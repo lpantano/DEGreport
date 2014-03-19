@@ -147,7 +147,6 @@ expDElist<-function(tags,g1,g2,counts,pop=400){
   return(p)
 }
 
-
 varDElist<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   rand<-sample(row.names(counts),pop)
@@ -177,10 +176,12 @@ getcomb<-function(g1,g2){
     return(expand.grid(a=g1,b=g2))
   }else{
     #take 10% of each group, 400 times
+    g1p=3
+    g2p=3
     g1p<-ceiling(0.1*length(g1)+1)
-    if(g1p==2){g1p==3}
+    if(g1p==2){g1p=3}
     g2p<-ceiling(0.1*length(g2)+1)
-    if(g2p==2){g2p==3}
+    if(g2p==2){g2p=3}
     r1<-sapply(1:400,function(x){sample(g1,g1p)})
     r2<-sapply(1:400,function(x){sample(g2,g2p)})
     return(list(r1,r2))
@@ -257,7 +258,7 @@ model {
 
 get_rank<-function(g1,g2,counts,fc){
   popfc<-get_ratio(g1,g2,counts)
-  e.tab<-get_estimate(log2(popfc))
+  e.tab<-get_estimate(log2(popfc["ENSG00000106484",]))
   e.tab.t<-as.data.frame(t(e.tab))
   qv<-apply(e.tab.t[,1:2],1,function(x){
     q<-quantile(rnorm(1000,x[1],x[2]^-0.5),
@@ -268,14 +269,14 @@ get_rank<-function(g1,g2,counts,fc){
   e.tab.t$log2max<-qv[2,]
   
   mix<-cbind(e.tab.t[detags,6:7],fc)
-  mix$state<-apply(mix[,1:2],1,function(x){
+  #mix$state<-apply(mix[,1:2],1,function(x){
   
   mix$sc<-apply(mix[,1:2],1,function(x){
     if (x[1]*x[2] < 0){
       d<-abs(x[1])+abs(x[2])
       s<-d/mean(c(abs(x[1]),abs(x[2])))
     }else{
-      d<-x[2]-x[1]
+      d<-abs(x[1])-abs(x[2])
       s<-d/mean(c(abs(x[1],x[2])))
     }
     return(s)  
@@ -318,7 +319,7 @@ plotscore<-function(var,genes,g1,g2){
   
   
 }
-
+#######
 meanE<-function(m,dat){
   var=sum(abs(dat-m))
   return(var)

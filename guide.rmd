@@ -73,8 +73,25 @@ for (g in detags){
   library(biomaRt)
   mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
   g = getGene( id = detags, type = "ensembl_gene_id", mart = mart)
+  mix<-get_rank(g1,g2,counts[detags,],tab[detags,"logFC"])
   mix$desc<-g$description
   mix$chr<-g$chromosome_name
+
+
+  mix2<-cbind(e.tab.t[detags,3:4],fc)
+  #mix$state<-apply(mix[,1:2],1,function(x){
+  
+  mix2$sc<-apply(mix2[,1:2],1,function(x){
+    if (x[1]*x[2] < 0){
+      d<-abs(x[1])+abs(x[2])
+      s<-d/mean(c(abs(x[1]),abs(x[2])))
+    }else{
+      d<-abs(abs(x[1])-abs(x[2]))
+      s<-d/abs(mean(c(x[1],x[2])))
+    }
+    return(s)  
+  })
+ 
 
 
 head(mix[order((mix$range),decreasing=F),])
