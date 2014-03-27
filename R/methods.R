@@ -243,7 +243,7 @@ model {
    #update(jags, 10000)
    
    coda <- coda.samples(jags, variable.names = c("mu", "tau"), 
-                              n.iter = 1000) 
+                              n.iter = 5000) 
    #summary(coda)
    #plot(coda)
    g<-gelman.diag(coda)
@@ -258,29 +258,30 @@ model {
 
 get_rank<-function(g1,g2,counts,fc){
   popfc<-get_ratio(g1,g2,counts)
-  e.tab<-get_estimate(log2(popfc["ENSG00000106484",]))
+  e.tab<-get_estimate(log2(popfc))
   e.tab.t<-as.data.frame(t(e.tab))
-  qv<-apply(e.tab.t[,1:2],1,function(x){
-    q<-quantile(rnorm(1000,x[1],x[2]^-0.5),
-                c(.025,.975))
-    return(q)
-  })
-  e.tab.t$log2min<-qv[1,]
-  e.tab.t$log2max<-qv[2,]
-  
-  mix<-cbind(e.tab.t[detags,6:7],fc)
+#   qv<-apply(e.tab.t[,1:2],1,function(x){
+#     q<-quantile(rnorm(1000,x[1],x[2]^-0.5),
+#                 c(.025,.975))
+#     return(q)
+#   })
+#   e.tab.t$log2min<-qv[1,]
+#   e.tab.t$log2max<-qv[2,]
+#   
+  mix<-cbind(e.tab.t[detags,c(1,3:4)],fc)
   #mix$state<-apply(mix[,1:2],1,function(x){
   
-  mix$sc<-apply(mix[,1:2],1,function(x){
-    if (x[1]*x[2] < 0){
-      d<-abs(x[1])+abs(x[2])
-      s<-d/mean(c(abs(x[1]),abs(x[2])))
+  mix$sc<-apply(mix[,1:3],1,function(x){
+    if (x[2]*x[3] < 0){
+      d<-abs(x[2])+abs(x[3])
+      s<-d/mean(abs(x[1])
     }else{
-      d<-abs(x[1])-abs(x[2])
-      s<-d/mean(c(abs(x[1],x[2])))
+      d<-abs(max(abs(x))-min(abs(x)))
+      s<-d/abs(x[1])
     }
     return(s)  
   })
+  
   
   return(mix)
   
@@ -319,6 +320,79 @@ plotscore<-function(var,genes,g1,g2){
   
   
 }
+
+figurepvaluebyexp<-function(pvalues,counts,out){
+  p<-pvalueMean(pvalues,counts)
+  
+  File="fpvaluebyexp.jpg"
+  HFile="fpvaluebyexp.pdf"
+  jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
+  print(p)
+  dev.off();
+  pdf(paste( out, HFile, sep="" )  );
+  print(p)
+  dev.off();
+  
+  # create a figure and make it available for exporting
+  FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYEXP",
+                      "This figure shows the distribution of pvalues according
+                      the average expression of the feature." );
+  return(FR)
+}
+
+figurepvaluebyvar<-function(pvalues,counts,out){
+  p<-pvalueVar(pvalues,counts)
+  
+  File="fpvaluebyvar.jpg"
+  HFile="fpvaluebyvar.pdf"
+  jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
+  print(p)
+  dev.off();
+  pdf(paste( out, HFile, sep="" )  );
+  print(p)
+  dev.off();
+  
+  # create a figure and make it available for exporting
+  FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYVAR",
+                   "This figure shows the distribution of pvalues according
+                   the SD of the feature." );
+  return(FR)
+}
+
+figurepvaluebyvar<-function(pvalues,counts,out){
+  p<-pvalueVarMean(pvalues,counts)
+  
+  File="fpvaluebyvarexp.jpg"
+  HFile="fpvaluebyvaexpr.pdf"
+  jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
+  print(p)
+  dev.off();
+  pdf(paste( out, HFile, sep="" )  );
+  print(p)
+  dev.off();
+  
+  # create a figure and make it available for exporting
+  FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYVAREXP",
+                   "This figure shows the distribution of pvalues according
+                   the average expression and the SD of the feature." );
+  return(FR)
+}
+
+
+createReport<-function(g1,g2,counts,pvalues,fc,path){
+  figurepvaluebyexp(pvalues,counts,path)
+  figurepvaluebyvar(pvalues,counts,path)
+  figurepvaluebyvarexp(pvalues,counts,path)
+  figurebyexp()
+  figurebyvar()
+  figurebyvarvsexp()
+  figurecor()
+  tablerank()
+  
+  
+}
+
+
 #######
 meanE<-function(m,dat){
   var=sum(abs(dat-m))

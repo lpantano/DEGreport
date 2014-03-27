@@ -77,7 +77,7 @@ for (g in detags){
   mix$desc<-g$description
   mix$chr<-g$chromosome_name
 
-
+  save(detags,file="/home/lpantano/crickhome/temp/detafs.ro")
   mix2<-cbind(e.tab.t[detags,3:4],fc)
   #mix$state<-apply(mix[,1:2],1,function(x){
   
