@@ -112,6 +112,15 @@ plotrank<-function(tab){
 
 }
 
+
+tablerank<-function(tab,path){
+  countsFile<-"rank.txt"
+  write.table(tab,paste0(path,"/rank.txt"),row.names=F,quote=F,sep="\t")
+  TAB <- newTable(tab , file=countsFile, exportId="TABLE_COUNTS",
+                  "Top genes" );
+  return(TAB)
+}
+
 createReport<-function(g1,g2,counts,tags,pvalues,fc,path,pop=400){
   fg1<-figurepvaluebyexp(pvalues,counts,path)
   fg2<-figurepvaluebyvar(pvalues,counts,path)
@@ -122,6 +131,19 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,pop=400){
   #figurecor()
   tabrank<-get_rank(g1,g2,counts,tags)
   tb1<-tablerank(tabrank)
+  
+  report <- addTo( 
+    report, addTo( newSection( "Quality of DEG", class="results" ),
+                   addTo( newSubSection( "" ), fg1),
+                   addTo( newSubSection( "" ), fg2),
+                   addTo( newSubSection(""), fg3),    
+                   addTo( newSubSection( "" ), fg4),
+                   addTo( newSubSection( "" ), fg5),
+                   addTo( newSubSection(""), tab1)
+    ))
+    
+    writeReport( report, filename=paste(path,"/DEGReport.html",sep=""))
+    
   
   
 }

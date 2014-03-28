@@ -1,77 +1,20 @@
-library(utils)
-library(plyr)
-library(reshape)
-#define inputs
-testdata<-function(){
-  require(DESeq2)
-  load("~/crickshared//Bioinformatics/iRNASeq/geovadis/YRI/genes/DESeq2Genes.inv.rm.27.low.exp.genes.filter.parametric/HsInv102/dse")
-  load("~/crickshared/Bioinformatics/iRNASeq/geovadis/YRI/genes/DESeq2Genes.inv.rm.27.low.exp.genes.filter.parametric/HsInv102/rld")
-
-#  load("/home/shareddata/Bioinformatics/iRNASeq/geovadis/TSICEU/genes/DESeq2Others.inv.116.rm.27.low.exp.genes.filter.parametric/HsInv58/dse")
-#  load("/home/shareddata/Bioinformatics/iRNASeq/geovadis/TSICEU/genes/DESeq2Others.inv.116.rm.27.low.exp.genes.filter.parametric/HsInv58/rld")
-
-
-  design<-as.data.frame(colData(dse))
-  res<-as.data.frame(results(dse,cooksCutoff=FALSE,independentFiltering=FALSE))
-  res<-res[!is.na(res$pvalue),]
-  res<-res[order(res$pvalue),]
-
-  #gene<-"ENSG00000213085"
-  gene<-row.names(res[res$padj<=0.1,])
-  genes<-counts(dse,normalized=TRUE)[gene,]
-  exp<-log2(counts(dse,normalized=TRUE)[gene,]+0.1)
-  g1<-row.names(design[design$conditio=="INV",])
-  g2<-row.names(design[design$conditio=="STD",])
-
-  #dat<-exp[inv]
-  library("RobustRankAggreg")
-  library("RankAggreg")
-
-  glist<-list(row.names(tab.res[order(-tab.res$V1),]),
-            row.names(tab.res[order(-tab.res$V2),]),
-            row.names(tab.res[order(-tab.res$minfc),]),
-            row.names(tab.res[order(tab.res$var.cor),]),
-            row.names(tab.res[order(tab.res$overlap.cor),])
-              )
-  glist<-list(row.names(popfc[order(popfc$var),]),
-              row.names(popfc[order(-popfc$mean),])         
-              )
-  rank<-aggregateRanks(glist,method="stuart")
-
-  ma<-rbind(row.names(tab.res[order(-tab.res$V1),]),
-          row.names(tab.res[order(-tab.res$V2),]),
-          row.names(tab.res[order(tab.res$var.cor),]))
-  maw<-rbind((tab.res[order(-tab.res$V1),1]),
-           (tab.res[order(-tab.res$V2),2]),
-           (1-tab.res[order(tab.res$var.cor),3]))
-  
-  ma<-rbind(row.names(popfc[order(popfc$var),]),
-              row.names(popfc[order(-popfc$mean),])         
-  )
-  
-  RankAggreg(ma,k=23,maw,method="CE")
-  rank<-RankAggreg(ma,k=23,method="CE")
-  BruteAggreg(ma,23,maw)
-  
-  error <- sapply(popfc$var,function(x){
-    qt(0.975,df=400-1)*x/sqrt(400)}
-              )
-  left<-popfc$mean-error
-  right<-popfc$mean+error
-  popfc$min<-apply(cbind(left,right),1,min)
-  popfc$error<-error
-  popfc[order(popfc$score),401:404]
-  
-  popfc$quantile<-apply(popfc[,1:400],1,function(x){
-    q<-quantile(x,c(.05,.95),na.rm=T)
-    dq<-max(q)-min(q)
-    return(dq)
-  })
-  
-  popfc$score<-popfc$quantile/popfc$mean
-  
-}
-
+#' Create report of QC
+#'
+#' @param path  absolute path to bcbio results (in yaml file after -upload)
+#' @param samples  vector indicating the name as samples are in the previous folder
+#' @param out path  where you want to create the index.html
+#' @param title  this value would be the title of the document
+#' @param condition  a vector indicating the groups of the samples
+#' @export
+#' @examples
+#' \dontrun{
+#' p<-"absolute paht to bcbio results in yaml file: -upload
+#' s<-c("name1","name2","name3","name4")
+#' o<-"/path/where/html/will/be/created"
+#' t<-"some title for the report"
+#' con<-c("TREAT","TREAT","CON","CON")
+#' r<-create_report(p,s,o,t,con)
+#' }
 pvalueMean<-function(pvalues,counts){
   
   meanv<-apply(counts,1,mean)
@@ -274,7 +217,7 @@ get_rank<-function(g1,g2,counts,fc){
   mix$sc<-apply(mix[,1:3],1,function(x){
     if (x[2]*x[3] < 0){
       d<-abs(x[2])+abs(x[3])
-      s<-d/mean(abs(x[1])
+      s<-d/mean(abs(x[1]))
     }else{
       d<-abs(max(abs(x))-min(abs(x)))
       s<-d/abs(x[1])

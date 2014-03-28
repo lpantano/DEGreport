@@ -1,4 +1,6 @@
-export(deIso)
+export(createReport)
+import(ggplot2)
 import(utils)
 import(plyr)
 import(reshape)
+import(Nozzle.R1)

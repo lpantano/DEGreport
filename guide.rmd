@@ -1,5 +1,7 @@
 ```{r}
 setwd("/home/lpantano/crickshared/Bioinformatics/iRNASeq/geovadis/TSI/genes/")
+library(devtools)
+devtools::load_all("~/crickhome/scripts/iRNAseq/DEGQA")
 ```
 
 Load TSI data
@@ -57,7 +59,7 @@ table(cut(tab[detags,"logFC"],breaks=c(-100,-0.5,0.5,100),labels=c(-1,0,1)))
 
 Check pvalue distribution
 ```{r}
-counts<-cpm(D)
+counts<-cpm(D,log=TRUE)
 for (g in detags){
  exp<-data.frame(counts=as.numeric(unlist(counts[g,])),gender=design[,2])
  p<-ggplot(exp,aes(gender,counts,colour=gender))+  
@@ -73,6 +75,10 @@ for (g in detags){
   library(biomaRt)
   mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
   g = getGene( id = detags, type = "ensembl_gene_id", mart = mart)
+  
+ devtools::load_all("~/crickhome/scripts/iRNAseq/DEGQA")
+ createReport(g1,g2,counts,detags,tab[,4],tab[,1],"~/crickhome/temp",pop=400)
+
   mix<-get_rank(g1,g2,counts[detags,],tab[detags,"logFC"])
   mix$desc<-g$description
   mix$chr<-g$chromosome_name
