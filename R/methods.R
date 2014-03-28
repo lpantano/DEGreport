@@ -287,14 +287,14 @@ get_rank<-function(g1,g2,counts,fc){
   
 }
 
-plotrank<-function(mix,chr){
+plotrank<-function(mix,colors){
   idsc<-row.names(mix[order(abs(mix$sc)),])
   idfc<-row.names(mix[order(abs(mix[,3]),decreasing=T),])
   
   tab.o<-data.frame(row.names=idsc,sc=1:length(idsc))
   tab.o[idfc,2]<-1:length(idfc)
-  tab.o[chr$genes,3]<-chr$chr
-  tab.o[grep("[0-9]",tab.o$V3),3]<-"Aut"
+  tab.o[colors$genes,3]<-colors$colors
+  #tab.o[grep("[0-9]",tab.o$V3),3]<-"Aut"
   
   p<-ggplot(tab.o, aes(sc,V2,colour=factor(V3))) +
     geom_point()
@@ -317,77 +317,6 @@ plotscore<-function(var,genes,g1,g2){
   d<-rbind(d,data.frame(p=1:length(m1),m=m2,u=g2up,d=g2down,group="g2"))
   qplot(p,m, data=d, colour=factor(group)) +
    geom_ribbon(aes(ymin=log2(d), ymax=log2(u),colour=group))
-  
-  
-}
-
-figurepvaluebyexp<-function(pvalues,counts,out){
-  p<-pvalueMean(pvalues,counts)
-  
-  File="fpvaluebyexp.jpg"
-  HFile="fpvaluebyexp.pdf"
-  jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
-  print(p)
-  dev.off();
-  pdf(paste( out, HFile, sep="" )  );
-  print(p)
-  dev.off();
-  
-  # create a figure and make it available for exporting
-  FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYEXP",
-                      "This figure shows the distribution of pvalues according
-                      the average expression of the feature." );
-  return(FR)
-}
-
-figurepvaluebyvar<-function(pvalues,counts,out){
-  p<-pvalueVar(pvalues,counts)
-  
-  File="fpvaluebyvar.jpg"
-  HFile="fpvaluebyvar.pdf"
-  jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
-  print(p)
-  dev.off();
-  pdf(paste( out, HFile, sep="" )  );
-  print(p)
-  dev.off();
-  
-  # create a figure and make it available for exporting
-  FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYVAR",
-                   "This figure shows the distribution of pvalues according
-                   the SD of the feature." );
-  return(FR)
-}
-
-figurepvaluebyvar<-function(pvalues,counts,out){
-  p<-pvalueVarMean(pvalues,counts)
-  
-  File="fpvaluebyvarexp.jpg"
-  HFile="fpvaluebyvaexpr.pdf"
-  jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
-  print(p)
-  dev.off();
-  pdf(paste( out, HFile, sep="" )  );
-  print(p)
-  dev.off();
-  
-  # create a figure and make it available for exporting
-  FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYVAREXP",
-                   "This figure shows the distribution of pvalues according
-                   the average expression and the SD of the feature." );
-  return(FR)
-}
-
-
-createReport<-function(g1,g2,counts,pvalues,fc,path){
-  figurepvaluebyexp(pvalues,counts,path)
-  figurepvaluebyvar(pvalues,counts,path)
-  figurepvaluebyvarexp(pvalues,counts,path)
-  figurebyexp()
-  figurebyvar()
-  figurebyvarvsexp()
-  figurecor()
-  tablerank()
   
   
 }
