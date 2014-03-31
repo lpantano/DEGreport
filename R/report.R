@@ -93,8 +93,8 @@ figurebyvar<-function(tags,g1,g2,counts,out,pop=400){
 
 }
 
-plotrank<-function(tab){
-  p<-expDElist(tags,g1,g2,counts,pop)
+figurerank<-function(tab){
+  p<-plotrank(tags,g1,g2,counts,pop)
   File="fcor.jpg"
   HFile="fcor.pdf"
   jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
@@ -131,6 +131,7 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,pop=400){
   #figurecor()
   tabrank<-get_rank(g1,g2,counts,tags)
   tb1<-tablerank(tabrank)
+  fg6<-figurerank(tabrank,fc,path)
   
   report <- addTo( 
     report, addTo( newSection( "Quality of DEG", class="results" ),
@@ -139,7 +140,8 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,pop=400){
                    addTo( newSubSection(""), fg3),    
                    addTo( newSubSection( "" ), fg4),
                    addTo( newSubSection( "" ), fg5),
-                   addTo( newSubSection(""), tab1)
+                   addTo( newSubSection(""), tb1),
+                   addTo( newSubSection(""), fg6)
     ))
     
     writeReport( report, filename=paste(path,"/DEGReport.html",sep=""))

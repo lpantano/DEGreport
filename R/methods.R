@@ -1,19 +1,10 @@
-#' Create report of QC
+#' distribution of pvalues by expression range
 #'
-#' @param path  absolute path to bcbio results (in yaml file after -upload)
-#' @param samples  vector indicating the name as samples are in the previous folder
-#' @param out path  where you want to create the index.html
-#' @param title  this value would be the title of the document
-#' @param condition  a vector indicating the groups of the samples
-#' @export
+#' @param pvalues  pvalues of DEG analysis
+#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @examples
 #' \dontrun{
-#' p<-"absolute paht to bcbio results in yaml file: -upload
-#' s<-c("name1","name2","name3","name4")
-#' o<-"/path/where/html/will/be/created"
-#' t<-"some title for the report"
-#' con<-c("TREAT","TREAT","CON","CON")
-#' r<-create_report(p,s,o,t,con)
+#' pvalueMean(pvalues,counts)
 #' }
 pvalueMean<-function(pvalues,counts){
   
@@ -31,7 +22,14 @@ pvalueMean<-function(pvalues,counts){
     theme_bw() + scale_fill_brewer(palette="RdYlBu")
   return(p)
 }
-
+#' distribution of pvalues by SD range
+#'
+#' @param pvalues  pvalues of DEG analysis
+#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @examples
+#' \dontrun{
+#' pvalueVar(pvalues,counts)
+#' }
 pvalueVar<-function(pvalues,counts){
   
   sdv<-apply(counts,1,sd)
@@ -48,7 +46,14 @@ pvalueVar<-function(pvalues,counts){
     theme_bw() + scale_fill_brewer(palette="RdYlBu")
   return(p)
 }
-
+#' Correlation of SD and mean of a set of genes
+#'
+#' @param pvalues  pvalues of DEG analysis
+#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @examples
+#' \dontrun{
+#' pvalueVarMean(pvalues,counts)
+#' }
 pvalueVarMean<-function(pvalues,counts){
   
   sdt1<-apply(counts[,g1],1,sd)
@@ -70,7 +75,17 @@ pvalueVarMean<-function(pvalues,counts){
                   linetype=2)
   return(p)
 }
-
+#' distribution of DE genes expression compared the background
+#'
+#' @param tags  list of genes that are DE
+#' @param g1 list of samples in group 1
+#' @param g1 list of samples in group 2
+#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param pop number of random samples taken for background comparison
+#' @examples
+#' \dontrun{
+#' expDElist(tags,g1,g2,counts)
+#' }
 expDElist<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   rand<-sample(row.names(counts),pop)
@@ -89,7 +104,17 @@ expDElist<-function(tags,g1,g2,counts,pop=400){
     theme_bw()
   return(p)
 }
-
+#' distribution of DE genes SD compared the background
+#'
+#' @param tags  list of genes that are DE
+#' @param g1 list of samples in group 1
+#' @param g1 list of samples in group 2
+#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param pop number of random samples taken for background comparison
+#' @examples
+#' \dontrun{
+#' varDElist(tags,g1,g2,counts)
+#' }
 varDElist<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   rand<-sample(row.names(counts),pop)
@@ -109,11 +134,17 @@ varDElist<-function(tags,g1,g2,counts,pop=400){
   return(p)
 }
 
-
+#' get number of potential combinations of two vectors
+#'
+#' @param g1 list of samples in group 1
+#' @param g1 list of samples in group 2
 combinations<-function(g1,g2){
   return(g1*g2)
 }
-
+#' get random combinations of two groups
+#'
+#' @param g1 list of samples in group 1
+#' @param g1 list of samples in group 2
 getcomb<-function(g1,g2){
   if (combinations(length(g1),length(g2))<400){
     return(expand.grid(a=g1,b=g2))
@@ -130,7 +161,10 @@ getcomb<-function(g1,g2){
     return(list(r1,r2))
   }
 }
-
+#' get the FC for each gene between two groups
+#'
+#' @param g1 list of samples in group 1
+#' @param g1 list of samples in group 2
 get_ratio<-function(g1,g2,genes){
   pop<-getcomb(g1,g2)
   if (is.list(pop)){
@@ -154,11 +188,17 @@ get_ratio<-function(g1,g2,genes){
   return(popfc)
 }
 
+#' get the estimates of the FC mean from a FC distribution using bayesian inference
+#'
+#' @param fc list of FC
 get_estimate<-function(fc){
   e<-apply(fc,1,do_estimate)
   return(e)
 }
 
+#' apply bayesian inference to estimate the average FC of a distribution
+#'
+#' @param x list of values
 do_estimate<-function(x){
   library('rjags')
   sink("model.bug")
@@ -198,7 +238,12 @@ model {
   
 }
 
-
+#' get a rank list according to the confidence of the bayesian estimator
+#'
+#' @param g1 list of samples in group 1
+#' @param g2 list of samples in group 2
+#' @param counts count matrix for each gene and each sample
+#' @param fc list of FC from the DEG analysis
 get_rank<-function(g1,g2,counts,fc){
   popfc<-get_ratio(g1,g2,counts)
   e.tab<-get_estimate(log2(popfc))
@@ -229,7 +274,10 @@ get_rank<-function(g1,g2,counts,fc){
   return(mix)
   
 }
-
+#' plot the correlation between the rank according estimator and the rank according FC
+#'
+#' @param mix output from get_rank function
+#' @param colors colour used for each gene
 plotrank<-function(mix,colors){
   idsc<-row.names(mix[order(abs(mix$sc)),])
   idfc<-row.names(mix[order(abs(mix[,3]),decreasing=T),])
@@ -243,6 +291,9 @@ plotrank<-function(mix,colors){
     geom_point()
   return(p)
 }
+
+
+#######
 
 plotscore<-function(var,genes,g1,g2){
   var1<-var[1:500];g1<-1:3;g2<-4:6
@@ -265,7 +316,6 @@ plotscore<-function(var,genes,g1,g2){
 }
 
 
-#######
 meanE<-function(m,dat){
   var=sum(abs(dat-m))
   return(var)
