@@ -129,7 +129,7 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,pop=400){
   fg5<-figurebyvar(tags,g1,g2,counts,path,pop)
   #figurebyvarvsexp()
   #figurecor()
-  tabrank<-get_rank(g1,g2,counts,tags)
+  tabrank<-get_rank(g1,g2,counts[detags],fc)
   tb1<-tablerank(tabrank)
   
   report <- addTo( 
