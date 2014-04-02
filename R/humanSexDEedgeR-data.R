@@ -6,3 +6,4 @@
 #' @format edgeR object
 #' @source gEUvadis
 #' @author Lorena Pantano, 2014-05-31
+NULL

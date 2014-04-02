@@ -1,0 +1,21 @@
+\name{figurepvaluebyvar}
+\alias{figurepvaluebyvar}
+\title{Wrap figure from \code{degVar} into a Nozzle object}
+\usage{
+figurepvaluebyvar(pvalues, counts, out)
+}
+\arguments{
+  \item{pvalues}{pvalues of DEG analysis}
+
+  \item{counts}{matrix with counts for each samples and
+  each gene. Should be same length than pvalues vector.}
+
+  \item{out}{path to save the figure}
+}
+\value{
+Nozzle object
+}
+\description{
+Wrap figure from \code{degVar} into a Nozzle object
+}
+

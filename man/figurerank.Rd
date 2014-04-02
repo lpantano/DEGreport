@@ -1,0 +1,20 @@
+\name{figurerank}
+\alias{figurerank}
+\title{Wrap figure from \code{plotrank} into a Nozzle object}
+\usage{
+figurerank(tab, out, colors)
+}
+\arguments{
+  \item{tab}{table from \link{get_rank}}
+
+  \item{out}{path to save the figure}
+
+  \item{colors}{colors for each gene}
+}
+\value{
+Nozzle object
+}
+\description{
+Wrap figure from \code{plotrank} into a Nozzle object
+}
+

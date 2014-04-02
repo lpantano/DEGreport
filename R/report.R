@@ -1,11 +1,11 @@
-#' Create figure 1
+#' Wrap figure from \code{degMean} into a Nozzle object
 #' 
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @param out path to save the figure
 #' @return Nozzle object
 figurepvaluebyexp<-function(pvalues,counts,out){
-  p<-pvalueMean(pvalues,counts)
+  p<-degMean(pvalues,counts)
   
   File="fpvaluebyexp.jpg"
   HFile="fpvaluebyexp.pdf"
@@ -22,14 +22,14 @@ figurepvaluebyexp<-function(pvalues,counts,out){
                       the average expression of the feature." );
   return(FR)
 }
-#' Create figure 2
+#' Wrap figure from \code{degVar} into a Nozzle object
 #' 
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @param out path to save the figure
 #' @return Nozzle object
 figurepvaluebyvar<-function(pvalues,counts,out){
-  p<-pvalueVar(pvalues,counts)
+  p<-degVar(pvalues,counts)
   
   File="fpvaluebyvar.jpg"
   HFile="fpvaluebyvar.pdf"
@@ -46,7 +46,7 @@ figurepvaluebyvar<-function(pvalues,counts,out){
                    the SD of the feature." );
   return(FR)
 }
-#' Create figure 3
+#' Wrap figure from \code{degDispersion} into a Nozzle object
 #' 
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
@@ -55,7 +55,7 @@ figurepvaluebyvar<-function(pvalues,counts,out){
 #' @param out path to save the figure
 #' @return Nozzle object
 figurepvaluebyvarexp<-function(g1,g2,pvalues,counts,out){
-  p<-pvalueVarMean(g1,g2,pvalues,counts)
+  p<-degDispersion(g1,g2,pvalues,counts)
   
   File="fpvaluebyvarexp.jpg"
   HFile="fpvaluebyvaexpr.pdf"
@@ -72,7 +72,7 @@ figurepvaluebyvarexp<-function(g1,g2,pvalues,counts,out){
                    the average expression and the SD of the feature." );
   return(FR)
 }
-#' Create figure 4
+#' Wrap figure from \code{degMB} into a Nozzle object
 #' 
 #' @param tags  genes of DEG analysis
 #' @param g1 group 1
@@ -82,7 +82,7 @@ figurepvaluebyvarexp<-function(g1,g2,pvalues,counts,out){
 #' @param pop random genes for background
 #' @return Nozzle object
 figurebyexp<-function(tags,g1,g2,counts,out,pop=400){
-  p<-expDElist(tags,g1,g2,counts,pop)
+  p<-degMB(tags,g1,g2,counts,pop)
   File="fexp.jpg"
   HFile="fexp.pdf"
   jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
@@ -99,17 +99,18 @@ figurebyexp<-function(tags,g1,g2,counts,out,pop=400){
   return(FR)
 
 }
-#' Create figure 5
+#' Wrap figure from \code{degVB} into a Nozzle object
 #' 
 #' @param tags  genes of DEG analysis
 #' @param g1 group 1
 #' @param g2 group 2
-#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param counts  matrix with counts for each samples and each gene. 
+#' row number should be the same length than pvalues vector.
 #' @param out path to save the figure
 #' @param pop random genes for background
 #' @return Nozzle object
 figurebyvar<-function(tags,g1,g2,counts,out,pop=400){
-  p<-varDElist(tags,g1,g2,counts,pop)
+  p<-degVB(tags,g1,g2,counts,pop)
   File="fvar.jpg"
   HFile="fvar.pdf"
   jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
@@ -126,14 +127,14 @@ figurebyvar<-function(tags,g1,g2,counts,out,pop=400){
   return(FR)
 
 }
-#' Create figure 6
+#' Wrap figure from \code{plotrank} into a Nozzle object
 #' 
-#' @param tab  table from \link{get_rank}
+#' @param tab  table from \link{degRank}
 #' @param out path to save the figure
 #' @param colors colors for each gene
 #' @return Nozzle object
 figurerank<-function(tab,out,colors){
-  p<-plotrank(tab,colors)
+  p<-degPR(tab,colors)
   File="fcor.jpg"
   HFile="fcor.pdf"
   jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
@@ -151,9 +152,9 @@ figurerank<-function(tab,out,colors){
 
 }
 
-#' Create table 1
+#' Create table for Nozzle report
 #' 
-#' @param tab  table from \link{get_rank}
+#' @param tab  table from \code{\link{degRank}}
 #' @param out path to save the figure
 #' @return Nozzle object
 tablerank<-function(tab,out){
@@ -166,8 +167,11 @@ tablerank<-function(tab,out){
                   "Top genes" );
   return(TAB)
 }
-#' Create report
-#' 
+#' Create report of RNAseq DEG anlaysis
+#' @description This function get the count matrix, pvalues, and FC of a 
+#' DEG analysis and create a report to help to detect possible problems with the data.
+#' @aliases createReport
+#' @usage createReport(g1,g2,counts,tags,pvalues,fc,path)
 #' @param g1 group 1
 #' @param g2 group 2
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
@@ -177,7 +181,7 @@ tablerank<-function(tab,out){
 #' @param path path to save the figure
 #' @param colors data frame with colors for each gene
 #' @param pop random genes for background
-#' @return nothing
+#' @return create a html file with all figures and tables
 createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400){
   fg1<-figurepvaluebyexp(pvalues,counts,path)
   fg2<-figurepvaluebyvar(pvalues,counts,path)
@@ -186,7 +190,7 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400){
   fg5<-figurebyvar(tags,g1,g2,counts,path,pop)
   #figurebyvarvsexp()
   #figurecor()
-  tabrank<-get_rank(g1,g2,counts[tags,],fc,pop)
+  tabrank<-degRank(g1,g2,counts[tags,],fc,pop)
   tb1<-tablerank(tabrank,path)
   fg6<-figurerank(tabrank,path,colors)
   

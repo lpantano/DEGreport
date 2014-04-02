@@ -1,9 +1,11 @@
 #' Distribution of pvalues by expression range
-#' 
+#' @aliases degMean
+#' @usage degMean(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param counts  matrix with counts for each samples and each gene. 
+#' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
-pvalueMean<-function(pvalues,counts){
+degMean<-function(pvalues,counts){
   
   meanv<-apply(counts,1,mean)
   meanvfac<-cut(meanv,
@@ -19,12 +21,15 @@ pvalueMean<-function(pvalues,counts){
     theme_bw() + scale_fill_brewer(palette="RdYlBu")
   return(p)
 }
+
 #' Distribution of pvalues by SD range
-#'
+#' @aliases degVar
+#' @usage degVar(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param counts  matrix with counts for each samples and each gene. 
+#' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
-pvalueVar<-function(pvalues,counts){
+degVar<-function(pvalues,counts){
   
   sdv<-apply(counts,1,sd)
   sdvfac<-cut(sdv,
@@ -40,14 +45,18 @@ pvalueVar<-function(pvalues,counts){
     theme_bw() + scale_fill_brewer(palette="RdYlBu")
   return(p)
 }
-#' Correlation of SD and mean of a set of genes
-#'
+
+#' Correlation of the standard desviation and the mean of the abundance of a
+#' set of genes.
+#' @aliases degDispersion
+#' @usage degDispersion(g1,g2,pvalues,counts)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param counts  matrix with counts for each samples and each gene. 
+#' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
-pvalueVarMean<-function(g1,g2,pvalues,counts){
+degDispersion<-function(g1,g2,pvalues,counts){
   
   sdt1<-apply(counts[,g1],1,sd)
   sdt2<-apply(counts[,g2],1,sd)
@@ -68,15 +77,18 @@ pvalueVarMean<-function(g1,g2,pvalues,counts){
                   linetype=2)
   return(p)
 }
-#' Distribution of DE genes expression compared the background
+
+#' Distribution of expression of DE genes compared to the background
 #'
+#' @aliases degMB
+#' @usage degMB(tags,g1,g2,pvalues)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
-expDElist<-function(tags,g1,g2,counts,pop=400){
+degMB<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   g<-""
   rand<-sample(row.names(counts),pop)
@@ -95,15 +107,17 @@ expDElist<-function(tags,g1,g2,counts,pop=400){
     theme_bw()
   return(p)
 }
-#' Distribution of DE genes SD compared the background
-#'
+
+#' Distribution of the SD of DE genes compared to the background
+#' @aliases degMB
+#' @usage degMB(tags,g1,g2,counts)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
-varDElist<-function(tags,g1,g2,counts,pop=400){
+degVB<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   g<-""
   rand<-sample(row.names(counts),pop)
@@ -124,21 +138,24 @@ varDElist<-function(tags,g1,g2,counts,pop=400){
 }
 
 #' Get number of potential combinations of two vectors
-#'
+#' @aliases degNcomb
+#' @usage degNcomb(g1,g2)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @return maximum number of combinations of two vectors
-combinations<-function(g1,g2){
+degNcomb<-function(g1,g2){
   return(g1*g2)
 }
+
 #' Get random combinations of two groups
-#'
+#' @aliases degComb
+#' @usage degComb(g1,g2,pop)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pop number of combinations to be return
 #' @return matrix with different combinatios of two vector 
-getcomb<-function(g1,g2,pop){
-  if (combinations(length(g1),length(g2))<pop){
+degComb<-function(g1,g2,pop){
+  if (degNcomb(length(g1),length(g2))<pop){
     return(expand.grid(a=g1,b=g2))
   }else{
     #take 10% of each group, 400 times
@@ -153,24 +170,26 @@ getcomb<-function(g1,g2,pop){
     return(list(r1,r2))
   }
 }
+
 #' get the FC for each gene between two groups
-#'
+#' @aliases degFC
+#' @usage degFC(g1,g2,counts,popsize)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
-#' @param genes list of genes to be analized
+#' @param counts count matrix of deregulated genes
 #' @param popsize number of combinations to generate
 #' @return FC for different combinations of samples in each group for each gene
-get_ratio<-function(g1,g2,genes,popsize){
-  pop<-getcomb(g1,g2,popsize)
+degFC<-function(g1,g2,counts,popsize){
+  pop<-degComb(g1,g2,popsize)
   if (is.list(pop)){
   popfc<-as.data.frame(sapply(1:popsize,function(x){
-    r<-rowMeans(genes[,pop[[1]][,x]])/(rowMeans(genes[,pop[[2]][,x]])+1 )
+    r<-rowMeans(counts[,pop[[1]][,x]])/(rowMeans(counts[,pop[[2]][,x]])+1 )
     r[is.infinite(r)]<-NaN
     return(r)
     }))
   }else{
     popfc<-as.data.frame(apply(pop,1,function(x){
-      r<-genes[,x[1]]/(genes[,x[2]]+1)
+      r<-counts[,x[1]]/(counts[,x[2]]+1)
       r[is.infinite(r)]<-NaN
       return(r)
     }))
@@ -180,20 +199,22 @@ get_ratio<-function(g1,g2,genes,popsize){
 }
 
 #' Get the estimates of the FC mean from a FC distribution using bayesian inference
-#'
+#' @aliases degBI
+#' @usage degBI(fc)
 #' @param fc list of FC
-#' @return matrix with values from \link{do_estimate}
-get_estimate<-function(fc){
-  e<-apply(fc,1,do_estimate)
+#' @return matrix with values from \link{degBIcmd}
+degBI<-function(fc){
+  e<-apply(fc,1,degBIcmd)
   return(e)
 }
 
-#' apply bayesian inference to estimate the average FC of a distribution
+#' Apply bayesian inference to estimate the average FC of a distribution
+#' @description code based on
 #' http://www.johnmyleswhite.com/notebook/2010/08/20/using-jags-in-r-with-the-rjags-package/
 #' http://public.wsu.edu/~jesse.brunner/classes/bio572/Lab7_Bayesian.html
 #' @param x list of values
 #' @return vector with mu and its confidence intervales (2.5% and 97.5%)
-do_estimate<-function(x){
+degBIcmd<-function(x){
   x<-(as.numeric(x))
   #print(x[1:10])
   mx<-min(x[!is.infinite(x)],na.rm=T)
@@ -231,20 +252,22 @@ model {
    
   
 }
+
 #' Get rank data frame with best score on the top
-#' 
+#' @aliases degRank
+#' @usage degRan(g1,g2,counts,fc,popsize)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
-#' @param counts count matrix for each gene and each sample
-#' @param fc list of FC from the DEG analysis
+#' @param counts count matrix for each gene and each sample that is deregulated
+#' @param fc list of FC of deregulated genes. Should be same length than counts \code{row.names}
 #' @param popsize number of combinations to generate
-#' @return data frame with the output of \link{do_estimate} for each gene
-get_rank<-function(g1,g2,counts,fc,popsize){
-  popfc<-get_ratio(g1,g2,counts,popsize)
-  e.tab<-get_estimate(log2(popfc))
+#' @return data frame with the output of \link{degBIcmd} for each gene
+degRank<-function(g1,g2,counts,fc,popsize){
+  popfc<-degFC(g1,g2,counts,popsize)
+  e.tab<-degBI(log2(popfc))
   e.tab.t<-as.data.frame(t(e.tab))
-  mix<-cbind(e.tab.t[,c(1,3:4)],fc)  
-  mix$sc<-apply(mix[,1:3],1,function(x){
+  full<-cbind(e.tab.t[,c(1,3:4)],fc)  
+  full$sc<-apply(full[,1:3],1,function(x){
     if (x[2]*x[3] < 0){
       d<-abs(x[2])+abs(x[3])
       s<-d/mean(abs(x[1]))
@@ -256,17 +279,19 @@ get_rank<-function(g1,g2,counts,fc,popsize){
   })
   
   
-  return(mix[order(mix$sc),])
+  return(full[order(full$sc),])
   
 }
+
 #' plot the correlation between the rank according estimator and the rank according FC
-#'
-#' @param mix output from get_rank function
+#' @aliases degPR
+#' @usage degPR(rank)
+#' @param rank output from \code{degRank} function
 #' @param colors colour used for each gene
 #' @return ggplot2 object
-plotrank<-function(mix,colors=""){
-  idsc<-row.names(mix[order(abs(mix$sc)),])
-  idfc<-row.names(mix[order(abs(mix[,3]),decreasing=T),])
+degPR<-function(rank,colors=""){
+  idsc<-row.names(rank[order(abs(rank$sc)),])
+  idfc<-row.names(rank[order(abs(rank[,3]),decreasing=T),])
   sc<-""
   fc<-""
   col=""
@@ -283,6 +308,18 @@ plotrank<-function(mix,colors=""){
     scale_color_brewer(palette="Set1")+
     labs(list(y="rank by FC",x="rank by score"))
   return(p)
+}
+
+#' Create a deg object that can be used to plot expression values at shiny server:runGist(9930881)
+#' @aliases degObj
+#' @usage degObj(counts,design,outfile)
+#' @param counts output from get_rank function
+#' @param design colour used for each gene
+#' @return R object to be load into vizExp
+degObj<-function(counts,design,outfile){
+  deg<-list(counts,design)
+  save(deg,outfile)
+  return(TRUE)
 }
 
 

@@ -1,0 +1,176 @@
+```{r}
+setwd("/home/lpantano/crickshared/Bioinformatics/iRNASeq/geovadis/TSI/genes/")
+library(devtools)
+devtools::load_all("~/crickhome/scripts/iRNAseq/DEGQA")
+devtools::document()
+```
+
+Load TSI data
+
+```{r}
+counts<-read.table("counts.Genes.tab",sep="\t",header=T,row.names=1)
+keep<-rowSums(counts)>0.25*nrow(counts)
+countsf<-counts[keep,]
+```
+
+Load gender information
+```{r}
+setwd("/home/lpantano/crickshared/Bioinformatics/iRNASeq")
+g<-read.table("iMLPA_genotypes_Oct22.csv",header=T,row.names=1)
+idx<-intersect(row.names(g),names(countsf))
+```
+
+Get common individuals
+```{r}
+countsf<-countsf[,idx]
+design<-g[idx,1:2]
+table(design$gender)
+g1<-row.names(design[design$gender=="Female",])
+g2<-row.names(design[design$gender!="Female",])
+
+```
+
+Do differential expression with edgeR
+```{r}
+library(edgeR)
+D <- DGEList(counts=countsf,group=design$gender)
+D <- calcNormFactors(D)
+des <- model.matrix(~design$gender)
+D <- estimateGLMCommonDisp(D, des)
+D <- estimateGLMTrendedDisp(D, des)
+D <- estimateGLMTagwiseDisp(D, des)
+
+plotBCV(D)
+```
+
+
+GLM DE analysis
+```{r}
+fit <- glmFit(D,des)
+lrt <- glmLRT(fit)
+tab<-cbind(lrt$table,p.adjust(lrt$table$PValue,method="BH"))
+detags <- rownames(tab[tab[,5]<=0.1,])
+plotSmear(D, de.tags=detags)
+```
+
+Distribution of FC
+```{r}
+table(cut(tab[detags,"logFC"],breaks=c(-100,-0.5,0.5,100),labels=c(-1,0,1)))
+```
+
+Check pvalue distribution
+```{r}
+counts<-cpm(D,log=TRUE)
+for (g in detags){
+ exp<-data.frame(counts=as.numeric(unlist(counts[g,])),gender=design[,2])
+ p<-ggplot(exp,aes(gender,counts,colour=gender))+  
+    geom_jitter()+
+    theme_bw()
+ pdf(paste0("img/",g,".pdf"))
+ print(p)
+ dev.off()
+}
+```
+
+```{r}
+  library(biomaRt)
+  mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
+  g = getGene( id = detags, type = "ensembl_gene_id", mart = mart)
+ counts<-cpm(D,log=FALSE)
+ detagsm<-detags[1:10]
+ devtools::load_all("~/crickhome/scripts/iRNAseq/DEGQA")
+ e<-get_ratio(g1,g2,counts[detagsm[3:4],])
+ do_estimate(x=log2(e[2,]))
+ get_estimate(log2(e))
+ m<-get_rank(g1,g2,counts[detagsm,],tab[detagsm,1])
+ plotrank(m)
+ createReport(g1,g2,counts,detagsm,tab[,4],tab[detagsm,1],"~/crickhome/temp/",pop=400)
+ expDElist(detags,g1,g2,counts)
+
+  mix<-get_rank(g1,g2,counts[detags,],tab[detags,"logFC"])
+  mix$desc<-g$description
+  mix$chr<-g$chromosome_name
+
+  save(detags,file="/home/lpantano/crickhome/temp/detafs.ro")
+  mix2<-cbind(e.tab.t[detags,3:4],fc)
+  #mix$state<-apply(mix[,1:2],1,function(x){
+  
+  mix2$sc<-apply(mix2[,1:2],1,function(x){
+    if (x[1]*x[2] < 0){
+      d<-abs(x[1])+abs(x[2])
+      s<-d/mean(c(abs(x[1]),abs(x[2])))
+    }else{
+      d<-abs(abs(x[1])-abs(x[2]))
+      s<-d/abs(mean(c(x[1],x[2])))
+    }
+    return(s)  
+  })
+ 
+
+
+head(mix[order((mix$range),decreasing=F),])
+
+
+ ggplot(mix, aes(-1*original,log2,
+  ymin = Q2, ymax=Q97)) +  geom_linerange()
+
+```
+
+
+```{r}
+plot(pvalueMean(tab$PValue,countsf))
+plot(pvalueVar(tab$PValue,countsf))
+plot(pvalueVarMean(tab$PValue,countsf))
+plot(expDElist(detags,g1,g2,countsf))
+plot(varDElist(detags,g1,g2,countsf))
+```
+
+Random M vs F
+```{r}
+idxr<-sample(row.names(design),10)
+Dr <- DGEList(counts=countsf[,idxr],group=design[idxr,2])
+Dr <- calcNormFactors(Dr)
+desr <- model.matrix(~design[idxr,2])
+Dr <- estimateGLMCommonDisp(Dr, desr)
+Dr <- estimateGLMTrendedDisp(Dr, desr)
+Dr <- estimateGLMTagwiseDisp(Dr, desr)
+fitr <- glmFit(Dr,desr)
+lrtr <- glmLRT(fitr)
+tabr<-cbind(lrtr$table,p.adjust(lrtr$table$PValue,method="BH"))
+detagsr <- rownames(tabr[tabr[,5]<=0.1,])
+
+genderr<-design[idxr,2]
+names(genderr)<-idxr
+popfcr<-get_ratio(names(genderr[genderr=="Male"]),names(genderr[genderr!="Male"]),counts[detagsr,idxr])
+e.tabr<-get_estimate(log2(popfcr))
+e.tab.tr<-as.data.frame(t(e.tabr))
+maxvr<-apply(e.tab.tr[,3:4],1,function(x){
+  idxm<-which.min(abs(x))
+  return(x[idxm])
+})
+e.tab.tr$log2<-(unlist(maxvr))
+head(e.tab.tr[order(abs(e.tab.tr$log2),decreasing=F),],20)
+
+detabr<-tab[detagsr,]
+head(detabr[order(detabr$logFC,decreasing=T),])
+
+mixr<-cbind(e.tab.tr[detagsr,3:6],detabr[detagsr,"logFC"])
+mixr$dif<- -1*mixr[,4]/mixr[,5]
+head(mixr[order(abs(mixr$dif),decreasing=F),])
+head(mixr[order(abs(mixr[,4]),decreasing=T),])
+head(mixr[order(abs(mixr[,5]),decreasing=T),])
+```
+
+
+Check pvalue distribution
+```{r}
+for (g in detagsr){
+ exp<-data.frame(counts=as.numeric(unlist(counts[g,idxr])),gender=design[idxr,2])
+ p<-ggplot(exp,aes(gender,counts,colour=gender))+  
+    geom_jitter()+
+    theme_bw()
+ pdf(paste0("img/",g,".pdf"))
+ print(p)
+ dev.off()
+}
+```

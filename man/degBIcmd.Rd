@@ -1,0 +1,19 @@
+\name{degBIcmd}
+\alias{degBIcmd}
+\title{Apply bayesian inference to estimate the average FC of a distribution}
+\usage{
+degBIcmd(x)
+}
+\arguments{
+  \item{x}{list of values}
+}
+\value{
+vector with mu and its confidence intervales (2.5% and
+97.5%)
+}
+\description{
+code based on
+http://www.johnmyleswhite.com/notebook/2010/08/20/using-jags-in-r-with-the-rjags-package/
+http://public.wsu.edu/~jesse.brunner/classes/bio572/Lab7_Bayesian.html
+}
+

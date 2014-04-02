@@ -1,0 +1,25 @@
+\name{figurepvaluebyvarexp}
+\alias{figurepvaluebyvarexp}
+\title{Wrap figure from \code{degDispersion} into a Nozzle object}
+\usage{
+figurepvaluebyvarexp(g1, g2, pvalues, counts, out)
+}
+\arguments{
+  \item{g1}{list of samples in group 1}
+
+  \item{g2}{list of samples in group 2}
+
+  \item{pvalues}{pvalues of DEG analysis}
+
+  \item{counts}{matrix with counts for each samples and
+  each gene. Should be same length than pvalues vector.}
+
+  \item{out}{path to save the figure}
+}
+\value{
+Nozzle object
+}
+\description{
+Wrap figure from \code{degDispersion} into a Nozzle object
+}
+
