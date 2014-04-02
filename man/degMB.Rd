@@ -2,7 +2,7 @@
 \alias{degMB}
 \title{Distribution of expression of DE genes compared to the background}
 \usage{
-degMB(tags,g1,g2,pvalues)
+degMB(tags,g1,g2,counts,pop=400)
 }
 \arguments{
   \item{tags}{list of genes that are DE}

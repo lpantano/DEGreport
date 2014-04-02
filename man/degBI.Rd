@@ -8,7 +8,7 @@ degBI(fc)
   \item{fc}{list of FC}
 }
 \value{
-matrix with values from \link{do_estimate}
+matrix with values from \link{degBIcmd}
 }
 \description{
 Get the estimates of the FC mean from a FC distribution

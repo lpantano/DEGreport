@@ -81,7 +81,7 @@ degDispersion<-function(g1,g2,pvalues,counts){
 #' Distribution of expression of DE genes compared to the background
 #'
 #' @aliases degMB
-#' @usage degMB(tags,g1,g2,pvalues)
+#' @usage degMB(tags,g1,g2,counts,pop=400)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
@@ -109,8 +109,8 @@ degMB<-function(tags,g1,g2,counts,pop=400){
 }
 
 #' Distribution of the SD of DE genes compared to the background
-#' @aliases degMB
-#' @usage degMB(tags,g1,g2,counts)
+#' @aliases degVB
+#' @usage degVB(tags,g1,g2,counts,pop=400)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
@@ -255,7 +255,7 @@ model {
 
 #' Get rank data frame with best score on the top
 #' @aliases degRank
-#' @usage degRan(g1,g2,counts,fc,popsize)
+#' @usage degRank(g1,g2,counts,fc,popsize)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param counts count matrix for each gene and each sample that is deregulated
@@ -285,7 +285,7 @@ degRank<-function(g1,g2,counts,fc,popsize){
 
 #' plot the correlation between the rank according estimator and the rank according FC
 #' @aliases degPR
-#' @usage degPR(rank)
+#' @usage degPR(rank,colors)
 #' @param rank output from \code{degRank} function
 #' @param colors colour used for each gene
 #' @return ggplot2 object
@@ -315,6 +315,7 @@ degPR<-function(rank,colors=""){
 #' @usage degObj(counts,design,outfile)
 #' @param counts output from get_rank function
 #' @param design colour used for each gene
+#' @param outfile file that will contain the object
 #' @return R object to be load into vizExp
 degObj<-function(counts,design,outfile){
   deg<-list(counts,design)

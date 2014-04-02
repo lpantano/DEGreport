@@ -5,7 +5,7 @@
 tablerank(tab, out)
 }
 \arguments{
-  \item{tab}{table from \code{\link{get_rank}}}
+  \item{tab}{table from \code{\link{degRank}}}
 
   \item{out}{path to save the figure}
 }

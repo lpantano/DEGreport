@@ -2,7 +2,7 @@
 \alias{degPR}
 \title{plot the correlation between the rank according estimator and the rank according FC}
 \usage{
-degPR(rank)
+degPR(rank,colors)
 }
 \arguments{
   \item{rank}{output from \code{degRank} function}

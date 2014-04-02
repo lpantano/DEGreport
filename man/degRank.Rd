@@ -2,7 +2,7 @@
 \alias{degRank}
 \title{Get rank data frame with best score on the top}
 \usage{
-degRan(g1,g2,counts,fc,popsize)
+degRank(g1,g2,counts,fc,popsize)
 }
 \arguments{
   \item{g1}{list of samples in group 1}

@@ -2,7 +2,7 @@
 \alias{createReport}
 \title{Create report of RNAseq DEG anlaysis}
 \usage{
-createReport(g1,g2,counts,tags,pvalues,fc,path)
+createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400)
 }
 \arguments{
   \item{g1}{group 1}

@@ -8,6 +8,8 @@ degObj(counts,design,outfile)
   \item{counts}{output from get_rank function}
 
   \item{design}{colour used for each gene}
+
+  \item{outfile}{file that will contain the object}
 }
 \value{
 R object to be load into vizExp

@@ -5,7 +5,7 @@
 figurerank(tab, out, colors)
 }
 \arguments{
-  \item{tab}{table from \link{get_rank}}
+  \item{tab}{table from \link{degRank}}
 
   \item{out}{path to save the figure}
 
