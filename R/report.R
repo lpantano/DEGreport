@@ -69,7 +69,8 @@ figurepvaluebyvarexp<-function(g1,g2,pvalues,counts,out){
   # create a figure and make it available for exporting
   FR <- newFigure( File, fileHighRes=HFile, exportId="PVALBYVAREXP",
                    "This figure shows the distribution of pvalues according
-                   the average expression and the SD of the feature." );
+                   the average expression and the variability of the feature. 
+                   It is taking the maximum value among group1 and group2" );
   return(FR)
 }
 #' Wrap figure from \code{degMB} into a Nozzle object

@@ -22,7 +22,7 @@ degMean<-function(pvalues,counts){
   return(p)
 }
 
-#' Distribution of pvalues by SD range
+#' Distribution of pvalues by standard desviation range
 #' @aliases degVar
 #' @usage degVar(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
@@ -108,7 +108,7 @@ degMB<-function(tags,g1,g2,counts,pop=400){
   return(p)
 }
 
-#' Distribution of the SD of DE genes compared to the background
+#' Distribution of the standard desviation of DE genes compared to the background
 #' @aliases degVB
 #' @usage degVB(tags,g1,g2,counts,pop=400)
 #' @param tags  list of genes that are DE
@@ -198,7 +198,7 @@ degFC<-function(g1,g2,counts,popsize){
   return(popfc)
 }
 
-#' Get the estimates of the FC mean from a FC distribution using bayesian inference
+#' Get the estimates of the fold change (FC) mean from a FC distribution using bayesian inference
 #' @aliases degBI
 #' @usage degBI(fc)
 #' @param fc list of FC
@@ -208,7 +208,7 @@ degBI<-function(fc){
   return(e)
 }
 
-#' Apply bayesian inference to estimate the average FC of a distribution
+#' Apply bayesian inference to estimate the average fold change (FC) of a distribution
 #' @description code based on
 #' http://www.johnmyleswhite.com/notebook/2010/08/20/using-jags-in-r-with-the-rjags-package/
 #' http://public.wsu.edu/~jesse.brunner/classes/bio572/Lab7_Bayesian.html
@@ -232,16 +232,16 @@ model {
       "),fill=TRUE)
   sink()
   #print(x)
-   jags <- jags.model('model.bug',
+   jags <- suppressMessages(jags.model('model.bug',
                      data = list('x' = x,
                                  'N' = length(x)),
                      n.chains = 4,
-                     n.adapt = 500)
+                     n.adapt = 500,quiet=TRUE ))
   
    #update(jags, 10000)
    
-   coda <- coda.samples(jags, variable.names = c("mu", "tau"), 
-                              n.iter = 500) 
+   coda <- suppressWarnings(coda.samples(jags, variable.names = c("mu", "tau"), 
+                              n.iter = 500,quiet=TRUE ) )
    #summary(coda)
    #plot(coda)
    g<-gelman.diag(coda)
@@ -319,7 +319,7 @@ degPR<-function(rank,colors=""){
 #' @return R object to be load into vizExp
 degObj<-function(counts,design,outfile){
   deg<-list(counts,design)
-  save(deg,outfile)
+  save(deg,file=outfile)
   return(TRUE)
 }
 
