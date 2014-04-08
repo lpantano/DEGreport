@@ -1,6 +1,6 @@
 \name{figurepvaluebyvarexp}
 \alias{figurepvaluebyvarexp}
-\title{Wrap figure from \code{degDispersion} into a Nozzle object}
+\title{Wrap figure from \code{degMV} into a Nozzle object}
 \usage{
 figurepvaluebyvarexp(g1, g2, pvalues, counts, out)
 }
@@ -20,6 +20,6 @@ figurepvaluebyvarexp(g1, g2, pvalues, counts, out)
 Nozzle object
 }
 \description{
-Wrap figure from \code{degDispersion} into a Nozzle object
+Wrap figure from \code{degMV} into a Nozzle object
 }
 

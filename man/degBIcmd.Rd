@@ -1,6 +1,6 @@
 \name{degBIcmd}
 \alias{degBIcmd}
-\title{Apply bayesian inference to estimate the average FC of a distribution}
+\title{Apply bayesian inference to estimate the average fold change (FC) of a distribution}
 \usage{
 degBIcmd(x)
 }

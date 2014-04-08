@@ -1,6 +1,6 @@
 \name{degVar}
 \alias{degVar}
-\title{Distribution of pvalues by SD range}
+\title{Distribution of pvalues by standard desviation range}
 \usage{
 degVar(pvalues,counts)
 }
@@ -15,6 +15,6 @@ degVar(pvalues,counts)
 ggplot2 object
 }
 \description{
-Distribution of pvalues by SD range
+Distribution of pvalues by standard desviation range
 }
 

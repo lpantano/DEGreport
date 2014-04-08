@@ -1,6 +1,6 @@
 \name{degVB}
 \alias{degVB}
-\title{Distribution of the SD of DE genes compared to the background}
+\title{Distribution of the standard desviation of DE genes compared to the background}
 \usage{
 degVB(tags,g1,g2,counts,pop=400)
 }
@@ -21,7 +21,7 @@ degVB(tags,g1,g2,counts,pop=400)
 ggplot2 object
 }
 \description{
-Distribution of the SD of DE genes compared to the
-background
+Distribution of the standard desviation of DE genes
+compared to the background
 }
 

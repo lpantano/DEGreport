@@ -1,6 +1,6 @@
 \name{degBI}
 \alias{degBI}
-\title{Get the estimates of the FC mean from a FC distribution using bayesian inference}
+\title{Get the estimates of the fold change (FC) mean from a FC distribution using bayesian inference}
 \usage{
 degBI(fc)
 }
@@ -11,7 +11,7 @@ degBI(fc)
 matrix with values from \link{degBIcmd}
 }
 \description{
-Get the estimates of the FC mean from a FC distribution
-using bayesian inference
+Get the estimates of the fold change (FC) mean from a FC
+distribution using bayesian inference
 }
 

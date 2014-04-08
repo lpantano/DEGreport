@@ -46,7 +46,7 @@ figurepvaluebyvar<-function(pvalues,counts,out){
                    the SD of the feature." );
   return(FR)
 }
-#' Wrap figure from \code{degDispersion} into a Nozzle object
+#' Wrap figure from \code{degMV} into a Nozzle object
 #' 
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
@@ -55,7 +55,7 @@ figurepvaluebyvar<-function(pvalues,counts,out){
 #' @param out path to save the figure
 #' @return Nozzle object
 figurepvaluebyvarexp<-function(g1,g2,pvalues,counts,out){
-  p<-degDispersion(g1,g2,pvalues,counts)
+  p<-degMV(g1,g2,pvalues,counts)
   
   File="fpvaluebyvarexp.jpg"
   HFile="fpvaluebyvaexpr.pdf"
@@ -183,7 +183,7 @@ tablerank<-function(tab,out){
 #' @param colors data frame with colors for each gene
 #' @param pop random genes for background
 #' @return create a html file with all figures and tables
-createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400){
+createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400,name="DEGreport"){
   fg1<-figurepvaluebyexp(pvalues,counts,path)
   fg2<-figurepvaluebyvar(pvalues,counts,path)
   fg3<-figurepvaluebyvarexp(g1,g2,pvalues,counts,path)
@@ -208,7 +208,7 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400){
                    addTo( newSubSection("FC vs rank"), fg6)
     ))
     
-    writeReport( report, filename=paste(path,"/DEGReport",sep=""))
+    writeReport( report, filename=paste0(path,name))
     
   return(0)
   

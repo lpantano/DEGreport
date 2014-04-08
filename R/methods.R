@@ -48,15 +48,15 @@ degVar<-function(pvalues,counts){
 
 #' Correlation of the standard desviation and the mean of the abundance of a
 #' set of genes.
-#' @aliases degDispersion
-#' @usage degDispersion(g1,g2,pvalues,counts)
+#' @aliases degMV
+#' @usage degMV(g1,g2,pvalues,counts)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene. 
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
-degDispersion<-function(g1,g2,pvalues,counts){
+degMV<-function(g1,g2,pvalues,counts){
   
   sdt1<-apply(counts[,g1],1,sd)
   sdt2<-apply(counts[,g2],1,sd)
@@ -156,7 +156,7 @@ degNcomb<-function(g1,g2){
 #' @return matrix with different combinatios of two vector 
 degComb<-function(g1,g2,pop){
   if (degNcomb(length(g1),length(g2))<pop){
-    return(expand.grid(a=g1,b=g2))
+    return(as.data.frame(expand.grid(a=g1,b=g2)))
   }else{
     #take 10% of each group, 400 times
     g1p=3
@@ -181,15 +181,16 @@ degComb<-function(g1,g2,pop){
 #' @return FC for different combinations of samples in each group for each gene
 degFC<-function(g1,g2,counts,popsize){
   pop<-degComb(g1,g2,popsize)
-  if (is.list(pop)){
+  print(is.data.frame(pop))
+  if (!is.data.frame(pop)){
   popfc<-as.data.frame(sapply(1:popsize,function(x){
-    r<-rowMeans(counts[,pop[[1]][,x]])/(rowMeans(counts[,pop[[2]][,x]])+1 )
+    r<-rowMeans(counts[,pop[[1]][,x]]+1)/(rowMeans(counts[,pop[[2]][,x]])+1)
     r[is.infinite(r)]<-NaN
     return(r)
     }))
   }else{
     popfc<-as.data.frame(apply(pop,1,function(x){
-      r<-counts[,x[1]]/(counts[,x[2]]+1)
+      r<-(counts[,x[1]]+1)/(counts[,x[2]]+1)
       r[is.infinite(r)]<-NaN
       return(r)
     }))
@@ -219,6 +220,7 @@ degBIcmd<-function(x){
   #print(x[1:10])
   mx<-min(x[!is.infinite(x)],na.rm=T)
   x[is.infinite(x)]<-mx  
+  if (max(x)!=min(x)){
   sink("model.bug")
   cat(paste0("
 model {
@@ -249,7 +251,9 @@ model {
   return(c(summary(coda)$statistics[1:2,1],
               summary(coda)[[2]][1,c(1,5)],g$psrf[1,2]))
    
-   
+  }else{
+    return(c(mean(x),0,min(x),max(x),1))
+  }
   
 }
 
@@ -295,10 +299,10 @@ degPR<-function(rank,colors=""){
   sc<-""
   fc<-""
   col=""
-  tab.o<-data.frame(row.names=idsc,sc=1:length(idsc),fc=0.0,col="")
+  tab.o<-data.frame(row.names=idsc,sc=1:length(idsc),fc=0.0,col="",stringsAsFactors = FALSE)
   tab.o[idfc,2]<-1:length(idfc)
-  if (colors!="" & is.data.frame(colors)){
-   tab.o[as.character(colors$genes),3]<-colors$colors
+  if (is.data.frame(colors)){
+   tab.o[as.character(colors$genes),3]<-as.character(colors$colors)
   }else{
     tab.o[,3]<-"black"
   }
@@ -318,7 +322,7 @@ degPR<-function(rank,colors=""){
 #' @param outfile file that will contain the object
 #' @return R object to be load into vizExp
 degObj<-function(counts,design,outfile){
-  deg<-list(counts,design)
+  deg<<-list(counts,design)
   save(deg,file=outfile)
   return(TRUE)
 }
