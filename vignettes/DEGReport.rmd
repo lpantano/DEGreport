@@ -1,22 +1,24 @@
 <!--
-%\VignetteEngine{knitr}
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{DEGReport}
 -->
 
 ```{r}
-library(rjags)
 library(DEGreport)
 data(humanSexDEedgeR)
 
 library(edgeR)
 ```
-Do differential expression with edgeR
+
+Get the path to write the report
 ```{r}
-plotBCV(humanSexDEedgeR)
+if (Sys.info()["sysname"]=="Windows"){pathreport<-paste0(getwd(),'\\')}
+if (Sys.info()["sysname"]!="Windows"){pathreport<-paste0(getwd(),'/')}
 ```
 
 
-GLM DE analysis
+GLM DE analysis, humanSexDEedgeR and edgeR object, so we need just to run the glm function to get DE genes.
+
 ```{r}
 des<-humanSexDEedgeR$design
 fit <- glmFit(humanSexDEedgeR,des)
@@ -26,12 +28,9 @@ detags <- rownames(tab[tab[,5]<=0.1,])
 plotSmear(humanSexDEedgeR, de.tags=detags)
 ```
 
-Distribution of FC
-```{r}
-table(cut(tab[detags,"logFC"],breaks=c(-100,-0.5,0.5,100),labels=c(-1,0,1)))
-```
 
-Check pvalue distribution
+Create the design data.frame where the condition can be Male or Female.
+
 ```{r}
 counts<-cpm(humanSexDEedgeR,log=FALSE)
 g1<-colnames(counts)[1:41]
@@ -40,8 +39,10 @@ design<-data.frame(condition=sub("1","Male",sub("0","Female",des[,2])))
 
 ```
 
-```{r}
 
+We are getting the chromosome information for each gene.
+
+```{r}
 library(biomaRt)
 mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
 g = getGene( id = detags, type = "ensembl_gene_id", mart = mart)
@@ -49,20 +50,22 @@ colors=data.frame(genes=g$ensembl_gene_id,colors=sub("[1-9]{1,2}","Autosomic",g$
 
 #just a quick analysis
 detag10<-detags[1:10]
-createReport(g1,g2,counts,detag10,tab[,4],tab[detag10,1],"~/crickhome/temp/",colors,pop=400)
+createReport(g1,g2,counts,detag10,tab[,4],tab[detag10,1],pathreport,colors,pop=400)
 
-degObj(counts,design,"~/crickhome/temp/degObj.rda")
-library(shiny)
-runGist(9930881)
+##Run this if you want to visualize your expression values by condition
+#degObj(counts,design,"~/crickhome/temp/degObj.rda")
+#library(shiny)
+#runGist(9930881)
 
-degMean(tab[,4],counts)
-detagsm<-detags[1:10]
-degRank(g1,g2,counts[detagsm,],tab[detagsm,1],400)
+#degMean(tab[,4],counts)
+#detagsm<-detags[1:10]
+#degRank(g1,g2,counts[detagsm,],tab[detagsm,1],400)
 
 ```
 
 
-Random M vs F
+Generate same analyziz but with only 10 samples to get a bigger list.
+
 ```{r}
 idxr<-as.numeric(sample(row.names(design),10))
 countsr=humanSexDEedgeR$counts[,idxr]
@@ -86,12 +89,12 @@ detagsr <- rownames(tabr[tabr[,5]<=0.1,])
 
 #just a quick analysis
 detag10<-detagsr[1:10]
-createReport(g1r,g2r,countsr,detag10,tabr[,4],tabr[detag10,1],"~/crickhome/temp/",pop=400,name="random")
+createReport(g1r,g2r,countsr,detag10,tabr[,4],tabr[detag10,1],pathreport,pop=400,name="random")
 
-degObj(countsr,designr,"~/crickhome/temp/degObjRandom.rda")
-
-library(shiny)
-runGist(9930881)
+##Run this if you want to visualize your expression values by condition
+#degObj(countsr,designr,"~/crickhome/temp/degObjRandom.rda")
+#library(shiny)
+#runGist(9930881)
 
 ```
 

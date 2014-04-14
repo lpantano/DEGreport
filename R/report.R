@@ -163,7 +163,7 @@ tablerank<-function(tab,out){
   tab<-cbind(row.names(tab),tab)
   names(tab)<-c("Gene","mean FC","FC at 2.5%","FC at 97.5%",
                 "Origial FC","score")
-  write.table(tab,paste0(out,"/rank.txt"),row.names=F,quote=F,sep="\t")
+  write.table(tab,paste0(out,"rank.txt"),row.names=F,quote=F,sep="\t")
   TAB <- newTable(tab , file=countsFile, exportId="TABLE_COUNTS",
                   "Top genes" );
   return(TAB)
