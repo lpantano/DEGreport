@@ -2,7 +2,7 @@
 \alias{createReport}
 \title{Create report of RNAseq DEG anlaysis}
 \usage{
-createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400)
+createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,name="DEGreport")
 }
 \arguments{
   \item{g1}{group 1}
@@ -23,6 +23,8 @@ createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400)
   \item{colors}{data frame with colors for each gene}
 
   \item{pop}{random genes for background}
+
+  \item{name}{name of the html file}
 }
 \value{
 create a html file with all figures and tables

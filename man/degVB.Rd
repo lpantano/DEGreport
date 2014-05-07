@@ -24,4 +24,9 @@ ggplot2 object
 Distribution of the standard desviation of DE genes
 compared to the background
 }
+\examples{
+data(DEGreportSet)
+detag<-row.names(DEGreportSet$deg[1:10,])
+degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
+}
 

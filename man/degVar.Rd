@@ -17,4 +17,8 @@ ggplot2 object
 \description{
 Distribution of pvalues by standard desviation range
 }
+\examples{
+data(DEGreportSet)
+degVar(DEGreportSet$deg[,4],DEGreportSet$counts)
+}
 

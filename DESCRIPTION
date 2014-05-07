@@ -1,27 +1,28 @@
 Package: DEGreport
-Version: 0.99.0
-Date: 2014-04-18
+Version: 0.99.2
+Date: 2014-05-2
 Type: Package
 Title: Report of DEG analysis
-Description: Creation of a HTML report of differential expression analyses of count data. It integrates some of the code mention in DESeq2 and edgeR vignettes, and reporta ranked list of genes according to the mean~variability of fold changes for each selected gene.
-biocViews: Bioinformatics,
-    DifferentailExpression, 
-    RNAseq, 
-    small RNAseq
+Description: Creation of a HTML report of differential expression analyses of count data. It integrates some of the code mentioned in DESeq2 and edgeR vignettes, and report a ranked list of genes according to the fold changes mean and variability  for each selected gene.
+biocViews: DifferentialExpression, 
+    RNAseqData, 
+    RNAExpressionData
 Suggests:
-    knitr
+    knitr,
+    biomaRt
 Depends:
     R (>= 3.0.0),
-    rjags
+    rjags,
+    quantreg
 Imports:
     plyr,
     utils,
     ggplot2,
     Nozzle.R1,
-    rjags,
-    coda
+    coda,
+    edgeR
 SystemRequirements:   jags (>= 3.0.0)
 Author: Lorena Pantano
-Maintainer: Lorena Pantano <lorena@iscb.org>
+Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: GPL (>=2)
 VignetteBuilder: knitr

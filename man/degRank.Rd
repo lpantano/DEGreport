@@ -23,4 +23,8 @@ data frame with the output of \link{degBIcmd} for each gene
 \description{
 Get rank data frame with best score on the top
 }
+\examples{
+data(DEGreportSet)
+degRank(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts[DEGreportSet$detag,],DEGreportSet$deg[DEGreportSet$detag,1],400)
+}
 

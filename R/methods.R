@@ -5,19 +5,23 @@
 #' @param counts  matrix with counts for each samples and each gene. 
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
+#' @examples
+#' data(DEGreportSet)
+#' degMean(DEGreportSet$deg[,4],DEGreportSet$counts) 
 degMean<-function(pvalues,counts){
   
   meanv<-apply(counts,1,mean)
   meanvfac<-cut(meanv,
                 breaks=c(0,quantile(meanv,seq(.1,1,.1))),
-                labels=paste0(seq(10,100,10),"%"),right=T)
+                labels=paste0(seq(10,100,10),"%"),right=TRUE)
   pvalfac<-cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
-               labels=seq(0.1,1,0.1),right=T)
+               labels=seq(0.1,1,0.1),right=TRUE)
   d<-data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
   p<-ggplot(d,aes(pvalues,fill=meanv))+  
-    geom_bar( position="fill")+
+    #geom_bar( position="fill")+
+    geom_bar()+
     theme_bw() + scale_fill_brewer(palette="RdYlBu")
   return(p)
 }
@@ -29,15 +33,18 @@ degMean<-function(pvalues,counts){
 #' @param counts  matrix with counts for each samples and each gene. 
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
+#' @examples
+#' data(DEGreportSet)
+#' degVar(DEGreportSet$deg[,4],DEGreportSet$counts) 
 degVar<-function(pvalues,counts){
   
   sdv<-apply(counts,1,sd)
   sdvfac<-cut(sdv,
                 breaks=c(0,quantile(sdv,seq(.1,1,.1))),
-                labels=paste0(seq(10,100,10),"%"),right=T)
+                labels=paste0(seq(10,100,10),"%"),right=TRUE)
   pvalfac<-cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
-               labels=seq(0.1,1,0.1),right=T)
+               labels=seq(0.1,1,0.1),right=TRUE)
   d<-data.frame(pvalues=factor(pvalfac),
                 sdv=factor(sdvfac))
   p<-ggplot(d,aes(pvalues,fill=sdv))+  
@@ -56,6 +63,9 @@ degVar<-function(pvalues,counts){
 #' @param counts  matrix with counts for each samples and each gene. 
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
+#' @examples
+#' data(DEGreportSet)
+#' degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],DEGreportSet$counts)
 degMV<-function(g1,g2,pvalues,counts){
   
   sdt1<-apply(counts[,g1],1,sd)
@@ -88,6 +98,10 @@ degMV<-function(g1,g2,pvalues,counts){
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
+#' @examples
+#' data(DEGreportSet)
+#' detag<-row.names(DEGreportSet$deg[1:10,])
+#' degMB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
 degMB<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   g<-""
@@ -117,6 +131,10 @@ degMB<-function(tags,g1,g2,counts,pop=400){
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
+#' @examples
+#' data(DEGreportSet)
+#' detag<-row.names(DEGreportSet$deg[1:10,])
+#' degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
 degVB<-function(tags,g1,g2,counts,pop=400){
   delen<-length(tags)
   g<-""
@@ -218,7 +236,7 @@ degBI<-function(fc){
 degBIcmd<-function(x){
   x<-(as.numeric(x))
   #print(x[1:10])
-  mx<-min(x[!is.infinite(x)],na.rm=T)
+  mx<-min(x[!is.infinite(x)],na.rm=TRUE)
   x[is.infinite(x)]<-mx  
   if (max(x)!=min(x)){
   sink("model.bug")
@@ -238,12 +256,12 @@ model {
                      data = list('x' = x,
                                  'N' = length(x)),
                      n.chains = 4,
-                     n.adapt = 500,quiet=TRUE ))
+                     n.adapt = 1000,quiet=TRUE ))
   
    #update(jags, 10000)
    
    coda <- suppressWarnings(coda.samples(jags, variable.names = c("mu", "tau"), 
-                              n.iter = 500,quiet=TRUE ) )
+                              n.iter = 1000,quiet=TRUE ) )
    #summary(coda)
    #plot(coda)
    g<-gelman.diag(coda)
@@ -266,6 +284,9 @@ model {
 #' @param fc list of FC of deregulated genes. Should be same length than counts \code{row.names}
 #' @param popsize number of combinations to generate
 #' @return data frame with the output of \link{degBIcmd} for each gene
+#' @examples
+#' data(DEGreportSet)
+#' degRank(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts[DEGreportSet$detag,],DEGreportSet$deg[DEGreportSet$detag,1],400)
 degRank<-function(g1,g2,counts,fc,popsize){
   popfc<-degFC(g1,g2,counts,popsize)
   e.tab<-degBI(log2(popfc))
@@ -295,7 +316,7 @@ degRank<-function(g1,g2,counts,fc,popsize){
 #' @return ggplot2 object
 degPR<-function(rank,colors=""){
   idsc<-row.names(rank[order(abs(rank$sc)),])
-  idfc<-row.names(rank[order(abs(rank[,3]),decreasing=T),])
+  idfc<-row.names(rank[order(abs(rank[,3]),decreasing=TRUE),])
   sc<-""
   fc<-""
   col=""
@@ -322,9 +343,9 @@ degPR<-function(rank,colors=""){
 #' @param outfile file that will contain the object
 #' @return R object to be load into vizExp
 degObj<-function(counts,design,outfile){
+  deg<-NULL
   deg<<-list(counts,design)
   save(deg,file=outfile)
   return(TRUE)
 }
-
 

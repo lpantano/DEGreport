@@ -163,7 +163,7 @@ tablerank<-function(tab,out){
   tab<-cbind(row.names(tab),tab)
   names(tab)<-c("Gene","mean FC","FC at 2.5%","FC at 97.5%",
                 "Origial FC","score")
-  write.table(tab,paste0(out,"rank.txt"),row.names=F,quote=F,sep="\t")
+  write.table(tab,paste0(out,"rank.txt"),row.names=FALSE,quote=FALSE,sep="\t")
   TAB <- newTable(tab , file=countsFile, exportId="TABLE_COUNTS",
                   "Top genes" );
   return(TAB)
@@ -172,7 +172,7 @@ tablerank<-function(tab,out){
 #' @description This function get the count matrix, pvalues, and FC of a 
 #' DEG analysis and create a report to help to detect possible problems with the data.
 #' @aliases createReport
-#' @usage createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400)
+#' @usage createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,name="DEGreport")
 #' @param g1 group 1
 #' @param g2 group 2
 #' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
@@ -182,6 +182,7 @@ tablerank<-function(tab,out){
 #' @param path path to save the figure
 #' @param colors data frame with colors for each gene
 #' @param pop random genes for background
+#' @param name name of the html file
 #' @return create a html file with all figures and tables
 createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400,name="DEGreport"){
   fg1<-figurepvaluebyexp(pvalues,counts,path)

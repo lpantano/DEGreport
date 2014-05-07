@@ -17,4 +17,8 @@ ggplot2 object
 \description{
 Distribution of pvalues by expression range
 }
+\examples{
+data(DEGreportSet)
+degMean(DEGreportSet$deg[,4],DEGreportSet$counts)
+}
 
