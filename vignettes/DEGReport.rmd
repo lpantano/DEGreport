@@ -9,12 +9,6 @@ data(humanSexDEedgeR)
 library(edgeR)
 ```
 
-Get the path to write the report
-```{r}
-if (Sys.info()["sysname"]=="Windows"){pathreport<-paste0(getwd(),'\\')}
-if (Sys.info()["sysname"]!="Windows"){pathreport<-paste0(getwd(),'/')}
-```
-
 
 We are going to do a differential expression analysis with edgeR. We have an object that is comming from the edgeR package. It countains a gene count matrix for 85 TSI HapMap individuals, and the gender information. With that, we are going to apply the `glmFit` function to get genes differentially expressed between males and females.
 
@@ -55,6 +49,8 @@ Create the report. The main parameters are the name columns in group1, and group
 detag10<-detags[1:10]
 pval<-tab[,4]
 fc<-tab[detag10,1]
+#uncomment this to create the file
+#pathreport<-"~/report"
 #createReport(g1,g2,counts,detag10,pval,fc,pathreport,colors,pop=400)
 ```
 
@@ -77,40 +73,6 @@ degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
 rank<-degRank(g1,g2,counts[detag10,],fc,400)
 degPR(rank)
-```
-
-Generate same analysis but with only 10 samples to get a bigger list.
-
-```{r}
-idxr<-as.numeric(sample(row.names(design),10))
-countsr=humanSexDEedgeR$counts[,idxr]
-names(countsr)<-colnames(countsr)
-designr<-design[idxr,,drop=FALSE]
-row.names(designr)<-colnames(countsr)
-g1r<-row.names(designr[designr[,1]=="Female",,drop=FALSE])
-g2r<-row.names(designr[designr[,1]!="Female",,drop=FALSE])
-
-
-Dr <- DGEList(counts=humanSexDEedgeR$counts[,idxr],group=design[idxr,])
-Dr <- calcNormFactors(Dr)
-desr <- model.matrix(~design[idxr,])
-Dr <- estimateGLMCommonDisp(Dr, desr)
-Dr <- estimateGLMTrendedDisp(Dr, desr)
-Dr <- estimateGLMTagwiseDisp(Dr, desr)
-fitr <- glmFit(Dr,desr)
-lrtr <- glmLRT(fitr)
-tabr<-cbind(lrtr$table,p.adjust(lrtr$table$PValue,method="BH"))
-detagsr <- rownames(tabr[tabr[,5]<=0.1,])
-
-#just a quick analysis
-detag10<-detagsr[1:10]
-#createReport(g1r,g2r,countsr,detag10,tabr[,4],tabr[detag10,1],pathreport,pop=400,name="random")
-
-##Run this if you want to visualize your expression values by condition
-#degObj(countsr,designr,"~/crickhome/temp/degObjRandom.rda")
-#library(shiny)
-#runGist(9930881)
-
 ```
 
 

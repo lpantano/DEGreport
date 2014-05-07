@@ -184,7 +184,8 @@ tablerank<-function(tab,out){
 #' @param pop random genes for background
 #' @param name name of the html file
 #' @return create a html file with all figures and tables
-createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400,name="DEGreport"){
+createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",
+                       pop=400,name="DEGreport"){
   fg1<-figurepvaluebyexp(pvalues,counts,path)
   fg2<-figurepvaluebyvar(pvalues,counts,path)
   fg3<-figurepvaluebyvarexp(g1,g2,pvalues,counts,path)
@@ -199,7 +200,7 @@ createReport<-function(g1,g2,counts,tags,pvalues,fc,path,colors="",pop=400,name=
   report<-""
   report <- newCustomReport( "DEG Report " );
   report <- addTo( 
-    report, addTo( newSection( "Quality of DEG", class="results" ),
+  report, addTo( newSection( "Quality of DEG", class="results" ),
                    addTo( newSubSection( "Pvalue vs abundance" ), fg1),
                    addTo( newSubSection( "Pvalue vs variation" ), fg2),
                    addTo( newSubSection("Pvalue vs abundance/variation"), fg3),    

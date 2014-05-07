@@ -13,16 +13,17 @@ degMean<-function(pvalues,counts){
   meanv<-apply(counts,1,mean)
   meanvfac<-cut(meanv,
                 breaks=c(0,quantile(meanv,seq(.1,1,.1))),
-                labels=paste0(seq(10,100,10),"%"),right=TRUE)
+                labels=paste0(seq(10,100,10),"%"),
+                right=TRUE)
   pvalfac<-cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
   d<-data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
-  p<-ggplot(d,aes(pvalues,fill=meanv))+  
+  p<-suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+  
     #geom_bar( position="fill")+
     geom_bar()+
-    theme_bw() + scale_fill_brewer(palette="RdYlBu")
+    theme_bw() + scale_fill_brewer(palette="RdYlBu"))
   return(p)
 }
 
@@ -41,15 +42,16 @@ degVar<-function(pvalues,counts){
   sdv<-apply(counts,1,sd)
   sdvfac<-cut(sdv,
                 breaks=c(0,quantile(sdv,seq(.1,1,.1))),
-                labels=paste0(seq(10,100,10),"%"),right=TRUE)
+                labels=paste0(seq(10,100,10),"%"),
+                right=TRUE)
   pvalfac<-cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
   d<-data.frame(pvalues=factor(pvalfac),
                 sdv=factor(sdvfac))
-  p<-ggplot(d,aes(pvalues,fill=sdv))+  
+  p<-suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+  
     geom_bar()+
-    theme_bw() + scale_fill_brewer(palette="RdYlBu")
+    theme_bw() + scale_fill_brewer(palette="RdYlBu"))
   return(p)
 }
 
@@ -78,13 +80,14 @@ degMV<-function(g1,g2,pvalues,counts){
           labels=c("<0.01","NoSig"))
   d<-data.frame(pvalues=pv,sdv=log2(sdv),
                 meanv=log2(meanv))
-  p<-ggplot(d,aes(meanv,sdv,colour=pvalues))+  
+  p<-suppressWarnings(ggplot(d,aes(meanv,sdv,
+    colour=pvalues))+  
     geom_point()+
     scale_color_manual(values=c("red",rgb(0.9,0.9,0.9,0.6)))+
     theme_bw()+
     stat_quantile(aes(meanv,sdv),colour="blue",
                   quantiles = c(0.025,0.975),
-                  linetype=2)
+                  linetype=2))
   return(p)
 }
 
@@ -111,14 +114,16 @@ degMB<-function(tags,g1,g2,counts,pop=400){
   
   rand.s1<-apply(counts[rand,g1],1,mean)
   rand.s2<-apply(counts[rand,g2],1,mean)
-  res<-rbind(data.frame(g="g1",mean=g1var),data.frame(g="g2",mean=g2var))
+  res<-rbind(data.frame(g="g1",mean=g1var),
+             data.frame(g="g2",mean=g2var))
   res<-rbind(res,data.frame(g="r1",mean=rand.s1),
              data.frame(g="r2",mean=rand.s2))
   
-  p<-ggplot(res,aes(g,mean,fill=g,colour=g))+  
+  p<-suppressWarnings(ggplot(res,aes(g,mean,
+    fill=g,colour=g))+  
     geom_violin(alpha=0.2)+
     scale_y_log10()+
-    theme_bw()
+    theme_bw())
   return(p)
 }
 
@@ -144,14 +149,15 @@ degVB<-function(tags,g1,g2,counts,pop=400){
   
   rand.s1<-apply(counts[rand,g1],1,sd)
   rand.s2<-apply(counts[rand,g2],1,sd)
-  res<-rbind(data.frame(g="g1",var=g1var),data.frame(g="g2",var=g2var))
+  res<-rbind(data.frame(g="g1",var=g1var),
+             data.frame(g="g2",var=g2var))
   res<-rbind(res,data.frame(g="r1",var=rand.s1),
              data.frame(g="r2",var=rand.s2))
   
-  p<-ggplot(res,aes(g,var,fill=g,colour=g))+  
+  p<-suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+  
     geom_violin(alpha=0.2)+
     scale_y_log10()+
-    theme_bw()
+    theme_bw())
   return(p)
 }
 
@@ -241,15 +247,15 @@ degBIcmd<-function(x){
   if (max(x)!=min(x)){
   sink("model.bug")
   cat(paste0("
-model {
+  model {
   for (i in 1:N) {
 		x[i] ~ dnorm(mu, tau)
 	}
 	mu ~ dunif(",min(x),",",max(x),")
 	tau <- pow(sigma, -2)
 	sigma ~ dunif(0, 100)
-}
-      "),fill=TRUE)
+  }
+  "),fill=TRUE)
   sink()
   #print(x)
    jags <- suppressMessages(jags.model('model.bug',
@@ -260,8 +266,9 @@ model {
   
    #update(jags, 10000)
    
-   coda <- suppressWarnings(coda.samples(jags, variable.names = c("mu", "tau"), 
-                              n.iter = 1000,quiet=TRUE ) )
+   coda <- suppressWarnings(coda.samples(jags, 
+           variable.names = c("mu", "tau"), 
+           n.iter = 1000,quiet=TRUE ) )
    #summary(coda)
    #plot(coda)
    g<-gelman.diag(coda)
@@ -316,22 +323,25 @@ degRank<-function(g1,g2,counts,fc,popsize){
 #' @return ggplot2 object
 degPR<-function(rank,colors=""){
   idsc<-row.names(rank[order(abs(rank$sc)),])
-  idfc<-row.names(rank[order(abs(rank[,3]),decreasing=TRUE),])
+  idfc<-row.names(rank[order(abs(rank[,3]),
+                             decreasing=TRUE),])
   sc<-""
   fc<-""
   col=""
-  tab.o<-data.frame(row.names=idsc,sc=1:length(idsc),fc=0.0,col="",stringsAsFactors = FALSE)
+  tab.o<-data.frame(row.names=idsc,sc=1:length(idsc),
+                    fc=0.0,col="",stringsAsFactors = FALSE)
   tab.o[idfc,2]<-1:length(idfc)
   if (is.data.frame(colors)){
    tab.o[as.character(colors$genes),3]<-as.character(colors$colors)
   }else{
     tab.o[,3]<-"black"
   }
-  p<-ggplot(tab.o, aes(sc,fc,colour=factor(col))) +
+  p<-suppressWarnings(ggplot(tab.o, 
+    aes(sc,fc,colour=factor(col))) +
     geom_point()+
     theme_bw()+
     scale_color_brewer(palette="Set1")+
-    labs(list(y="rank by FC",x="rank by score"))
+    labs(list(y="rank by FC",x="rank by score")))
   return(p)
 }
 
@@ -343,9 +353,9 @@ degPR<-function(rank,colors=""){
 #' @param outfile file that will contain the object
 #' @return R object to be load into vizExp
 degObj<-function(counts,design,outfile){
-  deg<-NULL
-  deg<<-list(counts,design)
-  save(deg,file=outfile)
-  return(TRUE)
+    deg<-NULL
+    deg<<-list(counts,design)
+    save(deg,file=outfile)
+    return(TRUE)
 }
 
