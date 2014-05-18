@@ -10,21 +10,21 @@
 #' degMean(DEGreportSet$deg[,4],DEGreportSet$counts) 
 degMean<-function(pvalues,counts){
   
-  meanv<-apply(counts,1,mean)
-  meanvfac<-cut(meanv,
+    meanv<-apply(counts,1,mean)
+    meanvfac<-cut(meanv,
                 breaks=c(0,quantile(meanv,seq(.1,1,.1))),
                 labels=paste0(seq(10,100,10),"%"),
                 right=TRUE)
-  pvalfac<-cut(pvalues,
+    pvalfac<-cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
-  d<-data.frame(pvalues=factor(pvalfac),
+    d<-data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
-  p<-suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+  
+    p<-suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+  
     #geom_bar( position="fill")+
     geom_bar()+
     theme_bw() + scale_fill_brewer(palette="RdYlBu"))
-  return(p)
+    return(p)
 }
 
 #' Distribution of pvalues by standard desviation range
@@ -39,20 +39,20 @@ degMean<-function(pvalues,counts){
 #' degVar(DEGreportSet$deg[,4],DEGreportSet$counts) 
 degVar<-function(pvalues,counts){
   
-  sdv<-apply(counts,1,sd)
-  sdvfac<-cut(sdv,
+    sdv<-apply(counts,1,sd)
+    sdvfac<-cut(sdv,
                 breaks=c(0,quantile(sdv,seq(.1,1,.1))),
                 labels=paste0(seq(10,100,10),"%"),
                 right=TRUE)
-  pvalfac<-cut(pvalues,
+    pvalfac<-cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
-  d<-data.frame(pvalues=factor(pvalfac),
+    d<-data.frame(pvalues=factor(pvalfac),
                 sdv=factor(sdvfac))
-  p<-suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+  
+    p<-suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+  
     geom_bar()+
     theme_bw() + scale_fill_brewer(palette="RdYlBu"))
-  return(p)
+    return(p)
 }
 
 #' Correlation of the standard desviation and the mean of the abundance of a
@@ -70,25 +70,25 @@ degVar<-function(pvalues,counts){
 #' degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],DEGreportSet$counts)
 degMV<-function(g1,g2,pvalues,counts){
   
-  sdt1<-apply(counts[,g1],1,sd)
-  sdt2<-apply(counts[,g2],1,sd)
-  sdv<-apply(cbind(sdt1,sdt2),1,max)
-  mt1<-apply(counts[,g1],1,mean)
-  mt2<-apply(counts[,g2],1,mean)  
-  meanv<-apply(cbind(mt1,mt2),1,max)
-  pv<-cut(pvalues,breaks=c(-1,0.01,1.1),
+    sdt1<-apply(counts[,g1],1,sd)
+    sdt2<-apply(counts[,g2],1,sd)
+    sdv<-apply(cbind(sdt1,sdt2),1,max)
+    mt1<-apply(counts[,g1],1,mean)
+    mt2<-apply(counts[,g2],1,mean)  
+    meanv<-apply(cbind(mt1,mt2),1,max)
+    pv<-cut(pvalues,breaks=c(-1,0.01,1.1),
           labels=c("<0.01","NoSig"))
-  d<-data.frame(pvalues=pv,sdv=log2(sdv),
+    d<-data.frame(pvalues=pv,sdv=log2(sdv),
                 meanv=log2(meanv))
-  p<-suppressWarnings(ggplot(d,aes(meanv,sdv,
+    p<-suppressWarnings(ggplot(d,aes(meanv,sdv,
     colour=pvalues))+  
     geom_point()+
     scale_color_manual(values=c("red",rgb(0.9,0.9,0.9,0.6)))+
     theme_bw()+
     stat_quantile(aes(meanv,sdv),colour="blue",
                   quantiles = c(0.025,0.975),
-                  linetype=2))
-  return(p)
+                  linetype=2,formula=y ~ x))
+    return(p)
 }
 
 #' Distribution of expression of DE genes compared to the background
@@ -106,25 +106,25 @@ degMV<-function(g1,g2,pvalues,counts){
 #' detag<-row.names(DEGreportSet$deg[1:10,])
 #' degMB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
 degMB<-function(tags,g1,g2,counts,pop=400){
-  delen<-length(tags)
-  g<-""
-  rand<-sample(row.names(counts),pop)
-  g1var<-apply(counts[tags,g1],1,mean)    
-  g2var<-apply(counts[tags,g2],1,mean)    
+    delen<-length(tags)
+    g<-""
+    rand<-sample(row.names(counts),pop)
+    g1var<-apply(counts[tags,g1],1,mean)    
+    g2var<-apply(counts[tags,g2],1,mean)    
   
-  rand.s1<-apply(counts[rand,g1],1,mean)
-  rand.s2<-apply(counts[rand,g2],1,mean)
-  res<-rbind(data.frame(g="g1",mean=g1var),
+    rand.s1<-apply(counts[rand,g1],1,mean)
+    rand.s2<-apply(counts[rand,g2],1,mean)
+    res<-rbind(data.frame(g="g1",mean=g1var),
              data.frame(g="g2",mean=g2var))
-  res<-rbind(res,data.frame(g="r1",mean=rand.s1),
+    res<-rbind(res,data.frame(g="r1",mean=rand.s1),
              data.frame(g="r2",mean=rand.s2))
   
-  p<-suppressWarnings(ggplot(res,aes(g,mean,
+    p<-suppressWarnings(ggplot(res,aes(g,mean,
     fill=g,colour=g))+  
     geom_violin(alpha=0.2)+
     scale_y_log10()+
     theme_bw())
-  return(p)
+    return(p)
 }
 
 #' Distribution of the standard desviation of DE genes compared to the background
@@ -133,7 +133,8 @@ degMB<-function(tags,g1,g2,counts,pop=400){
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
-#' @param counts  matrix with counts for each samples and each gene. Should be same length than pvalues vector.
+#' @param counts  matrix with counts for each samples and each gene. 
+#' Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
 #' @examples
@@ -141,24 +142,24 @@ degMB<-function(tags,g1,g2,counts,pop=400){
 #' detag<-row.names(DEGreportSet$deg[1:10,])
 #' degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
 degVB<-function(tags,g1,g2,counts,pop=400){
-  delen<-length(tags)
-  g<-""
-  rand<-sample(row.names(counts),pop)
-  g1var<-apply(counts[tags,g1],1,sd)    
-  g2var<-apply(counts[tags,g2],1,sd)    
+    delen<-length(tags)
+    g<-""
+    rand<-sample(row.names(counts),pop)
+    g1var<-apply(counts[tags,g1],1,sd)    
+    g2var<-apply(counts[tags,g2],1,sd)    
   
-  rand.s1<-apply(counts[rand,g1],1,sd)
-  rand.s2<-apply(counts[rand,g2],1,sd)
-  res<-rbind(data.frame(g="g1",var=g1var),
+    rand.s1<-apply(counts[rand,g1],1,sd)
+    rand.s2<-apply(counts[rand,g2],1,sd)
+    res<-rbind(data.frame(g="g1",var=g1var),
              data.frame(g="g2",var=g2var))
-  res<-rbind(res,data.frame(g="r1",var=rand.s1),
+    res<-rbind(res,data.frame(g="r1",var=rand.s1),
              data.frame(g="r2",var=rand.s2))
   
-  p<-suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+  
+    p<-suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+  
     geom_violin(alpha=0.2)+
     scale_y_log10()+
     theme_bw())
-  return(p)
+    return(p)
 }
 
 #' Get number of potential combinations of two vectors
@@ -168,7 +169,7 @@ degVB<-function(tags,g1,g2,counts,pop=400){
 #' @param g2 list of samples in group 2
 #' @return maximum number of combinations of two vectors
 degNcomb<-function(g1,g2){
-  return(g1*g2)
+    return(g1*g2)
 }
 
 #' Get random combinations of two groups
@@ -179,20 +180,20 @@ degNcomb<-function(g1,g2){
 #' @param pop number of combinations to be return
 #' @return matrix with different combinatios of two vector 
 degComb<-function(g1,g2,pop){
-  if (degNcomb(length(g1),length(g2))<pop){
-    return(as.data.frame(expand.grid(a=g1,b=g2)))
-  }else{
-    #take 10% of each group, 400 times
-    g1p=3
-    g2p=3
-    g1p<-ceiling(0.1*length(g1)+1)
-    if(g1p==2){g1p=3}
-    g2p<-ceiling(0.1*length(g2)+1)
-    if(g2p==2){g2p=3}
-    r1<-sapply(1:pop,function(x){sample(g1,g1p)})
-    r2<-sapply(1:pop,function(x){sample(g2,g2p)})
-    return(list(r1,r2))
-  }
+    if (degNcomb(length(g1),length(g2))<pop){
+        return(as.data.frame(expand.grid(a=g1,b=g2)))
+    }else{
+        #take 10% of each group, 400 times
+        g1p=3
+        g2p=3
+        g1p<-ceiling(0.1*length(g1)+1)
+        if(g1p==2){g1p=3}
+        g2p<-ceiling(0.1*length(g2)+1)
+        if(g2p==2){g2p=3}
+        r1<-sapply(1:pop,function(x){sample(g1,g1p)})
+        r2<-sapply(1:pop,function(x){sample(g2,g2p)})
+        return(list(r1,r2))
+    }
 }
 
 #' get the FC for each gene between two groups
@@ -204,33 +205,35 @@ degComb<-function(g1,g2,pop){
 #' @param popsize number of combinations to generate
 #' @return FC for different combinations of samples in each group for each gene
 degFC<-function(g1,g2,counts,popsize){
-  pop<-degComb(g1,g2,popsize)
-  print(is.data.frame(pop))
-  if (!is.data.frame(pop)){
-  popfc<-as.data.frame(sapply(1:popsize,function(x){
-    r<-rowMeans(counts[,pop[[1]][,x]]+1)/(rowMeans(counts[,pop[[2]][,x]])+1)
-    r[is.infinite(r)]<-NaN
-    return(r)
-    }))
-  }else{
-    popfc<-as.data.frame(apply(pop,1,function(x){
-      r<-(counts[,x[1]]+1)/(counts[,x[2]]+1)
-      r[is.infinite(r)]<-NaN
-      return(r)
-    }))
-  }
+    pop<-degComb(g1,g2,popsize)
+    #print(is.data.frame(pop))
+    if (!is.data.frame(pop)){
+        popfc<-as.data.frame(sapply(1:popsize,function(x){
+            r<-rowMeans(counts[,pop[[1]][,x]]+1)/(rowMeans(counts[,pop[[2]][,x]])+1)
+            r[is.infinite(r)]<-NaN
+            return(r)
+        }))
+    }else{
+        popfc<-as.data.frame(apply(pop,1,function(x){
+            r<-(counts[,x[1]]+1)/(counts[,x[2]]+1)
+            r[is.infinite(r)]<-NaN
+            return(r)
+        }))
+    }
 
-  return(popfc)
+    return(popfc)
 }
 
-#' Get the estimates of the fold change (FC) mean from a FC distribution using bayesian inference
+#' Get the estimates of the fold change (FC) mean from a FC distribution using 
+#' bayesian inference
 #' @aliases degBI
 #' @usage degBI(fc)
 #' @param fc list of FC
 #' @return matrix with values from \link{degBIcmd}
 degBI<-function(fc){
-  e<-apply(fc,1,degBIcmd)
-  return(e)
+    e<-apply(fc,1,degBIcmd)
+    if (file.exists("model.bug")){file.remove("model.bug")}
+    return(e)
 }
 
 #' Apply bayesian inference to estimate the average fold change (FC) of a distribution
@@ -240,45 +243,45 @@ degBI<-function(fc){
 #' @param x list of values
 #' @return vector with mu and its confidence intervales (2.5% and 97.5%)
 degBIcmd<-function(x){
-  x<-(as.numeric(x))
-  #print(x[1:10])
-  mx<-min(x[!is.infinite(x)],na.rm=TRUE)
-  x[is.infinite(x)]<-mx  
-  if (max(x)!=min(x)){
-  sink("model.bug")
-  cat(paste0("
-  model {
-  for (i in 1:N) {
-		x[i] ~ dnorm(mu, tau)
-	}
-	mu ~ dunif(",min(x),",",max(x),")
-	tau <- pow(sigma, -2)
-	sigma ~ dunif(0, 100)
-  }
-  "),fill=TRUE)
-  sink()
-  #print(x)
-   jags <- suppressMessages(jags.model('model.bug',
-                     data = list('x' = x,
-                                 'N' = length(x)),
-                     n.chains = 4,
-                     n.adapt = 1000,quiet=TRUE ))
-  
-   #update(jags, 10000)
-   
-   coda <- suppressWarnings(coda.samples(jags, 
-           variable.names = c("mu", "tau"), 
-           n.iter = 1000,quiet=TRUE ) )
-   #summary(coda)
-   #plot(coda)
-   g<-gelman.diag(coda)
-
-  return(c(summary(coda)$statistics[1:2,1],
-              summary(coda)[[2]][1,c(1,5)],g$psrf[1,2]))
-   
-  }else{
-    return(c(mean(x),0,min(x),max(x),1))
-  }
+    x<-(as.numeric(x))
+    #print(x[1:10])
+    mx<-min(x[!is.infinite(x)],na.rm=TRUE)
+    x[is.infinite(x)]<-mx  
+    if (max(x)!=min(x)){
+        sink("model.bug")
+        cat(paste0("
+        model {
+        for (i in 1:N) {
+        x[i] ~ dnorm(mu, tau)
+        }
+        mu ~ dunif(",min(x),",",max(x),")
+        tau <- pow(sigma, -2)
+        sigma ~ dunif(0, 100)
+        }
+        "),fill=TRUE)
+        sink()
+        #print(x)
+        jags <- suppressMessages(jags.model('model.bug',
+                                            data = list('x' = x,
+                                                        'N' = length(x)),
+                                            n.chains = 4,
+                                            n.adapt = 1000,quiet=TRUE ))
+        
+        #update(jags, 10000)
+        
+        coda <- suppressWarnings(coda.samples(jags, 
+                                              variable.names = c("mu", "tau"), 
+                                              n.iter = 1000,quiet=TRUE ) )
+        #summary(coda)
+        #plot(coda)
+        g<-gelman.diag(coda)
+        
+        return(c(summary(coda)$statistics[1:2,1],
+                 summary(coda)[[2]][1,c(1,5)],g$psrf[1,2]))
+        
+    }else{
+        return(c(mean(x),0,min(x),max(x),1))
+    }
   
 }
 
@@ -295,23 +298,23 @@ degBIcmd<-function(x){
 #' data(DEGreportSet)
 #' degRank(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts[DEGreportSet$detag,],DEGreportSet$deg[DEGreportSet$detag,1],400)
 degRank<-function(g1,g2,counts,fc,popsize){
-  popfc<-degFC(g1,g2,counts,popsize)
-  e.tab<-degBI(log2(popfc))
-  e.tab.t<-as.data.frame(t(e.tab))
-  full<-cbind(e.tab.t[,c(1,3:4)],fc)  
-  full$sc<-apply(full[,1:3],1,function(x){
-    if (x[2]*x[3] < 0){
-      d<-abs(x[2])+abs(x[3])
-      s<-d/mean(abs(x[1]))
-    }else{
-      d<-abs(max(abs(x))-min(abs(x)))
-      s<-d/abs(x[1])
-    }
-    return(s)  
-  })
-  
-  
-  return(full[order(full$sc),])
+    popfc<-degFC(g1,g2,counts,popsize)
+    e.tab<-degBI(log2(popfc))
+    e.tab.t<-as.data.frame(t(e.tab))
+    full<-cbind(e.tab.t[,c(1,3:4)],fc)  
+    full$sc<-apply(full[,1:3],1,function(x){
+        if (x[2]*x[3] < 0){
+            d<-abs(x[2])+abs(x[3])
+            s<-d/mean(abs(x[1]))
+        }else{
+            d<-abs(max(abs(x))-min(abs(x)))
+            s<-d/abs(x[1])
+        }
+        return(s)  
+    })
+    
+    
+    return(full[order(full$sc),])
   
 }
 
@@ -321,28 +324,31 @@ degRank<-function(g1,g2,counts,fc,popsize){
 #' @param rank output from \code{degRank} function
 #' @param colors colour used for each gene
 #' @return ggplot2 object
+#' @examples
+#' data(DEGreportSet)
+#' degPR(DEGreportSet$rank)
 degPR<-function(rank,colors=""){
-  idsc<-row.names(rank[order(abs(rank$sc)),])
-  idfc<-row.names(rank[order(abs(rank[,3]),
-                             decreasing=TRUE),])
-  sc<-""
-  fc<-""
-  col=""
-  tab.o<-data.frame(row.names=idsc,sc=1:length(idsc),
-                    fc=0.0,col="",stringsAsFactors = FALSE)
-  tab.o[idfc,2]<-1:length(idfc)
-  if (is.data.frame(colors)){
-   tab.o[as.character(colors$genes),3]<-as.character(colors$colors)
-  }else{
-    tab.o[,3]<-"black"
-  }
-  p<-suppressWarnings(ggplot(tab.o, 
-    aes(sc,fc,colour=factor(col))) +
-    geom_point()+
-    theme_bw()+
-    scale_color_brewer(palette="Set1")+
-    labs(list(y="rank by FC",x="rank by score")))
-  return(p)
+    idsc<-row.names(rank[order(abs(rank$sc)),])
+    idfc<-row.names(rank[order(abs(rank[,3]),
+                               decreasing=TRUE),])
+    sc<-""
+    fc<-""
+    col=""
+    tab.o<-data.frame(row.names=idsc,sc=1:length(idsc),
+                      fc=0.0,col="",stringsAsFactors = FALSE)
+    tab.o[idfc,2]<-1:length(idfc)
+    if (is.data.frame(colors)){
+        tab.o[as.character(colors$genes),3]<-as.character(colors$colors)
+    }else{
+        tab.o[,3]<-"black"
+    }
+    p<-suppressWarnings(ggplot(tab.o, 
+        aes(sc,fc,colour=factor(col))) +
+        geom_point()+
+        theme_bw()+
+        scale_color_brewer(palette="Set1")+
+        labs(list(y="rank by FC",x="rank by score")))
+    return(p)
 }
 
 #' Create a deg object that can be used to plot expression values at shiny server:runGist(9930881)
