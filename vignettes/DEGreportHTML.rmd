@@ -1,6 +1,7 @@
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{DEGReport}
+%\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
 -->
 
 ```{r}
@@ -8,8 +9,6 @@ library(DEGreport)
 data(humanSexDEedgeR)
 library(edgeR)
 ```
-
-
 We are going to do a differential expression analysis with edgeR. We have an object that is comming from the edgeR package. It countains a gene count matrix for 85 TSI HapMap individuals, and the gender information. With that, we are going to apply the `glmFit` function to get genes differentially expressed between males and females.
 
 ```{r}
@@ -20,10 +19,8 @@ tab<-cbind(lrt$table,p.adjust(lrt$table$PValue,method="BH"))
 detags <- rownames(tab[tab[,5]<=0.1,])
 plotSmear(humanSexDEedgeR, de.tags=detags)
 ```
-
-
-We need to extract the design data.frame where the condition is Male or Female.
-
+We need to extract the experiment design data.frame where the condition is 
+Male or Female.
 ```{r}
 counts<-cpm(humanSexDEedgeR,log=FALSE)
 g1<-colnames(counts)[1:41]
@@ -31,9 +28,8 @@ g2<-colnames(counts)[42:85]
 design<-data.frame(condition=sub("1","Male",sub("0","Female",des[,2])))
 
 ```
-
-
-We are getting the chromosome information for each gene. This way we can colour genes according autosomic,x or y chromosomes.
+We are getting the chromosome information for each gene. This way we can colour
+genes according autosomic,X or Y chromosomes.
 
 ```{r}
 library(biomaRt)
@@ -41,7 +37,6 @@ mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
 g = getGene( id = detags, type = "ensembl_gene_id", mart = mart)
 colors=data.frame(genes=g$ensembl_gene_id,colors=sub("[1-9]{1,2}","Autosomic",g$chromosome_name))
 ```
-
 Create the report. The main parameters are the name columns in group1, and group2. Then, the count matrix, gene names that are DE, p-values, fold changes and path to create the report. As optional, you can give colours for each gene, and the population size used for permutation.
 
 ```{r}
@@ -49,29 +44,35 @@ Create the report. The main parameters are the name columns in group1, and group
 detag10<-detags[1:10]
 pval<-tab[,4]
 fc<-tab[detag10,1]
-#uncomment this to create the file
-#pathreport<-"~/report"
-#createReport(g1,g2,counts,detag10,pval,fc,pathreport,colors,pop=400)
+```
+Run the following lines to create the file
+
+```{r eval=FALSE}
+
+pathreport<-"~/report"
+createReport(g1,g2,counts,detag10,pval,fc,pathreport,colors,pop=400)
 ```
 
-Run this if you want to visualize your expression values by condition
+Run the following lines if you want to visualize your expression values by 
+condition
 
-```{r}
-#degObj(counts,design,"~/crickhome/temp/degObj.rda")
-#library(shiny)
-#runGist(9930881)
+```{r eval=FALSE}
+degObj(counts,design,"/tmp/degObj.rda")
+library(shiny)
+runGist(9930881)
 
 ```
 
-You can use individual functions, like degRank or degMean. This will create specific figures and tables showed in the report. 
+You can use individual functions, like degRank or degMean. This will 
+create specific figures and tables showed in the report. 
 
-```{r}
+```{r dev='jpeg'}
 degMean(pval,counts)
 degVar(pval,counts)
 degMV(g1,g2,pval,counts)
 degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
-rank<-degRank(g1,g2,counts[detag10,],fc,400)
+rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
 degPR(rank)
 ```
 

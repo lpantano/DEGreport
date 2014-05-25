@@ -3,7 +3,7 @@
 \alias{degRank}
 \title{Get rank data frame with best score on the top}
 \usage{
-degRank(g1,g2,counts,fc,popsize)
+degRank(g1,g2,counts,fc,popsize,iter)
 }
 \arguments{
   \item{g1}{list of samples in group 1}
@@ -17,6 +17,8 @@ degRank(g1,g2,counts,fc,popsize)
   length than counts \code{row.names}}
 
   \item{popsize}{number of combinations to generate}
+
+  \item{iter}{number of iteration in the mcmc model}
 }
 \value{
 data frame with the output of \link{degBIcmd} for each gene
@@ -26,6 +28,8 @@ Get rank data frame with best score on the top
 }
 \examples{
 data(DEGreportSet)
-degRank(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts[DEGreportSet$detag,],DEGreportSet$deg[DEGreportSet$detag,1],400)
+degRank(DEGreportSet$g1,DEGreportSet$g2,
+    DEGreportSet$counts[DEGreportSet$detag[1:5],],
+    DEGreportSet$deg[DEGreportSet$detag[1:5],1],100,300)
 }
 

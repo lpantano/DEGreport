@@ -26,6 +26,7 @@ abundance of a set of genes.
 }
 \examples{
 data(DEGreportSet)
-degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],DEGreportSet$counts)
+degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],
+    DEGreportSet$counts)
 }
 

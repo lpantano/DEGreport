@@ -4,10 +4,12 @@
 \title{Get the estimates of the fold change (FC) mean from a FC distribution using
 bayesian inference}
 \usage{
-degBI(fc)
+degBI(fc,iter)
 }
 \arguments{
   \item{fc}{list of FC}
+
+  \item{iter}{number of iteration in the mcmc model}
 }
 \value{
 matrix with values from \link{degBIcmd}

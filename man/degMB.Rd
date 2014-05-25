@@ -27,7 +27,7 @@ background
 }
 \examples{
 data(DEGreportSet)
-detag<-row.names(DEGreportSet$deg[1:10,])
+detag <- row.names(DEGreportSet$deg[1:10,])
 degMB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
 }
 

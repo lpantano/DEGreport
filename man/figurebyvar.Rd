@@ -13,7 +13,7 @@ figurebyvar(tags, g1, g2, counts, out, pop = 400)
   \item{g2}{group 2}
 
   \item{counts}{matrix with counts for each samples and
-  each gene. row number should be the same length than
+  each gene. Row number should be the same length than
   pvalues vector.}
 
   \item{out}{path to save the figure}
