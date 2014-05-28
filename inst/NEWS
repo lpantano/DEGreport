@@ -1,0 +1,10 @@
+DEGreport News
+
+CHANGES IN DEGreport 0.99.4
+    
+    05-19-2014 Lorena Pantano <lorena.pantano@gmail.com>
+
+    CODING STYLE
+    * replacing tab by 4 spaces
+    * cleaning up function
+    * adding unit tests
