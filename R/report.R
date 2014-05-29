@@ -215,13 +215,13 @@ createReport <-
     report  <-  newCustomReport( "DEG Report " );
     report  <-  addTo( 
         report, addTo( newSection( "Quality of DEG", class="results" ),
-                    addTo( newSubSection( "Pvalue vs abundance" ), fg1),
-                    addTo( newSubSection( "Pvalue vs variation" ), fg2),
-                    addTo( newSubSection("Pvalue vs abundance/variation"),fg3),    
-                    addTo( newSubSection( "Abundance distribution" ), fg4),
-                    addTo( newSubSection( "Variation distribution" ), fg5),
-                    addTo( newSubSection("Rank"), tb1),
-                    addTo( newSubSection("FC vs rank"), fg6)
+                       addTo( newSubSection( "Pvalue vs abundance" ), fg1),
+                       addTo( newSubSection( "Pvalue vs variation" ), fg2),
+                       addTo( newSubSection("Pvalue vs abundance/variation"), fg3),    
+                       addTo( newSubSection( "Abundance distribution" ), fg4),
+                       addTo( newSubSection( "Variation distribution" ), fg5),
+                       addTo( newSubSection("Rank"), tb1),
+                       addTo( newSubSection("FC vs rank"), fg6)
         ))
     
     writeReport( report, filename=paste0(path,name))

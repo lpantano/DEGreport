@@ -30,6 +30,6 @@ Get rank data frame with best score on the top
 data(DEGreportSet)
 degRank(DEGreportSet$g1,DEGreportSet$g2,
     DEGreportSet$counts[DEGreportSet$detag[1:5],],
-    DEGreportSet$deg[DEGreportSet$detag[1:5],1],100,300)
+    DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
 }
 

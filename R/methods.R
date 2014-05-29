@@ -315,7 +315,7 @@ degBIcmd <-
 #' data(DEGreportSet)
 #' degRank(DEGreportSet$g1,DEGreportSet$g2,
 #'     DEGreportSet$counts[DEGreportSet$detag[1:5],],
-#'     DEGreportSet$deg[DEGreportSet$detag[1:5],1],100,300)
+#'     DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
 degRank <- 
     function(g1,g2,counts,fc,popsize,iter=1000)
 {
