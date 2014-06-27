@@ -1,0 +1,25 @@
+env:
+  global:
+    - R_LIBS_USER=~/R
+
+before_install:
+  - echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
+      | sudo tee /etc/apt/sources.list.d/cran.list
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/cran.list"
+      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+  - sudo apt-add-repository -y ppa:marutter/c2d4u
+  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
+      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+  - sudo apt-get install fabric
+  - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
+  - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
+  - R --version
+  - R -e '.libPaths(); sessionInfo()'
+  - sudo R -e 'source("http://bioconductor.org/biocLite.R");biocLite()'
+  - sudo R -e 'library(BiocInstaller);BiocInstaller::useDevel()'
+  - sudo R -e 'biocLite("DEGreport",suppressUpdates=TRUE,ask=FALSE)'
+
+
+language: c
+script: R -e 'library(DEGreport)'
