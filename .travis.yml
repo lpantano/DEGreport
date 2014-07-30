@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install fabric
-  - sudo apt-get install r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
+  - sudo apt-get install --force-yes r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
   - sudo apt-get install jags
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
