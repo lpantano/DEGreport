@@ -8,8 +8,9 @@ Description: Creation of a HTML report of differential expression
         mentioned in DESeq2 and edgeR vignettes, and report a ranked
         list of genes according to the fold changes mean and
         variability for each selected gene.
-biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting
-Suggests: knitr, biomaRt, RUnit, BiocStyle, BiocGenerics
+biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
+            GeneExpression
+Suggests: knitr, biomaRt, RUnit, BiocStyle, BiocGenerics, BiocParallel
 Depends: R (>= 3.0.0), rjags, quantreg
 Imports: plyr, utils, ggplot2, Nozzle.R1, coda, edgeR
 SystemRequirements: jags (>= 3.0.0)
