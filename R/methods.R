@@ -218,7 +218,7 @@ degFC <-
     pop <- degComb(g1,g2,popsize)
     #print(is.data.frame(pop))
     if (!is.data.frame(pop)){
-        popfc <- as.data.frame(sapply(1:popsize,function(x){
+        popfc <- as.data.frame(lapply(1:popsize,function(x){
             r <- rowMeans(counts[,pop[[1]][,x]]+1)/
                 (rowMeans(counts[,pop[[2]][,x]])+1)
             r[is.infinite(r)] <- NaN
@@ -232,22 +232,28 @@ degFC <-
         }))
     }
 
-    return(popfc)
+    return(split(popfc,row.names(popfc)))
 }
 
 #' Get the estimates of the fold change (FC) mean from a FC distribution using 
 #' bayesian inference
 #' @aliases degBI
-#' @usage degBI(fc,iter)
 #' @param fc list of FC
 #' @param iter number of iteration in the mcmc model
+#' @param ncores number of cores to use
 #' @return matrix with values from \link{degBIcmd}
 degBI <- 
-    function(fc,iter=1000)
+    function(fc,iter=1000,ncores=NULL)
 {
-    e <- apply(fc,1,degBIcmd,iter)
+    if (is.null(ncores)){
+        e <- lapply(fc,degBIcmd,iter)
+    }else{
+        message("using multiple threads")
+        e <- bplapply(fc, degBIcmd, BPPARAM = MulticoreParam(ncores), 
+                      iter = iter)
+    }
     if (file.exists("model.bug")){file.remove("model.bug")}
-    return(e)
+    return(do.call(rbind.data.frame, e))
 }
 
 #' Apply bayesian inference to estimate the average fold change (FC) of 
@@ -279,7 +285,6 @@ degBIcmd <-
         }
         "),fill=TRUE)
         sink()
-        #print(x)
         jags  <-  suppressMessages(jags.model('model.bug',
                                             data = list('x' = x,
                                                         'N' = length(x)),
@@ -302,7 +307,6 @@ degBIcmd <-
 
 #' Get rank data frame with best score on the top
 #' @aliases degRank
-#' @usage degRank(g1,g2,counts,fc,popsize,iter)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param counts count matrix for each gene and each sample that is deregulated
@@ -310,6 +314,7 @@ degBIcmd <-
 #'     Should be same length than counts \code{row.names}
 #' @param popsize number of combinations to generate
 #' @param iter number of iteration in the mcmc model
+#' @param ncores number of cores to use
 #' @return data frame with the output of \link{degBIcmd} for each gene
 #' @examples
 #' data(DEGreportSet)
@@ -317,12 +322,12 @@ degBIcmd <-
 #'     DEGreportSet$counts[DEGreportSet$detag[1:5],],
 #'     DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
 degRank <- 
-    function(g1,g2,counts,fc,popsize,iter=1000)
+    function(g1,g2,counts,fc,popsize,iter=1000,ncores=NULL)
 {
     popfc <- degFC(g1,g2,counts,popsize)
-    e.tab <- degBI(log2(popfc),iter)
-    e.tab.t <- as.data.frame(t(e.tab))
-    full <- cbind(e.tab.t[,c(1,3:4)],fc)  
+    e.tab <- degBI(lapply(popfc,log2),iter,ncores)
+    names(e.tab) <- c("mu","tau","q5","q95","conv")
+    full <- cbind(e.tab[,c(1,3:4)],fc,row.names = row.names(fc))  
     full$sc <- apply(full[,1:3],1,function(x){
         if (x[2]*x[3] < 0){
             d <- abs(x[2])+abs(x[3])
