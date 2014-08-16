@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 0.99.10
+    
+    08-16-2014 Lorena Pantano <lorena.pantano@gmail.com>
+
+    REMOVE BIOMART FROM VIGNETTES DUE TO WINDOWS UNKNOWN BUILD ISSUES
+
 CHANGES IN DEGreport 0.99.9
     
     08-02-2014 Lorena Pantano <lorena.pantano@gmail.com>
