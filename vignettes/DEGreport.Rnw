@@ -54,10 +54,7 @@ We are getting the chromosome information for each gene. This way we can colour
 genes according autosomic,X or Y chromosomes.
 
 <<chunk-3>>=
-library(biomaRt)
-mart = useMart("ensembl", dataset="hsapiens_gene_ensembl")
-g = getGene( id = detags, type = "ensembl_gene_id", mart = mart)
-colors=data.frame(genes=g$ensembl_gene_id,colors=sub("[1-9]{1,2}","Autosomic",g$chromosome_name))
+data(geneInfo)
 @
 
 Create the report. The main parameters are the column names in group1, and 
