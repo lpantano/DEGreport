@@ -327,7 +327,7 @@ degRank <-
     popfc <- degFC(g1,g2,counts,popsize)
     e.tab <- degBI(lapply(popfc,log2),iter,ncores)
     names(e.tab) <- c("mu","tau","q5","q95","conv")
-    full <- cbind(e.tab[,c(1,3:4)],fc,row.names = row.names(fc))  
+    full <- cbind(e.tab[,c(1,3:4)],fc,row.names = row.names(counts))  
     full$sc <- apply(full[,1:3],1,function(x){
         if (x[2]*x[3] < 0){
             d <- abs(x[2])+abs(x[3])
@@ -388,8 +388,8 @@ degObj <-
     function(counts,design,outfile)
 {
     deg <- NULL
-    deg <- list(counts,design)
-    save(deg,file=outfile)
+    deg <- list(counts, design)
+    save(deg, file=outfile)
     return(TRUE)
 }
 
