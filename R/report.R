@@ -198,7 +198,7 @@ tablerank <-
 #' @return create a html file with all figures and tables
 createReport <- 
     function(g1,g2,counts,tags,pvalues,fc,path,colors="",
-                       pop=400,name="DEGreport")
+                       pop=400,name="DEGreport", ncores=NULL)
 {
     fg1 <- figurepvaluebyexp(pvalues,counts,path)
     fg2 <- figurepvaluebyvar(pvalues,counts,path)
@@ -207,7 +207,7 @@ createReport <-
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
     #figurebyvarvsexp()
     #figurecor()
-    tabrank <- degRank(g1,g2,counts[tags,],fc,pop)
+    tabrank <- degRank(g1,g2,counts[tags,],fc,pop, ncores=ncores)
     tb1 <- tablerank(tabrank,path)
     fg6 <- figurerank(tabrank,path,colors)
     
