@@ -205,8 +205,6 @@ createReport <-
     fg3 <- figurepvaluebyvarexp(g1,g2,pvalues,counts,path)
     fg4 <- figurebyexp(tags,g1,g2,counts,path,pop)
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
-    #figurebyvarvsexp()
-    #figurecor()
     tabrank <- degRank(g1,g2,counts[tags,],fc,pop)
     tb1 <- tablerank(tabrank,path)
     fg6 <- figurerank(tabrank,path,colors)
