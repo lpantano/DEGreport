@@ -27,6 +27,8 @@ createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,
   \item{pop}{random genes for background}
 
   \item{name}{name of the html file}
+
+  \item{ncores}{num cores to be used to create report}
 }
 \value{
 create a html file with all figures and tables
