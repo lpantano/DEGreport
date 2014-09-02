@@ -195,6 +195,7 @@ tablerank <-
 #' @param colors data frame with colors for each gene
 #' @param pop random genes for background
 #' @param name name of the html file
+#' @param ncores num cores to be used to create report
 #' @return create a html file with all figures and tables
 createReport <- 
     function(g1,g2,counts,tags,pvalues,fc,path,colors="",
@@ -205,12 +206,9 @@ createReport <-
     fg3 <- figurepvaluebyvarexp(g1,g2,pvalues,counts,path)
     fg4 <- figurebyexp(tags,g1,g2,counts,path,pop)
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
-    #figurebyvarvsexp()
-    #figurecor()
-    tabrank <- degRank(g1,g2,counts[tags,],fc,pop, ncores=ncores)
+    tabrank <- degRank(g1,g2,counts[tags,],fc,pop)
     tb1 <- tablerank(tabrank,path)
     fg6 <- figurerank(tabrank,path,colors)
-    
     report <- ""
     report  <-  newCustomReport( "DEG Report " );
     report  <-  addTo( 
