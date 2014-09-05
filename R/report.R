@@ -182,8 +182,6 @@ tablerank <-
 #' DEG analysis and create a report to help to detect possible problems 
 #'     with the data.
 #' @aliases createReport
-#' @usage createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,
-#'     name="DEGreport")
 #' @param g1 group 1
 #' @param g2 group 2
 #' @param counts  matrix with counts for each samples and each gene. 
