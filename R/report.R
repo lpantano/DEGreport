@@ -207,7 +207,7 @@ createReport <-
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
     #figurebyvarvsexp()
     #figurecor()
-    tabrank <- degRank(g1,g2,counts[tags,],fc,pop, ncores=ncores)
+    tabrank <- degRank(g1,g2,counts[tags,,drop=FALSE],fc,pop, ncores=ncores)
     tb1 <- tablerank(tabrank,path)
     fg6 <- figurerank(tabrank,path,colors)
     
