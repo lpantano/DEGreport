@@ -112,11 +112,11 @@ degMB <-
     delen <- length(tags)
     g <- ""
     rand <- sample(row.names(counts),pop)
-    g1var <- apply(counts[tags,g1],1,mean)    
-    g2var <- apply(counts[tags,g2],1,mean)    
+    g1var <- apply(counts[tags,g1,drop=FALSE],1,mean)    
+    g2var <- apply(counts[tags,g2,drop=FALSE],1,mean)    
   
-    rand.s1 <- apply(counts[rand,g1],1,mean)
-    rand.s2 <- apply(counts[rand,g2],1,mean)
+    rand.s1 <- apply(counts[rand,g1,drop=FALSE],1,mean)
+    rand.s2 <- apply(counts[rand,g2,drop=FALSE],1,mean)
     res <- rbind(data.frame(g="g1",mean=g1var),
              data.frame(g="g2",mean=g2var))
     res <- rbind(res,data.frame(g="r1",mean=rand.s1),
@@ -150,11 +150,11 @@ degVB <-
     delen <- length(tags)
     g <- ""
     rand <- sample(row.names(counts),pop)
-    g1var <- apply(counts[tags,g1],1,sd)    
-    g2var <- apply(counts[tags,g2],1,sd)    
+    g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)    
+    g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)    
   
-    rand.s1 <- apply(counts[rand,g1],1,sd)
-    rand.s2 <- apply(counts[rand,g2],1,sd)
+    rand.s1 <- apply(counts[rand,g1,drop=FALSE],1,sd)
+    rand.s2 <- apply(counts[rand,g2,drop=FALSE],1,sd)
     res <- rbind(data.frame(g="g1",var=g1var),
              data.frame(g="g2",var=g2var))
     res <- rbind(res,data.frame(g="r1",var=rand.s1),
@@ -216,20 +216,23 @@ degFC <-
     function(g1,g2,counts,popsize)
 {
     pop <- degComb(g1,g2,popsize)
-    #print(is.data.frame(pop))
     if (!is.data.frame(pop)){
         popfc <- as.data.frame(lapply(1:popsize,function(x){
-            r <- rowMeans(counts[,pop[[1]][,x]]+1)/
-                (rowMeans(counts[,pop[[2]][,x]])+1)
+            r <- rowMeans(counts[,pop[[1]][,x],drop=FALSE]+1)/
+                (rowMeans(counts[,pop[[2]][,x],drop=FALSE])+1)
             r[is.infinite(r)] <- NaN
             return(r)
         }))
     }else{
         popfc <- as.data.frame(apply(pop,1,function(x){
-            r <- (counts[,x[1]]+1)/(counts[,x[2]]+1)
+            r <- (counts[,x[1],drop=FALSE]+1)/(counts[,x[2],drop=FALSE]+1)
             r[is.infinite(r)] <- NaN
             return(r)
         }))
+        if (nrow(counts) == 1){
+            popfc <- t(popfc)
+        }
+        row.names(popfc)<-row.names(counts)
     }
 
     return(split(popfc,row.names(popfc)))

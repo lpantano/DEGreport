@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.01.01
+    
+    10-17-2014 Lorena Pantano <lorena.pantano@gmail.com>
+
+    FIX BUG WHEN ONLY ONE GENE IS DEG
+
 CHANGES IN DEGreport 0.99.12
     
     09-04-2014 Lorena Pantano <lorena.pantano@gmail.com>
