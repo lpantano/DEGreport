@@ -18,7 +18,7 @@ before_install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","coda","knitr","rjags","quantreg"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
-  - sudo R -e 'source("http://bioconductor.org/biocLite.R");library(BiocInstaller);BiocInstaller::useDevel();biocLite("DEGreport",suppressUpdates=TRUE,ask=FALSE)'
+  - sudo R -e 'source("http://bioconductor.org/biocLite.R");library(BiocInstaller);biocLite("DEGreport",suppressUpdates=TRUE,ask=FALSE)'
 
 
 language: c
