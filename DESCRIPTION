@@ -10,10 +10,9 @@ Description: Creation of a HTML report of differential expression
         variability for each selected gene.
 biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
             GeneExpression
-Suggests: knitr, biomaRt, RUnit, BiocStyle, BiocGenerics, BiocParallel
-Depends: R (>= 3.0.0), rjags, quantreg
+Suggests: knitr, biomaRt, RUnit, BiocStyle, BiocGenerics, BiocParallel, rjags
+Depends: R (>= 3.0.0), quantreg
 Imports: plyr, utils, ggplot2, Nozzle.R1, coda, edgeR
-SystemRequirements: jags (>= 3.0.0)
 Author: Lorena Pantano
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: GPL (>=2)
