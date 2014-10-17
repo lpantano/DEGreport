@@ -3,8 +3,8 @@
 \alias{createReport}
 \title{Create report of RNAseq DEG anlaysis}
 \usage{
-createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,
-    name="DEGreport")
+createReport(g1, g2, counts, tags, pvalues, fc, path, colors = "",
+  pop = 400, name = "DEGreport", ncores = NULL)
 }
 \arguments{
   \item{g1}{group 1}
@@ -27,6 +27,8 @@ createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,
   \item{pop}{random genes for background}
 
   \item{name}{name of the html file}
+
+  \item{ncores}{num cores to be used to create report}
 }
 \value{
 create a html file with all figures and tables

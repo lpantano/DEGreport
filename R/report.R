@@ -182,8 +182,6 @@ tablerank <-
 #' DEG analysis and create a report to help to detect possible problems 
 #'     with the data.
 #' @aliases createReport
-#' @usage createReport(g1,g2,counts,tags,pvalues,fc,path,colors,pop=400,
-#'     name="DEGreport")
 #' @param g1 group 1
 #' @param g2 group 2
 #' @param counts  matrix with counts for each samples and each gene. 
@@ -195,6 +193,7 @@ tablerank <-
 #' @param colors data frame with colors for each gene
 #' @param pop random genes for background
 #' @param name name of the html file
+#' @param ncores num cores to be used to create report
 #' @return create a html file with all figures and tables
 createReport <- 
     function(g1,g2,counts,tags,pvalues,fc,path,colors="",
@@ -205,12 +204,9 @@ createReport <-
     fg3 <- figurepvaluebyvarexp(g1,g2,pvalues,counts,path)
     fg4 <- figurebyexp(tags,g1,g2,counts,path,pop)
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
-    #figurebyvarvsexp()
-    #figurecor()
     tabrank <- degRank(g1,g2,counts[tags,,drop=FALSE],fc,pop, ncores=ncores)
     tb1 <- tablerank(tabrank,path)
     fg6 <- figurerank(tabrank,path,colors)
-    
     report <- ""
     report  <-  newCustomReport( "DEG Report " );
     report  <-  addTo( 
