@@ -13,12 +13,11 @@ before_install:
       -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
   - sudo apt-get install fabric
   - sudo apt-get install --force-yes r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
-  - sudo apt-get install jags
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","coda","knitr","rjags","quantreg"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
-  - sudo R -e 'source("http://bioconductor.org/biocLite.R");library(BiocInstaller);BiocInstaller::useDevel();biocLite("DEGreport",suppressUpdates=TRUE,ask=FALSE)'
+  - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","knitr","devtools"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
+  - sudo R -e 'devtools::github_install("lpantano/DEGreport",ref="Lite",build=FALSE)'
 
 
 language: c
