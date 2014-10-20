@@ -10,13 +10,8 @@ export(degMean)
 export(degVar)
 export(degPR)
 export(degObj)
-import(quantreg)
 import(ggplot2)
 import(utils)
 import(plyr)
-import(Nozzle.R1)
-import(rjags)
-import(coda)
-import(edgeR)
 
 
