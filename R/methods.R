@@ -111,6 +111,7 @@ degMB <-
 {
     delen <- length(tags)
     g <- ""
+    pop <- min(pop, dim(counts)[1])
     rand <- sample(row.names(counts),pop)
     g1var <- apply(counts[tags,g1,drop=FALSE],1,mean)    
     g2var <- apply(counts[tags,g2,drop=FALSE],1,mean)    
@@ -149,6 +150,7 @@ degVB <-
 {
     delen <- length(tags)
     g <- ""
+    pop <- min(pop, dim(counts)[1])
     rand <- sample(row.names(counts),pop)
     g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)    
     g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)    
