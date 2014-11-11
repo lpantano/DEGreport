@@ -3,6 +3,7 @@
 %\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
 %\VignetteEngine{knitr::knitr}
 \documentclass{article}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
 
 <<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
 BiocStyle::latex()
@@ -10,9 +11,10 @@ BiocStyle::latex()
 
 \title{DEGreport }
 \author{Lorena Pantano}
-\date{Modified: 23 May, 2014. Compiled: \today}
+\date{Modified: 12 November, 2014. Compiled: \today}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 \maketitle
 
@@ -78,13 +80,14 @@ Run the fowlling lines if you want to visualize your expression values by
 condition
 
 <<chunk-6, eval=FALSE>>=
-degObj(counts,design,"/tmp/degObj.rda")
+degObj(counts,design,"~/degObj.rda")
+load("~/degObj.rda")
 library(shiny)
 runGist(9930881)
 @
 
 You can use individual functions, like degRank or degMean. This will create 
-specific figures and tables showed in the report.
+specific figures and tables showed in the report. 
 <<chunk-7>>=
 degMean(pval,counts)
 degVar(pval,counts)
@@ -93,6 +96,14 @@ degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
 rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
 degPR(rank)
+@
+
+Remember to change the number of iteration for the bayes approximation to 1000
+or 5000.\Rfunction{rank<-degRank(g1,g2,counts[detag10,],fc,400,5000)}
+
+You can paralellize the score calculation with \textbf{BiocParallel}:
+<<chunk-8, eval=FALSE>>=
+rank<-degRank(g1,g2,counts[detag10,],fc,400,2000,ncores=4)
 @
 
 \end{document}
