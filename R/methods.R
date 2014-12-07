@@ -111,7 +111,15 @@ degMB <-
 {
     delen <- length(tags)
     g <- ""
-    rand <- sample(row.names(counts),pop)
+    # if counts is tiny, sample with replacement
+    if(nrow(counts) < pop) {
+        warning("The number of genes < samples requested, sampling with replacement.")
+        replace = TRUE
+    }
+    else {
+        replace = FALSE
+    }
+    rand <- sample(row.names(counts),pop, replace=replace)
     g1var <- apply(counts[tags,g1,drop=FALSE],1,mean)    
     g2var <- apply(counts[tags,g2,drop=FALSE],1,mean)    
   
@@ -149,6 +157,14 @@ degVB <-
 {
     delen <- length(tags)
     g <- ""
+    # if counts is tiny, sample with replacement
+    if(nrow(counts) < pop) {
+        warning("The number of genes < samples requested, sampling with replacement.")
+        replace = TRUE
+    }
+    else {
+        replace = FALSE
+    }
     rand <- sample(row.names(counts),pop)
     g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)    
     g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)    
