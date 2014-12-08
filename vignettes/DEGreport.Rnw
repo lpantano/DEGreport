@@ -1,7 +1,7 @@
 %\VignetteIndexEntry{DEGreport}
 %\VignetteDepends{}
 %\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{knitr::Sweave2knitr}
 \documentclass{article}
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 
@@ -69,6 +69,7 @@ detag10<-detags[1:10]
 pval<-tab[,4]
 fc<-tab[detag10,1]
 @
+
 Run the following lines to create the file
 
 <<chunk-5, eval=FALSE>>=
@@ -88,12 +89,19 @@ runGist(9930881)
 
 You can use individual functions, like degRank or degMean. This will create 
 specific figures and tables showed in the report. 
+
 <<chunk-7>>=
 degMean(pval,counts)
 degVar(pval,counts)
 degMV(g1,g2,pval,counts)
 degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
+@
+
+If you have installed \Rfunction{rjags}, you can create the rank gene list with
+the following command.
+
+<<chunk-rank, eval=FALSE>>=
 rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
 degPR(rank)
 @
@@ -102,6 +110,7 @@ Remember to change the number of iteration for the bayes approximation to 1000
 or 5000.\Rfunction{rank<-degRank(g1,g2,counts[detag10,],fc,400,5000)}
 
 You can paralellize the score calculation with \textbf{BiocParallel}:
+
 <<chunk-8, eval=FALSE>>=
 rank<-degRank(g1,g2,counts[detag10,],fc,400,2000,ncores=4)
 @

@@ -13,5 +13,3 @@ export(degObj)
 import(ggplot2)
 import(utils)
 import(plyr)
-
-

@@ -23,7 +23,9 @@ degMean <-
                 meanv=factor(meanvfac))
     suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+  
         geom_bar()+
-        theme_bw() + scale_fill_brewer(palette="RdYlBu"))
+        theme_bw() + 
+        scale_fill_brewer("mean\nquantiles",palette="RdYlBu")) +
+        labs(list(x="p-values",y="# genes"))
 }
 
 #' Distribution of pvalues by standard desviation range
@@ -51,7 +53,9 @@ degVar <-
                 sdv=factor(sdvfac))
     suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+  
         geom_bar()+
-        theme_bw() + scale_fill_brewer(palette="RdYlBu"))
+        theme_bw() + 
+        scale_fill_brewer("variance\nquantiles",palette="RdYlBu") +
+        labs(list(x="p-values",y="# genes")))
 }
 
 #' Correlation of the standard desviation and the mean of the abundance of a
@@ -84,8 +88,9 @@ degMV <-
     suppressWarnings(ggplot(d,aes(meanv,sdv,
     colour=pvalues))+  
     geom_point()+
-    scale_color_manual(values=c("red",rgb(0.9,0.9,0.9,0.6)))+
+    scale_color_manual("Significance",values=c("red",rgb(0.9,0.9,0.9,0.6)))+
     theme_bw()+
+    labs(list(x="minimum expression",y="maximum variance")) +
     stat_quantile(aes(meanv,sdv),colour="blue",
         quantiles = c(0.025,0.975),
         linetype=2,formula=y ~ x))
@@ -127,7 +132,8 @@ degMB <-
         fill=g,colour=g))+  
         geom_violin(alpha=0.2)+
         scale_y_log10()+
-        theme_bw())
+        theme_bw()+
+        labs(list(x="",y="log10(gene expression)")))
 }
 
 #' Distribution of the standard desviation of 
@@ -165,7 +171,8 @@ degVB <-
     suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+  
         geom_violin(alpha=0.2)+
         scale_y_log10()+
-        theme_bw())
+        theme_bw()+
+        labs(list(x="",y="log10(gene variance)")))
 }
 
 #' Get number of potential combinations of two vectors
@@ -274,7 +281,6 @@ degBIcmd <-
     function(x,iter=1000)
 {
     x <- (as.numeric(x))
-    #print(x[1:10])
     mx <- min(x[!is.infinite(x)],na.rm=TRUE)
     x[is.infinite(x)] <- mx  
     if (max(x)!=min(x)){
@@ -329,6 +335,11 @@ degBIcmd <-
 degRank <- 
     function(g1,g2,counts,fc,popsize,iter=1000,ncores=NULL)
 {
+    if (is.element("rjags", installed.packages()[,1])){
+        message("you need to install jags and rjags.")
+        return(TRUE)
+    }
+    require("rjags")
     popfc <- degFC(g1,g2,counts,popsize)
     e.tab <- degBI(lapply(popfc,log2),iter,ncores)
     names(e.tab) <- c("mu","tau","q5","q95","conv")
@@ -362,8 +373,8 @@ degPR <-
     idsc <- row.names(rank[order(abs(rank$sc)),])
     idfc <- row.names(rank[order(abs(rank[,3]),
                                decreasing=TRUE),])
-    sc <- ""
-    fc <- ""
+    sc = ""
+    fc = ""
     col=""
     tab.o <- data.frame(row.names=idsc,sc=1:length(idsc),
                       fc=0.0,col="",stringsAsFactors = FALSE)
