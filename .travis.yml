@@ -17,10 +17,8 @@ before_install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","knitr","devtools","knitr","RUnit"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
-  - sudo R -e 'source("http://bioconductor.org/biocLite.R")'
-  - sudo R -e 'biocLite(c("edgeR","BiocGenerics"))'
-  - sudo R -e 'options(repos=structure(c(CRAN="http://cran.rstudio.com/")))'
-  - sudo R -e 'devtools::install_github("lpantano/DEGreport",ref="Lite")'
+  - sudo R -e 'source("http://bioconductor.org/biocLite.R");biocLite(c("edgeR","BiocGenerics"))'
+  - sudo R -e 'options(repos=structure(c(CRAN="http://cran.rstudio.com/")));devtools::install_github("lpantano/DEGreport",ref="Lite",dependencies=FALSE)'
 
 
 language: c
