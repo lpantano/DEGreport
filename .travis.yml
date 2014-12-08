@@ -17,7 +17,7 @@ before_install:
   - R --version
   - R -e '.libPaths(); sessionInfo()'
   - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","knitr","devtools"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
-  - sudo R -e 'devtools::install_github("lpantano/DEGreport",ref="Lite",build=TRUE)'
+  - sudo R -e 'devtools::install_github("lpantano/DEGreport",ref="Lite",build=TRUE,repos="http://cran.rstudio.com/")'
 
 
 language: c
