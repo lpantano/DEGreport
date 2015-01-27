@@ -292,7 +292,7 @@ degBIcmd <-
     mx <- min(x[!is.infinite(x)],na.rm=TRUE)
     x[is.infinite(x)] <- mx  
     if (max(x)!=min(x)){
-        modelstring = "
+        modelstring = '
         model {
         for (i in 1:N) {
             x[i] ~ dnorm(mu, tau)
@@ -301,7 +301,7 @@ degBIcmd <-
         tau  <-  pow(sigma, -2)
         sigma ~ dunif(0, 100)
         }
-        "
+        '
         jags  <-  suppressMessages(jags.model(textConnection(modelstring),
                                             data = list('x' = x,
                                                         'N' = length(x)),
