@@ -292,16 +292,16 @@ degBIcmd <-
     mx <- min(x[!is.infinite(x)],na.rm=TRUE)
     x[is.infinite(x)] <- mx  
     if (max(x)!=min(x)){
-        modelstring = '
+        modelstring = paste0('
         model {
         for (i in 1:N) {
             x[i] ~ dnorm(mu, tau)
         }
-        mu ~ dunif(",min(x),",",max(x),")
+        mu ~ dunif(',min(x),',',max(x),')
         tau  <-  pow(sigma, -2)
         sigma ~ dunif(0, 100)
         }
-        '
+        ')
         jags  <-  suppressMessages(jags.model(textConnection(modelstring),
                                             data = list('x' = x,
                                                         'N' = length(x)),
