@@ -17,9 +17,9 @@ before_install:
   - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","coda","knitr","rjags","quantreg"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
+  - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","coda","knitr","rjags","quantreg","devtools),dependencies=TRUE,repos="http://cran.rstudio.com/")'
   - sudo R -e 'source("http://bioconductor.org/biocLite.R");library(BiocInstaller);biocLite("DEGreport",suppressUpdates=TRUE,ask=FALSE)'
-
+  - sudo R -e 'library(devtools);devtools::install_github("lpantano/DEGreport")'
 
 language: c
 script: R -e 'library(DEGreport)'
