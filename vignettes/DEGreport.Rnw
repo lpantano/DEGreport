@@ -1,8 +1,19 @@
 %\VignetteIndexEntry{DEGreport}
-%\VignetteDepends{}
 %\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
 %\VignetteEngine{knitr::knitr}
-\documentclass{article}
+
+\documentclass[12pt]{article}
+
+\newcommand{\deseqtwo}{\textit{DESeq2}}
+\newcommand{\lowtilde}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+
+<<knitr, echo=FALSE, results="hide">>=
+library("knitr")
+opts_chunk$set(tidy=FALSE,dev="png",fig.show="hide",
+               fig.width=4,fig.height=4.5,
+               message=FALSE)
+@ 
+
 
 <<style, eval=TRUE, echo=FALSE, results="asis">>=
 BiocStyle::latex()
