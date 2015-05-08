@@ -2,13 +2,13 @@
 #' @aliases degMean
 #' @usage degMean(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. 
+#' @param counts  matrix with counts for each samples and each gene.
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' degMean(DEGreportSet$deg[,4],DEGreportSet$counts) 
-degMean <- 
+#' degMean(DEGreportSet$deg[,4],DEGreportSet$counts)
+degMean <-
     function(pvalues,counts)
 {
     meanv  <-  apply(counts,1,mean)
@@ -21,22 +21,24 @@ degMean <-
                labels=seq(0.1,1,0.1),right=TRUE)
     d  <-  data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
-    suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+  
+    suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+
         geom_bar()+
-        theme_bw() + scale_fill_brewer(palette="RdYlBu"))
+        theme_bw() +
+        scale_fill_brewer("mean\nquantiles",palette="RdYlBu")) +
+        labs(list(x="p-values",y="# genes"))
 }
 
 #' Distribution of pvalues by standard desviation range
 #' @aliases degVar
 #' @usage degVar(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. 
+#' @param counts  matrix with counts for each samples and each gene.
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' degVar(DEGreportSet$deg[,4],DEGreportSet$counts) 
-degVar <- 
+#' degVar(DEGreportSet$deg[,4],DEGreportSet$counts)
+degVar <-
     function(pvalues,counts)
 {
     sdv <- apply(counts,1,sd)
@@ -49,9 +51,11 @@ degVar <-
                labels=seq(0.1,1,0.1),right=TRUE)
     d <- data.frame(pvalues=factor(pvalfac),
                 sdv=factor(sdvfac))
-    suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+  
+    suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+
         geom_bar()+
-        theme_bw() + scale_fill_brewer(palette="RdYlBu"))
+        theme_bw() +
+        scale_fill_brewer("variance\nquantiles",palette="RdYlBu") +
+        labs(list(x="p-values",y="# genes")))
 }
 
 #' Correlation of the standard desviation and the mean of the abundance of a
@@ -61,28 +65,28 @@ degVar <-
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. 
+#' @param counts  matrix with counts for each samples and each gene.
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
 #' degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],
 #'     DEGreportSet$counts)
-degMV <- 
+degMV <-
     function(g1,g2,pvalues,counts)
 {
     sdt1 <- apply(counts[,g1],1,sd)
     sdt2 <- apply(counts[,g2],1,sd)
     sdv <- apply(cbind(sdt1,sdt2),1,max)
     mt1 <- apply(counts[,g1],1,mean)
-    mt2 <- apply(counts[,g2],1,mean)  
+    mt2 <- apply(counts[,g2],1,mean)
     meanv <- apply(cbind(mt1,mt2),1,max)
     pv <- cut(pvalues,breaks=c(-1,0.01,1.1),
           labels=c("<0.01","NoSig"))
     d <- data.frame(pvalues=pv,sdv=log2(sdv),
                 meanv=log2(meanv))
     suppressWarnings(ggplot(d,aes(meanv,sdv,
-    colour=pvalues))+  
+    colour=pvalues))+
     geom_point()+
     scale_color_manual(values=c("red",rgb(0.9,0.9,0.9,0.6)))+
     theme_bw()+
@@ -98,7 +102,7 @@ degMV <-
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
-#' @param counts  matrix with counts for each samples and each gene. 
+#' @param counts  matrix with counts for each samples and each gene.
 #' Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
@@ -106,11 +110,12 @@ degMV <-
 #' data(DEGreportSet)
 #' detag <- row.names(DEGreportSet$deg[1:10,])
 #' degMB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
-degMB <- 
+degMB <-
     function(tags,g1,g2,counts,pop=400)
 {
     delen <- length(tags)
     g <- ""
+
     # if counts is tiny, sample with replacement
     if(nrow(counts) < pop) {
         warning("The number of genes < samples requested, sampling with replacement.")
@@ -129,22 +134,22 @@ degMB <-
              data.frame(g="g2",mean=g2var))
     res <- rbind(res,data.frame(g="r1",mean=rand.s1),
              data.frame(g="r2",mean=rand.s2))
-  
+
     suppressWarnings(ggplot(res,aes(g,mean,
-        fill=g,colour=g))+  
+        fill=g,colour=g))+
         geom_violin(alpha=0.2)+
         scale_y_log10()+
         theme_bw())
 }
 
-#' Distribution of the standard desviation of 
+#' Distribution of the standard desviation of
 #'     DE genes compared to the background
 #' @aliases degVB
 #' @usage degVB(tags,g1,g2,counts,pop=400)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
-#' @param counts  matrix with counts for each samples and each gene. 
+#' @param counts  matrix with counts for each samples and each gene.
 #'     Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
@@ -152,7 +157,7 @@ degMB <-
 #' data(DEGreportSet)
 #' detag <- row.names(DEGreportSet$deg[1:10,])
 #' degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
-degVB <- 
+degVB <-
     function(tags,g1,g2,counts,pop=400)
 {
     delen <- length(tags)
@@ -166,17 +171,17 @@ degVB <-
         replace = FALSE
     }
     rand <- sample(row.names(counts),pop)
-    g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)    
-    g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)    
-  
+    g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)
+    g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)
+
     rand.s1 <- apply(counts[rand,g1,drop=FALSE],1,sd)
     rand.s2 <- apply(counts[rand,g2,drop=FALSE],1,sd)
     res <- rbind(data.frame(g="g1",var=g1var),
              data.frame(g="g2",var=g2var))
     res <- rbind(res,data.frame(g="r1",var=rand.s1),
              data.frame(g="r2",var=rand.s2))
-  
-    suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+  
+
+    suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+
         geom_violin(alpha=0.2)+
         scale_y_log10()+
         theme_bw())
@@ -188,7 +193,7 @@ degVB <-
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @return maximum number of combinations of two vectors
-degNcomb <- 
+degNcomb <-
     function(g1,g2)
 {
     return(g1*g2)
@@ -200,8 +205,8 @@ degNcomb <-
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pop number of combinations to be return
-#' @return matrix with different combinatios of two vector 
-degComb <- 
+#' @return matrix with different combinatios of two vector
+degComb <-
     function(g1,g2,pop)
 {
     if (degNcomb(length(g1),length(g2))<pop){
@@ -228,7 +233,7 @@ degComb <-
 #' @param counts count matrix of deregulated genes
 #' @param popsize number of combinations to generate
 #' @return FC for different combinations of samples in each group for each gene
-degFC <- 
+degFC <-
     function(g1,g2,counts,popsize)
 {
     pop <- degComb(g1,g2,popsize)
@@ -254,28 +259,28 @@ degFC <-
     return(split(popfc,row.names(popfc)))
 }
 
-#' Get the estimates of the fold change (FC) mean from a FC distribution using 
+#' Get the estimates of the fold change (FC) mean from a FC distribution using
 #' bayesian inference
 #' @aliases degBI
 #' @param fc list of FC
 #' @param iter number of iteration in the mcmc model
 #' @param ncores number of cores to use
 #' @return matrix with values from \link{degBIcmd}
-degBI <- 
+degBI <-
     function(fc,iter=1000,ncores=NULL)
 {
     if (is.null(ncores)){
         e <- lapply(fc,degBIcmd,iter)
     }else{
         message("using multiple threads")
-        e <- bplapply(fc, degBIcmd, BPPARAM = MulticoreParam(ncores), 
+        e <- bplapply(fc, degBIcmd, BPPARAM = MulticoreParam(ncores),
                       iter = iter)
     }
     if (file.exists("model.bug")){file.remove("model.bug")}
     return(do.call(rbind.data.frame, e))
 }
 
-#' Apply bayesian inference to estimate the average fold change (FC) of 
+#' Apply bayesian inference to estimate the average fold change (FC) of
 #' a distribution
 #' @description code based on
 #' http://www.johnmyleswhite.com/notebook/2010/08/20/
@@ -284,13 +289,13 @@ degBI <-
 #' @param x list of values
 #' @param iter number of iteration in the mcmc model
 #' @return vector with mu and its confidence intervales (2.5% and 97.5%)
-degBIcmd <- 
+degBIcmd <-
     function(x,iter=1000)
 {
     x <- (as.numeric(x))
     #print(x[1:10])
     mx <- min(x[!is.infinite(x)],na.rm=TRUE)
-    x[is.infinite(x)] <- mx  
+    x[is.infinite(x)] <- mx
     if (max(x)!=min(x)){
         modelstring = paste0('
         model {
@@ -307,16 +312,16 @@ degBIcmd <-
                                                         'N' = length(x)),
                                             n.chains = 4,
                                             n.adapt = iter,quiet=TRUE ))
-        
+
         #update(jags, 10000)
-        coda  <-  suppressWarnings(coda.samples(jags, 
-                                              variable.names = c("mu", "tau"), 
+        coda  <-  suppressWarnings(coda.samples(jags,
+                                              variable.names = c("mu", "tau"),
                                               n.iter = iter,quiet=TRUE ) )
         g <- gelman.diag(coda)
-        
+
         return(c(summary(coda)$statistics[1:2,1],
                  summary(coda)[[2]][1,c(1,5)],g$psrf[1,2]))
-        
+
     }else{
         return(c(mean(x),0,min(x),max(x),1))
     }
@@ -327,7 +332,7 @@ degBIcmd <-
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param counts count matrix for each gene and each sample that is deregulated
-#' @param fc list of FC of deregulated genes. 
+#' @param fc list of FC of deregulated genes.
 #'     Should be same length than counts \code{row.names}
 #' @param popsize number of combinations to generate
 #' @param iter number of iteration in the mcmc model
@@ -338,27 +343,32 @@ degBIcmd <-
 #' degRank(DEGreportSet$g1,DEGreportSet$g2,
 #'     DEGreportSet$counts[DEGreportSet$detag[1:5],],
 #'     DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
-degRank <- 
-    function(g1,g2,counts,fc,popsize,iter=1000,ncores=NULL)
+degRank <-
+    function(g1,g2,counts,fc,popsize=400,iter=1000,ncores=NULL)
 {
+    if (!is.element("rjags", installed.packages()[,1])){
+        message("you need to install jags and rjags.")
+        return(TRUE)
+    }
+    require("rjags")
     popfc <- degFC(g1,g2,counts,popsize)
     e.tab <- degBI(lapply(popfc,log2),iter,ncores)
     names(e.tab) <- c("mu","tau","q5","q95","conv")
-    full <- cbind(e.tab[,c(1,3:4)],fc,row.names = row.names(counts))  
+    full <- cbind(e.tab[,c(1,3:4)],fc,row.names = row.names(counts))
     full$sc <- apply(full[,1:3],1,function(x){
         if (x[2]*x[3] < 0){
             d <- abs(x[2])+abs(x[3])
-            s <- d/mean(abs(x[1]))
+            s <- d/abs(x[1])
         }else{
             d <- abs(max(abs(x))-min(abs(x)))
             s <- d/abs(x[1])
         }
-        return(s)  
+        return(s)
     })
     return(full[order(full$sc),])
 }
 
-#' plot the correlation between the rank according estimator and 
+#' plot the correlation between the rank according estimator and
 #'     the rank according FC
 #' @aliases degPR
 #' @usage degPR(rank,colors)
@@ -368,7 +378,7 @@ degRank <-
 #' @examples
 #' data(DEGreportSet)
 #' degPR(DEGreportSet$rank)
-degPR <- 
+degPR <-
     function(rank,colors="")
 {
     idsc <- row.names(rank[order(abs(rank$sc)),])
@@ -385,7 +395,7 @@ degPR <-
     }else{
         tab.o[,3] <- "black"
     }
-    suppressWarnings(ggplot(tab.o, 
+    suppressWarnings(ggplot(tab.o,
         aes(sc,fc,colour=factor(col))) +
         geom_point()+
         theme_bw()+
@@ -393,7 +403,7 @@ degPR <-
         labs(list(y="rank by FC",x="rank by score")))
 }
 
-#' Create a deg object that can be used to plot expression values 
+#' Create a deg object that can be used to plot expression values
 #'     at shiny server:runGist(9930881)
 #' @aliases degObj
 #' @usage degObj(counts,design,outfile)
@@ -401,7 +411,7 @@ degPR <-
 #' @param design colour used for each gene
 #' @param outfile file that will contain the object
 #' @return R object to be load into vizExp
-degObj <- 
+degObj <-
     function(counts,design,outfile)
 {
     deg <- NULL
