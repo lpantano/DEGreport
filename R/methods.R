@@ -115,10 +115,19 @@ degMB <-
 {
     delen <- length(tags)
     g <- ""
-    rand <- sample(row.names(counts),pop)
-    g1var <- apply(counts[tags,g1,drop=FALSE],1,mean)
-    g2var <- apply(counts[tags,g2,drop=FALSE],1,mean)
 
+    # if counts is tiny, sample with replacement
+    if(nrow(counts) < pop) {
+        warning("The number of genes < samples requested, sampling with replacement.")
+        replace = TRUE
+    }
+    else {
+        replace = FALSE
+    }
+    rand <- sample(row.names(counts),pop, replace=replace)
+    g1var <- apply(counts[tags,g1,drop=FALSE],1,mean)    
+    g2var <- apply(counts[tags,g2,drop=FALSE],1,mean)    
+  
     rand.s1 <- apply(counts[rand,g1,drop=FALSE],1,mean)
     rand.s2 <- apply(counts[rand,g2,drop=FALSE],1,mean)
     res <- rbind(data.frame(g="g1",mean=g1var),
@@ -153,6 +162,14 @@ degVB <-
 {
     delen <- length(tags)
     g <- ""
+    # if counts is tiny, sample with replacement
+    if(nrow(counts) < pop) {
+        warning("The number of genes < samples requested, sampling with replacement.")
+        replace = TRUE
+    }
+    else {
+        replace = FALSE
+    }
     rand <- sample(row.names(counts),pop)
     g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)
     g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)
@@ -280,19 +297,17 @@ degBIcmd <-
     mx <- min(x[!is.infinite(x)],na.rm=TRUE)
     x[is.infinite(x)] <- mx
     if (max(x)!=min(x)){
-        sink("model.bug")
-        cat(paste0("
+        modelstring = paste0('
         model {
         for (i in 1:N) {
-        x[i] ~ dnorm(mu, tau)
+            x[i] ~ dnorm(mu, tau)
         }
-        mu ~ dunif(",min(x),",",max(x),")
+        mu ~ dunif(',min(x),',',max(x),')
         tau  <-  pow(sigma, -2)
         sigma ~ dunif(0, 100)
         }
-        "),fill=TRUE)
-        sink()
-        jags  <-  suppressMessages(jags.model('model.bug',
+        ')
+        jags  <-  suppressMessages(jags.model(textConnection(modelstring),
                                             data = list('x' = x,
                                                         'N' = length(x)),
                                             n.chains = 4,
