@@ -338,19 +338,20 @@ degBIcmd <-
 #' @param iter number of iteration in the mcmc model
 #' @param ncores number of cores to use
 #' @return data frame with the output of \link{degBIcmd} for each gene
-#' @examples
+#' @examples \dontrun{
 #' data(DEGreportSet)
+#' library(rjags)
 #' degRank(DEGreportSet$g1,DEGreportSet$g2,
 #'     DEGreportSet$counts[DEGreportSet$detag[1:5],],
 #'     DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
+#' }
 degRank <-
     function(g1,g2,counts,fc,popsize=400,iter=1000,ncores=NULL)
 {
     if (!is.element("rjags", installed.packages()[,1])){
-        message("you need to install jags and rjags.")
-        return(TRUE)
+        message("you need to install jags > 3.0.0 and rjags.")
+        stop("After that load rjags before call this function.")
     }
-    require("rjags")
     popfc <- degFC(g1,g2,counts,popsize)
     e.tab <- degBI(lapply(popfc,log2),iter,ncores)
     names(e.tab) <- c("mu","tau","q5","q95","conv")
@@ -417,6 +418,5 @@ degObj <-
     deg <- NULL
     deg <- list(counts, design)
     save(deg, file=outfile)
-    return(TRUE)
 }
 
