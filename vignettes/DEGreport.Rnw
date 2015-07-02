@@ -86,7 +86,7 @@ createReport(g1,g2,counts,detag10,pval,fc,pathreport,colors,pop=400)
 @
 
 Run the fowlling lines if you want to visualize your expression values by 
-condition
+condition:
 
 <<chunk-6, eval=FALSE>>=
 degObj(counts,design,"/tmp/degObj.rda")
@@ -95,13 +95,15 @@ runGist(9930881)
 @
 
 You can use individual functions, like degRank or degMean. This will create 
-specific figures and tables showed in the report.
+specific figures and tables that are included in the report.
+
 <<chunk-7>>=
 degMean(pval,counts)
 degVar(pval,counts)
 degMV(g1,g2,pval,counts)
 degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
+require(rjags)
 rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
 degPR(rank)
 @
