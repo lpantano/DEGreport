@@ -12,7 +12,7 @@ library("knitr")
 opts_chunk$set(tidy=FALSE,dev="png",fig.show="hide",
                fig.width=4,fig.height=4.5,
                message=FALSE)
-@ 
+@
 
 
 <<style, eval=TRUE, echo=FALSE, results="asis">>=
@@ -36,10 +36,10 @@ library(edgeR)
 @
 
 
-We are going to do a differential expression analysis with edgeR. We have an 
+We are going to do a differential expression analysis with edgeR. We have an
 object that is comming from the edgeR package. It countains a gene count matrix
-for 85 TSI HapMap individuals, and the gender information. With that, we are 
-going to apply the `glmFit` function to get genes differentially expressed 
+for 85 TSI HapMap individuals, and the gender information. With that, we are
+going to apply the `glmFit` function to get genes differentially expressed
 between males and females.
 
 <<chunk-1>>=
@@ -51,7 +51,7 @@ detags <- rownames(tab[tab[,5]<=0.1,])
 plotSmear(humanSexDEedgeR, de.tags=detags)
 @
 
-We need to extract the experiment design data.frame where the condition is 
+We need to extract the experiment design data.frame where the condition is
 Male or Female.
 
 <<chunk-2>>=
@@ -68,9 +68,9 @@ genes according autosomic,X or Y chromosomes.
 data(geneInfo)
 @
 
-Create the report. The main parameters are the column names in group1, and 
-group2. Then, the count matrix, gene names that are DE, p-values, fold changes 
-and path to create the report. As optional, you can give colours for each gene, 
+Create the report. The main parameters are the column names in group1, and
+group2. Then, the count matrix, gene names that are DE, p-values, fold changes
+and path to create the report. As optional, you can give colours for each gene,
 and the number of permutation.
 
 <<chunk-4>>=
@@ -85,7 +85,7 @@ pathreport<-"~/report" #change this to a proper path
 createReport(g1,g2,counts,detag10,pval,fc,pathreport,colors,pop=400)
 @
 
-Run the fowlling lines if you want to visualize your expression values by 
+Run the fowlling lines if you want to visualize your expression values by
 condition:
 
 <<chunk-6, eval=FALSE>>=
@@ -94,7 +94,7 @@ library(shiny)
 runGist(9930881)
 @
 
-You can use individual functions, like degRank or degMean. This will create 
+You can use individual functions, like degRank or degMean. This will create
 specific figures and tables that are included in the report.
 
 <<chunk-7>>=
@@ -103,7 +103,11 @@ degVar(pval,counts)
 degMV(g1,g2,pval,counts)
 degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
-require(rjags)
+@
+
+<<chunk-8, eval=FALSE>>==
+library(coda)
+library(rjags)
 rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
 degPR(rank)
 @
