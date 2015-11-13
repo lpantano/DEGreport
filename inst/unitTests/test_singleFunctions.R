@@ -1,5 +1,5 @@
-test_singleFunctions <- 
-    function() 
+test_singleFunctions <-
+    function()
 {
     data(DEGreportSet)
     checkTrue(class(degMean(DEGreportSet$deg[,4],
@@ -13,9 +13,4 @@ test_singleFunctions <-
         DEGreportSet$counts))[[2]]=="ggplot")
     checkTrue(class(degVB(detag,DEGreportSet$g1,DEGreportSet$g2,
         DEGreportSet$counts))[[2]]=="ggplot")
-    library(rjags)
-    checkTrue(class(degRank(DEGreportSet$g1,DEGreportSet$g2,
-        DEGreportSet$counts[DEGreportSet$detag,],
-        DEGreportSet$deg[DEGreportSet$detag,1],400,200))=="data.frame")
-    checkTrue(class(degPR(DEGreportSet$rank))[[2]]=="ggplot")
 }
