@@ -10,11 +10,11 @@ export(degMean)
 export(degVar)
 export(degPR)
 export(degObj)
-import(quantreg)
-import(ggplot2)
 import(utils)
 import(plyr)
 import(Nozzle.R1)
 import(edgeR)
-
+import(BiocGenerics)
+importFrom(ggplot2, aes, geom_bar, geom_point, geom_violin, ggplot, labs, scale_color_brewer,
+           scale_color_manual, scale_fill_brewer, scale_y_log10, stat_quantile, theme_bw)
 
