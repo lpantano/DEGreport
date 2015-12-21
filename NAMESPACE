@@ -12,7 +12,6 @@ export(degPR)
 export(degObj)
 import(utils)
 import(plyr)
-import(Nozzle.R1)
 import(edgeR)
 import(BiocGenerics)
 importFrom(ggplot2, aes, geom_bar, geom_point, geom_violin, ggplot, labs, scale_color_brewer,

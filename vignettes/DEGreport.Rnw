@@ -68,7 +68,7 @@ genes according autosomic,X or Y chromosomes.
 data(geneInfo)
 @
 
-Create the report. The main parameters are the column names in group1, and
+The main parameters are the column names in group1, and
 group2. Then, the count matrix, gene names that are DE, p-values, fold changes
 and path to create the report. As optional, you can give colours for each gene,
 and the number of permutation.
@@ -78,7 +78,7 @@ detag10<-detags[1:10]
 pval<-tab[,4]
 fc<-tab[detag10,1]
 @
-Run the following lines to create the file
+Run the following lines to create the report. You will need Nozzle.R1 package.
 
 <<chunk-5, eval=FALSE>>=
 pathreport<-"~/report" #change this to a proper path
@@ -104,6 +104,11 @@ degMV(g1,g2,pval,counts)
 degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
 @
+
+To create a ranked list of genes to validate, you can use
+degRank function. It will use the variation of each genes
+to give the ones with highest FC not influenced by the
+variation.
 
 <<chunk-8, eval=FALSE>>==
 library(coda)
