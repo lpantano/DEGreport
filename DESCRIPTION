@@ -12,7 +12,7 @@ biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
             GeneExpression
 Suggests: knitr, biomaRt, RUnit, BiocStyle, BiocGenerics, BiocParallel
 Depends: R (>= 3.2.0), quantreg
-Imports: plyr, utils, ggplot2, Nozzle.R1, coda, edgeR
+Imports: plyr, utils, ggplot2, Nozzle.R1, coda, edgeR, cluster
 Author: Lorena Pantano
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: GPL (>=2)
