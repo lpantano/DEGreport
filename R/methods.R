@@ -1,6 +1,5 @@
 #' Distribution of pvalues by expression range
 #' @aliases degMean
-#' @usage degMean(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene.
 #' row number should be the same length than pvalues vector.
@@ -30,7 +29,6 @@ degMean <-
 
 #' Distribution of pvalues by standard desviation range
 #' @aliases degVar
-#' @usage degVar(pvalues,counts)
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene.
 #' row number should be the same length than pvalues vector.
@@ -61,7 +59,6 @@ degVar <-
 #' Correlation of the standard desviation and the mean of the abundance of a
 #' set of genes.
 #' @aliases degMV
-#' @usage degMV(g1,g2,pvalues,counts)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pvalues  pvalues of DEG analysis
@@ -98,12 +95,11 @@ degMV <-
 #' Distribution of expression of DE genes compared to the background
 #'
 #' @aliases degMB
-#' @usage degMB(tags,g1,g2,counts,pop=400)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
-#' @param counts  matrix with counts for each samples and each gene.
-#' Should be same length than pvalues vector.
+#' @param counts  matrix with counts for each samples and each gene
+#' Should be same length than pvalues vector
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
 #' @examples
@@ -145,7 +141,6 @@ degMB <-
 #' Distribution of the standard desviation of
 #'     DE genes compared to the background
 #' @aliases degVB
-#' @usage degVB(tags,g1,g2,counts,pop=400)
 #' @param tags  list of genes that are DE
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
@@ -189,7 +184,6 @@ degVB <-
 
 #' Get number of potential combinations of two vectors
 #' @aliases degNcomb
-#' @usage degNcomb(g1,g2)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @return maximum number of combinations of two vectors
@@ -201,7 +195,6 @@ degNcomb <-
 
 #' Get random combinations of two groups
 #' @aliases degComb
-#' @usage degComb(g1,g2,pop)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param pop number of combinations to be return
@@ -227,7 +220,6 @@ degComb <-
 
 #' get the FC for each gene between two groups
 #' @aliases degFC
-#' @usage degFC(g1,g2,counts,popsize)
 #' @param g1 list of samples in group 1
 #' @param g2 list of samples in group 2
 #' @param counts count matrix of deregulated genes
@@ -338,13 +330,12 @@ degBIcmd <-
 #' @param iter number of iteration in the mcmc model
 #' @param ncores number of cores to use
 #' @return data frame with the output of \link{degBIcmd} for each gene
-#' @examples \dontrun{
+#' @examples
 #' data(DEGreportSet)
-#' library(rjags)
-#' degRank(DEGreportSet$g1,DEGreportSet$g2,
-#'     DEGreportSet$counts[DEGreportSet$detag[1:5],],
-#'     DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
-#' }
+#' #library(rjags)
+#' #degRank(DEGreportSet$g1,DEGreportSet$g2,
+#' #    DEGreportSet$counts[DEGreportSet$detag[1:5],],
+#' #    DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
 degRank <-
     function(g1,g2,counts,fc,popsize=400,iter=1000,ncores=NULL)
 {
@@ -372,7 +363,6 @@ degRank <-
 #' plot the correlation between the rank according estimator and
 #'     the rank according FC
 #' @aliases degPR
-#' @usage degPR(rank,colors)
 #' @param rank output from \code{degRank} function
 #' @param colors colour used for each gene
 #' @return ggplot2 object
@@ -407,16 +397,24 @@ degPR <-
 #' Create a deg object that can be used to plot expression values
 #'     at shiny server:runGist(9930881)
 #' @aliases degObj
-#' @usage degObj(counts,design,outfile)
 #' @param counts output from get_rank function
 #' @param design colour used for each gene
 #' @param outfile file that will contain the object
 #' @return R object to be load into vizExp
+#' @examples 
+#' data(DEGreportSet)
+#' de = data.frame(row.names=colnames(DEGreportSet$counts),
+#' sex = c(rep("M", length(DEGreportSet$g1)),
+#'         rep("F", length(DEGreportSet$g2))))
+#' degObj(DEGreportSet$counts, de, NULL)
 degObj <-
     function(counts,design,outfile)
 {
     deg <- NULL
     deg <- list(counts, design)
-    save(deg, file=outfile)
+    if (!is.null(outfile))
+        save(deg, file=outfile)
+    if (is.null(outfile))
+        message("please, give an output file name.")
 }
 
