@@ -103,9 +103,9 @@ degVar(pval,counts)
 degMV(g1,g2,pval,counts)
 degMB(detags,g1,g2,counts)
 degVB(detags,g1,g2,counts)
-require(rjags)
-rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
-degPR(rank)
+# require(rjags)
+# rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
+# degPR(rank)
 @
 
 \end{document}
