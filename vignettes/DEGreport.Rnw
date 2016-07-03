@@ -2,15 +2,13 @@
 %\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
 %\VignetteEngine{knitr::knitr}
 
-\documentclass[12pt]{article}
-
-\newcommand{\deseqtwo}{\textit{DESeq2}}
-\newcommand{\lowtilde}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+\documentclass{article}
+\usepackage[utf8]{inputenc}
 
 <<knitr, echo=FALSE, results="hide">>=
 library("knitr")
-opts_chunk$set(tidy=FALSE,dev="png",fig.show="hide",
-               fig.width=4,fig.height=4.5,
+opts_chunk$set(tidy=FALSE,
+               fig.width=9,fig.height=5,
                message=FALSE)
 @ 
 
@@ -21,13 +19,12 @@ BiocStyle::latex()
 
 \title{DEGreport }
 \author{Lorena Pantano}
-\date{Modified: 23 May, 2014. Compiled: \today}
+\date{Modified: 2 July, 2016. Compiled: \today}
 
 \begin{document}
-
-\maketitle
-
-
+maketitle
+\tableofcontents
+\newpage
 
 <<package-load,message=FALSE>>=
 library(DEGreport)
@@ -35,6 +32,7 @@ data(humanSexDEedgeR)
 library(edgeR)
 @
 
+\section{QC figures from DE analysis}
 
 We are going to do a differential expression analysis with edgeR. We have an 
 object that is comming from the edgeR package. It countains a gene count matrix
@@ -106,6 +104,39 @@ degVB(detags,g1,g2,counts)
 # require(rjags)
 # rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
 # degPR(rank)
+@
+
+
+\section{Report from DESeq2 analysis}
+
+In this section, we show how to use DESeq2 output to create a full report,
+including figures and tbale with top de-regulated genes, GO enrichment
+analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
+different files will be saved there.
+
+<<deseq2>>=
+data(humanSexDEedgeR)
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+humanSexDEedgeR$samples[idx,], design=~group)
+dse <- DESeq(dse)
+res <- degResults(dds=dse, name="test", org=NULL, 
+do_go=FALSE, group="group", xs="group", path_results = NULL)
+@
+
+\section{Detect patterns of expression}
+
+In this section, we show how to detect pattern of expression. Mainly useful when
+data is a time course experiment. \Rfunction{degPatterns} needs a expression
+matrix, the design experiment and the column used to group samples.
+
+<<pattern>>=
+data(humanSexDEedgeR)
+ma <- humanSexDEedgeR$counts[1:100,]
+des <- data.frame(row.names=colnames(ma), 
+group=as.factor(humanSexDEedgeR$design[,2]))
+res <- degPatterns(ma, des, time="group", col=NULL)
 @
 
 \end{document}
