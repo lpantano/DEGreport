@@ -159,6 +159,13 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 #' @param scale boolean scale the \code{ma} values by row
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
+#' @details It would be used \link[cluster]{diana} function
+#' to detect a value to cut the expression based clustering
+#' at certain height. It can work with one or more groups with 2 or
+#' more several time points. The different patterns can be merged
+#' to get similar ones into only one pattern. The expression
+#' correlation of the patterns will be used to decide whether
+#' some need to be merged or not.
 #' @return list wiht two items. \code{df} is a data.frame
 #' with two columns. The first one with genes, the second
 #' with the clusters they belong. \code{pass_to_plot} is a vector
@@ -387,7 +394,6 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
                    time, col_transformed, nc1, paste(base, nc1))
         df = lapply(names(matrix_list), function(name) {
             if (name == base) return(NULL)
-            # .exp = cluster_expression[[name]]
             .norm = matrixnorm_list[[name]]
             .ma =  matrix_list[[name]]
             .metadata = metadata_list[[name]]

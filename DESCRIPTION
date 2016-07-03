@@ -42,6 +42,6 @@ Imports:
     stats
 Author: Lorena Pantano
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
-License: GPL (>=2)
+License: MIT + file LICENSE
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
