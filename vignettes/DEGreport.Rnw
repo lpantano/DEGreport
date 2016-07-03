@@ -8,7 +8,7 @@
 <<knitr, echo=FALSE, results="hide">>=
 library("knitr")
 opts_chunk$set(tidy=FALSE,
-               fig.width=5,fig.height=5,
+               fig.width=9,fig.height=5,
                message=FALSE)
 @ 
 
@@ -111,7 +111,7 @@ degVB(detags,g1,g2,counts)
 
 In this section, we show how to use DESeq2 output to create a full report,
 including figures and tbale with top de-regulated genes, GO enrichment
-analysis and heatmaps and PCA plots. If you set `path\_results`,
+analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
 different files will be saved there.
 
 <<deseq2>>=
