@@ -174,7 +174,7 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 #' data(humanSexDEedgeR)
 #' ma <- humanSexDEedgeR$counts[1:100,]
 #' des <- data.frame(row.names=colnames(ma), 
-#' group=as.factor(humanSexDEedgeR$design[,2]))
+#' group=as.factor(humanSexDEedgeR$samples$group))
 #' res <- degPatterns(ma, des, time="group", col=NULL)
 degPatterns = function(ma, metadata, minc=15, summarize="group", 
                        time="time", col="condition", 
