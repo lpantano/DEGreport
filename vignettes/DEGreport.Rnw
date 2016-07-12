@@ -135,8 +135,8 @@ matrix, the design experiment and the column used to group samples.
 data(humanSexDEedgeR)
 ma <- humanSexDEedgeR$counts[1:100,]
 des <- data.frame(row.names=colnames(ma), 
-group=as.factor(humanSexDEedgeR$samples$group))
-res <- degPatterns(ma, des, time="group", col=NULL)
+sex=as.factor(humanSexDEedgeR$samples$group))
+res <- degPatterns(ma, des, time="sex", col=NULL)
 @
 
 \end{document}
