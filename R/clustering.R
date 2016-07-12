@@ -185,7 +185,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         metadata[,col] = rep("one_group", nrow(metadata))
     }
     if (!summarize %in% names(metadata))
-        metadata[,summarize] = paste0(metadata[,col], metadata[,time])
+        metadata[,summarize] = as.factor(paste0(metadata[,col], metadata[,time]))
     stopifnot(class(metadata) == "data.frame")
     stopifnot(class(ma) == "matrix")
     stopifnot(summarize %in% names(metadata))
@@ -214,7 +214,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         norm_sign = ma
     }
     
-    metadata_groups = metadata %>% distinct(metadata[,summarize])
+    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
+    print(metadata_groups)
     rownames(metadata_groups) = metadata_groups[,summarize]
     to_plot = unique(groups)
     plots = lapply(to_plot, function(x){
@@ -318,7 +319,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     if (!summarize %in% names(metadata))
         metadata[,summarize] = paste0(metadata[,col_transformed], metadata[,time])
     
-    metadata_groups = metadata %>% dplyr::distinct(metadata[,summarize])
+    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     return(metadata_groups)
 }
