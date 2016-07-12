@@ -1,9 +1,9 @@
 #' @name humanSexDEedgeR
-#' @title edgeR object for DE genes betwen Male and Females
-#' @description edgeR object for DE genes betwen Male and Females
+#' @title DGEList object for DE genes betwen Male and Females
+#' @description DGEList object for DE genes betwen Male and Females
 #' @docType data
 #' @usage humanSexDEedgeR
-#' @format edgeR object
+#' @format DGEList
 #' @source gEUvadis
 #' @author Lorena Pantano, 2014-05-31
 NULL
