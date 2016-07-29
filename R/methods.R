@@ -11,9 +11,11 @@ degMean <-
     function(pvalues,counts)
 {
     meanv  <-  apply(counts,1,mean)
+    q <- quantile(meanv,seq(.1,1,.1))
+    q <- q[!duplicated(q)]
     meanvfac <- cut(meanv,
-                breaks=c(0,quantile(meanv,seq(.1,1,.1))),
-                labels=paste0(seq(10,100,10),"%"),
+                breaks=c(0,q),
+                labels=names(q),
                 right=TRUE)
     pvalfac  <-  cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
@@ -40,9 +42,11 @@ degVar <-
     function(pvalues,counts)
 {
     sdv <- apply(counts,1,sd)
+    q <- quantile(sdv,seq(.1,1,.1))
+    q <- q[!duplicated(q)]
     sdvfac <- cut(sdv,
-                breaks=c(0,quantile(sdv,seq(.1,1,.1))),
-                labels=paste0(seq(10,100,10),"%"),
+                breaks=c(0,q),
+                labels=names(q),
                 right=TRUE)
     pvalfac <- cut(pvalues,
                breaks=c(0,seq(.1,1,.1)),
@@ -59,25 +63,28 @@ degVar <-
 #' Correlation of the standard desviation and the mean of the abundance of a
 #' set of genes.
 #' @aliases degMV
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
+#' @param group character vector with group name for each sample in the
+#' same order than counts column names.
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene.
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],
-#'     DEGreportSet$counts)
+#' degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
+#'       DEGreportSet$deg[,4],
+#'       DEGreportSet$counts)
 degMV <-
-    function(g1,g2,pvalues,counts)
+    function(group, pvalues, counts)
 {
-    sdt1 <- apply(counts[,g1],1,sd)
-    sdt2 <- apply(counts[,g2],1,sd)
-    sdv <- apply(cbind(sdt1,sdt2),1,max)
-    mt1 <- apply(counts[,g1],1,mean)
-    mt2 <- apply(counts[,g2],1,mean)
-    meanv <- apply(cbind(mt1,mt2),1,max)
+    var_ma <- sapply(unique(as.character(group)), function(g){
+        apply(counts[,group==g], 1, sd, na.rm=TRUE)
+    })    
+    sdv <- apply(var_ma, 1, max)
+    mean_ma <- sapply(unique(as.character(group)), function(g){
+        apply(counts[,group==g], 1, mean, na.rm=TRUE)
+    })    
+    meanv <- apply(mean_ma, 1, min)
     pv <- cut(pvalues,breaks=c(-1,0.01,1.1),
           labels=c("<0.01","NoSig"))
     d <- data.frame(pvalues=pv,sdv=log2(sdv),

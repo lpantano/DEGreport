@@ -5,12 +5,11 @@
 \title{Correlation of the standard desviation and the mean of the abundance of a
 set of genes.}
 \usage{
-degMV(g1, g2, pvalues, counts)
+degMV(group, pvalues, counts)
 }
 \arguments{
-\item{g1}{list of samples in group 1}
-
-\item{g2}{list of samples in group 2}
+\item{group}{character vector with group name for each sample in the
+same order than counts column names.}
 
 \item{pvalues}{pvalues of DEG analysis}
 
@@ -26,7 +25,8 @@ set of genes.
 }
 \examples{
 data(DEGreportSet)
-degMV(DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$deg[,4],
-    DEGreportSet$counts)
+degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
+      DEGreportSet$deg[,4],
+      DEGreportSet$counts)
 }
 

@@ -51,7 +51,7 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 
 
 # plot group of genes according time and group
-.plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy) {
+.plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy=NULL) {
     ma = as.data.frame(norm_sign)[g_in_c,]
     ma_long = suppressMessages(melt(cbind(gene=row.names(ma), ma), variable_name = "sample"))
     ma_long$x = xs[ma_long$sample]
@@ -215,7 +215,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     }
     
     metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
-    print(metadata_groups)
     rownames(metadata_groups) = metadata_groups[,summarize]
     to_plot = unique(groups)
     plots = lapply(to_plot, function(x){
@@ -348,7 +347,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
 degMerge <- function(matrix_list, cluster_list, metadata_list, 
                      summarize="group", time="time", col="condition", 
                      scale=TRUE, mapping=NULL){
-    # require(logging) # basicConfig(level='FINEST')
+    # basicConfig(level='FINEST')
     stopifnot(length(matrix_list)>1 | length(metadata_list)>1)
     stopifnot(length(matrix_list)==length(metadata_list))
     matrixnorm_list = list()
