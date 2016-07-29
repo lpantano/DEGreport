@@ -3,8 +3,8 @@
 \docType{data}
 \name{humanSexDEedgeR}
 \alias{humanSexDEedgeR}
-\title{edgeR object for DE genes betwen Male and Females}
-\format{edgeR object}
+\title{DGEList object for DE genes betwen Male and Females}
+\format{DGEList}
 \source{
 gEUvadis
 }
@@ -12,7 +12,7 @@ gEUvadis
 humanSexDEedgeR
 }
 \description{
-edgeR object for DE genes betwen Male and Females
+DGEList object for DE genes betwen Male and Females
 }
 \author{
 Lorena Pantano, 2014-05-31

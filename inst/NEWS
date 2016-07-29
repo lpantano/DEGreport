@@ -1,5 +1,14 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.9.7
+    
+    07-29-2015 Lorena Pantano <lorena.pantano@gmail.com>
+
+    Features: Add functions to return markdown report from DESeq2 object,
+              and clustering function for time course data.
+    Fixes: small bugs related to Nan values or small diversity values
+           in QC plots.
+
 CHANGES IN DEGreport 1.4.0
     
     07-03-2015 Lorena Pantano <lorena.pantano@gmail.com>
