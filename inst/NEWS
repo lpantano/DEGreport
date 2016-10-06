@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.9.9
+
+    10-06-2016 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Fixes: GO enrichment function. Input genes was wrong.
+    
 CHANGES IN DEGreport 1.9.7
     
     07-29-2015 Lorena Pantano <lorena.pantano@gmail.com>
