@@ -42,7 +42,7 @@ figurepvaluebyvar <-
 figurepvaluebyvarexp <- 
     function(g1,g2,pvalues,counts,out)
 {
-    p <- degMV(g1,g2,pvalues,counts)
+    p <- degMV(c(g1,g2),pvalues,counts)
     
     File="fpvaluebyvarexp.jpg"
     HFile="fpvaluebyvaexpr.pdf"

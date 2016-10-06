@@ -15,7 +15,7 @@
 #' @param batch character, colname in colData to shape points, normally used by 
 #' batch effect visualization
 #' @return ggplot showing the expresison of the genes
-plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
+degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     metadata = data.frame(colData(dds))
     genes= row.names(res)[1:n]
     pp = lapply(genes, function(gene){
@@ -70,6 +70,9 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     if (length(unique(groups))==1){
         p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
                 scale_fill_brewer(guide=FALSE, palette = "Set1")
+    }else{
+        p = p + scale_color_brewer(palette = "Set1") + 
+            scale_fill_brewer(palette = "Set1")
     }
     p
 }
@@ -110,6 +113,7 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     
     select = cutree(as.hclust(c), h = c$dc)
     select = select[select %in% names(table(select))[table(select)>minc]]
+    cat("\n\n Working with ", length(select), "genes after filtering\n\n")
     if (reduce & length(unique(select) > 1) & ncol(counts_group)>2)
         select = .reduce(select, counts_group, cutoff)
     return(select)
@@ -180,6 +184,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
                        time="time", col="condition", 
                        reduce=FALSE,  cutoff=0.30,
                        scale=TRUE, plot=TRUE, fixy=NULL){
+    ma = ma[, row.names(metadata)]
     if (is.null(col)){
         col = "condition"
         metadata[,col] = rep("one_group", nrow(metadata))
@@ -426,11 +431,11 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 }
 
 .run_cluster_profiler <- function(out_df, FDR, FC, org, minc=30){
-    cat("\n\n### GO ontology of DE genes (log2FC >" , FC, " and FDR <", FDR, "):\n\n")
     .res = as.data.frame(out_df)
-    .idx = .res$padj< FDR & .res$absMaxLog2FC > FC
+    .idx = .res$padj < FDR & .res$absMaxLog2FC > FC
     .idx[is.na(.idx)] = FALSE
-    ego <- enrichGO(gene = rownames(out_df), keytype = "ENSEMBL",
+    cat("\n\n### GO ontology of DE genes (log2FC >" , FC, " and FDR <", FDR, "): ", sum(.idx),"\n\n")
+    ego <- enrichGO(gene = row.names(out_df[.idx,]), keytype = "ENSEMBL",
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
     print(print_enrichGO(ego@result, minc))
@@ -601,7 +606,7 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     cat("\n")
     
     cat("\n\nPlot top 9 genes\n\n")
-    plot_top(dds, out_df, xs = xs, group = group)
+    degPlot(dds, out_df, xs = xs, group = group)
     cat("\n")
     
     cat("\n\n### Top DE genes\n\n")
