@@ -2,6 +2,13 @@ DEGreport News
 
 CHANGES IN DEGreport 1.9.9
 
+    10-14-2016 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Fixes: Fix the reduccion of clusters to use correlation
+           values directly.
+
+CHANGES IN DEGreport 1.9.9
+
     10-06-2016 Lorena Pantano <lorena.pantano@gmail.com>
     
     Fixes: GO enrichment function. Input genes was wrong.

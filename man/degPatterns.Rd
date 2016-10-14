@@ -5,7 +5,7 @@
 \title{Make groups of genes using expression profile}
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "group", time = "time",
-  col = "condition", reduce = FALSE, cutoff = 0.3, scale = TRUE,
+  col = "condition", reduce = FALSE, cutoff = 0.7, scale = TRUE,
   plot = TRUE, fixy = NULL)
 }
 \arguments{
@@ -33,7 +33,7 @@ samples. Normally control/mutant}
 correlation values between them.}
 
 \item{cutoff}{integer threshold for correlation
-expression to merge clusters}
+expression to merge clusters (0 - 1)}
 
 \item{scale}{boolean scale the \code{ma} values by row}
 

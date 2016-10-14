@@ -85,20 +85,20 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     scale(e)
 }
 
-.reduce <- function(group, counts_group, cutoff=0.30){
+.reduce <- function(group, counts_group, cutoff=0.70){
     ngroup <- unique(group)
     cor <- lapply(ngroup, function(nc1){
         sapply(ngroup, function(nc2){
-            g1 = colMeans(counts_group[group[group==nc1],])
-            g2 = colMeans(counts_group[group[group==nc2],])
-            1-cor.test(g1, g2)$estimate
+            g1 = colMeans(counts_group[names(group[group==nc1]),])
+            g2 = colMeans(counts_group[names(group[group==nc2]),])
+            (1-cor.test(g1, g2)$estimate)^2
         })
     })
     cor <- do.call(rbind, cor)
     colnames(cor) <- ngroup
     rownames(cor) <- ngroup
     h <- hclust(as.dist(cor), method = "ward.D2")
-    c <- cutree(h, h = cutoff)
+    c <- cutree(h, h = (1-cutoff)^2)
     new <- c[as.character(group)]
     names(new) <- names(group)
     new
@@ -159,7 +159,7 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 #' @param reduce boolean reduce number of clusters using
 #' correlation values between them.
 #' @param cutoff integer threshold for correlation
-#' expression to merge clusters
+#' expression to merge clusters (0 - 1)
 #' @param scale boolean scale the \code{ma} values by row
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
@@ -182,7 +182,7 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 #' res <- degPatterns(ma, des, time="group", col=NULL)
 degPatterns = function(ma, metadata, minc=15, summarize="group", 
                        time="time", col="condition", 
-                       reduce=FALSE,  cutoff=0.30,
+                       reduce=FALSE,  cutoff=0.70,
                        scale=TRUE, plot=TRUE, fixy=NULL){
     ma = ma[, row.names(metadata)]
     if (is.null(col)){
@@ -438,7 +438,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     ego <- enrichGO(gene = row.names(out_df[.idx,]), keytype = "ENSEMBL",
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
-    print(print_enrichGO(ego@result, minc))
+    knitr::kable(simplify(ego@result[,1:7]))
     cat("\n\n")
     
     if ("result" %in%  slotNames(ego))
