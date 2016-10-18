@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.11.1
+
+    10-18-2016 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Fixes: print clusterProfiler output.
+
 CHANGES IN DEGreport 1.9.9
 
     10-14-2016 Lorena Pantano <lorena.pantano@gmail.com>
