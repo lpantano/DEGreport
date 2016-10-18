@@ -438,11 +438,12 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     ego <- enrichGO(gene = row.names(out_df[.idx,]), keytype = "ENSEMBL",
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
-    knitr::kable(simplify(ego@result[,1:7]))
-    cat("\n\n")
     
-    if ("result" %in%  slotNames(ego))
+    if ("result" %in%  slotNames(ego)){
+        print(knitr::kable(simplify(ego@result[,1:7])))
+        cat("\n\n")
         return(ego)
+    }
     return(NULL)
 }
 
