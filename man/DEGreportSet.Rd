@@ -3,8 +3,8 @@
 \docType{data}
 \name{DEGreportSet}
 \alias{DEGreportSet}
-\title{list object for DE genes betwen Male and Females}
-\format{matrix,list,list and matrix}
+\title{List of process geuvadis data to test the package}
+\format{List}
 \source{
 gEUvadis
 }
@@ -12,7 +12,9 @@ gEUvadis
 DEGreportSet
 }
 \description{
-list of objects containgin counts matrix,g1,g2 and edgeR glmfit object
+It contains gene counts matrix, group1 of samples,
+group2 of samples, differential expression analysis table, 
+set of genes, output from degRank function.
 }
 \author{
 Lorena Pantano, 2014-05-31

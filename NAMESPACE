@@ -1,4 +1,5 @@
 export(createReport)
+export(degCheckFactors)
 export(degMV)
 export(degMB)
 export(degVB)
@@ -12,6 +13,7 @@ export(degResults)
 export(degPatterns)
 export(degMerge)
 export(degVolcano)
+export(degPlot)
 importFrom("grDevices", "dev.off", "jpeg", "pdf", "rgb")
 importFrom("methods", "slotNames")
 importFrom("stats", "as.dist", "as.hclust", "cor", "cor.test",

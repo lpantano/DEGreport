@@ -15,7 +15,7 @@
 #' @param batch character, colname in colData to shape points, normally used by 
 #' batch effect visualization
 #' @return ggplot showing the expresison of the genes
-plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
+degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     metadata = data.frame(colData(dds))
     genes= row.names(res)[1:n]
     pp = lapply(genes, function(gene){
@@ -51,7 +51,7 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 
 
 # plot group of genes according time and group
-.plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy) {
+.plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy=NULL) {
     ma = as.data.frame(norm_sign)[g_in_c,]
     ma_long = suppressMessages(melt(cbind(gene=row.names(ma), ma), variable_name = "sample"))
     ma_long$x = xs[ma_long$sample]
@@ -70,6 +70,9 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     if (length(unique(groups))==1){
         p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
                 scale_fill_brewer(guide=FALSE, palette = "Set1")
+    }else{
+        p = p + scale_color_brewer(palette = "Set1") + 
+            scale_fill_brewer(palette = "Set1")
     }
     p
 }
@@ -82,20 +85,20 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     scale(e)
 }
 
-.reduce <- function(group, counts_group, cutoff=0.30){
+.reduce <- function(group, counts_group, cutoff=0.70){
     ngroup <- unique(group)
     cor <- lapply(ngroup, function(nc1){
         sapply(ngroup, function(nc2){
-            g1 = colMeans(counts_group[group[group==nc1],])
-            g2 = colMeans(counts_group[group[group==nc2],])
-            1-cor.test(g1, g2)$estimate
+            g1 = colMeans(counts_group[names(group[group==nc1]),])
+            g2 = colMeans(counts_group[names(group[group==nc2]),])
+            (1-cor.test(g1, g2)$estimate)^2
         })
     })
     cor <- do.call(rbind, cor)
     colnames(cor) <- ngroup
     rownames(cor) <- ngroup
     h <- hclust(as.dist(cor), method = "ward.D2")
-    c <- cutree(h, h = cutoff)
+    c <- cutree(h, h = (1-cutoff)^2)
     new <- c[as.character(group)]
     names(new) <- names(group)
     new
@@ -110,6 +113,7 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     
     select = cutree(as.hclust(c), h = c$dc)
     select = select[select %in% names(table(select))[table(select)>minc]]
+    cat("\n\n Working with ", length(select), "genes after filtering\n\n")
     if (reduce & length(unique(select) > 1) & ncol(counts_group)>2)
         select = .reduce(select, counts_group, cutoff)
     return(select)
@@ -155,7 +159,7 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 #' @param reduce boolean reduce number of clusters using
 #' correlation values between them.
 #' @param cutoff integer threshold for correlation
-#' expression to merge clusters
+#' expression to merge clusters (0 - 1)
 #' @param scale boolean scale the \code{ma} values by row
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
@@ -178,8 +182,9 @@ plot_top = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 #' res <- degPatterns(ma, des, time="group", col=NULL)
 degPatterns = function(ma, metadata, minc=15, summarize="group", 
                        time="time", col="condition", 
-                       reduce=FALSE,  cutoff=0.30,
+                       reduce=FALSE,  cutoff=0.70,
                        scale=TRUE, plot=TRUE, fixy=NULL){
+    ma = ma[, row.names(metadata)]
     if (is.null(col)){
         col = "condition"
         metadata[,col] = rep("one_group", nrow(metadata))
@@ -347,7 +352,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
 degMerge <- function(matrix_list, cluster_list, metadata_list, 
                      summarize="group", time="time", col="condition", 
                      scale=TRUE, mapping=NULL){
-    # require(logging) # basicConfig(level='FINEST')
+    # basicConfig(level='FINEST')
     stopifnot(length(matrix_list)>1 | length(metadata_list)>1)
     stopifnot(length(matrix_list)==length(metadata_list))
     matrixnorm_list = list()
@@ -426,18 +431,19 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 }
 
 .run_cluster_profiler <- function(out_df, FDR, FC, org, minc=30){
-    cat("\n\n### GO ontology of DE genes (log2FC >" , FC, " and FDR <", FDR, "):\n\n")
     .res = as.data.frame(out_df)
-    .idx = .res$padj< FDR & .res$absMaxLog2FC > FC
+    .idx = .res$padj < FDR & .res$absMaxLog2FC > FC
     .idx[is.na(.idx)] = FALSE
-    ego <- enrichGO(gene = rownames(out_df), keytype = "ENSEMBL",
+    cat("\n\n### GO ontology of DE genes (log2FC >" , FC, " and FDR <", FDR, "): ", sum(.idx),"\n\n")
+    ego <- enrichGO(gene = row.names(out_df[.idx,]), keytype = "ENSEMBL",
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
-    print(print_enrichGO(ego@result, minc))
-    cat("\n\n")
     
-    if ("result" %in%  slotNames(ego))
+    if ("result" %in%  slotNames(ego)){
+        print(knitr::kable(simplify(ego@result[,1:7])))
+        cat("\n\n")
         return(ego)
+    }
     return(NULL)
 }
 
@@ -601,7 +607,7 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     cat("\n")
     
     cat("\n\nPlot top 9 genes\n\n")
-    plot_top(dds, out_df, xs = xs, group = group)
+    degPlot(dds, out_df, xs = xs, group = group)
     cat("\n")
     
     cat("\n\n### Top DE genes\n\n")

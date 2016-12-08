@@ -1,10 +1,4 @@
-#' Wrap figure from \code{degMean} into a Nozzle object
-#' 
-#' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. 
-#'     Should be same length than pvalues vector.
-#' @param out path to save the figure
-#' @return Nozzle object
+# Wrap figure from \code{degMean} into a Nozzle object
 figurepvaluebyexp <- 
     function(pvalues,counts,out)
 {
@@ -24,13 +18,7 @@ figurepvaluebyexp <-
                      "This figure shows the distribution of pvalues according
                       the average expression of the feature." );
 }
-#' Wrap figure from \code{degVar} into a Nozzle object
-#' 
-#' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. 
-#'     Should be same length than pvalues vector.
-#' @param out path to save the figure
-#' @return Nozzle object
+# Wrap figure from \code{degVar} into a Nozzle object
 figurepvaluebyvar <- 
     function(pvalues,counts,out)
 {
@@ -50,19 +38,11 @@ figurepvaluebyvar <-
                      "This figure shows the distribution of pvalues according
                    the SD of the feature." );
 }
-#' Wrap figure from \code{degMV} into a Nozzle object
-#' 
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
-#' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene. 
-#'     Should be same length than pvalues vector.
-#' @param out path to save the figure
-#' @return Nozzle object
+# Wrap figure from \code{degMV} into a Nozzle object
 figurepvaluebyvarexp <- 
     function(g1,g2,pvalues,counts,out)
 {
-    p <- degMV(g1,g2,pvalues,counts)
+    p <- degMV(c(g1,g2),pvalues,counts)
     
     File="fpvaluebyvarexp.jpg"
     HFile="fpvaluebyvaexpr.pdf"
@@ -79,16 +59,7 @@ figurepvaluebyvarexp <-
                    the average expression and the variability of the feature. 
                    It is taking the maximum value among group1 and group2" );
 }
-#' Wrap figure from \code{degMB} into a Nozzle object
-#' 
-#' @param tags  genes of DEG analysis
-#' @param g1 group 1
-#' @param g2 group 2
-#' @param counts  matrix with counts for each samples and each gene. 
-#'     Should be same length than pvalues vector.
-#' @param out path to save the figure
-#' @param pop random genes for background
-#' @return Nozzle object
+# Wrap figure from \code{degMB} into a Nozzle object
 figurebyexp <- 
     function(tags,g1,g2,counts,out,pop=400)
 {
@@ -107,16 +78,7 @@ figurebyexp <-
                      "This figure shows the distribution of expression values
                    of the two groups." );
 }
-#' Wrap figure from \code{degVB} into a Nozzle object
-#' 
-#' @param tags  genes of DEG analysis
-#' @param g1 group 1
-#' @param g2 group 2
-#' @param counts  matrix with counts for each samples and each gene. 
-#'     Row number should be the same length than pvalues vector.
-#' @param out path to save the figure
-#' @param pop random genes for background
-#' @return Nozzle object
+# Wrap figure from \code{degVB} into a Nozzle object
 figurebyvar <- 
     function(tags,g1,g2,counts,out,pop=400)
 {
@@ -135,12 +97,7 @@ figurebyvar <-
         "This figure shows the distribution of SD
         of the two groups." );
 }
-#' Wrap figure from \code{plotrank} into a Nozzle object
-#' 
-#' @param tab  table from \link{degRank}
-#' @param out path to save the figure
-#' @param colors colors for each gene
-#' @return Nozzle object
+# Wrap figure from \code{plotrank} into a Nozzle object
 figurerank <- 
     function(tab,out,colors)
 {
@@ -160,11 +117,7 @@ figurerank <-
                    the rank by score and tha rank by FC" );
 }
 
-#' Create table for Nozzle report
-#' 
-#' @param tab  table from \code{\link{degRank}}
-#' @param out path to save the figure
-#' @return Nozzle object
+# Create table for Nozzle report
 tablerank <- 
     function(tab,out)
 {
@@ -201,7 +154,8 @@ createReport <-
 {
     fg1 <- figurepvaluebyexp(pvalues,counts,path)
     fg2 <- figurepvaluebyvar(pvalues,counts,path)
-    fg3 <- figurepvaluebyvarexp(g1,g2,pvalues,counts,path)
+    fg3 <- figurepvaluebyvarexp(c(rep("G1", length(g1)),
+                                  rep("G2", length(g2))),pvalues,counts,path)
     fg4 <- figurebyexp(tags,g1,g2,counts,path,pop)
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
     tabrank <- degRank(g1,g2,counts[tags,,drop=FALSE],fc,pop, ncores=ncores)
