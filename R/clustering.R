@@ -28,7 +28,7 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
             dd$treatment = metadata[row.names(dd), group]
         }
         if (!is.null(batch)){
-            dd$batch = metadata[row.names(dd), batch]
+            dd$batch = as.factor(metadata[row.names(dd), batch])
             p=ggplot(dd, aes(x=time,y=count,color=batch,shape=treatment)) 
         }else{
             p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
