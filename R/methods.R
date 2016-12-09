@@ -1,3 +1,31 @@
+#' Distribution of gene ratios used to calculate Size Factors.
+#' @aliases degCheckFactors
+#' @param counts  matrix with counts for each samples and each gene.
+#' row number should be the same length than pvalues vector.
+#' @return ggplot2 object
+#' @details This function will plot the gene ratios for each sample. To calculate
+#' the ratios, it follows the simliar logic than DESeq2/edgeR uses, where the expression
+#' of each gene is divided by the mean expression of that gene. The distribution
+#' of the ratios should approximate to a normal shape and the factors should be similar
+#' to the median of distributions. If some samples show different distribution,
+#' the factor may be bias due to some biological or technical factor.
+#' @examples
+#' data(DEGreportSet)
+#' degCheckFactors(DEGreportSet$counts[,1:10])
+degCheckFactors <-
+    function(counts)
+    {
+        meanv  <-  rowMeans(counts)
+        ratios <- sweep(counts, 1, meanv, "/")
+        df <- suppressWarnings(reshape::melt.data.frame(as.data.frame(ratios)))
+        suppressWarnings(ggplot(df, aes(value))+
+                             geom_histogram(binwidth = 0.3)+
+                             theme_bw() +
+                             facet_wrap(~variable) +
+                             xlim(-4,4))
+    }
+
+
 #' Distribution of pvalues by expression range
 #' @aliases degMean
 #' @param pvalues  pvalues of DEG analysis
