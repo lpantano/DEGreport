@@ -1,5 +1,12 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.11.2
+
+    12-09-2016 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Features: Add degCheckFactors functions to plot sizefactors used to
+              normalize count data.
+
 CHANGES IN DEGreport 1.11.1
 
     10-18-2016 Lorena Pantano <lorena.pantano@gmail.com>
