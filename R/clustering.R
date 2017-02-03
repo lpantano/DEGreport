@@ -28,7 +28,7 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
             dd$treatment = metadata[row.names(dd), group]
         }
         if (!is.null(batch)){
-            dd$batch = metadata[row.names(dd), batch]
+            dd$batch = as.factor(metadata[row.names(dd), batch])
             p=ggplot(dd, aes(x=time,y=count,color=batch,shape=treatment)) 
         }else{
             p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
@@ -56,7 +56,8 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     ma_long = suppressMessages(melt(cbind(gene=row.names(ma), ma), variable_name = "sample"))
     ma_long$x = xs[ma_long$sample]
     ma_long$group = groups[ma_long$sample]
-    splan = max(c(round(length(unique(ma_long$x))/2,0), 1))
+    splan = max(c(round(length(unique(ma_long$x))/3*2,0), 1))
+    # ma_long$x=factor(ma_long$x)
     p = ggplot(ma_long, aes(x=x, y=value, fill=group, color=group)) + 
         geom_boxplot(alpha=0.3,outlier.size = 0, outlier.shape = NA) + 
         geom_jitter(alpha=0.4, width = 0.2, size=1) +
@@ -210,17 +211,19 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
             mean(ma[g, idx], na.rm=TRUE)
         })
     }))
-    colnames(counts_group) = unique(metadata[,summarize])
+    # colnames(counts_group) = unique(metadata[,summarize])
+    
     groups = .make_clusters(counts_group, minc, reduce=reduce, cutoff=cutoff)
     
     if (scale){
         norm_sign = t(apply(counts_group, 1, .scale))
     }else{
-        norm_sign = ma
+        norm_sign = counts_group
     }
-    
+    colnames(norm_sign) = colnames(counts_group)
     metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
+    norm_sign = norm_sign[, row.names(metadata_groups)]
     to_plot = unique(groups)
     plots = lapply(to_plot, function(x){
         .plot_cluster(norm_sign, as.character(names(groups[groups==x])), 
@@ -440,7 +443,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
     
     if ("result" %in%  slotNames(ego)){
-        print(knitr::kable(simplify(ego@result[,1:7])))
+        print(knitr::kable(simplify(ego)@result[,1:7]))
         cat("\n\n")
         return(ego)
     }
@@ -474,7 +477,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     write.table(tab, file.path(basedir, fn), quote=quote, sep=sep, row.names=F)
 }
 
-.mds = function(counts, condition=NULL,k=6,d="euclidian",xi=1,yi=2) {
+.mds = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
     nprobes = nrow(counts)
     nsamples = ncol(counts)
     if (d=="euclidian"){
