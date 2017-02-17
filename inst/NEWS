@@ -1,5 +1,13 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.11.4
+
+    02-17-2017 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Re-organize vignette.
+    Feature: Ignore warnings when plotting
+    Feature: Improve volcano plot
+
 CHANGES IN DEGreport 1.11.3
 
     01-03-2017 Lorena Pantano <lorena.pantano@gmail.com>

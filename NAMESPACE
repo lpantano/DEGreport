@@ -19,6 +19,7 @@ importFrom("methods", "slotNames")
 importFrom("stats", "as.dist", "as.hclust", "cor", "cor.test",
            "cutree", "density", "median.default", "quantile", "sd",
            "time", "var")
+import(ggrepel)
 import(quantreg)
 import(ggplot2)
 import(utils)
