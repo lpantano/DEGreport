@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.11.3
-Date: 2017-01-03
+Version: 1.11.4
+Date: 2017-02-17
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -26,6 +26,7 @@ Imports:
     utils,
     methods,
     ggplot2,
+    ggrepel,
     Nozzle.R1,
     coda,
     edgeR,
@@ -40,7 +41,12 @@ Imports:
     knitr,
     grDevices,
     stats
-Author: Lorena Pantano
+Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 
+  role = c("aut", "cre")),
+  person("John", "Hutchinson", email = "@jnhutchinson", 
+  role = c("ctb")),
+  person("Victor", "Barrera", email = "@vbarrera", 
+  role = c("ctb")) )
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr

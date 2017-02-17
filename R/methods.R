@@ -1,3 +1,6 @@
+# add function for PCA of discarded genes in the independing filtering by deseq2
+# add volcano plot to documentation
+
 #' Distribution of gene ratios used to calculate Size Factors.
 #' @aliases degCheckFactors
 #' @param counts  matrix with counts for each samples and each gene.

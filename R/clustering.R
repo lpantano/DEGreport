@@ -1,3 +1,6 @@
+# output plots as a way to avoid running the function again
+# add plotGenes to documentation. Option to plot by names
+
 .logger = function(toout,msg=""){
     logdebug(paste("\n\nchecking data:" , msg, "\n\n"))
     if (getLogger()[['level']]!=20)
@@ -33,11 +36,11 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
         }else{
             p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
         }
-            p = p +
+            p = suppressWarnings( p +
             # geom_violin(alpha=0.3) +
-            stat_smooth(aes(x=time, y=count, group=treatment, color=treatment), fill="grey80") +
-            geom_jitter(size=1, alpha=0.7, height = 0, width = 0.2) +
-            theme_bw(base_size = 7) + ggtitle(gene)
+            stat_smooth(aes(x=time, y=count, group=treatment, color=treatment), fill="grey80", method = 'loess') +
+            geom_point(size=1, alpha=0.7, position = position_jitterdodge(dodge.width=0.9)) +
+            theme_bw(base_size = 7) + ggtitle(gene))
             if (length(unique(dd$treatment))==1){
                 p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
                     scale_fill_brewer(guide=FALSE, palette = "Set1")
@@ -58,14 +61,16 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     ma_long$group = groups[ma_long$sample]
     splan = max(c(round(length(unique(ma_long$x))/3*2,0), 1))
     # ma_long$x=factor(ma_long$x)
-    p = ggplot(ma_long, aes(x=x, y=value, fill=group, color=group)) + 
+    p = suppressWarnings(
+        ggplot(ma_long, aes(x=x, y=value, fill=group, color=group)) + 
         geom_boxplot(alpha=0.3,outlier.size = 0, outlier.shape = NA) + 
-        geom_jitter(alpha=0.4, width = 0.2, size=1) +
+        geom_point(alpha=0.4, width = 0.2, size=1,
+                    position = position_jitterdodge(dodge.width=0.9)) +
         stat_smooth(aes(x=x, y=value, group=group, color=group),method = "lm",formula = y~poly(x,splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
         theme_bw(base_size = 11) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-        ylab("scaled expression") + xlab("") 
+        ylab("scaled expression") + xlab("") )
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups))==1){
@@ -114,7 +119,7 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     
     select = cutree(as.hclust(c), h = c$dc)
     select = select[select %in% names(table(select))[table(select)>minc]]
-    cat("\n\n Working with ", length(select), "genes after filtering\n\n")
+    cat("\n\n Working with ", length(select), "genes after filtering: minc > ",minc,"\n\n")
     if (reduce & length(unique(select) > 1) & ncol(counts_group)>2)
         select = .reduce(select, counts_group, cutoff)
     return(select)
