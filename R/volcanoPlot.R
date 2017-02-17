@@ -15,6 +15,7 @@ fmt <- function(){
 #' @param point.alpha transparency for points. Default 0.75
 #' @param point.outline.colour Default darkgray
 #' @param line.colour Defaul gray
+#' @param plot_text data.frame with three columns: logFC, Pvalue, Gene name
 #' @return The function will plot volcano plot together
 #' with density of the fold change and p-values on the top and the
 #' right side of the volcano plot.
@@ -27,7 +28,8 @@ fmt <- function(){
 degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Distributions",
                                  pval.cutoff=0.05, lfc.cutoff=1, shade.colour="orange",
                                  shade.alpha=0.25, point.colour="gray", point.alpha=0.75,
-                                 point.outline.colour="darkgray", line.colour="gray") {
+                                 point.outline.colour="darkgray", line.colour="gray",
+                                 plot_text=NULL) {
     if ( !any(side %in% c("both","down","up")) | length(side)>1)
         stop("side parameter should be: both, up or down.")
     if (ncol(stats)!=2)
@@ -44,13 +46,15 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
 
     #make top plot - density plot with fold changes
     lfcd <- as.data.frame(cbind(density(stats$logFC)$x, density(stats$logFC)$y))
-    hist_top <- ggplot(data=stats, aes(x=logFC))+
-        geom_density(color=line.colour)+
+    hist_top <- ggplot(data=stats, aes(logFC, x=1))+
+        geom_violin(color=line.colour)+
         theme_bw()+
-        theme(axis.title.x=element_blank())+
+        coord_flip()+
+        # scale_x_continuous(limits = range.pval)+
+        theme(axis.title.y=element_blank(), axis.title.x=element_blank())+
         theme(plot.margin=unit(c(3,-5.5,4,3), "mm") )+
-        scale_x_continuous(limits = range.lfc, breaks = range.lfc[1]:range.lfc[2], expand = c(.05,.05))+
-        scale_y_continuous(labels=fmt()) + labs(list(title="fold changes density plot"))
+        labs(list(title="logFC density"))
+    
     if (side=="both" | side=="up")
         hist_top = hist_top + geom_ribbon(data=subset(lfcd, V1>lfc.cutoff),aes(x=V1,ymax=V2),ymin=0,fill=shade.colour, alpha=shade.alpha)
     if (side=="both" | side=="down")
@@ -84,24 +88,30 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
     if (side=="both" | side=="down")
         scatter = scatter + geom_polygon(data=scat.poly.down, aes(x=x,y=y), fill=shade.colour, alpha=shade.alpha)
 
+    if (!is.null(plot_text)){
+        names(plot_text) = c("logFC", "adj.P.Val", "name")
+        plot_text[,2] <- plot_text[,2] + 1e-10
+        scatter <- scatter + 
+            geom_text_repel(data=plot_text, aes(x=logFC, y=-log10(adj.P.Val), label=name), size=3)
+    }
+    
     # make right plot - density plot of adjusted pvalues
-    pvald <- as.data.frame(cbind(density(-log10(stats$adj.P.Val))$x, density(-log10(stats$adj.P.Val))$y))
-    hist_right <- ggplot(data=stats, aes(x=-log10(adj.P.Val)))+
-        geom_density(color=line.colour)+
-        geom_ribbon(data=subset(pvald, V1>-log10(pval.cutoff)),aes(x=V1,ymax=V2),ymin=0,fill=shade.colour, alpha=shade.alpha)+
-        theme_bw()+coord_flip()+
-        scale_x_continuous(limits = range.pval)+
-        theme(axis.title.y=element_blank())+
-        theme(plot.margin=unit(c(3,-5.5,4,3), "mm")) + labs(list(title="adj.pval density plot"))
+    hist_right <- ggplot(data=stats, aes(-log10(adj.P.Val), x=1))+
+        geom_violin(color=line.colour)+
+        theme_bw()+
+        # scale_x_continuous(limits = range.pval)+
+        theme(axis.title.y=element_blank(), axis.title.x=element_blank())+
+        theme(plot.margin=unit(c(3,-5.5,4,3), "mm")) + labs(list(title="adj.pval density"))
 
     # plot all plots
-    pp.logfc <- ggplotGrob(hist_top)
-    pp.empty <- ggplotGrob(empty)
+    # pp.logfc <- ggplotGrob(hist_top)
+    # pp.empty <- ggplotGrob(empty)
     pp.volc <- ggplotGrob(scatter)
-    pp.pval  <- ggplotGrob(hist_right)
-    p = grid.arrange(top=textGrob(title),
-                 arrangeGrob(pp.logfc,pp.volc, heights=c(1,3),ncol=1),
-                 arrangeGrob(pp.empty,pp.pval,  heights=c(1,3),ncol=1),
-                 ncol=2, widths=c(3,1))
+    # pp.pval  <- ggplotGrob(hist_right)
+    # p = grid.arrange(top=textGrob(title),
+    #              arrangeGrob(pp.logfc,pp.volc, heights=c(1,3),ncol=1),
+    #              arrangeGrob(pp.empty,pp.pval,  heights=c(1,3),ncol=1),
+    #              ncol=2, widths=c(3,1))
+    p = grid.arrange(pp.volc)
     invisible(p)
 }

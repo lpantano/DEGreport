@@ -32,7 +32,7 @@ data(humanSexDEedgeR)
 library(edgeR)
 @
 
-\section{QC figures from DE analysis}
+\section{General QC figures from DE analysis}
 
 We are going to do a differential expression analysis with edgeR. We have an 
 object that is comming from the edgeR package. It countains a gene count matrix
@@ -56,7 +56,7 @@ Male or Female.
 counts<-cpm(humanSexDEedgeR,log=FALSE)
 g1<-colnames(counts)[1:41]
 g2<-colnames(counts)[42:85]
-design<-data.frame(condition=sub("1","Male",sub("0","Female",des[,2])))
+design<-data.frame(condition=sub("1","Male",sub("0","Female",des[,2])), other=1, row.names=colnames(counts))
 @
 
 We are getting the chromosome information for each gene. This way we can colour
@@ -66,40 +66,56 @@ genes according autosomic,X or Y chromosomes.
 data(geneInfo)
 @
 
-Create the report. The main parameters are the column names in group1, and 
-group2. Then, the count matrix, gene names that are DE, p-values, fold changes 
-and path to create the report. As optional, you can give colours for each gene, 
-and the number of permutation.
+p-value distribution gives an idea on how well you model is capturing the input data
+and as well whether it could be some problem for some set of genes. In general,
+you expect to have a flat distribution with peaks at 0 and 1. In this case, we add
+the mean count information to check if any set of genes are enriched in any
+specific p-value range.
 
-<<chunk-4>>=
-detag10<-detags[1:10]
-pval<-tab[,4]
-fc<-tab[detag10,1]
+<<chunk-mean>>=
+degMean(lrt$table$PValue, counts)
 @
 
-Run the fowlling lines if you want to visualize your expression values by 
+The same idea can be done with the gene variation.
+
+<<chunk-var>>=
+degVar(lrt$table$PValue, counts)
+@
+
+Variation (dispersion) and average expresion relationship shouldn't be a factor among
+the differentialy expressed genes. When plotting average mean and standard desviation,
+significant genes should be randomly distributed.
+
+<<chunk-mean-var>>=
+degMV(humanSexDEedgeR$samples$group, lrt$table$PValue, counts)
+@
+
+In this case, it would be good to look at the ones are totally outside the expected 
+correlation.
+
+
+Other way to look at this is showing the mean count distribution among groups.
+
+<<chunk-mean-dist>>=
+degMB(detags,g1,g2,counts)
+@
+
+The same idea can be applied to gene variation.
+
+<<chunk-var-dist>>=
+degVB(detags,g1,g2,counts)
+@
+
+
+Browsing gene expression can help to validate results or select some gene
+for donwstream analysis. Run the fowlling lines if you want to visualize your expression values by 
 condition:
 
-<<chunk-6, eval=FALSE>>=
+<<chunk-shiny, eval=FALSE>>=
 degObj(counts,design,"degObj.rda")
 library(shiny)
-runGist(9930881)
+shiny::runGitHub("lpantano/shiny", subdir="expression")
 @
-
-You can use individual functions, like degRank or degMean. This will create 
-specific figures and tables that are included in the report.
-
-<<chunk-7>>=
-degMean(pval,counts)
-degVar(pval,counts)
-degMV(humanSexDEedgeR$samples$group,pval,counts)
-degMB(detags,g1,g2,counts)
-degVB(detags,g1,g2,counts)
-# require(rjags)
-# rank<-degRank(g1,g2,counts[detag10,],fc,400,500)
-# degPR(rank)
-@
-
 
 \section{Report from DESeq2 analysis}
 
@@ -112,11 +128,33 @@ different files will be saved there.
 data(humanSexDEedgeR)
 library(DESeq2)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
-humanSexDEedgeR$samples[idx,], design=~group)
+dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:5000, idx],
+                              humanSexDEedgeR$samples[idx,], 
+                              design=~group)
 dse <- DESeq(dse)
-res <- degResults(dds=dse, name="test", org=NULL, 
+res <- results(dse)
+resreport <- degResults(dds=dse, name="test", org=NULL, 
 do_go=FALSE, group="group", xs="group", path_results = NULL)
+@
+
+Volcano plot using the output of DESeq2. It mainly needs data.frame with
+two columns (logFC and pVal). Specific genes can be plot using the option
+\Rcode{plot\_text} (subset of the previous data.frame with a 3rd column to be used
+to plot the gene name).
+
+<<deseq2-volcano>>=
+res$id <- row.names(res)
+show = as.data.frame(res[1:2, c("log2FoldChange", "padj", "id")])
+degVolcano(as.data.frame(res[,c("log2FoldChange", "padj")]), plot_text = show)
+@
+
+Plot top genes coloring by group. Very useful for experiments with nested 
+groups. `xs` can be `time` or `WT`/`KO`, and `group` can be `treated`/`untreated`.
+Another classification can be added, like `batch` that will plot points 
+with different shapes.
+
+<<deseq2-gene-plots>>=
+degPlot(dds=dse, res = res, n = 6, xs = "group", group = "group")
 @
 
 \section{Detect patterns of expression}
@@ -126,11 +164,8 @@ data is a time course experiment. \Rfunction{degPatterns} needs a expression
 matrix, the design experiment and the column used to group samples.
 
 <<pattern>>=
-data(humanSexDEedgeR)
-ma <- humanSexDEedgeR$counts[1:100,]
-des <- data.frame(row.names=colnames(ma), 
-sex=as.factor(humanSexDEedgeR$samples$group))
-res <- degPatterns(ma, des, time="sex", col=NULL)
+ma = assay(rlog(dse))[row.names(res)[1:100],]
+res <- degPatterns(ma, as.data.frame(colData(dse)), time="group", col=NULL)
 @
 
 \end{document}
