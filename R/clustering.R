@@ -15,27 +15,29 @@
 #' @param batch character, colname in colData to shape points, normally used by 
 #' batch effect visualization
 #' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
+degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab=xs,groupLab=group,batchLab=batch){
     metadata = data.frame(colData(dds))
     genes= row.names(res)[1:n]
     pp = lapply(genes, function(gene){
         dd = plotCounts(dds, gene, transform = TRUE,
                         intgroup=xs, returnData = TRUE)
-        names(dd)[2] = "time"
+        names(dd)[2] = xsLab
         if (is.null(group)){
             dd$treatment = "one_group"
         }else{
             dd$treatment = metadata[row.names(dd), group]
         }
+        names(dd)[grep("treatment",names(dd))]=groupLab
         if (!is.null(batch)){
             dd$batch = as.factor(metadata[row.names(dd), batch])
-            p=ggplot(dd, aes(x=time,y=count,color=batch,shape=treatment)) 
+            names(dd)[grep("batch",names(dd))]=batchLab
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=batchLab,shape=groupLab)) 
         }else{
-            p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=groupLab,shape=groupLab))
         }
             p = p +
             # geom_violin(alpha=0.3) +
-            stat_smooth(aes(x=time, y=count, group=treatment, color=treatment), fill="grey80") +
+            stat_smooth(aes_string(x=xsLab, y="count", group=groupLab, color=groupLab), fill="grey80") +
             geom_jitter(size=1, alpha=0.7, height = 0, width = 0.2) +
             theme_bw(base_size = 7) + ggtitle(gene)
             if (length(unique(dd$treatment))==1){
