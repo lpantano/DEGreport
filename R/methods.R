@@ -1,5 +1,33 @@
 # add function for PCA of discarded genes in the independing filtering by deseq2
-# add volcano plot to documentation
+
+#' Plot main figures showing p-values distribution and mean-variance correlation
+#' 
+#' This function joins the output of \code{\link[DEGreport]{degMean}}, 
+#' \code{\link[DEGreport]{degVar}} and \code{\link[DEGreport]{degMV}} in a
+#' single plot. See these functions for further information.
+#' 
+#' @param pvalue  pvalues of DEG analysis
+#' @param counts  matrix with counts for each samples and each gene.
+#' @param groups character vector with group name for each sample in the
+#' same order than counts column names.
+#' @return ggplot2 object
+#' @examples
+#' library(DESeq2)
+#' data(humanSexDEedgeR)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' dse <- DESeq(dse)
+#' res <- results(dse)
+#' degQC(res$pvalue, counts(dse, normalized=TRUE),colData(dse)$group)
+degQC <- function(pvalue, counts, groups){
+    pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
+    pvar <- degVar(pvalue, counts)+ theme(legend.position="top")
+    pmv <- degMV(groups, pvalue, counts)
+    grid.arrange(arrangeGrob(ggplotGrob(pmean), 
+                                  ggplotGrob(pvar),
+                                  ggplotGrob(pmv), heights=c(1,2,1)))
+}
 
 #' Distribution of gene ratios used to calculate Size Factors.
 #' @aliases degCheckFactors
@@ -49,7 +77,7 @@ degMean <-
                 labels=names(q),
                 right=TRUE)
     pvalfac  <-  cut(pvalues,
-               breaks=c(0,seq(.1,1,.1)),
+               breaks=c(-1,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
     d  <-  data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
@@ -80,7 +108,7 @@ degVar <-
                 labels=names(q),
                 right=TRUE)
     pvalfac <- cut(pvalues,
-               breaks=c(0,seq(.1,1,.1)),
+               breaks=c(-1,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
     d <- data.frame(pvalues=factor(pvalfac),
                 sdv=factor(sdvfac))
@@ -98,6 +126,7 @@ degVar <-
 #' same order than counts column names.
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene.
+#' @param sign defining the cutoff to label significant features.
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
@@ -106,7 +135,7 @@ degVar <-
 #'       DEGreportSet$deg[,4],
 #'       DEGreportSet$counts)
 degMV <-
-    function(group, pvalues, counts)
+    function(group, pvalues, counts, sign=0.01)
 {
     var_ma <- sapply(unique(as.character(group)), function(g){
         apply(counts[,group==g], 1, sd, na.rm=TRUE)
@@ -116,8 +145,8 @@ degMV <-
         apply(counts[,group==g], 1, mean, na.rm=TRUE)
     })    
     meanv <- apply(mean_ma, 1, min)
-    pv <- cut(pvalues,breaks=c(-1,0.01,1.1),
-          labels=c("<0.01","NoSig"))
+    pv <- cut(pvalues,breaks=c(-1,sign,1.1),
+          labels=c("Sign","NoSig"))
     d <- data.frame(pvalues=pv,sdv=log2(sdv),
                 meanv=log2(meanv))
     suppressWarnings(ggplot(d,aes(meanv,sdv,

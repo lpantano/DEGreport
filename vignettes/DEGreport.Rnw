@@ -90,9 +90,14 @@ significant genes should be randomly distributed.
 degMV(humanSexDEedgeR$samples$group, lrt$table$PValue, counts)
 @
 
-In this case, it would be good to look at the ones are totally outside the expected 
+In this case, it would be good to look at the ones that are totally outside the expected 
 correlation.
 
+You can put this tree plots together using \Rcode{degQC}.
+
+<<chunk-qc>>=
+degQC(lrt$table$PValue, counts, humanSexDEedgeR$samples$group)
+@
 
 Other way to look at this is showing the mean count distribution among groups.
 
