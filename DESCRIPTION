@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.11.6
-Date: 2017-04-07
+Version: 1.11.7
+Date: 2017-04-08
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -46,7 +46,9 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
   person("John", "Hutchinson", email = "@jnhutchinson", 
   role = c("ctb")),
   person("Victor", "Barrera", email = "@vbarrera", 
-  role = c("ctb")) )
+  role = c("ctb")),
+  person("Mary", "Piper", email = "@marypiper", 
+  role = c("ctb")))
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
