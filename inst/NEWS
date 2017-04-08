@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.11.6
+
+    2017-04-07 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Add function to plot genes in a wide format
+
 CHANGES IN DEGreport 1.11.4
 
     02-17-2017 Lorena Pantano <lorena.pantano@gmail.com>

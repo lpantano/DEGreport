@@ -52,6 +52,50 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
     # marrangeGrob(pp, ncol=2, nrow=n)
 }
 
+#' Plot selected genes on a wide format
+#' 
+#' @param dds \link[DESeq2]{DESeqDataSet} object
+#' @param genes character genes to plot.
+#' @param group character, colname in colData to color points and add different
+#' lines for each level
+#' @param batch character, colname in colData to shape points, normally used by 
+#' batch effect visualization
+#' @return ggplot showing the expresison of the genes on the x 
+#' axis
+#' @examples
+#' data(humanSexDEedgeR)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' dse <- DESeq(dse)
+#' degPlotWide(dse, rownames(dse)[1:10], group="group")
+degPlotWide <- function(dds, genes, group="condition", batch=NULL){
+    metadata = data.frame(colData(dds))
+    dd = bind_rows(lapply(genes,function(gene){
+        plotCounts(dds, gene, transform = TRUE,
+                    intgroup=group, returnData = TRUE) %>%
+            mutate(gene=gene)}))
+    if (is.null(group)){
+        dd$treatment = "one_group"
+    }else{
+        dd$treatment = dd[,group]
+    }
+    p = ggplot(dd, aes(x = gene, y = count, color = treatment))
+    if (!is.null(batch)){
+        dd$batch = as.factor(metadata[row.names(dd), batch])
+        p = ggplot(dd, aes(x = gene, y = count, color = treatment, shape=batch))
+    }
+        
+    p = p +
+        geom_point(position = position_jitterdodge(dodge.width=0.9)) +
+        scale_y_log10() +
+        xlab("Genes") +
+        ylab("Normalized Counts") +
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    p
+}
 
 # plot group of genes according time and group
 .plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy=NULL) {
@@ -558,7 +602,8 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     }
     cat(paste("## Comparison: ", name, "{.tabset} \n\n"))
     metadata = as.data.frame(colData(dds))
-    metadata = metadata[,!grepl("replaceable", names(metadata)), drop=F]
+    metadata = metadata[,!grepl("replaceable", names(metadata)),
+                        drop=FALSE]
     out_df = as.data.frame(res)
     out_df = out_df[!is.na(out_df$padj),]
     out_df = out_df[order(out_df$padj),]
