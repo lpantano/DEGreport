@@ -22,4 +22,3 @@ Distribution of pvalues by expression range
 data(DEGreportSet)
 degMean(DEGreportSet$deg[,4],DEGreportSet$counts)
 }
-

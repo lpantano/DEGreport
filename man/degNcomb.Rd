@@ -17,4 +17,3 @@ maximum number of combinations of two vectors
 \description{
 Get number of potential combinations of two vectors
 }
-

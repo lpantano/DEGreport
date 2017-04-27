@@ -38,4 +38,3 @@ as the base for the integration. Then, it will loop through clusters
 and run \link{degPatterns} in the second data set to detect patterns that match
 this one.
 }
-

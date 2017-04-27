@@ -6,7 +6,7 @@
 \title{Complete report from DESeq2 analysis}
 \usage{
 degResults(res = NULL, dds, rlogMat = NULL, name, org = NULL,
-  FDR = 0.05, do_go = TRUE, FC = 0.1, group = "condition",
+  FDR = 0.05, do_go = FALSE, FC = 0.1, group = "condition",
   xs = "time", path_results = ".", contrast = NULL)
 }
 \arguments{
@@ -55,4 +55,3 @@ dse <- DESeq(dse)
 res <- degResults(dds=dse, name="test", org=NULL, 
 do_go=FALSE, group="group", xs="group", path_results = NULL)
 }
-

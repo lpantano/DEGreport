@@ -31,4 +31,3 @@ data(DEGreportSet)
 detag <- row.names(DEGreportSet$deg[1:10,])
 degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
 }
-

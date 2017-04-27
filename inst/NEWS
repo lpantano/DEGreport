@@ -1,5 +1,18 @@
 DEGreport News
 
+CHANGES IN DEGreport  1.13.1
+    2017-04-27  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: change arrange for plotQC plots with cowplot
+    Feature: Use theme_minimal inside degResults
+    Feature: Change title for some sections in degResults
+    
+CHANGES IN DEGreport 1.11.7
+
+    2017-04-08 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Fix: Add new contributor
+
 CHANGES IN DEGreport 1.11.6
 
     2017-04-07 Lorena Pantano <lorena.pantano@gmail.com>

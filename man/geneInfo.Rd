@@ -17,4 +17,3 @@ data.frame with chromose information for each gene
 \author{
 Lorena Pantano, 2014-08-14
 }
-
