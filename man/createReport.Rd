@@ -39,4 +39,3 @@ This function get the count matrix, pvalues, and FC of a
 DEG analysis and create a report to help to detect possible problems 
     with the data.
 }
-

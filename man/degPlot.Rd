@@ -27,4 +27,3 @@ ggplot showing the expresison of the genes
 \description{
 Plot top genes allowing more variables to color and shape points
 }
-

@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.13.0
-Date: 2017-04-10
+Version: 1.13.1
+Date: 2017-04-27
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -53,4 +53,4 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -22,4 +22,3 @@ Distribution of pvalues by standard desviation range
 data(DEGreportSet)
 degVar(DEGreportSet$deg[,4],DEGreportSet$counts)
 }
-
