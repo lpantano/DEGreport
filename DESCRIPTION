@@ -26,6 +26,7 @@ Imports:
     utils,
     methods,
     ggplot2,
+    cowplot,
     ggrepel,
     Nozzle.R1,
     coda,

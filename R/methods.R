@@ -24,9 +24,10 @@ degQC <- function(pvalue, counts, groups){
     pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
     pvar <- degVar(pvalue, counts)+ theme(legend.position="top")
     pmv <- degMV(groups, pvalue, counts)
-    grid.arrange(arrangeGrob(ggplotGrob(pmean), 
-                                  ggplotGrob(pvar),
-                                  ggplotGrob(pmv), heights=c(1,2,1)))
+    suppressWarnings(ggdraw() + 
+        draw_plot(pmean, 0, 0.5, 0.6, 0.4 ) +
+        draw_plot(pmv, 0.6, 0, 0.4, 0.7) +
+        draw_plot(pvar, 0, 0, 0.6, 0.6))
 }
 
 #' Distribution of gene ratios used to calculate Size Factors.
@@ -156,7 +157,8 @@ degMV <-
     theme_bw()+
     stat_quantile(aes(meanv,sdv),colour="blue",
         quantiles = c(0.025,0.975),
-        linetype=2,formula=y ~ x))
+        linetype=2,formula=y ~ x)) +
+        theme(legend.position="top")
 }
 
 #' Distribution of expression of DE genes compared to the background
