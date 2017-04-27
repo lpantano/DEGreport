@@ -32,4 +32,3 @@ dse <- DESeq(dse)
 res <- results(dse)
 degQC(res$pvalue, counts(dse, normalized=TRUE),colData(dse)$group)
 }
-

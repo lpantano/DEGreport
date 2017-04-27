@@ -31,4 +31,3 @@ degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
       DEGreportSet$deg[,4],
       DEGreportSet$counts)
 }
-

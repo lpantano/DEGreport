@@ -33,4 +33,3 @@ humanSexDEedgeR$samples[idx,], design=~group)
 dse <- DESeq(dse)
 degPlotWide(dse, rownames(dse)[1:10], group="group")
 }
-

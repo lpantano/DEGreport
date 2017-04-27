@@ -28,4 +28,3 @@ sex = c(rep("M", length(DEGreportSet$g1)),
         rep("F", length(DEGreportSet$g2))))
 degObj(DEGreportSet$counts, de, NULL)
 }
-

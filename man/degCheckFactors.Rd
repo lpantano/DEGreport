@@ -28,4 +28,3 @@ the factor may be bias due to some biological or technical factor.
 data(DEGreportSet)
 degCheckFactors(DEGreportSet$counts[,1:10])
 }
-

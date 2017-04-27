@@ -23,4 +23,3 @@ plot the correlation between the rank according estimator and
 data(DEGreportSet)
 degPR(DEGreportSet$rank)
 }
-

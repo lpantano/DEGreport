@@ -52,4 +52,3 @@ data(DEGreportSet)
 stats = DEGreportSet$deg[,c("logFC", "PValue")]
 degVolcano(stats)
 }
-
