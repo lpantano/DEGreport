@@ -588,7 +588,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 #' res <- degResults(dds=dse, name="test", org=NULL, 
 #' do_go=FALSE, group="group", xs="group", path_results = NULL)
 degResults <- function(res=NULL, dds, rlogMat=NULL, name, 
-                                org=NULL, FDR=0.05, do_go=TRUE,
+                                org=NULL, FDR=0.05, do_go=FALSE,
                                 FC=0.1, group="condition", xs="time", 
                                 path_results =".",
                                 contrast=NULL){
@@ -637,15 +637,15 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     stats = as.data.frame(res[,c(2,6)])
     degVolcano(stats, title=name, lfc.cutoff=1.5)
     
-    cat("\n\n### QC for DE genes p-values/variance\n")
+    cat("\n\n### QC for DE genes\n")
     show= !is.na(out_df$pvalue)
-    p = degVar(out_df$pvalue[show], rlogMat[row.names(out_df)[show],]) +
-        ggtitle(paste0("p-Values vs Mean for ", name))
+    p = degQC(out_df$pvalue[show], 
+              rlogMat[row.names(out_df)[show],],
+              metadata[,xs]) 
     print(p)
     
     sign = row.names(out_df)[out_df$padj<FDR & !is.na(out_df$padj) & out_df$absMaxLog2FC > FC]
-    cat("\n\n### Most significand, FDR<", FDR, " and log2FC > ", FC, ": ", length(sign),"\n")
-    cat("\n\n### Plots most significand\n")
+    cat("\n\n### Most significants, FDR<", FDR, " and log2FC > ", FC, ": ", length(sign),"\n")
     
     if (length(sign) < 2){
         cat("Too few genes to plot.")
@@ -655,15 +655,16 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
                  clustering_method = "ward.D2", 
                  clustering_distance_cols = "correlation"
                 )
-        print(.mds(rlogMat[sign,],condition = metadata[,xs]))
+        print(.mds(rlogMat[sign,],condition = metadata[,xs])+ 
+                  theme_minimal())
     }
     cat("\n")
     
-    cat("\n\nPlot top 9 genes\n\n")
+    cat("\n\n### Plots top 9 most significants\n")
     degPlot(dds, out_df, xs = xs, group = group)
     cat("\n")
     
-    cat("\n\n### Top DE genes\n\n")
+    cat("\n\n### Top DE table\n\n")
     print(kable(head(out_df, 20)))
     cat("\n\n")
     goterm = ""
