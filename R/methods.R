@@ -1,5 +1,40 @@
 # add function for PCA of discarded genes in the independing filtering by deseq2
 
+#' Filter genes by group
+#' 
+#' This function will keep only rows that have a minimum counts of
+#' 1 at least in a \code{min} number of samples (default 80%).
+#' 
+#' @param counts matrix with expression data, columns are samples
+#' and rows are genes or other feature
+#' @param metadata data.frame with information about
+#' each column in counts matrix. Rownames should match
+#' \code{colnames(counts)}.
+#' @param group character column in metadata used to
+#' group samples and applied the cutoff
+#' @param min numeric value indicating the minimum
+#' number of samples in each group that should have
+#' more than 0 in count matrix.
+#' @param minreads integer minimum number of reads to consider 
+#' a feature expressed.
+#' @return count \code{matrix} after filtering genes (features)
+#' with not enough expression in any group.
+#' @examples
+#' data(humanSexDEedgeR)
+#' idx <- c(1:10, 75:85)
+#' c <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
+#' humanSexDEedgeR$samples[idx,], "group", min=1)
+degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
+    .unique_group <- as.character(unique(metadata[,group]))
+    .keep = sapply(.unique_group, function(g){
+        .samples = rownames(metadata)[metadata[,group] == g]
+        .n = length(.samples)
+        rowSums(counts[, .samples] > minreads) >= .n * min
+    })
+    counts[rowSums(.keep) > 0,]
+}
+    
+
 #' Plot main figures showing p-values distribution and mean-variance correlation
 #' 
 #' This function joins the output of \code{\link[DEGreport]{degMean}}, 
