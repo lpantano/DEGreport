@@ -16,6 +16,7 @@ export(degVolcano)
 export(degPlot)
 export(degPlotWide)
 export(degQC)
+export(degFilter)
 importFrom("grDevices", "dev.off", "jpeg", "pdf", "rgb")
 importFrom("methods", "slotNames")
 importFrom("stats", "as.dist", "as.hclust", "cor", "cor.test",
