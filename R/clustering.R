@@ -27,7 +27,9 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab
         }else{
             dd$treatment = metadata[row.names(dd), group]
         }
-        names(dd)[grep("treatment",names(dd))]=groupLab
+        if (!is.null(groupLab)){
+            names(dd)[grep("treatment",names(dd))]=groupLab
+        }
         if (!is.null(batch)){
             dd$batch = as.factor(metadata[row.names(dd), batch])
             names(dd)[grep("batch",names(dd))]=batchLab
