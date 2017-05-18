@@ -45,7 +45,8 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab
             theme_bw(base_size = 7) + ggtitle(gene)
             if (length(unique(dd$condition))==1){
                 p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
-                    scale_fill_brewer(guide=FALSE, palette = "Set1")
+                    scale_fill_brewer(guide=FALSE, palette = "Set1")+
+                    theme(legend.position = "none")
             }
         p
     })
