@@ -23,12 +23,13 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab
                         intgroup=xs, returnData = TRUE)
         names(dd)[2] = xsLab
         if (is.null(group)){
-            dd$treatment = "one_group"
+            dd$condition = "one_group"
+            groupLab="condition"
         }else{
-            dd$treatment = metadata[row.names(dd), group]
+            dd$condition = metadata[row.names(dd), group]
         }
         if (!is.null(groupLab)){
-            names(dd)[grep("treatment",names(dd))]=groupLab
+            names(dd)[grep("condition",names(dd))]=groupLab
         }
         if (!is.null(batch)){
             dd$batch = as.factor(metadata[row.names(dd), batch])
@@ -42,7 +43,7 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab
             stat_smooth(aes_string(x=xsLab, y="count", group=groupLab, color=groupLab), fill="grey80") +
             geom_jitter(size=1, alpha=0.7, height = 0, width = 0.2) +
             theme_bw(base_size = 7) + ggtitle(gene)
-            if (length(unique(dd$treatment))==1){
+            if (length(unique(dd$condition))==1){
                 p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
                     scale_fill_brewer(guide=FALSE, palette = "Set1")
             }
