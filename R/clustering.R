@@ -17,33 +17,43 @@
 #' lines for each level
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
+#' @param xsLab character, alternative label for x-axis (default: same as xs)
+#' @param groupLab character, alternative label for group (default: same as group)
+#' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
+degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
+                   xsLab=xs, groupLab=group, batchLab=batch){
     metadata = data.frame(colData(dds))
     genes= row.names(res)[1:n]
     pp = lapply(genes, function(gene){
         dd = plotCounts(dds, gene, transform = TRUE,
                         intgroup=xs, returnData = TRUE)
-        names(dd)[2] = "time"
+        names(dd)[2] = xsLab
         if (is.null(group)){
-            dd$treatment = "one_group"
+            dd$condition = "one_group"
+            groupLab="condition"
         }else{
-            dd$treatment = metadata[row.names(dd), group]
+            dd$condition = metadata[row.names(dd), group]
+        }
+        if (!is.null(groupLab)){
+            names(dd)[grep("condition",names(dd))]=groupLab
         }
         if (!is.null(batch)){
             dd$batch = as.factor(metadata[row.names(dd), batch])
-            p=ggplot(dd, aes(x=time,y=count,color=batch,shape=treatment))
+            names(dd)[grep("batch",names(dd))]=batchLab
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=batchLab,shape=groupLab)) 
         }else{
-            p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=groupLab,shape=groupLab))
         }
             p = suppressWarnings( p +
             # geom_violin(alpha=0.3) +
-            stat_smooth(aes(x=time, y=count, group=treatment, color=treatment), fill="grey80", method = 'loess') +
+            stat_smooth(fill="grey80", method = 'loess') +
             geom_point(size=1, alpha=0.7, position = position_jitterdodge(dodge.width=0.9)) +
             theme_bw(base_size = 7) + ggtitle(gene))
             if (length(unique(dd$treatment))==1){
-                p = p + scale_color_brewer(guide=FALSE, palette = "Set1") +
-                    scale_fill_brewer(guide=FALSE, palette = "Set1")
+                p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
+                    scale_fill_brewer(guide=FALSE, palette = "Set1")+
+                    theme(legend.position = "none")
             }
         p
     })
@@ -543,7 +553,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 #' library(DESeq2)
 #' idx <- c(1:10, 75:85)
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], condition=~group)
+#' humanSexDEedgeR$samples[idx,], design=~group)
 #' degMDS(counts(dse), condition=colData(dse)$group)
 degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
     nprobes = nrow(counts)
@@ -573,7 +583,7 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
 
     }
 
-    return(p)
+    return(p + theme_bw())
 }
 
 #' Complete report from DESeq2 analysis
@@ -673,7 +683,7 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
                  clustering_method = "ward.D2",
                  clustering_distance_cols = "correlation"
                 )
-        print(.mds(rlogMat[sign,],condition = metadata[,xs])+
+        print(degMDS(rlogMat[sign,],condition = metadata[,xs])+
                   theme_minimal())
     }
     cat("\n")

@@ -23,12 +23,12 @@ with design experiment. Normally \code{colData} output}
 
 \item{scale}{boolean scale by row expression matrix}
 
-\item{mapping}{data.frame mapping table in case elements use 
+\item{mapping}{data.frame mapping table in case elements use
 different ID in the row.names of expression matrix. For instance,
 when integrating miRNA/mRNA.}
 }
 \value{
-A data.frame with information on what genes are in each cluster in 
+A data.frame with information on what genes are in each cluster in
 all data set, and the correlation value for each pair cluster comparison.
 }
 \description{
