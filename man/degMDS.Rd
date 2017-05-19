@@ -33,6 +33,6 @@ data(humanSexDEedgeR)
 library(DESeq2)
 idx <- c(1:10, 75:85)
 dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-humanSexDEedgeR$samples[idx,], condition=~group)
+humanSexDEedgeR$samples[idx,], design=~group)
 degMDS(counts(dse), condition=colData(dse)$group)
 }
