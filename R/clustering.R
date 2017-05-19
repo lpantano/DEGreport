@@ -14,6 +14,9 @@
 #' lines for each level
 #' @param batch character, colname in colData to shape points, normally used by 
 #' batch effect visualization
+#' @param xsLab character, alternative label for x-axis (default: same as xs)
+#' @param groupLab character, alternative label for group (default: same as group)
+#' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
 degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab=xs,groupLab=group,batchLab=batch){
     metadata = data.frame(colData(dds))
