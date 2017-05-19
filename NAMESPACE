@@ -1,5 +1,6 @@
 export(createReport)
 export(degCheckFactors)
+export(degMDS)
 export(degMV)
 export(degMB)
 export(degVB)
