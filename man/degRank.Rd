@@ -35,4 +35,3 @@ data(DEGreportSet)
 #    DEGreportSet$counts[DEGreportSet$detag[1:5],],
 #    DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
 }
-

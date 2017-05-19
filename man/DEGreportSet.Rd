@@ -19,4 +19,3 @@ set of genes, output from degRank function.
 \author{
 Lorena Pantano, 2014-05-31
 }
-

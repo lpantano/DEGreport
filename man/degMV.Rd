@@ -5,7 +5,7 @@
 \title{Correlation of the standard desviation and the mean of the abundance of a
 set of genes.}
 \usage{
-degMV(group, pvalues, counts)
+degMV(group, pvalues, counts, sign = 0.01)
 }
 \arguments{
 \item{group}{character vector with group name for each sample in the
@@ -13,7 +13,9 @@ same order than counts column names.}
 
 \item{pvalues}{pvalues of DEG analysis}
 
-\item{counts}{matrix with counts for each samples and each gene.
+\item{counts}{matrix with counts for each samples and each gene.}
+
+\item{sign}{defining the cutoff to label significant features.
 row number should be the same length than pvalues vector.}
 }
 \value{
@@ -29,4 +31,3 @@ degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
       DEGreportSet$deg[,4],
       DEGreportSet$counts)
 }
-

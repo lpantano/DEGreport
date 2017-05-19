@@ -1,5 +1,52 @@
 DEGreport News
 
+CHANGES IN DEGreport  1.13.2
+    2017-05-05  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: add degFilter to filter genes by group
+
+CHANGES IN DEGreport  1.13.1
+    2017-04-27  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: change arrange for plotQC plots with cowplot
+    Feature: Use theme_minimal inside degResults
+    Feature: Change title for some sections in degResults
+    
+CHANGES IN DEGreport 1.11.7
+
+    2017-04-08 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Fix: Add new contributor
+
+CHANGES IN DEGreport 1.11.6
+
+    2017-04-07 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Add function to plot genes in a wide format
+
+CHANGES IN DEGreport 1.11.4
+
+    02-17-2017 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Re-organize vignette.
+    Feature: Ignore warnings when plotting
+    Feature: Improve volcano plot
+
+CHANGES IN DEGreport 1.11.3
+
+    01-03-2017 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Fix: fix order of clusters figures that are not in the correct
+         place in some cases with many groups.
+
+
+CHANGES IN DEGreport 1.11.2
+
+    12-09-2016 Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Features: Add degCheckFactors functions to plot sizefactors used to
+              normalize count data.
+
 CHANGES IN DEGreport 1.11.1
 
     10-18-2016 Lorena Pantano <lorena.pantano@gmail.com>

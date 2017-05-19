@@ -21,4 +21,3 @@ matrix with values from \link{degBIcmd}
 Get the estimates of the fold change (FC) mean from a FC distribution using
 bayesian inference
 }
-

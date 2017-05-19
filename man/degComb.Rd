@@ -19,4 +19,3 @@ matrix with different combinatios of two vector
 \description{
 Get random combinations of two groups
 }
-

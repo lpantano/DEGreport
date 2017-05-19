@@ -66,4 +66,3 @@ des <- data.frame(row.names=colnames(ma),
 group=as.factor(humanSexDEedgeR$samples$group))
 res <- degPatterns(ma, des, time="group", col=NULL)
 }
-

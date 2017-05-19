@@ -21,4 +21,3 @@ FC for different combinations of samples in each group for each gene
 \description{
 get the FC for each gene between two groups
 }
-

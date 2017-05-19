@@ -1,3 +1,70 @@
+# add function for PCA of discarded genes in the independing filtering by deseq2
+
+#' Filter genes by group
+#' 
+#' This function will keep only rows that have a minimum counts of
+#' 1 at least in a \code{min} number of samples (default 80%).
+#' 
+#' @param counts matrix with expression data, columns are samples
+#' and rows are genes or other feature
+#' @param metadata data.frame with information about
+#' each column in counts matrix. Rownames should match
+#' \code{colnames(counts)}.
+#' @param group character column in metadata used to
+#' group samples and applied the cutoff
+#' @param min numeric value indicating the minimum
+#' number of samples in each group that should have
+#' more than 0 in count matrix.
+#' @param minreads integer minimum number of reads to consider 
+#' a feature expressed.
+#' @return count \code{matrix} after filtering genes (features)
+#' with not enough expression in any group.
+#' @examples
+#' data(humanSexDEedgeR)
+#' idx <- c(1:10, 75:85)
+#' c <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
+#' humanSexDEedgeR$samples[idx,], "group", min=1)
+degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
+    .unique_group <- as.character(unique(metadata[,group]))
+    .keep = sapply(.unique_group, function(g){
+        .samples = rownames(metadata)[metadata[,group] == g]
+        .n = length(.samples)
+        rowSums(counts[, .samples] > minreads) >= .n * min
+    })
+    counts[rowSums(.keep) > 0,]
+}
+    
+
+#' Plot main figures showing p-values distribution and mean-variance correlation
+#' 
+#' This function joins the output of \code{\link[DEGreport]{degMean}}, 
+#' \code{\link[DEGreport]{degVar}} and \code{\link[DEGreport]{degMV}} in a
+#' single plot. See these functions for further information.
+#' 
+#' @param pvalue  pvalues of DEG analysis
+#' @param counts  matrix with counts for each samples and each gene.
+#' @param groups character vector with group name for each sample in the
+#' same order than counts column names.
+#' @return ggplot2 object
+#' @examples
+#' library(DESeq2)
+#' data(humanSexDEedgeR)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' dse <- DESeq(dse)
+#' res <- results(dse)
+#' degQC(res$pvalue, counts(dse, normalized=TRUE),colData(dse)$group)
+degQC <- function(pvalue, counts, groups){
+    pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
+    pvar <- degVar(pvalue, counts)+ theme(legend.position="top")
+    pmv <- degMV(groups, pvalue, counts)
+    suppressWarnings(ggdraw() + 
+        draw_plot(pmean, 0, 0.5, 0.6, 0.4 ) +
+        draw_plot(pmv, 0.6, 0, 0.4, 0.7) +
+        draw_plot(pvar, 0, 0, 0.6, 0.6))
+}
+
 #' Distribution of gene ratios used to calculate Size Factors.
 #' @aliases degCheckFactors
 #' @param counts  matrix with counts for each samples and each gene.
@@ -46,7 +113,7 @@ degMean <-
                 labels=names(q),
                 right=TRUE)
     pvalfac  <-  cut(pvalues,
-               breaks=c(0,seq(.1,1,.1)),
+               breaks=c(-1,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
     d  <-  data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
@@ -77,7 +144,7 @@ degVar <-
                 labels=names(q),
                 right=TRUE)
     pvalfac <- cut(pvalues,
-               breaks=c(0,seq(.1,1,.1)),
+               breaks=c(-1,seq(.1,1,.1)),
                labels=seq(0.1,1,0.1),right=TRUE)
     d <- data.frame(pvalues=factor(pvalfac),
                 sdv=factor(sdvfac))
@@ -95,6 +162,7 @@ degVar <-
 #' same order than counts column names.
 #' @param pvalues  pvalues of DEG analysis
 #' @param counts  matrix with counts for each samples and each gene.
+#' @param sign defining the cutoff to label significant features.
 #' row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
@@ -103,7 +171,7 @@ degVar <-
 #'       DEGreportSet$deg[,4],
 #'       DEGreportSet$counts)
 degMV <-
-    function(group, pvalues, counts)
+    function(group, pvalues, counts, sign=0.01)
 {
     var_ma <- sapply(unique(as.character(group)), function(g){
         apply(counts[,group==g], 1, sd, na.rm=TRUE)
@@ -113,8 +181,8 @@ degMV <-
         apply(counts[,group==g], 1, mean, na.rm=TRUE)
     })    
     meanv <- apply(mean_ma, 1, min)
-    pv <- cut(pvalues,breaks=c(-1,0.01,1.1),
-          labels=c("<0.01","NoSig"))
+    pv <- cut(pvalues,breaks=c(-1,sign,1.1),
+          labels=c("Sign","NoSig"))
     d <- data.frame(pvalues=pv,sdv=log2(sdv),
                 meanv=log2(meanv))
     suppressWarnings(ggplot(d,aes(meanv,sdv,
@@ -124,7 +192,8 @@ degMV <-
     theme_bw()+
     stat_quantile(aes(meanv,sdv),colour="blue",
         quantiles = c(0.025,0.975),
-        linetype=2,formula=y ~ x))
+        linetype=2,formula=y ~ x)) +
+        theme(legend.position="top")
 }
 
 #' Distribution of expression of DE genes compared to the background
