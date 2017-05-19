@@ -17,24 +17,32 @@
 #' lines for each level
 #' @param batch character, colname in colData to shape points, normally used by 
 #' batch effect visualization
+#' @param xsLab character, alternative label for x-axis (default: same as xs)
+#' @param groupLab character, alternative label for group (default: same as group)
+#' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
+degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,xsLab=xs,groupLab=group,batchLab=batch){
     metadata = data.frame(colData(dds))
     genes= row.names(res)[1:n]
     pp = lapply(genes, function(gene){
         dd = plotCounts(dds, gene, transform = TRUE,
                         intgroup=xs, returnData = TRUE)
-        names(dd)[2] = "time"
+        names(dd)[2] = xsLab
         if (is.null(group)){
-            dd$treatment = "one_group"
+            dd$condition = "one_group"
+            groupLab="condition"
         }else{
-            dd$treatment = metadata[row.names(dd), group]
+            dd$condition = metadata[row.names(dd), group]
+        }
+        if (!is.null(groupLab)){
+            names(dd)[grep("condition",names(dd))]=groupLab
         }
         if (!is.null(batch)){
             dd$batch = as.factor(metadata[row.names(dd), batch])
-            p=ggplot(dd, aes(x=time,y=count,color=batch,shape=treatment)) 
+            names(dd)[grep("batch",names(dd))]=batchLab
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=batchLab,shape=groupLab)) 
         }else{
-            p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=groupLab,shape=groupLab))
         }
             p = suppressWarnings( p +
             # geom_violin(alpha=0.3) +
@@ -43,7 +51,8 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
             theme_bw(base_size = 7) + ggtitle(gene))
             if (length(unique(dd$treatment))==1){
                 p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
-                    scale_fill_brewer(guide=FALSE, palette = "Set1")
+                    scale_fill_brewer(guide=FALSE, palette = "Set1")+
+                    theme(legend.position = "none")
             }
         p
     })
