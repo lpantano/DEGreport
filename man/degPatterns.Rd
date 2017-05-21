@@ -62,7 +62,7 @@ some need to be merged or not.
 \examples{
 data(humanSexDEedgeR)
 ma <- humanSexDEedgeR$counts[1:100,]
-des <- data.frame(row.names=colnames(ma), 
+des <- data.frame(row.names=colnames(ma),
 group=as.factor(humanSexDEedgeR$samples$group))
 res <- degPatterns(ma, des, time="group", col=NULL)
 }

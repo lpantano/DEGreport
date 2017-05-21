@@ -4,7 +4,8 @@
 \alias{degPlot}
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
-degPlot(dds, res, n = 9, xs = "time", group = "condition", batch = NULL)
+degPlot(dds, res, n = 9, xs = "time", group = "condition", batch = NULL,
+  xsLab = xs, groupLab = group, batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2]{DESeqDataSet} object}
@@ -18,8 +19,14 @@ degPlot(dds, res, n = 9, xs = "time", group = "condition", batch = NULL)
 \item{group}{character, colname in colData to color points and add different
 lines for each level}
 
-\item{batch}{character, colname in colData to shape points, normally used by 
+\item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}
+
+\item{xsLab}{character, alternative label for x-axis (default: same as xs)}
+
+\item{groupLab}{character, alternative label for group (default: same as group)}
+
+\item{batchLab}{character, alternative label for batch (default: same as batch)}
 }
 \value{
 ggplot showing the expresison of the genes

@@ -14,11 +14,11 @@ degPlotWide(dds, genes, group = "condition", batch = NULL)
 \item{group}{character, colname in colData to color points and add different
 lines for each level}
 
-\item{batch}{character, colname in colData to shape points, normally used by 
+\item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}
 }
 \value{
-ggplot showing the expresison of the genes on the x 
+ggplot showing the expresison of the genes on the x
 axis
 }
 \description{
@@ -28,7 +28,7 @@ Plot selected genes on a wide format
 data(humanSexDEedgeR)
 library(DESeq2)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 humanSexDEedgeR$samples[idx,], design=~group)
 dse <- DESeq(dse)
 degPlotWide(dse, rownames(dse)[1:10], group="group")

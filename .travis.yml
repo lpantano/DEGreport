@@ -1,25 +1,4 @@
-env:
-  global:
-    - R_LIBS_USER=~/R
-
-before_install:
-  - echo "deb http://cran.rstudio.com/bin/linux/ubuntu `lsb_release -cs`/"
-      | sudo tee /etc/apt/sources.list.d/cran.list
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/cran.list"
-      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-  - sudo apt-add-repository -y ppa:marutter/c2d4u
-  - sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/marutter-c2d4u-precise.list"
-      -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-  - sudo apt-get install fabric
-  - sudo apt-get install --force-yes r-base-dev r-cran-xml r-cran-rcurl r-cran-rgl r-recommended
-  - sudo apt-get install jags
-  - "[ ! -d ${R_LIBS_USER} ] && mkdir ${R_LIBS_USER}"
-  - R --version
-  - R -e '.libPaths(); sessionInfo()'
-  - sudo R -e 'install.packages(pkgs=c("ggplot2","utils","plyr","coda","knitr","rjags","quantreg","devtools"),dependencies=TRUE,repos="http://cran.rstudio.com/")'
-  - sudo R -e 'source("http://bioconductor.org/biocLite.R");library(BiocInstaller);biocLite("DEGreport",suppressUpdates=TRUE,ask=FALSE)'
-  - sudo R -e 'library(devtools);devtools::install_github("lpantano/DEGreport")'
-
-language: c
-script: R -e 'library(DEGreport)'
+language: r
+sudo: false
+cache: packages
+r: bioc-devel

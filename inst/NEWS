@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport  1.13.3
+    2017-05-19  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Add degMDS for PCA like clustering figures
+    Feature: Add labels parameters to degPlot
+    
 CHANGES IN DEGreport  1.13.2
     2017-05-05  Lorena Pantano <lorena.pantano@gmail.com>
     

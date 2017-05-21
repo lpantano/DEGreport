@@ -8,42 +8,52 @@
 }
 
 #' Plot top genes allowing more variables to color and shape points
-#' 
+#'
 #' @param dds \link[DESeq2]{DESeqDataSet} object
 #' @param res \link[DESeq2]{DESeqResults} object
 #' @param n integer number of genes to plot.
 #' @param xs character, colname in colData that will be used as X-axes
 #' @param group character, colname in colData to color points and add different
 #' lines for each level
-#' @param batch character, colname in colData to shape points, normally used by 
+#' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
+#' @param xsLab character, alternative label for x-axis (default: same as xs)
+#' @param groupLab character, alternative label for group (default: same as group)
+#' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
+degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
+                   xsLab=xs, groupLab=group, batchLab=batch){
     metadata = data.frame(colData(dds))
     genes= row.names(res)[1:n]
     pp = lapply(genes, function(gene){
         dd = plotCounts(dds, gene, transform = TRUE,
                         intgroup=xs, returnData = TRUE)
-        names(dd)[2] = "time"
+        names(dd)[2] = xsLab
         if (is.null(group)){
-            dd$treatment = "one_group"
+            dd$condition = "one_group"
+            groupLab="condition"
         }else{
-            dd$treatment = metadata[row.names(dd), group]
+            dd$condition = metadata[row.names(dd), group]
+        }
+        if (!is.null(groupLab)){
+            names(dd)[grep("condition",names(dd))]=groupLab
         }
         if (!is.null(batch)){
             dd$batch = as.factor(metadata[row.names(dd), batch])
-            p=ggplot(dd, aes(x=time,y=count,color=batch,shape=treatment)) 
+            names(dd)[grep("batch",names(dd))]=batchLab
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=batchLab,shape=groupLab)) 
         }else{
-            p=ggplot(dd, aes(x=time,y=count,color=treatment,shape=treatment))
+            p=ggplot(dd, aes_string(x=xsLab,y="count",color=groupLab,shape=groupLab))
         }
             p = suppressWarnings( p +
             # geom_violin(alpha=0.3) +
-            stat_smooth(aes(x=time, y=count, group=treatment, color=treatment), fill="grey80", method = 'loess') +
+            stat_smooth(fill="grey80", method = 'loess') +
             geom_point(size=1, alpha=0.7, position = position_jitterdodge(dodge.width=0.9)) +
             theme_bw(base_size = 7) + ggtitle(gene))
             if (length(unique(dd$treatment))==1){
                 p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
-                    scale_fill_brewer(guide=FALSE, palette = "Set1")
+                    scale_fill_brewer(guide=FALSE, palette = "Set1")+
+                    theme(legend.position = "none")
             }
         p
     })
@@ -53,20 +63,20 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL){
 }
 
 #' Plot selected genes on a wide format
-#' 
+#'
 #' @param dds \link[DESeq2]{DESeqDataSet} object
 #' @param genes character genes to plot.
 #' @param group character, colname in colData to color points and add different
 #' lines for each level
-#' @param batch character, colname in colData to shape points, normally used by 
+#' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
-#' @return ggplot showing the expresison of the genes on the x 
+#' @return ggplot showing the expresison of the genes on the x
 #' axis
 #' @examples
 #' data(humanSexDEedgeR)
 #' library(DESeq2)
 #' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' dse <- DESeq(dse)
 #' degPlotWide(dse, rownames(dse)[1:10], group="group")
@@ -86,7 +96,7 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
         dd$batch = as.factor(metadata[row.names(dd), batch])
         p = ggplot(dd, aes(x = gene, y = count, color = treatment, shape=batch))
     }
-        
+
     p = p +
         geom_point(position = position_jitterdodge(dodge.width=0.9)) +
         scale_y_log10() +
@@ -106,8 +116,8 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
     splan = max(c(round(length(unique(ma_long$x))/3*2,0), 1))
     # ma_long$x=factor(ma_long$x)
     p = suppressWarnings(
-        ggplot(ma_long, aes(x=x, y=value, fill=group, color=group)) + 
-        geom_boxplot(alpha=0.3,outlier.size = 0, outlier.shape = NA) + 
+        ggplot(ma_long, aes(x=x, y=value, fill=group, color=group)) +
+        geom_boxplot(alpha=0.3,outlier.size = 0, outlier.shape = NA) +
         geom_point(alpha=0.4, width = 0.2, size=1,
                     position = position_jitterdodge(dodge.width=0.9)) +
         stat_smooth(aes(x=x, y=value, group=group, color=group),method = "lm",formula = y~poly(x,splan)) +
@@ -118,10 +128,10 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups))==1){
-        p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
+        p = p + scale_color_brewer(guide=FALSE, palette = "Set1") +
                 scale_fill_brewer(guide=FALSE, palette = "Set1")
     }else{
-        p = p + scale_color_brewer(palette = "Set1") + 
+        p = p + scale_color_brewer(palette = "Set1") +
             scale_fill_brewer(palette = "Set1")
     }
     p
@@ -160,7 +170,7 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
     m = (1-cor(t(counts_group), method = "kendall"))
     d = as.dist(m^2)
     c = diana(d, diss = TRUE, stand = FALSE)
-    
+
     select = cutree(as.hclust(c), h = c$dc)
     select = select[select %in% names(table(select))[table(select)>minc]]
     cat("\n\n Working with ", length(select), "genes after filtering: minc > ",minc,"\n\n")
@@ -190,7 +200,7 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
 }
 
 #' Make groups of genes using expression profile
-#' 
+#'
 #' @aliases degPatterns
 #' @param ma  log2 normalized count matrix
 #' @param metadata  data frame with sample information. Rownames
@@ -227,11 +237,11 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
 #' @examples
 #' data(humanSexDEedgeR)
 #' ma <- humanSexDEedgeR$counts[1:100,]
-#' des <- data.frame(row.names=colnames(ma), 
+#' des <- data.frame(row.names=colnames(ma),
 #' group=as.factor(humanSexDEedgeR$samples$group))
 #' res <- degPatterns(ma, des, time="group", col=NULL)
-degPatterns = function(ma, metadata, minc=15, summarize="group", 
-                       time="time", col="condition", 
+degPatterns = function(ma, metadata, minc=15, summarize="group",
+                       time="time", col="condition",
                        reduce=FALSE,  cutoff=0.70,
                        scale=TRUE, plot=TRUE, fixy=NULL){
     ma = ma[, row.names(metadata)]
@@ -245,10 +255,10 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     stopifnot(class(ma) == "matrix")
     stopifnot(summarize %in% names(metadata))
     stopifnot(time %in% names(metadata))
-    
+
     if (!is.null(fixy))
         stopifnot(length(fixy) == 2)
-    
+
     if (nrow(ma)>3000)
         message("Large number of genes given. Please,",
                 "make sure is not an error. Normally",
@@ -261,9 +271,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         })
     }))
     # colnames(counts_group) = unique(metadata[,summarize])
-    
+
     groups = .make_clusters(counts_group, minc, reduce=reduce, cutoff=cutoff)
-    
+
     if (scale){
         norm_sign = t(apply(counts_group, 1, .scale))
     }else{
@@ -275,7 +285,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     norm_sign = norm_sign[, row.names(metadata_groups)]
     to_plot = unique(groups)
     plots = lapply(to_plot, function(x){
-        .plot_cluster(norm_sign, as.character(names(groups[groups==x])), 
+        .plot_cluster(norm_sign, as.character(names(groups[groups==x])),
                      metadata_groups[,time], metadata_groups[,col], x, fixy)
     })
     nc = 3
@@ -302,7 +312,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
 
 .filter <- function(df){
     .sum = table(df$cluster)
-    .pass = names(.sum)[.sum>4] 
+    .pass = names(.sum)[.sum>4]
     df[df$cluster %in% .pass,]
 }
 
@@ -318,8 +328,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     .logger(length(intersect(genes, rownames(norm))), "num genes")
     .logger(head(norm), "Plot expression")
     .logger(head(metadata), "Plot expression")
-    p=.plot_cluster(norm, genes, 
-                    metadata[,time], 
+    p=.plot_cluster(norm, genes,
+                    metadata[,time],
                     metadata[,col], nc) +
         ggtitle( paste("Pattern of the Genes in", name) )
     print(p)
@@ -328,25 +338,25 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
                aes(x=value, color=variable)) + geom_density() +
         ggtitle( paste("Expression of the Genes in", name) )
     print(p)
-    
+
 }
 
 .integrate <- function(nc1, .exp_base, .clus_base, .norm_base, .metadata_group,
-                       .maraw_base, .ma, .norm, .metadata, time, col, summarize, 
+                       .maraw_base, .ma, .norm, .metadata, time, col, summarize,
                        col_transformed, name, mapping=NULL){
     .genes_nc1 = as.character(.clus_base$genes[.clus_base$cluster==nc1])
     keep_info =  .get_features(.genes_nc1, .norm, mapping)
     keep = as.character(unique(keep_info$touse))
     if (length(keep)<5)
         return(NULL)
-    clusters = degPatterns(as.matrix(.ma[keep,]), 
-                           .metadata, 
-                           minc = 5, summarize = summarize, 
+    clusters = degPatterns(as.matrix(.ma[keep,]),
+                           .metadata,
+                           minc = 5, summarize = summarize,
                            time=time, col = col)
     # print(clusters$pass)
     if (length(clusters$pass)==0)
         return(NULL)
-    .exp = .median_per_cluster(.norm, 
+    .exp = .median_per_cluster(.norm,
                                clusters$df[clusters$df$cluster %in% clusters$pass,])
     # print(.exp)
     # for (nc2 in rownames(.exp)){
@@ -356,9 +366,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         # print(.exp[nc2,colnames(.exp_base)])
         .genes_nc2 = as.character(clusters$df$genes[clusters$df$cluster==nc2])
         .est = cor.test(.exp_base[nc1,], .exp[nc2,colnames(.exp_base)])
-        data.frame(nc1=nc1, 
-                   nc2=paste0(nc1, ".", nc2), 
-                   cor=.est$estimate, 
+        data.frame(nc1=nc1,
+                   nc2=paste0(nc1, ".", nc2),
+                   cor=.est$estimate,
                    pval=.est$p.value,
                    gene=keep_info$touse[keep_info$touse %in% .genes_nc2],
                    pair=keep_info$pair[keep_info$touse %in% .genes_nc2])
@@ -374,7 +384,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     }
     if (!summarize %in% names(metadata))
         metadata[,summarize] = paste0(metadata[,col_transformed], metadata[,time])
-    
+
     metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     return(metadata_groups)
@@ -382,12 +392,12 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
 
 
 #' Integrate data comming from degPattern into one data object
-#' 
+#'
 #' The simplest case is if you want to convine the pattern profile
 #' for gene expression data and proteomic data. It will use the first element
 #' as the base for the integration. Then, it will loop through clusters
 #' and run \link{degPatterns} in the second data set to detect patterns that match
-#' this one. 
+#' this one.
 #' @param matrix_list list expression data for each element
 #' @param cluster_list list df item from degPattern output
 #' @param metadata_list list data.frames from each element
@@ -396,13 +406,13 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
 #' @param time character column to use as x-axes in figures
 #' @param col character column to color samples in figures
 #' @param scale boolean scale by row expression matrix
-#' @param mapping data.frame mapping table in case elements use 
+#' @param mapping data.frame mapping table in case elements use
 #' different ID in the row.names of expression matrix. For instance,
 #' when integrating miRNA/mRNA.
-#' @return A data.frame with information on what genes are in each cluster in 
+#' @return A data.frame with information on what genes are in each cluster in
 #' all data set, and the correlation value for each pair cluster comparison.
-degMerge <- function(matrix_list, cluster_list, metadata_list, 
-                     summarize="group", time="time", col="condition", 
+degMerge <- function(matrix_list, cluster_list, metadata_list,
+                     summarize="group", time="time", col="condition",
                      scale=TRUE, mapping=NULL){
     # basicConfig(level='FINEST')
     stopifnot(length(matrix_list)>1 | length(metadata_list)>1)
@@ -414,15 +424,15 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     for (name in names(matrix_list)){
         .logger(name, msg="Name list")
         metadata = metadata_list[[name]]
-        matrixnorm_list[[name]] = .summarize_scale( as.matrix(matrix_list[[name]]), 
-                          group=metadata[,summarize], 
+        matrixnorm_list[[name]] = .summarize_scale( as.matrix(matrix_list[[name]]),
+                          group=metadata[,summarize],
                           scale=scale)
         .logger(head(matrix_list[[name]]), msg="cluster Matrix")
-        matrixabs_list[[name]] = .summarize_scale( as.matrix(matrix_list[[name]]), 
-                                                    group=metadata[,summarize], 
+        matrixabs_list[[name]] = .summarize_scale( as.matrix(matrix_list[[name]]),
+                                                    group=metadata[,summarize],
                                                     scale=FALSE)
         .logger(head(matrixnorm_list[[name]]), msg="Matrix norm DF")
-        
+
         if (is.null(col))
             col_transformed = "condition"
 
@@ -431,12 +441,12 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
         if (name %in% names(cluster_list)){
             cluster = cluster_list[[name]]
             cluster_list[[name]] = .filter(cluster[as.character(cluster$genes) %in% rownames(matrix_list[[name]]), ])
-            cluster_expression[[name]] = .median_per_cluster(matrixnorm_list[[name]], 
+            cluster_expression[[name]] = .median_per_cluster(matrixnorm_list[[name]],
                             cluster_list[[name]])
         }
         .logger(head(cluster_expression[[name]]), "Cluster summarized")
     }
-    
+
     base = names(matrix_list)[1]
     .norm_base = matrixnorm_list[[base]]
     .exp_base = cluster_expression[[base]]
@@ -447,7 +457,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     df = lapply(rownames(.exp_base), function(nc1){
         .genes_nc1 = as.character(.clus_base$genes[.clus_base$cluster==nc1])
         cat("\n\n### Cluster number ", nc1, "\n\n")
-        .plot_base(.genes_nc1, .norm_base, .maraw_base, .metadata_group, 
+        .plot_base(.genes_nc1, .norm_base, .maraw_base, .metadata_group,
                    time, col_transformed, nc1, paste(base, nc1))
         df = lapply(names(matrix_list), function(name) {
             if (name == base) return(NULL)
@@ -459,13 +469,13 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
                 map=mapping[[name]]
             .logger(head(map), "Mapping")
             .integrate(nc1, .exp_base, .clus_base, .norm_base, .metadata_group,
-                       .maraw_base, .ma, .norm, .metadata, 
+                       .maraw_base, .ma, .norm, .metadata,
                        time, col, summarize, col_transformed, name, map)
         })
         do.call(rbind, df)
     })
     df
-    
+
 }
 
 .table_w_fc <- function(dds, contrast){
@@ -490,7 +500,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     ego <- enrichGO(gene = row.names(out_df[.idx,]), keytype = "ENSEMBL",
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
-    
+
     if ("result" %in%  slotNames(ego)){
         print(knitr::kable(simplify(ego)@result[,1:7]))
         cat("\n\n")
@@ -526,13 +536,32 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     write.table(tab, file.path(basedir, fn), quote=quote, sep=sep, row.names=F)
 }
 
-.mds = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
+#' Plot MDS from normalized count data
+#'
+#' Uses cmdscale to get multidimensional scaling of data matrix,
+#' and plot the samples with ggplot2.
+#' @param counts matrix samples in columns, features in rows
+#' @param condition vector define groups of samples in counts.
+#' It has to be same order than the count matrix for columns.
+#' @param k integer number of dimensions to get
+#' @param d type of distance to use
+#' @param xi number of component to plot in x-axis
+#' @param yi number of component to plot in y-axis
+#' @return ggplot2 object
+#' @examples
+#' data(humanSexDEedgeR)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' degMDS(counts(dse), condition=colData(dse)$group)
+degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
     nprobes = nrow(counts)
     nsamples = ncol(counts)
     if (d=="euclidian"){
         distances = dist(t(counts))
     }else if (d=="cor"){
-        distances = as.dist(1-cor(counts))
+        distances = as.dist((1-cor(counts))^2)
     }
     fit = cmdscale(distances, eig=TRUE, k=k)
     eigs = data.frame(variance_explained=fit$eig / sum(fit$eig))
@@ -540,7 +569,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     df = as.data.frame(fit$points[,c(xi,yi)])
     names(df) = c("one", "two")
     df$label = rownames(df)
-    if(!is.null(condition)) { 
+    if(!is.null(condition)) {
         df$condition = condition
         p = ggplot(df, aes(one, two, label=label, color=condition)) +
             geom_text(aes(one, two, label=label), size=3) +
@@ -551,15 +580,14 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
         p = ggplot(df, aes(one, two)) +
             geom_text(aes(one, two, label=label), size=3) +
             labs(list(x=xnames[xi],y=xnames[yi])) + scale_x_continuous(expand=c(0.3, 0.3))
-        
+
     }
-    
-    return(p)
+
+    return(p + theme_bw())
 }
 
 #' Complete report from DESeq2 analysis
-#' 
-#' @aliases show_deseq2_results
+#'
 #' @param res  output from \link[DESeq2]{results} function.
 #' @param dds  \link[DESeq2]{DESeqDataSet} object.
 #' @param rlogMat matrix from \link[DESeq2]{rlog} function.
@@ -575,21 +603,21 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 #' that will be used as X axes in plots (i.e time)
 #' @param path_results character path where files are stored.
 #' NULL if you don't want to save any file.
-#' @param contrast list with character vector indicating the 
+#' @param contrast list with character vector indicating the
 #' fold change values from different comparisons to add to the output table.
 #' @return ggplot2 object
 #' @examples
 #' data(humanSexDEedgeR)
 #' library(DESeq2)
 #' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' dse <- DESeq(dse)
-#' res <- degResults(dds=dse, name="test", org=NULL, 
+#' res <- degResults(dds=dse, name="test", org=NULL,
 #' do_go=FALSE, group="group", xs="group", path_results = NULL)
-degResults <- function(res=NULL, dds, rlogMat=NULL, name, 
+degResults <- function(res=NULL, dds, rlogMat=NULL, name,
                                 org=NULL, FDR=0.05, do_go=FALSE,
-                                FC=0.1, group="condition", xs="time", 
+                                FC=0.1, group="condition", xs="time",
                                 path_results =".",
                                 contrast=NULL){
     if (is.null(rlogMat)){
@@ -611,9 +639,9 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
         out_df$symbol = .convertIDs(rownames(out_df), "ENSEMBL", "SYMBOL", org, "useFirst")
         out_df$description = .convertIDs(rownames(out_df), "ENSEMBL", "GENENAME", org, "useFirst")
     }
-    
+
     cat("\n",paste(capture.output(summary(res)[1:8]), collapse = "<br>"),"\n")
-    
+
     if (!is.null(contrast)){
         fc_df <- .table_w_fc(dds, contrast)
         cols_names <- names(fc_df)
@@ -629,41 +657,41 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     .save_file(rlogMat, fn_log, path_results)
     cat("\n\nDifferential expression file at: ", fn)
     cat("\n\nNormalized counts matrix file at: ", fn_log)
-    
+
     cat("\n\n### MA plot plot\n\n")
     DESeq2::plotMA(res)
 
     cat("\n\n### Volcano plot\n\n")
     stats = as.data.frame(res[,c(2,6)])
     degVolcano(stats, title=name, lfc.cutoff=1.5)
-    
+
     cat("\n\n### QC for DE genes\n")
     show= !is.na(out_df$pvalue)
-    p = degQC(out_df$pvalue[show], 
+    p = degQC(out_df$pvalue[show],
               rlogMat[row.names(out_df)[show],],
-              metadata[,xs]) 
+              metadata[,xs])
     print(p)
-    
+
     sign = row.names(out_df)[out_df$padj<FDR & !is.na(out_df$padj) & out_df$absMaxLog2FC > FC]
     cat("\n\n### Most significants, FDR<", FDR, " and log2FC > ", FC, ": ", length(sign),"\n")
-    
+
     if (length(sign) < 2){
         cat("Too few genes to plot.")
     }else{
         pheatmap(rlogMat[sign, ], show_rownames = FALSE,
                  annotation_col = metadata,
-                 clustering_method = "ward.D2", 
+                 clustering_method = "ward.D2",
                  clustering_distance_cols = "correlation"
                 )
-        print(.mds(rlogMat[sign,],condition = metadata[,xs])+ 
+        print(degMDS(rlogMat[sign,],condition = metadata[,xs])+
                   theme_minimal())
     }
     cat("\n")
-    
+
     cat("\n\n### Plots top 9 most significants\n")
     degPlot(dds, out_df, xs = xs, group = group)
     cat("\n")
-    
+
     cat("\n\n### Top DE table\n\n")
     print(kable(head(out_df, 20)))
     cat("\n\n")
@@ -674,8 +702,8 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
             .save_file(df@result, paste0(name, "_goenrich.csv"), path_results)
             goterm = df
         }
-            
-            
+
+
     }
     return(list(sign=sign, table=out_df, go_res=goterm))
 }
