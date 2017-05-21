@@ -2,7 +2,6 @@
 % Please edit documentation in R/clustering.R
 \name{degResults}
 \alias{degResults}
-\alias{show_deseq2_results}
 \title{Complete report from DESeq2 analysis}
 \usage{
 degResults(res = NULL, dds, rlogMat = NULL, name, org = NULL,
@@ -36,7 +35,7 @@ that will be used as X axes in plots (i.e time)}
 \item{path_results}{character path where files are stored.
 NULL if you don't want to save any file.}
 
-\item{contrast}{list with character vector indicating the 
+\item{contrast}{list with character vector indicating the
 fold change values from different comparisons to add to the output table.}
 }
 \value{
@@ -49,9 +48,9 @@ Complete report from DESeq2 analysis
 data(humanSexDEedgeR)
 library(DESeq2)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
+dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 humanSexDEedgeR$samples[idx,], design=~group)
 dse <- DESeq(dse)
-res <- degResults(dds=dse, name="test", org=NULL, 
+res <- degResults(dds=dse, name="test", org=NULL,
 do_go=FALSE, group="group", xs="group", path_results = NULL)
 }
