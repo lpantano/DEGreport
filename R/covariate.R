@@ -137,7 +137,8 @@
 #' a)significantCovars, 
 #' b)plot,
 #' c)cor_matrix, 
-#' b)Effects.significantCovars: that is PCs pct * absolute correlation between covariate and PCs
+#' d)Effects.significantCovars: that is PCs pct * absolute correlation between covariate and PCs,
+#' e)PCs_matrix: PCs loading for each sample
 #' @examples
 #' data(humanSexDEedgeR)
 #' library(DESeq2)
@@ -198,6 +199,7 @@ degCovariates <- function(counts, metadata,
     return(list(significantCovars=significantCovars, 
                 plot=p,
                 cor_matrix=corrRes$mat, 
-                Effects.significantCovars = corrRes$Effects.significantCovars))
+                Effects.significantCovars = corrRes$Effects.significantCovars,
+                PCs_matrix=samplePCvals))
 }
 

@@ -30,7 +30,8 @@ correlation between PCs and covariates.}
 a)significantCovars, 
 b)plot,
 c)cor_matrix, 
-b)Effects.significantCovars: that is PCs pct * absolute correlation between covariate and PCs
+d)Effects.significantCovars: that is PCs pct * absolute correlation between covariate and PCs,
+e)PCs_matrix: PCs loading for each sample
 }
 \description{
 This function will calculate the PCs using prcomp function,
