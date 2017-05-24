@@ -85,7 +85,7 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
     dd = bind_rows(lapply(genes,function(gene){
         plotCounts(dds, gene, transform = TRUE,
                     intgroup=group, returnData = TRUE) %>%
-            mutate(gene=gene)}))
+            mutate(gene=gene, sample=row.names(metadata))}))
     if (is.null(group)){
         dd$treatment = "one_group"
     }else{
@@ -93,7 +93,7 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
     }
     p = ggplot(dd, aes(x = gene, y = count, color = treatment))
     if (!is.null(batch)){
-        dd$batch = as.factor(metadata[row.names(dd), batch])
+        dd$batch = as.factor(metadata[dd$sample, batch])
         p = ggplot(dd, aes(x = gene, y = count, color = treatment, shape=batch))
     }
 
