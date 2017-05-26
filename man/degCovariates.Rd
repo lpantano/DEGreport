@@ -5,7 +5,7 @@
 \title{Find correlation between PCs and covariates}
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, min_pc_pct = 5,
-  correlation = "pearson")
+  correlation = "spearman")
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -26,10 +26,10 @@ to select only PCs that explain more variability than this.}
 correlation between PCs and covariates.}
 }
 \value{
-: list: 
-a)significantCovars, 
+: list:
+a)significantCovars,
 b)plot,
-c)cor_matrix, 
+c)cor_matrix,
 d)Effects.significantCovars: that is PCs pct * absolute correlation between covariate and PCs,
 e)PCs_matrix: PCs loading for each sample
 }
