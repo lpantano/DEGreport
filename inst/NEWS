@@ -1,5 +1,17 @@
 DEGreport News
 
+CHANGES IN DEGreport  1.13.4
+    2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
+
+    Feature: Accept matrix for degWidePlot
+    
+CHANGES IN DEGreport  1.13.4
+    2017-05-22  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Add degCovariates to calculate correlations
+             between PCs from count data and covariates
+             from metadata
+
 CHANGES IN DEGreport  1.13.3
     2017-05-19  Lorena Pantano <lorena.pantano@gmail.com>
     

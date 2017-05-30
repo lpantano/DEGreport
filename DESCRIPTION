@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.13.3
-Date: 2017-05-19
+Version: 1.13.5
+Date: 2017-05-30
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -16,7 +16,6 @@ Suggests:
     BiocStyle,
     BiocGenerics,
     org.Hs.eg.db,
-    DESeq2,
     AnnotationDbi,
     BiocParallel
 Depends:
@@ -41,15 +40,16 @@ Imports:
     gridExtra,
     knitr,
     grDevices,
-    stats
+    stats,
+    psych,
+    DESeq2
 Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 
   role = c("aut", "cre")),
-  person("John", "Hutchinson", email = "@jnhutchinson", 
-  role = c("ctb")),
-  person("Victor", "Barrera", email = "@vbarrera", 
-  role = c("ctb")),
-  person("Mary", "Piper", email = "@marypiper", 
-  role = c("ctb")))
+  person("John", "Hutchinson", email = "@jnhutchinson", role = c("ctb")),
+  person("Victor", "Barrera", email = "@vbarrera", role = c("ctb")),
+  person("Mary", "Piper", email = "@marypiper", role = c("ctb")),
+  person("Kenneth", "Daily", role=c("ctb")),
+  person("Thanneer", "Malai Perumal", role=c("ctb")))
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr

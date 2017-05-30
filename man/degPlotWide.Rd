@@ -4,15 +4,19 @@
 \alias{degPlotWide}
 \title{Plot selected genes on a wide format}
 \usage{
-degPlotWide(dds, genes, group = "condition", batch = NULL)
+degPlotWide(counts, genes, group = "condition", metadata = NULL,
+  batch = NULL)
 }
 \arguments{
-\item{dds}{\link[DESeq2]{DESeqDataSet} object}
+\item{counts}{\link[DESeq2]{DESeqDataSet} object or expression matrix}
 
 \item{genes}{character genes to plot.}
 
 \item{group}{character, colname in colData to color points and add different
 lines for each level}
+
+\item{metadata}{data.frame, information for each sample. Not needed if
+\link[DESeq2]{DESeqDataSet} given as counts.}
 
 \item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}
