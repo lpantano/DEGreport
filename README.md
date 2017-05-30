@@ -9,6 +9,7 @@
 
 [![Build status](https://secure.travis-ci.org/lpantano/DEGreport.png)](https://secure.travis-ci.org/lpantano/DEGreport.png)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![BioC Downloads](http://bioconductor.org//shields/downloads/DEGreport.svg)](http://bioconductor.org/packages/3.6/bioc/html/DEGreport.html)
 
 Figures and analyses after differential expression analysis.
 
