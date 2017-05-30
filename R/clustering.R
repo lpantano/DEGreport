@@ -64,10 +64,12 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
 
 #' Plot selected genes on a wide format
 #'
-#' @param dds \link[DESeq2]{DESeqDataSet} object
+#' @param counts \link[DESeq2]{DESeqDataSet} object or expression matrix
 #' @param genes character genes to plot.
 #' @param group character, colname in colData to color points and add different
 #' lines for each level
+#' @param metadata data.frame, information for each sample. Not needed if
+#' \link[DESeq2]{DESeqDataSet} given as counts.
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
 #' @return ggplot showing the expresison of the genes on the x
@@ -80,12 +82,22 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' dse <- DESeq(dse)
 #' degPlotWide(dse, rownames(dse)[1:10], group="group")
-degPlotWide <- function(dds, genes, group="condition", batch=NULL){
-    metadata = data.frame(colData(dds))
-    dd = bind_rows(lapply(genes,function(gene){
-        plotCounts(dds, gene, transform = TRUE,
-                    intgroup=group, returnData = TRUE) %>%
-            mutate(gene=gene)}))
+degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=NULL){
+    if (is.null(metadata))
+        metadata = data.frame(colData(counts))
+    metadata = data.frame(metadata)
+    if (class(counts) == "DESeqDataSet"){
+        dd = bind_rows(lapply(genes,function(gene){
+            plotCounts(counts, gene, transform = TRUE,
+                       intgroup=group, returnData = TRUE) %>%
+                mutate(gene=gene, sample=row.names(metadata))}))
+    }else if(class(counts) == "matrix"){
+        dd = melt(counts[genes,])
+        colnames(dd) = c("gene", "sample", "count")
+        dd$group = as.factor(metadata[as.character(dd$sample), group])
+    }else{
+        stop("No supported for class", class(counts))
+    }
     if (is.null(group)){
         dd$treatment = "one_group"
     }else{
@@ -93,7 +105,7 @@ degPlotWide <- function(dds, genes, group="condition", batch=NULL){
     }
     p = ggplot(dd, aes(x = gene, y = count, color = treatment))
     if (!is.null(batch)){
-        dd$batch = as.factor(metadata[row.names(dd), batch])
+        dd$batch = as.factor(metadata[dd$sample, batch])
         p = ggplot(dd, aes(x = gene, y = count, color = treatment, shape=batch))
     }
 
