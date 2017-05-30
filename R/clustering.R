@@ -68,6 +68,8 @@ degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
 #' @param genes character genes to plot.
 #' @param group character, colname in colData to color points and add different
 #' lines for each level
+#' @param metadata data.frame, information for each sample. Not needed if
+#' \link[DESeq2]{DESeqDataSet} given as counts.
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
 #' @return ggplot showing the expresison of the genes on the x

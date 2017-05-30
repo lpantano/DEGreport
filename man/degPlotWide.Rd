@@ -15,6 +15,9 @@ degPlotWide(counts, genes, group = "condition", metadata = NULL,
 \item{group}{character, colname in colData to color points and add different
 lines for each level}
 
+\item{metadata}{data.frame, information for each sample. Not needed if
+\link[DESeq2]{DESeqDataSet} given as counts.}
+
 \item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}
 }
