@@ -128,11 +128,12 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
     splan = max(c(round(length(unique(ma_long$x))/3*2,0), 1))
     # ma_long$x=factor(ma_long$x)
     p = suppressWarnings(
-        ggplot(ma_long, aes(x=x, y=value, fill=group, color=group)) +
+        ggplot(ma_long, aes_string(x="x", y="value", fill="group", color="group")) +
         geom_boxplot(alpha=0.3,outlier.size = 0, outlier.shape = NA) +
         geom_point(alpha=0.4, width = 0.2, size=1,
                     position = position_jitterdodge(dodge.width=0.9)) +
-        stat_smooth(aes(x=x, y=value, group=group, color=group),method = "lm",formula = y~poly(x,splan)) +
+        stat_smooth(aes_string(x="x", y="value", group="group", color="group"),
+                    method = "lm",formula = y~poly(x,splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
         theme_bw(base_size = 11) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
@@ -347,7 +348,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     print(p)
     .logger(head(melt(as.data.frame(raw[genes,]))), "Plot expression")
     p = ggplot(melt(as.data.frame(raw[genes,])),
-               aes(x=value, color=variable)) + geom_density() +
+               aes_string(x="value", color="variable")) + geom_density() +
         ggtitle( paste("Expression of the Genes in", name) )
     print(p)
 
@@ -720,3 +721,53 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     return(list(sign=sign, table=out_df, go_res=goterm))
 }
 
+.pca_loadings = function(counts, ntop=500) {
+    pca <- prcomp((t(counts)))
+    percentVar <- pca$sdev^2/sum(pca$sdev^2)
+    names(percentVar) = colnames(pca$x)
+    pca$percentVar = percentVar
+    pca
+}
+
+#' smart PCA from count matrix data
+#' 
+#' nice plot using ggplot2 from prcomp function
+#' 
+#' @param counts matrix with count data
+#' @param metadata dara.frame with sample information
+#' @param pc1 character PC to plot on x-axis
+#' @param pc2 character PC to plot on y-axis
+#' @param condition character column in metadata to use to color samples
+#' @param name character if given, column in metadata to print label
+#' @param shape character if given, column in metadata to shape points
+#' @author Lorena Pantano, Rory Kirchner, Michael Steinbaugh
+#' @examples
+#' data(humanSexDEedgeR)
+#' library(DESeq2)
+#' idx <- c(1:5, 75:80)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' degPCA(log2(counts(dse)+0.5), colData(dse), condition="group", name="group", shape="group")
+degPCA <- function(counts, metadata, condition="condition", 
+                   pc1="PC1", pc2="PC2", 
+                   name=NULL, shape=NULL){
+    pc = .pca_loadings(counts)
+    idx1 = which(colnames(pc) == pc1)
+    idx2 = which(colnames(pc) == pc2)
+    comps = data.frame(pc$x)
+    comps$Name = rownames(comps)
+    comps = cbind(comps, as.data.frame(metadata)[as.character(comps$Name),])
+    # [Feature] check metadata has name,shape,condition
+    # [Feature] check counts has same samples than metadata
+    p <- ggplot(comps, aes_string(pc1, pc2, color=condition))
+    if (!is.null(shape))
+        p <- ggplot(comps, aes_string(pc1, pc2, color=condition, shape=shape))
+    if (!is.null(name))
+        p <- p + geom_text(aes_string(label=name), nudge_x = 1, nudge_y = 1)
+    p +
+        geom_point(size=3) +
+        scale_color_brewer(palette = "Set1") +
+        xlab(paste0("PC1", ": ", round(pc$percentVar[idx1] * 100), "% variance")) +
+        ylab(paste0("PC2", ": ", round(pc$percentVar[idx2] * 100), "% variance")) +
+        theme_minimal()
+}

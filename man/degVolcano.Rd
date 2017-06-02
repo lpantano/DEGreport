@@ -50,5 +50,9 @@ This function was mainly developed by @jnhutchinson.
 \examples{
 data(DEGreportSet)
 stats = DEGreportSet$deg[,c("logFC", "PValue")]
-degVolcano(stats)
+stats$name = row.names(stats)
+degVolcano(stats, plot_text=stats)
+}
+\author{
+Lorena Pantano, John Hutchinson
 }
