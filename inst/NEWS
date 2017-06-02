@@ -1,6 +1,11 @@
 DEGreport News
 
-CHANGES IN DEGreport  1.13.4
+CHANGES IN DEGreport  1.13.5
+    2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
+
+    Feature: Add degPCA plot from Rory Kirchner
+   
+CHANGES IN DEGreport  1.13.5
     2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
 
     Feature: Accept matrix for degWidePlot

@@ -21,10 +21,12 @@ fmt <- function(){
 #' right side of the volcano plot.
 #' @details 
 #' This function was mainly developed by @jnhutchinson.
+#' @author Lorena Pantano, John Hutchinson
 #' @examples 
 #' data(DEGreportSet)
 #' stats = DEGreportSet$deg[,c("logFC", "PValue")]
-#' degVolcano(stats)
+#' stats$name = row.names(stats)
+#' degVolcano(stats, plot_text=stats)
 degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Distributions",
                                  pval.cutoff=0.05, lfc.cutoff=1, shade.colour="orange",
                                  shade.alpha=0.25, point.colour="gray", point.alpha=0.75,
@@ -32,50 +34,27 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
                                  plot_text=NULL) {
     if ( !any(side %in% c("both","down","up")) | length(side)>1)
         stop("side parameter should be: both, up or down.")
-    if (ncol(stats)!=2)
+    if (ncol(stats)<2)
         stop("Need a data.frame with two columns: logFC and Adjusted.Pvalue")
     if ( sum( rowSums(is.na(stats)) ) > 0 )
         stats = stats[rowSums(is.na(stats))==0,]
     if ( any(stats[,2]>1) | any(stats[,2]<0) )
         stop("pvalues needs to be >0 and <1")
     names(stats) = c("logFC","adj.P.Val")
-    stats[,2] = stats[,2] + 1e-10
+    stats[,2] = -log10(stats[,2] + 1e-10)
+    
     # get range of log fold change and p-value values to setup plot borders
     range.lfc <- c(floor(min(stats$logFC)), ceiling(max(stats$logFC)))
-    range.pval <- c(floor(min(-log10(stats$adj.P.Val))), ceiling(max(-log10(stats$adj.P.Val))))
+    range.pval <- c(floor(min(stats$adj.P.Val)), ceiling(max(stats$adj.P.Val)))
 
-    #make top plot - density plot with fold changes
-    lfcd <- as.data.frame(cbind(density(stats$logFC)$x, density(stats$logFC)$y))
-    hist_top <- ggplot(data=stats, aes(logFC, x=1))+
-        geom_violin(color=line.colour)+
-        theme_bw()+
-        coord_flip()+
-        # scale_x_continuous(limits = range.pval)+
-        theme(axis.title.y=element_blank(), axis.title.x=element_blank())+
-        theme(plot.margin=unit(c(3,-5.5,4,3), "mm") )+
-        labs(list(title="logFC density"))
-    
-    if (side=="both" | side=="up")
-        hist_top = hist_top + geom_ribbon(data=subset(lfcd, V1>lfc.cutoff),aes(x=V1,ymax=V2),ymin=0,fill=shade.colour, alpha=shade.alpha)
-    if (side=="both" | side=="down")
-        hist_top = hist_top +  geom_ribbon(data=subset(lfcd, V1< -lfc.cutoff),aes(x=V1,ymax=V2),ymin=0,fill=shade.colour, alpha=shade.alpha)
-
-
-    # make blank plot
-    empty <- ggplot()+geom_point(aes(1,1), colour="white")+
-        theme(panel.grid=element_blank(),
-              axis.ticks=element_blank(),
-              panel.background=element_blank(),
-              axis.text.x=element_blank(),
-              axis.text.y=element_blank(),
-              axis.title.x=element_blank(),
-              axis.title.y=element_blank()
-        )
 
     #make scatter volcano plot
-    scat.poly.up <- with(stats, data.frame(x=as.numeric(c(lfc.cutoff,  lfc.cutoff, max(range.lfc),max(range.lfc))), y=as.numeric(c(-log10(pval.cutoff), max(range.pval), max(range.pval),-log10(pval.cutoff)))))
-    scat.poly.down <- with(stats, data.frame(x=as.numeric(c(-lfc.cutoff,  -lfc.cutoff, min(range.lfc),min(range.lfc))), y=as.numeric(c(-log10(pval.cutoff), max(range.pval), max(range.pval),-log10(pval.cutoff)))))
-    scatter <- ggplot(data=stats, aes(x=logFC, y=-log10(adj.P.Val))) +
+    scat.poly.up <- with(stats, data.frame(x=as.numeric(c(lfc.cutoff,  lfc.cutoff, max(range.lfc),max(range.lfc))), 
+                                           y=as.numeric(c(pval.cutoff, max(range.pval), max(range.pval),pval.cutoff))))
+    scat.poly.down <- with(stats, data.frame(x=as.numeric(c(-lfc.cutoff,  -lfc.cutoff, min(range.lfc),min(range.lfc))), 
+                                             y=as.numeric(c(pval.cutoff, max(range.pval), max(range.pval),pval.cutoff))))
+    
+    scatter <- ggplot(data=stats, aes_string(x="logFC", y="adj.P.Val")) +
         geom_point(alpha=point.alpha, pch=21, fill=point.colour, color=point.outline.colour) +
         xlab("log2 fold change") + ylab("-log10(adjusted p-value)") +
         theme_bw()+
@@ -84,34 +63,19 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
         scale_x_continuous(limits = range.lfc, breaks = range.lfc[1]:range.lfc[2], expand = c(.05,.05))+
         scale_y_continuous(labels=fmt(), limits = range.pval)+ labs(list(title="Volcano plot"))
     if (side=="both" | side=="up")
-        scatter = scatter + geom_polygon(data=scat.poly.up, aes(x=x,y=y), fill=shade.colour, alpha=shade.alpha)
+        scatter = scatter + geom_polygon(data=scat.poly.up, aes_string(x="x",y="y"), fill=shade.colour, alpha=shade.alpha)
     if (side=="both" | side=="down")
-        scatter = scatter + geom_polygon(data=scat.poly.down, aes(x=x,y=y), fill=shade.colour, alpha=shade.alpha)
+        scatter = scatter + geom_polygon(data=scat.poly.down, aes_string(x="x",y="y"), fill=shade.colour, alpha=shade.alpha)
 
     if (!is.null(plot_text)){
         names(plot_text) = c("logFC", "adj.P.Val", "name")
-        plot_text[,2] <- plot_text[,2] + 1e-10
+        plot_text[,2] <- -log10(plot_text[,2] + 1e-10)
         scatter <- scatter + 
-            geom_text_repel(data=plot_text, aes(x=logFC, y=-log10(adj.P.Val), label=name), size=3)
+            geom_text_repel(data=plot_text, aes_string(x="logFC", y="adj.P.Val", label="name"), size=3)
     }
     
-    # make right plot - density plot of adjusted pvalues
-    hist_right <- ggplot(data=stats, aes(-log10(adj.P.Val), x=1))+
-        geom_violin(color=line.colour)+
-        theme_bw()+
-        # scale_x_continuous(limits = range.pval)+
-        theme(axis.title.y=element_blank(), axis.title.x=element_blank())+
-        theme(plot.margin=unit(c(3,-5.5,4,3), "mm")) + labs(list(title="adj.pval density"))
 
-    # plot all plots
-    # pp.logfc <- ggplotGrob(hist_top)
-    # pp.empty <- ggplotGrob(empty)
     pp.volc <- ggplotGrob(scatter)
-    # pp.pval  <- ggplotGrob(hist_right)
-    # p = grid.arrange(top=textGrob(title),
-    #              arrangeGrob(pp.logfc,pp.volc, heights=c(1,3),ncol=1),
-    #              arrangeGrob(pp.empty,pp.pval,  heights=c(1,3),ncol=1),
-    #              ncol=2, widths=c(3,1))
     p = grid.arrange(pp.volc)
     invisible(p)
 }
