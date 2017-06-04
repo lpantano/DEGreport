@@ -162,6 +162,12 @@ with different shapes.
 degPlot(dds=dse, res = res, n = 6, xs = "group", group = "group")
 @
 
+Another option for plotting genes in a wide format:
+
+<<deseq2-gene-plot-wide>>=
+degPlotWide(dse, rownames(dse)[1:5], group="group")
+@
+
 \section{Detect patterns of expression}
 
 In this section, we show how to detect pattern of expression. Mainly useful when
