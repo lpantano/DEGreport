@@ -146,7 +146,7 @@
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' res <- degCovariates(log2(counts(dse)+0.5),
-#' colData(dse), "example")
+#' colData(dse))
 #' res$plot
 degCovariates <- function(counts, metadata,
                                       fdr = 0.1,

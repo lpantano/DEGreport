@@ -34,10 +34,11 @@ library(edgeR)
 
 \section{General QC figures from DE analysis}
 
-We are going to do a differential expression analysis with edgeR. We have an 
-object that is comming from the edgeR package. It countains a gene count matrix
+We are going to do a differential expression analysis with edgeR/DESeq2.
+We have an object that is comming from the edgeR package. 
+It countains a gene count matrix
 for 85 TSI HapMap individuals, and the gender information. With that, we are 
-going to apply the `glmFit` function to get genes differentially expressed 
+going to apply the `glmFit` function or `DESeq2` to get genes differentially expressed 
 between males and females.
 
 <<chunk-1>>=
@@ -54,17 +55,22 @@ Male or Female.
 
 <<chunk-2>>=
 counts<-cpm(humanSexDEedgeR,log=FALSE)
-g1<-colnames(counts)[1:41]
-g2<-colnames(counts)[42:85]
 design<-data.frame(condition=sub("1","Male",sub("0","Female",des[,2])), other=1, row.names=colnames(counts))
 @
 
-We are getting the chromosome information for each gene. This way we can colour
-genes according autosomic,X or Y chromosomes.
+\subsection{Size factor QC}
 
-<<chunk-3>>=
-data(geneInfo)
+A main assumption in library size factor calculation of edgeR and DESeq2 (and others)
+is that the majority of genes remain unchanged. Plotting the distribution
+of gene ratios between each gene and the average gene can show how true this is.
+Not superuseful for many samples because the plot becomes crowed.
+
+<<chunk-size-factor>>=
+degCheckFactors(counts[,1:10])
 @
+
+
+\subsection{Mean-Variance QC plots}
 
 p-value distribution gives an idea on how well you model is capturing the input data
 and as well whether it could be some problem for some set of genes. In general,
@@ -72,23 +78,9 @@ you expect to have a flat distribution with peaks at 0 and 1. In this case, we a
 the mean count information to check if any set of genes are enriched in any
 specific p-value range.
 
-<<chunk-mean>>=
-degMean(lrt$table$PValue, counts)
-@
-
-The same idea can be done with the gene variation.
-
-<<chunk-var>>=
-degVar(lrt$table$PValue, counts)
-@
-
 Variation (dispersion) and average expresion relationship shouldn't be a factor among
 the differentialy expressed genes. When plotting average mean and standard desviation,
 significant genes should be randomly distributed.
-
-<<chunk-mean-var>>=
-degMV(humanSexDEedgeR$samples$group, lrt$table$PValue, counts)
-@
 
 In this case, it would be good to look at the ones that are totally outside the expected 
 correlation.
@@ -96,51 +88,34 @@ correlation.
 You can put this tree plots together using \Rcode{degQC}.
 
 <<chunk-qc>>=
-degQC(lrt$table$PValue, counts, humanSexDEedgeR$samples$group)
-@
-
-Other way to look at this is showing the mean count distribution among groups.
-
-<<chunk-mean-dist>>=
-degMB(detags,g1,g2,counts)
-@
-
-The same idea can be applied to gene variation.
-
-<<chunk-var-dist>>=
-degVB(detags,g1,g2,counts)
+degQC(lrt$table$PValue, counts, design$condition)
 @
 
 
-Browsing gene expression can help to validate results or select some gene
-for donwstream analysis. Run the fowlling lines if you want to visualize your expression values by 
-condition:
+\subsection{Covariates effect on count data}
 
-<<chunk-shiny, eval=FALSE>>=
-degObj(counts,design,"degObj.rda")
-library(shiny)
-shiny::runGitHub("lpantano/shiny", subdir="expression")
+Another important analysis to do if you have covariates is to calculcate
+the correlation between PCs from PCA analysis to different variables you may
+think are affecting the gene expression. This is a toy example of how the
+function works with raw data, where clearly library size correlates with 
+some of the PCs.
+
+<<chunk-covariates>>=
+library(DESeq2)
+idx <- c(1:5, 75:80)
+dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
+                              humanSexDEedgeR$samples[idx,], 
+                              design=~group)
+resCov <- degCovariates(log2(counts(dse)+0.5),
+                     colData(dse))
+resCov$plot
 @
 
 \section{Report from DESeq2 analysis}
 
-In this section, we show how to use DESeq2 output to create a full report,
-including figures and tbale with top de-regulated genes, GO enrichment
-analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
-different files will be saved there.
+Here, we show some useful plots for differentially expressed genes.
 
-<<deseq2>>=
-data(humanSexDEedgeR)
-library(DESeq2)
-idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:5000, idx],
-                              humanSexDEedgeR$samples[idx,], 
-                              design=~group)
-dse <- DESeq(dse)
-res <- results(dse)
-resreport <- degResults(dds=dse, name="test", org=NULL, 
-do_go=FALSE, group="group", xs="group", path_results = NULL)
-@
+\subsection{Volcano plots}
 
 Volcano plot using the output of DESeq2. It mainly needs data.frame with
 two columns (logFC and pVal). Specific genes can be plot using the option
@@ -148,10 +123,14 @@ two columns (logFC and pVal). Specific genes can be plot using the option
 to plot the gene name).
 
 <<deseq2-volcano>>=
+dse <- DESeq(dse)
+res <- results(dse)
 res$id <- row.names(res)
 show = as.data.frame(res[1:2, c("log2FoldChange", "padj", "id")])
 degVolcano(as.data.frame(res[,c("log2FoldChange", "padj")]), plot_text = show)
 @
+
+\subsection{Gene plots}
 
 Plot top genes coloring by group. Very useful for experiments with nested 
 groups. `xs` can be `time` or `WT`/`KO`, and `group` can be `treated`/`untreated`.
@@ -160,6 +139,38 @@ with different shapes.
 
 <<deseq2-gene-plots>>=
 degPlot(dds=dse, res = res, n = 6, xs = "group", group = "group")
+@
+
+Another option for plotting genes in a wide format:
+
+<<deseq2-gene-plot-wide>>=
+degPlotWide(dse, rownames(dse)[1:5], group="group")
+@
+
+\subsection{Full report}
+
+If you have a DESeq2 object, you can use degResults to create a full report
+with markdown code inserted,
+including figures and tbale with top de-regulated genes, GO enrichment
+analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
+different files will be saved there.
+
+<<deseq2>>=
+resreport <- degResults(dds=dse, name="test", org=NULL,
+                        do_go=FALSE, group="group", xs="group",
+                        path_results = NULL)
+@
+
+\subsection{Interactive shiny-app}
+
+Browsing gene expression can help to validate results or select some gene
+for donwstream analysis. Run the fowlling lines if you want to visualize
+your expression values by condition:
+
+<<chunk-shiny, eval=FALSE>>=
+degObj(counts,design,"degObj.rda")
+library(shiny)
+shiny::runGitHub("lpantano/shiny", subdir="expression")
 @
 
 \section{Detect patterns of expression}
@@ -172,5 +183,21 @@ matrix, the design experiment and the column used to group samples.
 ma = assay(rlog(dse))[row.names(res)[1:100],]
 res <- degPatterns(ma, as.data.frame(colData(dse)), time="group", col=NULL)
 @
+
+\section{Useful functions}
+
+This section shows some useful functions during DEG analysis.
+
+\Rfunction{degFilter} helps to filter genes with a minimum read count by group.
+
+<<chunk-filter>>=
+cat("gene in original count matrix: 1000")
+filter_count <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
+                          humanSexDEedgeR$samples[idx,], "group",
+                          min=1, minreads = 50)
+cat("gene in final count matrix", nrow(filter_count))
+@
+
+
 
 \end{document}

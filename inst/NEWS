@@ -1,6 +1,12 @@
 DEGreport News
 
-CHANGES IN DEGreport  1.13.5
+CHANGES IN DEGreport  1.13.7
+    2017-06-07  Lorena Pantano <lorena.pantano@gmail.com>
+
+    Fix: Fix y scale degPlotWide
+    Fix: Improve vignette to have better examples
+
+CHANGES IN DEGreport  1.13.6
     2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
 
     Feature: Add degPCA plot from Rory Kirchner
