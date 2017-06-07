@@ -111,7 +111,6 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
 
     p = p +
         geom_point(position = position_jitterdodge(dodge.width=0.9)) +
-        scale_y_log10() +
         xlab("Genes") +
         ylab("Normalized Counts") +
         theme_bw() +
