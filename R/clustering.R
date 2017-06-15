@@ -11,55 +11,64 @@
 #'
 #' @param dds \link[DESeq2]{DESeqDataSet} object
 #' @param res \link[DESeq2]{DESeqResults} object
-#' @param n integer number of genes to plot.
+#' @param n integer number of genes to plot
+#' @param genes character of gene names matching rownames of count data
 #' @param xs character, colname in colData that will be used as X-axes
 #' @param group character, colname in colData to color points and add different
 #' lines for each level
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
+#' @param ann column in rowData (if available) used to print gene names
 #' @param xsLab character, alternative label for x-axis (default: same as xs)
 #' @param groupLab character, alternative label for group (default: same as group)
 #' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
+degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
+                   group="condition", batch=NULL, ann=NULL,
                    xsLab=xs, groupLab=group, batchLab=batch){
+    
+    if (is.null(genes))
+        genes= row.names(res)[1:n]
+    ann <- as.data.frame(rowData(dds))
     metadata = data.frame(colData(dds))
-    genes= row.names(res)[1:n]
-    pp = lapply(genes, function(gene){
-        dd = plotCounts(dds, gene, transform = TRUE,
-                        intgroup=xs, returnData = TRUE)
-        names(dd)[2] = xsLab
-        if (is.null(group)){
-            dd$condition = "one_group"
-            groupLab="condition"
-        }else{
-            dd$condition = metadata[row.names(dd), group]
-        }
-        if (!is.null(groupLab)){
-            names(dd)[grep("condition",names(dd))]=groupLab
-        }
-        if (!is.null(batch)){
-            dd$batch = as.factor(metadata[row.names(dd), batch])
-            names(dd)[grep("batch",names(dd))]=batchLab
-            p=ggplot(dd, aes_string(x=xsLab,y="count",color=batchLab,shape=groupLab)) 
-        }else{
-            p=ggplot(dd, aes_string(x=xsLab,y="count",color=groupLab,shape=groupLab))
-        }
-            p = suppressWarnings( p +
-            # geom_violin(alpha=0.3) +
-            stat_smooth(fill="grey80", method = 'loess') +
-            geom_point(size=1, alpha=0.7, position = position_jitterdodge(dodge.width=0.9)) +
-            theme_bw(base_size = 7) + ggtitle(gene))
-            if (length(unique(dd$treatment))==1){
-                p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
-                    scale_fill_brewer(guide=FALSE, palette = "Set1")+
-                    theme(legend.position = "none")
-            }
-        p
-    })
-    n = ceiling(length(pp))
-    do.call(grid.arrange,pp)
-    # marrangeGrob(pp, ncol=2, nrow=n)
+    if (class(dds) == "DESeqDataSet")
+        counts <- log2(counts(dds, normalized=TRUE) + 0.2)
+    counts <- log2(assays(dds)[["counts"]] + 0.2)
+    
+    if (ncol(ann)>0){
+        name <- intersect(names(ann), c("external_gene_name", "symbol"))
+        if (length(name > 0))
+            newgenes <- ann[match(genes, ann[,1]), name[1]]
+        else
+            newgenes <- genes
+    }
+    
+    dd = melt(as.data.frame(counts[genes,]) %>% mutate(gene=newgenes))
+    colnames(dd) = c("gene", "sample", "count")
+
+    if (!is.null(group)){
+        dd$group = as.factor(metadata[as.character(dd$sample), group])
+    }
+    
+    if (!is.null(batch)){
+        dd$batch = as.factor(metadata[row.names(dd), batch])
+        
+        p=ggplot(dd, aes_string(x=xsLab,y="count",color="group",shape="batch")) 
+    }else{
+        p=ggplot(dd, aes_string(x=xsLab,y="count",color="group"))
+    }
+    p = p +
+        # geom_violin(alpha=0.3) +
+        stat_smooth(fill="grey80", method = 'loess') +
+        geom_point(size=1, alpha=0.7, 
+                   position = position_jitterdodge(dodge.width=0.9)) +
+        theme_bw(base_size = 7) + facet_wrap(~gene) +
+        xlab(xsLab) +
+        scale_color_brewer(guide=groupLab, palette = "Set1") + 
+            scale_fill_brewer(guide=groupLab, palette = "Set1")+
+            theme(legend.position = "none")
+    
+    suppressWarnings(p)
 }
 
 #' Plot selected genes on a wide format
@@ -88,8 +97,9 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
     metadata = data.frame(metadata)
     if (class(counts) == "DESeqDataSet"){
         dd = bind_rows(lapply(genes,function(gene){
-            plotCounts(counts, gene, transform = TRUE,
+            plotCounts(counts, gene,
                        intgroup=group, returnData = TRUE) %>%
+                mutate(count=log2(count+1)) %>%
                 mutate(gene=gene, sample=row.names(metadata))}))
     }else if(class(counts) == "matrix"){
         dd = melt(counts[genes,])
@@ -103,10 +113,10 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
     }else{
         dd$treatment = dd[,group]
     }
-    p = ggplot(dd, aes(x = gene, y = count, color = treatment))
+    p = ggplot(dd, aes_(x = "gene", y = "count", color = "treatment"))
     if (!is.null(batch)){
         dd$batch = as.factor(metadata[dd$sample, batch])
-        p = ggplot(dd, aes(x = gene, y = count, color = treatment, shape=batch))
+        p = ggplot(dd, aes_(x = "gene", y = "count", color = "treatment", shape="batch"))
     }
 
     p = p +
@@ -256,6 +266,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
                        time="time", col="condition",
                        reduce=FALSE,  cutoff=0.70,
                        scale=TRUE, plot=TRUE, fixy=NULL){
+    metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
     if (is.null(col)){
         col = "condition"
