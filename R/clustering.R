@@ -27,6 +27,9 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
                    group="condition", batch=NULL, ann=NULL,
                    xsLab=xs, groupLab=group, batchLab=batch){
     
+    if (!is.null(res))
+        res <- res[order(res$padj),] %>% .[!is.na(res$padj),]
+    
     if (is.null(genes))
         genes= row.names(res)[1:n]
     ann <- as.data.frame(rowData(dds))
@@ -35,12 +38,11 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
         counts <- log2(counts(dds, normalized=TRUE) + 0.2)
     counts <- log2(assays(dds)[["counts"]] + 0.2)
     
+    newgenes <- genes
     if (ncol(ann)>0){
         name <- intersect(names(ann), c("external_gene_name", "symbol"))
         if (length(name > 0))
             newgenes <- ann[match(genes, ann[,1]), name[1]]
-        else
-            newgenes <- genes
     }
     
     dd = melt(as.data.frame(counts[genes,]) %>% mutate(gene=newgenes))
@@ -66,7 +68,9 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
         xlab(xsLab) +
         scale_color_brewer(guide=groupLab, palette = "Set1") + 
             scale_fill_brewer(guide=groupLab, palette = "Set1")+
-            theme(legend.position = "none")
+            theme(legend.position = "none",
+                  strip.background = element_rect(fill="white"))
+        
     
     suppressWarnings(p)
 }
