@@ -509,8 +509,9 @@ degPCA <- function(counts, metadata, condition="condition",
         p <- ggplot(comps, aes_string(pc1, pc2, color=condition, shape=shape))
     if (!is.null(name))
         p <- p + geom_text(aes_string(label=name), nudge_x = 1, nudge_y = 1)
+    else
+        p <- p + geom_point(size=3)
     p +
-        geom_point(size=3) +
         scale_color_brewer(palette = "Set1") +
         xlab(paste0("PC1", ": ", round(pc$percentVar[idx1] * 100), "% variance")) +
         ylab(paste0("PC2", ": ", round(pc$percentVar[idx2] * 100), "% variance")) +
