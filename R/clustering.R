@@ -612,16 +612,18 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
     dd = melt(as.data.frame(counts[genes,]) %>% mutate(gene=newgenes))
     colnames(dd) = c("gene", "sample", "count")
     
+    dd$xs = as.factor(metadata[as.character(dd$sample), xs])
+    
     if (!is.null(group)){
-        dd$group = as.factor(metadata[as.character(dd$sample), group])
+        dd[, groupLab] = as.factor(metadata[as.character(dd$sample), group])
     }
     
     if (!is.null(batch)){
         dd$batch = as.factor(metadata[row.names(dd), batch])
         
-        p=ggplot(dd, aes_string(x=xsLab,y="count",color="group",shape="batch")) 
+        p=ggplot(dd, aes_string(x="xs",y="count",color="group",shape="batch")) 
     }else{
-        p=ggplot(dd, aes_string(x=xsLab,y="count",color="group"))
+        p=ggplot(dd, aes_string(x="xs",y="count",color="group"))
     }
     p = p +
         # geom_violin(alpha=0.3) +
@@ -630,10 +632,10 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
                    position = position_jitterdodge(dodge.width=0.9)) +
         facet_wrap(~gene) +
         xlab(xsLab) +
-        scale_color_brewer(guide=groupLab, palette = "Set1") + 
-        scale_fill_brewer(guide=groupLab, palette = "Set1")+
-        theme(legend.position = "none",
-              strip.background = element_rect(fill="white"))
+        scale_color_brewer(palette = "Set1") + 
+        scale_fill_brewer(palette = "Set1")+
+        theme(strip.background = element_rect(fill="white"),
+              strip.text = element_text(colour = "black"))
     
     suppressWarnings(p)
 }
