@@ -475,9 +475,9 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 
 
 #' smart PCA from count matrix data
-#' 
+#'
 #' nice plot using ggplot2 from prcomp function
-#' 
+#'
 #' @param counts matrix with count data
 #' @param metadata dara.frame with sample information
 #' @param pc1 character PC to plot on x-axis
@@ -493,8 +493,8 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' degPCA(log2(counts(dse)+0.5), colData(dse), condition="group", name="group", shape="group")
-degPCA <- function(counts, metadata, condition="condition", 
-                   pc1="PC1", pc2="PC2", 
+degPCA <- function(counts, metadata, condition="condition",
+                   pc1="PC1", pc2="PC2",
                    name=NULL, shape=NULL){
     pc = .pca_loadings(counts)
     idx1 = which(colnames(pc) == pc1)
@@ -562,9 +562,9 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
         p = ggplot(df, aes(one, two)) +
             geom_text(aes(one, two, label=label), size=3) +
             labs(list(x=xnames[xi],y=xnames[yi])) + scale_x_continuous(expand=c(0.3, 0.3))
-        
+
     }
-    
+
     return(p + theme_bw())
 }
 
@@ -587,13 +587,13 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
 degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
                    group="condition", batch=NULL, ann=NULL,
                    xsLab=xs, groupLab=group, batchLab=batch){
-    
+
     if ( !("assays" %in% slotNames(dds)) )
         stop("dds object doesn't have assays slot")
-    
+
     if (!is.null(res))
         res <- res[order(res$padj),] %>% .[!is.na(res$padj),]
-    
+
     if (is.null(genes))
         genes= row.names(res)[1:n]
     ann <- as.data.frame(rowData(dds))
@@ -601,42 +601,41 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
     if (class(dds) == "DESeqDataSet")
         counts <- log2(counts(dds, normalized=TRUE) + 0.2)
     counts <- log2(assays(dds)[["counts"]] + 0.2)
-    
+
     newgenes <- genes
     if (ncol(ann)>0){
         name <- intersect(names(ann), c("external_gene_name", "symbol"))
         if (length(name > 0))
             newgenes <- ann[match(genes, ann[,1]), name[1]]
     }
-    
     dd = melt(as.data.frame(counts[genes,]) %>% mutate(gene=newgenes))
     colnames(dd) = c("gene", "sample", "count")
-    
+
     dd$xs = as.factor(metadata[as.character(dd$sample), xs])
-    
+
     if (!is.null(group)){
         dd[, groupLab] = as.factor(metadata[as.character(dd$sample), group])
     }
-    
+
     if (!is.null(batch)){
         dd$batch = as.factor(metadata[row.names(dd), batch])
-        
-        p=ggplot(dd, aes_string(x="xs",y="count",color="group",shape="batch")) 
+
+        p=ggplot(dd, aes_string(x="xs",y="count",color="group",shape="batch"))
     }else{
         p=ggplot(dd, aes_string(x="xs",y="count",color="group"))
     }
     p = p +
         # geom_violin(alpha=0.3) +
         stat_smooth(fill="grey80", method = 'loess') +
-        geom_point(size=1, alpha=0.7, 
+        geom_point(size=1, alpha=0.7,
                    position = position_jitterdodge(dodge.width=0.9)) +
         facet_wrap(~gene) +
         xlab(xsLab) +
-        scale_color_brewer(palette = "Set1") + 
+        scale_color_brewer(palette = "Set1") +
         scale_fill_brewer(palette = "Set1")+
         theme(strip.background = element_rect(fill="white"),
               strip.text = element_text(colour = "black"))
-    
+
     suppressWarnings(p)
 }
 
@@ -680,14 +679,14 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
     if (is.null(group)){
         dd$treatment = "one_group"
     }else{
-        dd$treatment = dd[,group]
+        dd$treatment = dd[,"group"]
     }
-    p = ggplot(dd, aes_(x = "gene", y = "count", color = "treatment"))
+    p = ggplot(dd, aes_string(x = "gene", y = "count", color = "treatment"))
     if (!is.null(batch)){
         dd$batch = as.factor(metadata[dd$sample, batch])
         p = ggplot(dd, aes_(x = "gene", y = "count", color = "treatment", shape="batch"))
     }
-    
+
     p = p +
         geom_point(position = position_jitterdodge(dodge.width=0.9)) +
         xlab("Genes") +
@@ -754,10 +753,10 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     stopifnot(class(ma) == "matrix")
     stopifnot(summarize %in% names(metadata))
     stopifnot(time %in% names(metadata))
-    
+
     if (!is.null(fixy))
         stopifnot(length(fixy) == 2)
-    
+
     if (nrow(ma)>3000)
         message("Large number of genes given. Please,",
                 "make sure is not an error. Normally",
@@ -770,9 +769,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         })
     }))
     # colnames(counts_group) = unique(metadata[,summarize])
-    
+
     groups = .make_clusters(counts_group, minc, reduce=reduce, cutoff=cutoff)
-    
+
     if (scale){
         norm_sign = t(apply(counts_group, 1, .scale))
     }else{
@@ -794,6 +793,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     if (length(plots)>0){
         all <- plot_grid(plotlist = plots, ncol=nc)
         print(all)}
-    
+
     list(df=data.frame(genes=names(groups),cluster=groups), pass=to_plot, plot=all)
 }
