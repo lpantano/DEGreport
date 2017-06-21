@@ -4,8 +4,7 @@
 \alias{degPlotWide}
 \title{Plot selected genes on a wide format}
 \usage{
-degPlotWide(counts, genes, group = "condition", metadata = NULL,
-  batch = NULL)
+degPlotWide(counts, genes, group, metadata = NULL, batch = NULL)
 }
 \arguments{
 \item{counts}{\link[DESeq2]{DESeqDataSet} object or expression matrix}

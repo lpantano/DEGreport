@@ -4,20 +4,20 @@
 \alias{degPlot}
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
-degPlot(dds, res = NULL, n = 9, genes = NULL, xs = "time",
-  group = "condition", batch = NULL, ann = NULL, xsLab = xs,
-  groupLab = group, batchLab = batch)
+degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = xs,
+  batch = NULL, ann = NULL, xsLab = xs, groupLab = group,
+  batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2]{DESeqDataSet} object}
+
+\item{xs}{character, colname in colData that will be used as X-axes}
 
 \item{res}{\link[DESeq2]{DESeqResults} object}
 
 \item{n}{integer number of genes to plot}
 
 \item{genes}{character of gene names matching rownames of count data}
-
-\item{xs}{character, colname in colData that will be used as X-axes}
 
 \item{group}{character, colname in colData to color points and add different
 lines for each level}

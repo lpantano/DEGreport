@@ -584,8 +584,8 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
 #' @param groupLab character, alternative label for group (default: same as group)
 #' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
-                   group="condition", batch=NULL, ann=NULL,
+degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
+                   group=xs, batch=NULL, ann=NULL,
                    xsLab=xs, groupLab=group, batchLab=batch){
 
     if ( !("assays" %in% slotNames(dds)) )
@@ -618,11 +618,11 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
     }
 
     if (!is.null(batch)){
-        dd$batch = as.factor(metadata[row.names(dd), batch])
+        dd[, batchLab] = as.factor(metadata[row.names(dd), batch])
 
-        p=ggplot(dd, aes_string(x="xs",y="count",color="group",shape="batch"))
+        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab,shape=batchLab))
     }else{
-        p=ggplot(dd, aes_string(x="xs",y="count",color="group"))
+        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab))
     }
     p = p +
         # geom_violin(alpha=0.3) +
@@ -659,7 +659,7 @@ degPlot = function(dds, res=NULL, n=9, genes=NULL, xs="time",
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' dse <- DESeq(dse)
 #' degPlotWide(dse, rownames(dse)[1:10], group="group")
-degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=NULL){
+degPlotWide <- function(counts, genes, group, metadata=NULL, batch=NULL){
     if (is.null(metadata))
         metadata = data.frame(colData(counts))
     metadata = data.frame(metadata)
