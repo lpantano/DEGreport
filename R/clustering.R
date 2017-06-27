@@ -570,7 +570,8 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
 
 #' Plot top genes allowing more variables to color and shape points
 #'
-#' @param dds \link[DESeq2]{DESeqDataSet} object
+#' @param dds \link[DESeq2]{DESeqDataSet} object or SummarizedExperiment
+#' or Matrix or data.frame
 #' @param res \link[DESeq2]{DESeqResults} object
 #' @param n integer number of genes to plot
 #' @param genes character of gene names matching rownames of count data
@@ -580,14 +581,19 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
 #' @param ann column in rowData (if available) used to print gene names
+#' @param metadata metadata in case dds is a matrix
 #' @param xsLab character, alternative label for x-axis (default: same as xs)
 #' @param groupLab character, alternative label for group (default: same as group)
 #' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
 degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
-                   group=xs, batch=NULL, ann=NULL,
+                   group=NULL, batch=NULL, ann=NULL,
+                   metadata = NULL,
                    xsLab=xs, groupLab=group, batchLab=batch){
-
+    if (class(dds) %in% c("data.frame", "matrix"))
+        dds = SummarizedExperiment(assays = SimpleList(counts=as.matrix(dds)), 
+                                   colData = metadata)
+    
     if ( !("assays" %in% slotNames(dds)) )
         stop("dds object doesn't have assays slot")
 
@@ -596,7 +602,9 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
 
     if (is.null(genes))
         genes= row.names(res)[1:n]
-    ann <- as.data.frame(rowData(dds))
+    if (is.null(ann))
+        ann <- as.data.frame(rowData(dds))
+    
     metadata = data.frame(colData(dds))
     if (class(dds) == "DESeqDataSet")
         counts <- log2(counts(dds, normalized=TRUE) + 0.2)
@@ -612,27 +620,36 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     colnames(dd) = c("gene", "sample", "count")
 
     dd$xs = as.factor(metadata[as.character(dd$sample), xs])
-
+    
     if (!is.null(group)){
         dd[, groupLab] = as.factor(metadata[as.character(dd$sample), group])
+    }else{
+        groupLab = "fake"
+        dd[, groupLab] = "fake"
     }
-
+    
     if (!is.null(batch)){
         dd[, batchLab] = as.factor(metadata[row.names(dd), batch])
 
-        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab,shape=batchLab))
+        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab,
+                                shape=batchLab))
     }else{
         p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab))
     }
+
     p = p +
         # geom_violin(alpha=0.3) +
         stat_smooth(fill="grey80", method = 'loess') +
         geom_point(size=1, alpha=0.7,
                    position = position_jitterdodge(dodge.width=0.9)) +
         facet_wrap(~gene) +
-        xlab(xsLab) +
-        scale_color_brewer(palette = "Set1") +
-        scale_fill_brewer(palette = "Set1")+
+        xlab(xsLab)
+    if (!is.null(group)){
+        p = p +
+        scale_color_brewer(guide=!(is.null(group)), palette = "Set1") +
+        scale_fill_brewer(guide=!(is.null(group)), palette = "Set1")
+    }
+    p = p + theme_bw() +
         theme(strip.background = element_rect(fill="white"),
               strip.text = element_text(colour = "black"))
 

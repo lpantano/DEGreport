@@ -4,12 +4,13 @@
 \alias{degPlot}
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
-degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = xs,
-  batch = NULL, ann = NULL, xsLab = xs, groupLab = group,
-  batchLab = batch)
+degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
+  batch = NULL, ann = NULL, metadata = NULL, xsLab = xs,
+  groupLab = group, batchLab = batch)
 }
 \arguments{
-\item{dds}{\link[DESeq2]{DESeqDataSet} object}
+\item{dds}{\link[DESeq2]{DESeqDataSet} object or SummarizedExperiment
+or Matrix or data.frame}
 
 \item{xs}{character, colname in colData that will be used as X-axes}
 
@@ -26,6 +27,8 @@ lines for each level}
 batch effect visualization}
 
 \item{ann}{column in rowData (if available) used to print gene names}
+
+\item{metadata}{metadata in case dds is a matrix}
 
 \item{xsLab}{character, alternative label for x-axis (default: same as xs)}
 
