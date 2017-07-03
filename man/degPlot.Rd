@@ -5,8 +5,8 @@
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
 degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
-  batch = NULL, ann = NULL, metadata = NULL, xsLab = xs,
-  groupLab = group, batchLab = batch)
+  batch = NULL, metadata = NULL, ann = c("external_gene_name", "symbol"),
+  slot = 1, xsLab = xs, groupLab = group, batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2]{DESeqDataSet} object or SummarizedExperiment
@@ -26,9 +26,11 @@ lines for each level}
 \item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}
 
-\item{ann}{column in rowData (if available) used to print gene names}
-
 \item{metadata}{metadata in case dds is a matrix}
+
+\item{ann}{columns in rowData (if available) used to print gene names}
+
+\item{slot}{name of the slot to use to get count data}
 
 \item{xsLab}{character, alternative label for x-axis (default: same as xs)}
 
