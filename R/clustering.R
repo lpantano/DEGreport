@@ -580,15 +580,18 @@ degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
 #' lines for each level
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
-#' @param ann column in rowData (if available) used to print gene names
+#' @param ann columns in rowData (if available) used to print gene names
 #' @param metadata metadata in case dds is a matrix
+#' @param slot name of the slot to use to get count data
 #' @param xsLab character, alternative label for x-axis (default: same as xs)
 #' @param groupLab character, alternative label for group (default: same as group)
 #' @param batchLab character, alternative label for batch (default: same as batch)
 #' @return ggplot showing the expresison of the genes
 degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
-                   group=NULL, batch=NULL, ann=NULL,
+                   group=NULL, batch=NULL,
                    metadata = NULL,
+                   ann=c("external_gene_name", "symbol"),
+                   slot=1,
                    xsLab=xs, groupLab=group, batchLab=batch){
     if (class(dds) %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts=as.matrix(dds)),
@@ -602,20 +605,23 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
 
     if (is.null(genes))
         genes= row.names(res)[1:n]
-    if (is.null(ann))
-        ann <- as.data.frame(rowData(dds))
+
+    anno <- as.data.frame(rowData(dds))
 
     metadata = data.frame(colData(dds))
     if (class(dds) == "DESeqDataSet")
         counts <- log2(counts(dds, normalized=TRUE) + 0.2)
-    counts <- log2(assays(dds)[["counts"]] + 0.2)
+    counts <- log2(assays(dds)[[slot]] + 0.2)
 
     newgenes <- genes
-    if (ncol(ann)>0){
-        name <- intersect(names(ann), c("external_gene_name", "symbol"))
-        if (length(name > 0))
-            newgenes <- ann[match(genes, ann[,1]), name[1]]
+    if (ncol(anno)>0){
+        name <- intersect(names(anno), ann)
+        if (length(name) != 2)
+            stop("No genes were mapped to rowData. check ann parameter values.")
+        if (length(name == 2))
+            newgenes <- anno[match(genes, anno[,name[1]]), name[2]]
     }
+
     dd = melt(as.data.frame(counts[genes,]) %>% mutate(gene=newgenes))
     colnames(dd) = c("gene", "sample", "count")
 
