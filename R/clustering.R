@@ -617,8 +617,8 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     if (ncol(anno)>0){
         name <- intersect(names(anno), ann)
         if (length(name) != 2)
-            stop("No genes were mapped to rowData. check ann parameter values.")
-        if (length(name == 2))
+            message("No genes were mapped to rowData. check ann parameter values.")
+        if (length(name) == 2)
             newgenes <- anno[match(genes, anno[,name[1]]), name[2]]
     }
 
