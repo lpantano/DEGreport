@@ -591,9 +591,9 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    metadata = NULL,
                    xsLab=xs, groupLab=group, batchLab=batch){
     if (class(dds) %in% c("data.frame", "matrix"))
-        dds = SummarizedExperiment(assays = SimpleList(counts=as.matrix(dds)), 
+        dds = SummarizedExperiment(assays = SimpleList(counts=as.matrix(dds)),
                                    colData = metadata)
-    
+
     if ( !("assays" %in% slotNames(dds)) )
         stop("dds object doesn't have assays slot")
 
@@ -604,7 +604,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
         genes= row.names(res)[1:n]
     if (is.null(ann))
         ann <- as.data.frame(rowData(dds))
-    
+
     metadata = data.frame(colData(dds))
     if (class(dds) == "DESeqDataSet")
         counts <- log2(counts(dds, normalized=TRUE) + 0.2)
@@ -620,14 +620,14 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     colnames(dd) = c("gene", "sample", "count")
 
     dd$xs = as.factor(metadata[as.character(dd$sample), xs])
-    
+
     if (!is.null(group)){
         dd[, groupLab] = as.factor(metadata[as.character(dd$sample), group])
     }else{
         groupLab = "fake"
         dd[, groupLab] = "fake"
     }
-    
+
     if (!is.null(batch)){
         dd[, batchLab] = as.factor(metadata[row.names(dd), batch])
 
@@ -644,7 +644,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    position = position_jitterdodge(dodge.width=0.9)) +
         facet_wrap(~gene) +
         xlab(xsLab)
-    if (!is.null(group)){
+    if (length(unique(dd[, groupLab])) == 1){
         p = p +
         scale_color_brewer(guide=!(is.null(group)), palette = "Set1") +
         scale_fill_brewer(guide=!(is.null(group)), palette = "Set1")

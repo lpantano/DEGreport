@@ -8,6 +8,7 @@ CHANGES IN DEGreport  1.13.7
     Feature: Use plot_grid for degPattern and save plot
     Feature: Use text or point in degPCA
     Feature: Fix labels of degPlot
+    Feature: Accept matrix in degPlot
 
 CHANGES IN DEGreport  1.13.6
     2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
