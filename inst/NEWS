@@ -9,6 +9,9 @@ CHANGES IN DEGreport  1.13.7
     Feature: Use text or point in degPCA
     Feature: Fix labels of degPlot
     Feature: Accept matrix in degPlot
+    Fix: correctly handling rowData in SE objects for degPlot
+    Fix: plot only legend if group > 1
+    Feature: More output for degPattern
 
 CHANGES IN DEGreport  1.13.6
     2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>

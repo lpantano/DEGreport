@@ -24,7 +24,6 @@
         stat_smooth(aes_string(x="x", y="value", group="group", color="group"),
                     method = "lm",formula = y~poly(x,splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
-        theme_bw(base_size = 11) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
         ylab("scaled expression") + xlab("") )
     if (!is.null(fixy))
@@ -68,11 +67,16 @@
 
 
 # use diana package to detect clusters
-.make_clusters <- function(counts_group, minc=15, reduce=FALSE, cutoff=0.30){
+.make_clusters <- function(counts_group){
     m = (1-cor(t(counts_group), method = "kendall"))
     d = as.dist(m^2)
     c = diana(d, diss = TRUE, stand = FALSE)
 
+    c
+}
+
+.select_genes <- function(c, counts_group, minc=15, 
+                          reduce=FALSE, cutoff=0.30){
     select = cutree(as.hclust(c), h = c$dc)
     select = select[select %in% names(table(select))[table(select)>minc]]
     cat("\n\n Working with ", length(select), "genes after filtering: minc > ",minc,"\n\n")
@@ -793,7 +797,10 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     }))
     # colnames(counts_group) = unique(metadata[,summarize])
 
-    groups = .make_clusters(counts_group, minc, reduce=reduce, cutoff=cutoff)
+    cluster_genes = .make_clusters(counts_group)
+    groups = .select_genes(cluster_genes, counts_group, minc, 
+                           reduce=reduce,
+                           cutoff=cutoff)
 
     if (scale){
         norm_sign = t(apply(counts_group, 1, .scale))
@@ -801,7 +808,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         norm_sign = counts_group
     }
     colnames(norm_sign) = colnames(counts_group)
-    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
+    metadata_groups = metadata %>% 
+        dplyr::distinct_(summarize, .keep_all=TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     norm_sign = norm_sign[, row.names(metadata_groups)]
     to_plot = unique(groups)
@@ -817,5 +825,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         all <- plot_grid(plotlist = plots, ncol=nc)
         print(all)}
 
-    list(df=data.frame(genes=names(groups),cluster=groups), pass=to_plot, plot=all)
+    list(df=data.frame(genes=names(groups),cluster=groups), 
+         pass=to_plot, plot=all, hr=as.hclust(cluster_genes),
+         profile=counts_group)
 }
