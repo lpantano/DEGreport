@@ -1,6 +1,20 @@
 DEGreport News
+CHANGES IN DEGreport  1.13.8
+
+    2017-06-19  Lorena Pantano <lorena.pantano@gmail.com>
+
+    Feature: Accept SE like objects to degPlot and
+             use better gene names if rowData has it
+    Feature: Use plot_grid for degPattern and save plot
+    Feature: Use text or point in degPCA
+    Feature: Fix labels of degPlot
+    Feature: Accept matrix in degPlot
+    Fix: correctly handling rowData in SE objects for degPlot
+    Fix: plot only legend if group > 1
+    Feature: More output for degPattern
 
 CHANGES IN DEGreport  1.13.7
+
     2017-06-07  Lorena Pantano <lorena.pantano@gmail.com>
 
     Fix: Fix y scale degPlotWide

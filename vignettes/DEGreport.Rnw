@@ -138,7 +138,7 @@ Another classification can be added, like `batch` that will plot points
 with different shapes.
 
 <<deseq2-gene-plots>>=
-degPlot(dds=dse, res = res, n = 6, xs = "group", group = "group")
+degPlot(dds=dse, res = res, n = 6, xs = "group")
 @
 
 Another option for plotting genes in a wide format:

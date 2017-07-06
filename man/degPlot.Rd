@@ -4,23 +4,33 @@
 \alias{degPlot}
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
-degPlot(dds, res, n = 9, xs = "time", group = "condition", batch = NULL,
-  xsLab = xs, groupLab = group, batchLab = batch)
+degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
+  batch = NULL, metadata = NULL, ann = c("external_gene_name", "symbol"),
+  slot = 1, xsLab = xs, groupLab = group, batchLab = batch)
 }
 \arguments{
-\item{dds}{\link[DESeq2]{DESeqDataSet} object}
+\item{dds}{\link[DESeq2]{DESeqDataSet} object or SummarizedExperiment
+or Matrix or data.frame}
+
+\item{xs}{character, colname in colData that will be used as X-axes}
 
 \item{res}{\link[DESeq2]{DESeqResults} object}
 
-\item{n}{integer number of genes to plot.}
+\item{n}{integer number of genes to plot}
 
-\item{xs}{character, colname in colData that will be used as X-axes}
+\item{genes}{character of gene names matching rownames of count data}
 
 \item{group}{character, colname in colData to color points and add different
 lines for each level}
 
 \item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}
+
+\item{metadata}{metadata in case dds is a matrix}
+
+\item{ann}{columns in rowData (if available) used to print gene names}
+
+\item{slot}{name of the slot to use to get count data}
 
 \item{xsLab}{character, alternative label for x-axis (default: same as xs)}
 

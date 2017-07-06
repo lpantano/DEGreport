@@ -7,116 +7,6 @@
         print(toout)
 }
 
-#' Plot top genes allowing more variables to color and shape points
-#'
-#' @param dds \link[DESeq2]{DESeqDataSet} object
-#' @param res \link[DESeq2]{DESeqResults} object
-#' @param n integer number of genes to plot.
-#' @param xs character, colname in colData that will be used as X-axes
-#' @param group character, colname in colData to color points and add different
-#' lines for each level
-#' @param batch character, colname in colData to shape points, normally used by
-#' batch effect visualization
-#' @param xsLab character, alternative label for x-axis (default: same as xs)
-#' @param groupLab character, alternative label for group (default: same as group)
-#' @param batchLab character, alternative label for batch (default: same as batch)
-#' @return ggplot showing the expresison of the genes
-degPlot = function(dds, res, n=9, xs="time", group="condition", batch=NULL,
-                   xsLab=xs, groupLab=group, batchLab=batch){
-    metadata = data.frame(colData(dds))
-    genes= row.names(res)[1:n]
-    pp = lapply(genes, function(gene){
-        dd = plotCounts(dds, gene, transform = TRUE,
-                        intgroup=xs, returnData = TRUE)
-        names(dd)[2] = xsLab
-        if (is.null(group)){
-            dd$condition = "one_group"
-            groupLab="condition"
-        }else{
-            dd$condition = metadata[row.names(dd), group]
-        }
-        if (!is.null(groupLab)){
-            names(dd)[grep("condition",names(dd))]=groupLab
-        }
-        if (!is.null(batch)){
-            dd$batch = as.factor(metadata[row.names(dd), batch])
-            names(dd)[grep("batch",names(dd))]=batchLab
-            p=ggplot(dd, aes_string(x=xsLab,y="count",color=batchLab,shape=groupLab)) 
-        }else{
-            p=ggplot(dd, aes_string(x=xsLab,y="count",color=groupLab,shape=groupLab))
-        }
-            p = suppressWarnings( p +
-            # geom_violin(alpha=0.3) +
-            stat_smooth(fill="grey80", method = 'loess') +
-            geom_point(size=1, alpha=0.7, position = position_jitterdodge(dodge.width=0.9)) +
-            theme_bw(base_size = 7) + ggtitle(gene))
-            if (length(unique(dd$treatment))==1){
-                p = p + scale_color_brewer(guide=FALSE, palette = "Set1") + 
-                    scale_fill_brewer(guide=FALSE, palette = "Set1")+
-                    theme(legend.position = "none")
-            }
-        p
-    })
-    n = ceiling(length(pp))
-    do.call(grid.arrange,pp)
-    # marrangeGrob(pp, ncol=2, nrow=n)
-}
-
-#' Plot selected genes on a wide format
-#'
-#' @param counts \link[DESeq2]{DESeqDataSet} object or expression matrix
-#' @param genes character genes to plot.
-#' @param group character, colname in colData to color points and add different
-#' lines for each level
-#' @param metadata data.frame, information for each sample. Not needed if
-#' \link[DESeq2]{DESeqDataSet} given as counts.
-#' @param batch character, colname in colData to shape points, normally used by
-#' batch effect visualization
-#' @return ggplot showing the expresison of the genes on the x
-#' axis
-#' @examples
-#' data(humanSexDEedgeR)
-#' library(DESeq2)
-#' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], design=~group)
-#' dse <- DESeq(dse)
-#' degPlotWide(dse, rownames(dse)[1:10], group="group")
-degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=NULL){
-    if (is.null(metadata))
-        metadata = data.frame(colData(counts))
-    metadata = data.frame(metadata)
-    if (class(counts) == "DESeqDataSet"){
-        dd = bind_rows(lapply(genes,function(gene){
-            plotCounts(counts, gene, transform = TRUE,
-                       intgroup=group, returnData = TRUE) %>%
-                mutate(gene=gene, sample=row.names(metadata))}))
-    }else if(class(counts) == "matrix"){
-        dd = melt(counts[genes,])
-        colnames(dd) = c("gene", "sample", "count")
-        dd$group = as.factor(metadata[as.character(dd$sample), group])
-    }else{
-        stop("No supported for class", class(counts))
-    }
-    if (is.null(group)){
-        dd$treatment = "one_group"
-    }else{
-        dd$treatment = dd[,group]
-    }
-    p = ggplot(dd, aes(x = gene, y = count, color = treatment))
-    if (!is.null(batch)){
-        dd$batch = as.factor(metadata[dd$sample, batch])
-        p = ggplot(dd, aes(x = gene, y = count, color = treatment, shape=batch))
-    }
-
-    p = p +
-        geom_point(position = position_jitterdodge(dodge.width=0.9)) +
-        xlab("Genes") +
-        ylab("Normalized Counts") +
-        theme_bw() +
-        theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    p
-}
 
 # plot group of genes according time and group
 .plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy=NULL) {
@@ -134,7 +24,6 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
         stat_smooth(aes_string(x="x", y="value", group="group", color="group"),
                     method = "lm",formula = y~poly(x,splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
-        theme_bw(base_size = 11) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
         ylab("scaled expression") + xlab("") )
     if (!is.null(fixy))
@@ -178,11 +67,16 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
 
 
 # use diana package to detect clusters
-.make_clusters <- function(counts_group, minc=15, reduce=FALSE, cutoff=0.30){
+.make_clusters <- function(counts_group){
     m = (1-cor(t(counts_group), method = "kendall"))
     d = as.dist(m^2)
     c = diana(d, diss = TRUE, stand = FALSE)
 
+    c
+}
+
+.select_genes <- function(c, counts_group, minc=15, 
+                          reduce=FALSE, cutoff=0.30){
     select = cutree(as.hclust(c), h = c$dc)
     select = select[select %in% names(table(select))[table(select)>minc]]
     cat("\n\n Working with ", length(select), "genes after filtering: minc > ",minc,"\n\n")
@@ -211,102 +105,6 @@ degPlotWide <- function(counts, genes, group="condition", metadata=NULL, batch=N
     norm_sign
 }
 
-#' Make groups of genes using expression profile
-#'
-#' @aliases degPatterns
-#' @param ma  log2 normalized count matrix
-#' @param metadata  data frame with sample information. Rownames
-#' should match \code{ma} column names
-#' row number should be the same length than p-values vector.
-#' @param minc integer minimum number of genes in a group that
-#' will be return
-#' @param summarize character column name in metadata that will be used to gorup
-#' replicates.
-#' For instance, a merge between summarize and time parameters:
-#' control_point0 ... etc
-#' @param time character column name in metadata that will be used as
-#' variable that changes, normally a time variable.
-#' @param col character column name in metadata to separate
-#' samples. Normally control/mutant
-#' @param reduce boolean reduce number of clusters using
-#' correlation values between them.
-#' @param cutoff integer threshold for correlation
-#' expression to merge clusters (0 - 1)
-#' @param scale boolean scale the \code{ma} values by row
-#' @param plot boolean plot the clusters found
-#' @param fixy vector integers used as ylim in plot
-#' @details It would be used \link[cluster]{diana} function
-#' to detect a value to cut the expression based clustering
-#' at certain height. It can work with one or more groups with 2 or
-#' more several time points. The different patterns can be merged
-#' to get similar ones into only one pattern. The expression
-#' correlation of the patterns will be used to decide whether
-#' some need to be merged or not.
-#' @return list wiht two items. \code{df} is a data.frame
-#' with two columns. The first one with genes, the second
-#' with the clusters they belong. \code{pass_to_plot} is a vector
-#' of the clusters that pass the \code{minc} cutoff.
-#' @examples
-#' data(humanSexDEedgeR)
-#' ma <- humanSexDEedgeR$counts[1:100,]
-#' des <- data.frame(row.names=colnames(ma),
-#' group=as.factor(humanSexDEedgeR$samples$group))
-#' res <- degPatterns(ma, des, time="group", col=NULL)
-degPatterns = function(ma, metadata, minc=15, summarize="group",
-                       time="time", col="condition",
-                       reduce=FALSE,  cutoff=0.70,
-                       scale=TRUE, plot=TRUE, fixy=NULL){
-    ma = ma[, row.names(metadata)]
-    if (is.null(col)){
-        col = "condition"
-        metadata[,col] = rep("one_group", nrow(metadata))
-    }
-    if (!summarize %in% names(metadata))
-        metadata[,summarize] = as.factor(paste0(metadata[,col], metadata[,time]))
-    stopifnot(class(metadata) == "data.frame")
-    stopifnot(class(ma) == "matrix")
-    stopifnot(summarize %in% names(metadata))
-    stopifnot(time %in% names(metadata))
-
-    if (!is.null(fixy))
-        stopifnot(length(fixy) == 2)
-
-    if (nrow(ma)>3000)
-        message("Large number of genes given. Please,",
-                "make sure is not an error. Normally",
-                "Only DE genes are useful for this function.")
-    cat("\n\nWorking with ", nrow(ma), " genes \n\n")
-    counts_group = t(sapply(rownames(ma), function(g){
-        sapply(levels(metadata[,summarize]), function(i){
-            idx = which(metadata[,summarize] == i)
-            mean(ma[g, idx], na.rm=TRUE)
-        })
-    }))
-    # colnames(counts_group) = unique(metadata[,summarize])
-
-    groups = .make_clusters(counts_group, minc, reduce=reduce, cutoff=cutoff)
-
-    if (scale){
-        norm_sign = t(apply(counts_group, 1, .scale))
-    }else{
-        norm_sign = counts_group
-    }
-    colnames(norm_sign) = colnames(counts_group)
-    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
-    rownames(metadata_groups) = metadata_groups[,summarize]
-    norm_sign = norm_sign[, row.names(metadata_groups)]
-    to_plot = unique(groups)
-    plots = lapply(to_plot, function(x){
-        .plot_cluster(norm_sign, as.character(names(groups[groups==x])),
-                     metadata_groups[,time], metadata_groups[,col], x, fixy)
-    })
-    nc = 3
-    if (length(plots) < 3)
-        nc = length(plots)
-    if (plot & length(plots)>0)
-        grid.arrange(arrangeGrob(grobs=lapply(plots, ggplotGrob), ncol=nc))
-    list(df=data.frame(genes=names(groups),cluster=groups), pass=to_plot)
-}
 
 .median_per_cluster <- function(ma, clusters){
     # matrix, and df
@@ -548,54 +346,13 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     write.table(tab, file.path(basedir, fn), quote=quote, sep=sep, row.names=F)
 }
 
-#' Plot MDS from normalized count data
-#'
-#' Uses cmdscale to get multidimensional scaling of data matrix,
-#' and plot the samples with ggplot2.
-#' @param counts matrix samples in columns, features in rows
-#' @param condition vector define groups of samples in counts.
-#' It has to be same order than the count matrix for columns.
-#' @param k integer number of dimensions to get
-#' @param d type of distance to use
-#' @param xi number of component to plot in x-axis
-#' @param yi number of component to plot in y-axis
-#' @return ggplot2 object
-#' @examples
-#' data(humanSexDEedgeR)
-#' library(DESeq2)
-#' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], design=~group)
-#' degMDS(counts(dse), condition=colData(dse)$group)
-degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
-    nprobes = nrow(counts)
-    nsamples = ncol(counts)
-    if (d=="euclidian"){
-        distances = dist(t(counts))
-    }else if (d=="cor"){
-        distances = as.dist((1-cor(counts))^2)
-    }
-    fit = cmdscale(distances, eig=TRUE, k=k)
-    eigs = data.frame(variance_explained=fit$eig / sum(fit$eig))
-    xnames = paste0("PC",1:k," ",round(eigs[1:k,1]*100,digits=2),"%")
-    df = as.data.frame(fit$points[,c(xi,yi)])
-    names(df) = c("one", "two")
-    df$label = rownames(df)
-    if(!is.null(condition)) {
-        df$condition = condition
-        p = ggplot(df, aes(one, two, label=label, color=condition)) +
-            geom_text(aes(one, two, label=label), size=3) +
-            labs(list(x=xnames[xi],y=xnames[yi])) +
-            scale_x_continuous(expand=c(0.3, 0.3))
-    }
-    else {
-        p = ggplot(df, aes(one, two)) +
-            geom_text(aes(one, two, label=label), size=3) +
-            labs(list(x=xnames[xi],y=xnames[yi])) + scale_x_continuous(expand=c(0.3, 0.3))
 
-    }
-
-    return(p + theme_bw())
+.pca_loadings = function(counts, ntop=500) {
+    pca <- prcomp((t(counts)))
+    percentVar <- pca$sdev^2/sum(pca$sdev^2)
+    names(percentVar) = colnames(pca$x)
+    pca$percentVar = percentVar
+    pca
 }
 
 #' Complete report from DESeq2 analysis
@@ -720,18 +477,11 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     return(list(sign=sign, table=out_df, go_res=goterm))
 }
 
-.pca_loadings = function(counts, ntop=500) {
-    pca <- prcomp((t(counts)))
-    percentVar <- pca$sdev^2/sum(pca$sdev^2)
-    names(percentVar) = colnames(pca$x)
-    pca$percentVar = percentVar
-    pca
-}
 
 #' smart PCA from count matrix data
-#' 
+#'
 #' nice plot using ggplot2 from prcomp function
-#' 
+#'
 #' @param counts matrix with count data
 #' @param metadata dara.frame with sample information
 #' @param pc1 character PC to plot on x-axis
@@ -747,8 +497,8 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' degPCA(log2(counts(dse)+0.5), colData(dse), condition="group", name="group", shape="group")
-degPCA <- function(counts, metadata, condition="condition", 
-                   pc1="PC1", pc2="PC2", 
+degPCA <- function(counts, metadata, condition="condition",
+                   pc1="PC1", pc2="PC2",
                    name=NULL, shape=NULL){
     pc = .pca_loadings(counts)
     idx1 = which(colnames(pc) == pc1)
@@ -763,10 +513,319 @@ degPCA <- function(counts, metadata, condition="condition",
         p <- ggplot(comps, aes_string(pc1, pc2, color=condition, shape=shape))
     if (!is.null(name))
         p <- p + geom_text(aes_string(label=name), nudge_x = 1, nudge_y = 1)
+    else
+        p <- p + geom_point(size=3)
     p +
-        geom_point(size=3) +
         scale_color_brewer(palette = "Set1") +
         xlab(paste0("PC1", ": ", round(pc$percentVar[idx1] * 100), "% variance")) +
         ylab(paste0("PC2", ": ", round(pc$percentVar[idx2] * 100), "% variance")) +
         theme_minimal()
+}
+
+#' Plot MDS from normalized count data
+#'
+#' Uses cmdscale to get multidimensional scaling of data matrix,
+#' and plot the samples with ggplot2.
+#' @param counts matrix samples in columns, features in rows
+#' @param condition vector define groups of samples in counts.
+#' It has to be same order than the count matrix for columns.
+#' @param k integer number of dimensions to get
+#' @param d type of distance to use
+#' @param xi number of component to plot in x-axis
+#' @param yi number of component to plot in y-axis
+#' @return ggplot2 object
+#' @examples
+#' data(humanSexDEedgeR)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' degMDS(counts(dse), condition=colData(dse)$group)
+degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
+    nprobes = nrow(counts)
+    nsamples = ncol(counts)
+    if (d=="euclidian"){
+        distances = dist(t(counts))
+    }else if (d=="cor"){
+        distances = as.dist((1-cor(counts))^2)
+    }
+    fit = cmdscale(distances, eig=TRUE, k=k)
+    eigs = data.frame(variance_explained=fit$eig / sum(fit$eig))
+    xnames = paste0("PC",1:k," ",round(eigs[1:k,1]*100,digits=2),"%")
+    df = as.data.frame(fit$points[,c(xi,yi)])
+    names(df) = c("one", "two")
+    df$label = rownames(df)
+    if(!is.null(condition)) {
+        df$condition = condition
+        p = ggplot(df, aes(one, two, label=label, color=condition)) +
+            geom_text(aes(one, two, label=label), size=3) +
+            labs(list(x=xnames[xi],y=xnames[yi])) +
+            scale_x_continuous(expand=c(0.3, 0.3))
+    }
+    else {
+        p = ggplot(df, aes(one, two)) +
+            geom_text(aes(one, two, label=label), size=3) +
+            labs(list(x=xnames[xi],y=xnames[yi])) + scale_x_continuous(expand=c(0.3, 0.3))
+
+    }
+
+    return(p + theme_bw())
+}
+
+#' Plot top genes allowing more variables to color and shape points
+#'
+#' @param dds \link[DESeq2]{DESeqDataSet} object or SummarizedExperiment
+#' or Matrix or data.frame
+#' @param res \link[DESeq2]{DESeqResults} object
+#' @param n integer number of genes to plot
+#' @param genes character of gene names matching rownames of count data
+#' @param xs character, colname in colData that will be used as X-axes
+#' @param group character, colname in colData to color points and add different
+#' lines for each level
+#' @param batch character, colname in colData to shape points, normally used by
+#' batch effect visualization
+#' @param ann columns in rowData (if available) used to print gene names
+#' @param metadata metadata in case dds is a matrix
+#' @param slot name of the slot to use to get count data
+#' @param xsLab character, alternative label for x-axis (default: same as xs)
+#' @param groupLab character, alternative label for group (default: same as group)
+#' @param batchLab character, alternative label for batch (default: same as batch)
+#' @return ggplot showing the expresison of the genes
+degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
+                   group=NULL, batch=NULL,
+                   metadata = NULL,
+                   ann=c("external_gene_name", "symbol"),
+                   slot=1,
+                   xsLab=xs, groupLab=group, batchLab=batch){
+    if (class(dds) %in% c("data.frame", "matrix"))
+        dds = SummarizedExperiment(assays = SimpleList(counts=as.matrix(dds)),
+                                   colData = metadata)
+
+    if ( !("assays" %in% slotNames(dds)) )
+        stop("dds object doesn't have assays slot")
+
+    if (!is.null(res))
+        res <- res[order(res$padj),] %>% .[!is.na(res$padj),]
+
+    if (is.null(genes))
+        genes= row.names(res)[1:n]
+
+    anno <- as.data.frame(rowData(dds))
+
+    metadata = data.frame(colData(dds))
+    if (class(dds) == "DESeqDataSet")
+        counts <- log2(counts(dds, normalized=TRUE) + 0.2)
+    counts <- log2(assays(dds)[[slot]] + 0.2)
+
+    newgenes <- genes
+    if (ncol(anno)>0){
+        name <- intersect(names(anno), ann)
+        if (length(name) != 2)
+            message("No genes were mapped to rowData. check ann parameter values.")
+        if (length(name) == 2)
+            newgenes <- anno[match(genes, anno[,name[1]]), name[2]]
+    }
+
+    dd = melt(as.data.frame(counts[genes,]) %>% mutate(gene=newgenes))
+    colnames(dd) = c("gene", "sample", "count")
+
+    dd$xs = as.factor(metadata[as.character(dd$sample), xs])
+
+    if (!is.null(group)){
+        dd[, groupLab] = as.factor(metadata[as.character(dd$sample), group])
+    }else{
+        groupLab = "fake"
+        dd[, groupLab] = "fake"
+    }
+
+    if (!is.null(batch)){
+        dd[, batchLab] = as.factor(metadata[row.names(dd), batch])
+
+        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab,
+                                shape=batchLab))
+    }else{
+        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab))
+    }
+
+    p = p +
+        # geom_violin(alpha=0.3) +
+        stat_smooth(fill="grey80", method = 'loess') +
+        geom_point(size=1, alpha=0.7,
+                   position = position_jitterdodge(dodge.width=0.9)) +
+        facet_wrap(~gene) +
+        xlab(xsLab)
+    if (length(unique(dd[, groupLab])) == 1){
+        p = p +
+        scale_color_brewer(guide=!(is.null(group)), palette = "Set1") +
+        scale_fill_brewer(guide=!(is.null(group)), palette = "Set1")
+    }
+    p = p + theme_bw() +
+        theme(strip.background = element_rect(fill="white"),
+              strip.text = element_text(colour = "black"))
+
+    suppressWarnings(p)
+}
+
+#' Plot selected genes on a wide format
+#'
+#' @param counts \link[DESeq2]{DESeqDataSet} object or expression matrix
+#' @param genes character genes to plot.
+#' @param group character, colname in colData to color points and add different
+#' lines for each level
+#' @param metadata data.frame, information for each sample. Not needed if
+#' \link[DESeq2]{DESeqDataSet} given as counts.
+#' @param batch character, colname in colData to shape points, normally used by
+#' batch effect visualization
+#' @return ggplot showing the expresison of the genes on the x
+#' axis
+#' @examples
+#' data(humanSexDEedgeR)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
+#' humanSexDEedgeR$samples[idx,], design=~group)
+#' dse <- DESeq(dse)
+#' degPlotWide(dse, rownames(dse)[1:10], group="group")
+degPlotWide <- function(counts, genes, group, metadata=NULL, batch=NULL){
+    if (is.null(metadata))
+        metadata = data.frame(colData(counts))
+    metadata = data.frame(metadata)
+    if (class(counts) == "DESeqDataSet"){
+        dd = bind_rows(lapply(genes,function(gene){
+            plotCounts(counts, gene,
+                       intgroup=group, returnData = TRUE) %>%
+                mutate(count=log2(count+1)) %>%
+                mutate(gene=gene, sample=row.names(metadata))}))
+    }else if(class(counts) == "matrix"){
+        dd = melt(counts[genes,])
+        colnames(dd) = c("gene", "sample", "count")
+        dd$group = as.factor(metadata[as.character(dd$sample), group])
+    }else{
+        stop("No supported for class", class(counts))
+    }
+    if (is.null(group)){
+        dd$treatment = "one_group"
+    }else{
+        dd$treatment = dd[,"group"]
+    }
+    p = ggplot(dd, aes_string(x = "gene", y = "count", color = "treatment"))
+    if (!is.null(batch)){
+        dd$batch = as.factor(metadata[dd$sample, batch])
+        p = ggplot(dd, aes_(x = "gene", y = "count", color = "treatment", shape="batch"))
+    }
+
+    p = p +
+        geom_point(position = position_jitterdodge(dodge.width=0.9)) +
+        xlab("Genes") +
+        ylab("Normalized Counts") +
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    p
+}
+
+#' Make groups of genes using expression profile
+#'
+#' @aliases degPatterns
+#' @param ma  log2 normalized count matrix
+#' @param metadata  data frame with sample information. Rownames
+#' should match \code{ma} column names
+#' row number should be the same length than p-values vector.
+#' @param minc integer minimum number of genes in a group that
+#' will be return
+#' @param summarize character column name in metadata that will be used to gorup
+#' replicates.
+#' For instance, a merge between summarize and time parameters:
+#' control_point0 ... etc
+#' @param time character column name in metadata that will be used as
+#' variable that changes, normally a time variable.
+#' @param col character column name in metadata to separate
+#' samples. Normally control/mutant
+#' @param reduce boolean reduce number of clusters using
+#' correlation values between them.
+#' @param cutoff integer threshold for correlation
+#' expression to merge clusters (0 - 1)
+#' @param scale boolean scale the \code{ma} values by row
+#' @param plot boolean plot the clusters found
+#' @param fixy vector integers used as ylim in plot
+#' @details It would be used \link[cluster]{diana} function
+#' to detect a value to cut the expression based clustering
+#' at certain height. It can work with one or more groups with 2 or
+#' more several time points. The different patterns can be merged
+#' to get similar ones into only one pattern. The expression
+#' correlation of the patterns will be used to decide whether
+#' some need to be merged or not.
+#' @return list wiht two items. \code{df} is a data.frame
+#' with two columns. The first one with genes, the second
+#' with the clusters they belong. \code{pass_to_plot} is a vector
+#' of the clusters that pass the \code{minc} cutoff.
+#' @examples
+#' data(humanSexDEedgeR)
+#' ma <- humanSexDEedgeR$counts[1:100,]
+#' des <- data.frame(row.names=colnames(ma),
+#' group=as.factor(humanSexDEedgeR$samples$group))
+#' res <- degPatterns(ma, des, time="group", col=NULL)
+degPatterns = function(ma, metadata, minc=15, summarize="group",
+                       time="time", col="condition",
+                       reduce=FALSE,  cutoff=0.70,
+                       scale=TRUE, plot=TRUE, fixy=NULL){
+    metadata <- as.data.frame(metadata)
+    ma = ma[, row.names(metadata)]
+    if (is.null(col)){
+        col = "condition"
+        metadata[,col] = rep("one_group", nrow(metadata))
+    }
+    if (!summarize %in% names(metadata))
+        metadata[,summarize] = as.factor(paste0(metadata[,col], metadata[,time]))
+    stopifnot(class(metadata) == "data.frame")
+    stopifnot(class(ma) == "matrix")
+    stopifnot(summarize %in% names(metadata))
+    stopifnot(time %in% names(metadata))
+
+    if (!is.null(fixy))
+        stopifnot(length(fixy) == 2)
+
+    if (nrow(ma)>3000)
+        message("Large number of genes given. Please,",
+                "make sure is not an error. Normally",
+                "Only DE genes are useful for this function.")
+    cat("\n\nWorking with ", nrow(ma), " genes \n\n")
+    counts_group = t(sapply(rownames(ma), function(g){
+        sapply(levels(metadata[,summarize]), function(i){
+            idx = which(metadata[,summarize] == i)
+            mean(ma[g, idx], na.rm=TRUE)
+        })
+    }))
+    # colnames(counts_group) = unique(metadata[,summarize])
+
+    cluster_genes = .make_clusters(counts_group)
+    groups = .select_genes(cluster_genes, counts_group, minc, 
+                           reduce=reduce,
+                           cutoff=cutoff)
+
+    if (scale){
+        norm_sign = t(apply(counts_group, 1, .scale))
+    }else{
+        norm_sign = counts_group
+    }
+    colnames(norm_sign) = colnames(counts_group)
+    metadata_groups = metadata %>% 
+        dplyr::distinct_(summarize, .keep_all=TRUE)
+    rownames(metadata_groups) = metadata_groups[,summarize]
+    norm_sign = norm_sign[, row.names(metadata_groups)]
+    to_plot = unique(groups)
+    plots = lapply(to_plot, function(x){
+        .plot_cluster(norm_sign, as.character(names(groups[groups==x])),
+                      metadata_groups[,time], metadata_groups[,col], x, fixy)
+    })
+    nc = 3
+    all <- NULL
+    if (length(plots) < 3)
+        nc = length(plots)
+    if (length(plots)>0){
+        all <- plot_grid(plotlist = plots, ncol=nc)
+        print(all)}
+
+    list(df=data.frame(genes=names(groups),cluster=groups), 
+         pass=to_plot, plot=all, hr=as.hclust(cluster_genes),
+         profile=counts_group)
 }

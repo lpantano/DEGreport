@@ -190,14 +190,16 @@ degCovariates <- function(counts, metadata,
     significantCovars = corrRes$mat[corrRes$mat$fdr<fdr,"COVAR"]
     ma = corrRes$mat
     ma$r[ma$fdr > fdr] <- NA
-    p = ggplot(ma, aes_(fill= ~r,x= ~COVAR,y= ~COMPARE)) + geom_tile() +
+    p = ggplot(ma, aes_(fill= ~r,x= ~COVAR,y= ~COMPARE)) + 
+        geom_tile() +
         theme_minimal() +
         ggtitle(title) +
         scale_fill_gradient2(low="darkblue", high="darkorange",
                              guide="colorbar", na.value = "grey90",
                              limits=c(-1,1)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
-    return(list(significantCovars=significantCovars,
+    print(p)
+    invisible(list(significantCovars=significantCovars,
                 plot=p,
                 cor_matrix=corrRes$mat,
                 Effects.significantCovars = corrRes$Effects.significantCovars,
