@@ -13,6 +13,8 @@
 
 QCs, figures and analyses after differential expression analysis.
 
+Pantano L (2017). DEGreport: Report of DEG analysis. R package version 1.13.8.
+
 ## Installation
 
 This is an [R][] package.
