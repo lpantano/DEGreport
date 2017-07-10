@@ -32,3 +32,7 @@ biocLite("DEGreport")
 install.packages("devtools")
 devtools::install_github("lpantano/DEGreport")
 ```
+
+Learn what to do:
+
+`browseVignettes("DEGreport")`
