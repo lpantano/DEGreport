@@ -33,6 +33,6 @@ install.packages("devtools")
 devtools::install_github("lpantano/DEGreport")
 ```
 
-Learn what to do:
+Load the package and learn what to do:
 
 `browseVignettes("DEGreport")`
