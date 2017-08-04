@@ -2,7 +2,7 @@
 % Please edit documentation in R/covariate.R
 \name{degCovariates}
 \alias{degCovariates}
-\title{Find correlation between PCs and covariates}
+\title{Find correlation between pcs and covariates}
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, min_pc_pct = 5,
   correlation = "spearman")
@@ -13,28 +13,28 @@ degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, min_pc_pct = 5,
 \item{metadata}{data.frame with samples metadata.}
 
 \item{fdr}{numeric value to use as cutoff to determine
-the minimum FDR to consider significant correlations
-between PCs and covariates.}
+the minimum fdr to consider significant correlations
+between pcs and covariates.}
 
 \item{scale}{boolean to determine wether counts matrix should be
-scaled for PCA. Default FALSE.}
+scaled for pca. default FALSE.}
 
 \item{min_pc_pct}{numeric value that will be used as cutoff
-to select only PCs that explain more variability than this.}
+to select only pcs that explain more variability than this.}
 
 \item{correlation}{character determining the method for the
-correlation between PCs and covariates.}
+correlation between pcs and covariates.}
 }
 \value{
 : list:
-a)significantCovars,
+a)significantcovars,
 b)plot,
 c)cor_matrix,
-d)Effects.significantCovars: that is PCs pct * absolute correlation between covariate and PCs,
-e)PCs_matrix: PCs loading for each sample
+d)effects.significantcovars: that is pcs pct * absolute correlation between covariate and pcs,
+e)pcs_matrix: pcs loading for each sample
 }
 \description{
-This function will calculate the PCs using prcomp function,
+This function will calculate the pcs using prcomp function,
 and correlate categorical and numerical variables from
 metadata.
 }
