@@ -1,8 +1,9 @@
 DEGreport News
 
 CHANGES IN DEGreport  1.13.7
-    2017-06-19  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-08-07  Lorena Pantano <lorena.pantano@gmail.com>
 
+    Style: Add more unit tests
     Feature: Accept SE like objects to degPlot and
              use better gene names if rowData has it
     Feature: Use plot_grid for degPattern and save plot
