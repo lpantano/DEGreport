@@ -286,216 +286,39 @@ degVB <-
         theme_bw())
 }
 
-#' Get number of potential combinations of two vectors
-#' @aliases degNcomb
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
-#' @return maximum number of combinations of two vectors
-degNcomb <-
-    function(g1,g2)
-{
-    return(g1*g2)
+degNcomb <- function() {
+        .Deprecated("DESeq2::lcfShrink")
 }
 
-#' Get random combinations of two groups
-#' @aliases degComb
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
-#' @param pop number of combinations to be return
-#' @return matrix with different combinatios of two vector
-degComb <-
-    function(g1,g2,pop)
+degComb <- function()
 {
-    if (degNcomb(length(g1),length(g2))<pop){
-        return(as.data.frame(expand.grid(a=g1,b=g2)))
-    }else{
-        #take 10% of each group, 400 times
-        g1p=3
-        g2p=3
-        g1p <- ceiling(0.1*length(g1)+1)
-        if(g1p==2){g1p=3}
-        g2p <- ceiling(0.1*length(g2)+1)
-        if(g2p==2){g2p=3}
-        r1 <- sapply(1:pop,function(x){sample(g1,g1p)})
-        r2 <- sapply(1:pop,function(x){sample(g2,g2p)})
-        return(list(r1,r2))
-    }
+    .Deprecated("DESeq2::lcfShrink")
 }
 
-#' get the FC for each gene between two groups
-#' @aliases degFC
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
-#' @param counts count matrix of deregulated genes
-#' @param popsize number of combinations to generate
-#' @return FC for different combinations of samples in each group for each gene
-degFC <-
-    function(g1,g2,counts,popsize)
+degFC <- function()
 {
-    pop <- degComb(g1,g2,popsize)
-    if (!is.data.frame(pop)){
-        popfc <- as.data.frame(lapply(1:popsize,function(x){
-            r <- rowMeans(counts[,pop[[1]][,x],drop=FALSE]+1)/
-                (rowMeans(counts[,pop[[2]][,x],drop=FALSE])+1)
-            r[is.infinite(r)] <- NaN
-            return(r)
-        }))
-    }else{
-        popfc <- as.data.frame(apply(pop,1,function(x){
-            r <- (counts[,x[1],drop=FALSE]+1)/(counts[,x[2],drop=FALSE]+1)
-            r[is.infinite(r)] <- NaN
-            return(r)
-        }))
-        if (nrow(counts) == 1){
-            popfc <- t(popfc)
-        }
-        row.names(popfc)<-row.names(counts)
-    }
-
-    return(split(popfc,row.names(popfc)))
+    .Deprecated("DESeq2::lcfShrink")
 }
 
-#' Get the estimates of the fold change (FC) mean from a FC distribution using
-#' bayesian inference
-#' @aliases degBI
-#' @param fc list of FC
-#' @param iter number of iteration in the mcmc model
-#' @param ncores number of cores to use
-#' @return matrix with values from \link{degBIcmd}
-degBI <-
-    function(fc,iter=1000,ncores=NULL)
+degBI <- function()
 {
-    if (is.null(ncores)){
-        e <- lapply(fc,degBIcmd,iter)
-    }else{
-        message("using multiple threads")
-        e <- bplapply(fc, degBIcmd, BPPARAM = MulticoreParam(ncores),
-                      iter = iter)
-    }
-    if (file.exists("model.bug")){file.remove("model.bug")}
-    return(do.call(rbind.data.frame, e))
+    .Deprecated("DESeq2::lcfShrink")
 }
 
-#' Apply bayesian inference to estimate the average fold change (FC) of
-#' a distribution
-#' @description code based on
-#' http://www.johnmyleswhite.com/notebook/2010/08/20/
-#'     using-jags-in-r-with-the-rjags-package/
-#' http://public.wsu.edu/~jesse.brunner/classes/bio572/Lab7_Bayesian.html
-#' @param x list of values
-#' @param iter number of iteration in the mcmc model
-#' @return vector with mu and its confidence intervales (2.5% and 97.5%)
-degBIcmd <-
-    function(x,iter=1000)
+degBIcmd <- function(x,iter=1000)
 {
-    x <- (as.numeric(x))
-    #print(x[1:10])
-    mx <- min(x[!is.infinite(x)],na.rm=TRUE)
-    x[is.infinite(x)] <- mx
-    if (max(x)!=min(x)){
-        modelstring = paste0('
-        model {
-        for (i in 1:N) {
-            x[i] ~ dnorm(mu, tau)
-        }
-        mu ~ dunif(',min(x),',',max(x),')
-        tau  <-  pow(sigma, -2)
-        sigma ~ dunif(0, 100)
-        }
-        ')
-        jags  <-  suppressMessages(jags.model(textConnection(modelstring),
-                                            data = list('x' = x,
-                                                        'N' = length(x)),
-                                            n.chains = 4,
-                                            n.adapt = iter,quiet=TRUE ))
-
-        #update(jags, 10000)
-        coda  <-  suppressWarnings(coda.samples(jags,
-                                              variable.names = c("mu", "tau"),
-                                              n.iter = iter,quiet=TRUE ) )
-        g <- gelman.diag(coda)
-
-        return(c(summary(coda)$statistics[1:2,1],
-                 summary(coda)[[2]][1,c(1,5)],g$psrf[1,2]))
-
-    }else{
-        return(c(mean(x),0,min(x),max(x),1))
-    }
+    .Deprecated("DESeq2::lcfShrink")
 }
 
-#' Get rank data frame with best score on the top
-#' @aliases degRank
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
-#' @param counts count matrix for each gene and each sample that is deregulated
-#' @param fc list of FC of deregulated genes.
-#'     Should be same length than counts \code{row.names}
-#' @param popsize number of combinations to generate
-#' @param iter number of iteration in the mcmc model
-#' @param ncores number of cores to use
-#' @return data frame with the output of \link{degBIcmd} for each gene
-#' @examples
-#' data(DEGreportSet)
-#' #library(rjags)
-#' #degRank(DEGreportSet$g1,DEGreportSet$g2,
-#' #    DEGreportSet$counts[DEGreportSet$detag[1:5],],
-#' #    DEGreportSet$deg[DEGreportSet$detag[1:5],1],400,500)
-degRank <-
-    function(g1,g2,counts,fc,popsize=400,iter=1000,ncores=NULL)
+degRank <- function()
 {
-    if (!is.element("rjags", installed.packages()[,1])){
-        message("you need to install jags > 3.0.0 and rjags.")
-        stop("After that load rjags before call this function.")
-    }
-    popfc <- degFC(g1,g2,counts,popsize)
-    e.tab <- degBI(lapply(popfc,log2),iter,ncores)
-    names(e.tab) <- c("mu","tau","q5","q95","conv")
-    full <- cbind(e.tab[,c(1,3:4)],fc,row.names = row.names(counts))
-    full$sc <- apply(full[,1:3],1,function(x){
-        if (x[2]*x[3] < 0){
-            d <- abs(x[2])+abs(x[3])
-            s <- d/abs(x[1])
-        }else{
-            d <- abs(max(abs(x))-min(abs(x)))
-            s <- d/abs(x[1])
-        }
-        return(s)
-    })
-    return(full[order(full$sc),])
+    .Deprecated("DESeq2::lcfShrink")
 }
 
-#' plot the correlation between the rank according estimator and
-#'     the rank according FC
-#' @aliases degPR
-#' @param rank output from \code{degRank} function
-#' @param colors colour used for each gene
-#' @return ggplot2 object
-#' @examples
-#' data(DEGreportSet)
-#' degPR(DEGreportSet$rank)
-degPR <-
-    function(rank,colors="")
+
+degPR <- function()
 {
-    idsc <- row.names(rank[order(abs(rank$sc)),])
-    idfc <- row.names(rank[order(abs(rank[,3]),
-                               decreasing=TRUE),])
-    sc <- ""
-    fc <- ""
-    col=""
-    tab.o <- data.frame(row.names=idsc,sc=1:length(idsc),
-                      fc=0.0,col="",stringsAsFactors = FALSE)
-    tab.o[idfc,2] <- 1:length(idfc)
-    if (is.data.frame(colors)){
-        tab.o[as.character(colors$genes),3] <- as.character(colors$colors)
-    }else{
-        tab.o[,3] <- "black"
-    }
-    suppressWarnings(ggplot(tab.o,
-        aes(sc,fc,colour=factor(col))) +
-        geom_point()+
-        theme_bw()+
-        scale_color_brewer(palette="Set1")+
-        labs(list(y="rank by FC",x="rank by score")))
+    .Deprecated("DESeq2::lcfShrink")
 }
 
 #' Create a deg object that can be used to plot expression values

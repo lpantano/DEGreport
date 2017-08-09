@@ -76,6 +76,6 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
     
 
     pp.volc <- ggplotGrob(scatter)
-    p = grid.arrange(pp.volc)
+    p = pp.volc
     invisible(p)
 }

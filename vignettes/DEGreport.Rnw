@@ -107,9 +107,23 @@ dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
                               humanSexDEedgeR$samples[idx,], 
                               design=~group)
 resCov <- degCovariates(log2(counts(dse)+0.5),
-                     colData(dse))
+                        colData(dse))
 resCov$plot
 @
+
+
+\subsection{Covariates correlation with metrics}
+
+Also, the correlation among covariates and metrics from the analysis can
+be tested. This is useful when the study has multiple variables, like in
+clinical trials. The following code will return a correlation table, and
+plot the correlation heatmap for all the covariates and metrics in a table.
+
+<<chunk-cor-covariates>>=
+cor <- degCorCov(colData(dse))
+head(cor)
+@
+
 
 \section{Report from DESeq2 analysis}
 

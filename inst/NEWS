@@ -1,8 +1,12 @@
 DEGreport News
 
 CHANGES IN DEGreport  1.13.7
-    2017-08-07  Lorena Pantano <lorena.pantano@gmail.com>
-
+    2017-08-08  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: new function to analyze the correlation
+             among covaritaes in metatdata
+    Deprecation: all functions related to foldchange accuraty are removed. 
+                 Using lfcShrink much better now.
     Style: Add more unit tests
     Feature: Accept SE like objects to degPlot and
              use better gene names if rowData has it

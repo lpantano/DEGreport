@@ -405,8 +405,10 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     out_df = out_df[!is.na(out_df$padj),]
     out_df = out_df[order(out_df$padj),]
     if (! is.null(org)){
-        out_df$symbol = .convertIDs(rownames(out_df), "ENSEMBL", "SYMBOL", org, "useFirst")
-        out_df$description = .convertIDs(rownames(out_df), "ENSEMBL", "GENENAME", org, "useFirst")
+        out_df$symbol = .convertIDs(rownames(out_df),
+                                    "ENSEMBL", "SYMBOL", org, "useFirst")
+        out_df$description = .convertIDs(rownames(out_df),
+                                         "ENSEMBL", "GENENAME", org, "useFirst")
     }
 
     cat("\n",paste(capture.output(summary(res)[1:8]), collapse = "<br>"),"\n")
@@ -442,16 +444,18 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
     print(p)
 
     sign = row.names(out_df)[out_df$padj<FDR & !is.na(out_df$padj) & out_df$absMaxLog2FC > FC]
-    cat("\n\n### Most significants, FDR<", FDR, " and log2FC > ", FC, ": ", length(sign),"\n")
+    cat("\n\n### Most significants, FDR<", FDR,
+        " and log2FC > ", FC, ": ", length(sign),"\n")
 
     if (length(sign) < 2){
         cat("Too few genes to plot.")
     }else{
-        pheatmap(rlogMat[sign, ], show_rownames = FALSE,
-                 annotation_col = metadata,
-                 clustering_method = "ward.D2",
-                 clustering_distance_cols = "correlation"
-                )
+        Heatmap(rlogMat[sign, ], show_row_names = FALSE,
+                top_annotation = HeatmapAnnotation(df = metadata),
+                clustering_method_rows = "ward.D2",
+                clustering_method_columns = "ward.D2",
+                clustering_distance_columns = "correlation"
+        )
         print(degMDS(rlogMat[sign,],condition = metadata[,xs])+
                   theme_minimal())
     }
@@ -541,9 +545,7 @@ degPCA <- function(counts, metadata, condition="condition",
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' degMDS(counts(dse), condition=colData(dse)$group)
-degMDS = function(counts, condition=NULL,k=2,d="euclidian",xi=1,yi=2) {
-    nprobes = nrow(counts)
-    nsamples = ncol(counts)
+degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     if (d=="euclidian"){
         distances = dist(t(counts))
     }else if (d=="cor"){
@@ -598,7 +600,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    slot=1,
                    xsLab=xs, groupLab=group, batchLab=batch){
     if (class(dds) %in% c("data.frame", "matrix"))
-        dds = SummarizedExperiment(assays = SimpleList(counts=as.matrix(dds)),
+        dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
                                    colData = metadata)
 
     if ( !("assays" %in% slotNames(dds)) )
@@ -614,11 +616,11 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
 
     metadata = data.frame(colData(dds))
     if (class(dds) == "DESeqDataSet")
-        counts <- log2(counts(dds, normalized=TRUE) + 0.2)
+        counts <- log2(counts(dds, normalized = TRUE) + 0.2)
     counts <- log2(assays(dds)[[slot]] + 0.2)
 
     newgenes <- genes
-    if (ncol(anno)>0){
+    if (ncol(anno) > 0){
         name <- intersect(names(anno), ann)
         if (length(name) != 2)
             message("No genes were mapped to rowData. check ann parameter values.")
@@ -641,23 +643,23 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     if (!is.null(batch)){
         dd[, batchLab] = as.factor(metadata[row.names(dd), batch])
 
-        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab,
-                                shape=batchLab))
+        p = ggplot(dd, aes_string(x = "xs", y = "count", color = groupLab,
+                                shape = batchLab))
     }else{
-        p=ggplot(dd, aes_string(x="xs",y="count",color=groupLab))
+        p = ggplot(dd, aes_string(x = "xs", y = "count", color = groupLab))
     }
 
     p = p +
         # geom_violin(alpha=0.3) +
-        stat_smooth(fill="grey80", method = 'loess') +
-        geom_point(size=1, alpha=0.7,
-                   position = position_jitterdodge(dodge.width=0.9)) +
+        stat_smooth(fill = "grey80", method = 'loess') +
+        geom_point(size = 1, alpha = 0.7,
+                   position = position_jitterdodge(dodge.width = 0.9)) +
         facet_wrap(~gene) +
         xlab(xsLab)
     if (length(unique(dd[, groupLab])) == 1){
         p = p +
-        scale_color_brewer(guide=!(is.null(group)), palette = "Set1") +
-        scale_fill_brewer(guide=!(is.null(group)), palette = "Set1")
+        scale_color_brewer(guide = !(is.null(group)), palette = "Set1") +
+        scale_fill_brewer(guide = !(is.null(group)), palette = "Set1")
     }
     p = p + theme_bw() +
         theme(strip.background = element_rect(fill="white"),

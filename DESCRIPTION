@@ -1,6 +1,6 @@
 Package: DEGreport
 Version: 1.13.7
-Date: 2017-08-07
+Date: 2017-08-08
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -11,7 +11,6 @@ Description: Creation of a HTML report of differential expression
 biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
     GeneExpression
 Suggests:
-    biomaRt,
     RUnit,
     BiocStyle,
     BiocGenerics,
@@ -38,10 +37,9 @@ Imports:
     logging,
     dplyr,
     tidyr,
+    tibble,
     reshape,
-    pheatmap,
-    grid,
-    gridExtra,
+    ComplexHeatmap,
     knitr,
     grDevices,
     stats,

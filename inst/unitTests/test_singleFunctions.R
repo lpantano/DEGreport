@@ -38,6 +38,5 @@ test_singleFunctions <-
         DEGreportSet$counts))[[2]] == "ggplot")
     checkTrue(class(degVB(detag,DEGreportSet$g1,DEGreportSet$g2,
         DEGreportSet$counts))[[2]] == "ggplot")
-    checkTrue(class(degPR(DEGreportSet$rank))[[2]] == "ggplot")
     checkTrue(class(degVolcano(DEGreportSet$deg[,c("logFC", "PValue")]))[1] == "gtable")
     }

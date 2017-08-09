@@ -49,5 +49,5 @@ colData(dse))
 res$plot
 }
 \author{
-: Kenneth Daily and Thanneer Malai Perumal
+: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
 }
