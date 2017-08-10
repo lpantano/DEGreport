@@ -1,6 +1,6 @@
 # DEGreport
 
-<img src="https://github.com/lpantano/isomiRs/raw/master/inst/stickers/isomirs.png" width="150" height="150" align="right"/>
+<img src="https://github.com/lpantano/DEGreport/raw/master/inst/sticker/degreport.png" width="150" height="150" align="right"/>
 
 
 [![Build status](https://secure.travis-ci.org/lpantano/DEGreport.png)](https://travis-ci.org/lpantano/DEGreport)
