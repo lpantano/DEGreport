@@ -1,11 +1,7 @@
-
-[Bioconductor]: https://bioconductor.org
-[bcbio-nextgen]: https://github.com/chapmanb/bcbio-nextgen
-[devtools]: https://cran.r-project.org/package=devtools
-[R]: https://www.r-project.org
-
-
 # DEGreport
+
+<img src="https://github.com/lpantano/isomiRs/raw/master/inst/stickers/isomirs.png" width="150" height="150" align="right"/>
+
 
 [![Build status](https://secure.travis-ci.org/lpantano/DEGreport.png)](https://travis-ci.org/lpantano/DEGreport)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
@@ -36,3 +32,9 @@ devtools::install_github("lpantano/DEGreport")
 Load the package and learn what to do:
 
 `browseVignettes("DEGreport")`
+
+
+[Bioconductor]: https://bioconductor.org
+[bcbio-nextgen]: https://github.com/chapmanb/bcbio-nextgen
+[devtools]: https://cran.r-project.org/package=devtools
+[R]: https://www.r-project.org
