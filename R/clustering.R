@@ -617,7 +617,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     metadata = data.frame(colData(dds))
     if (class(dds) == "DESeqDataSet")
         counts <- log2(counts(dds, normalized = TRUE) + 0.2)
-    counts <- log2(assays(dds)[[slot]] + 0.2)
+    else counts <- log2(assays(dds)[[slot]] + 0.2)
 
     newgenes <- genes
     if (ncol(anno) > 0){
@@ -641,7 +641,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     }
 
     if (!is.null(batch)){
-        dd[, batchLab] = as.factor(metadata[row.names(dd), batch])
+        dd[, batchLab] = as.factor(metadata[as.character(dd$sample), batch])
 
         p = ggplot(dd, aes_string(x = "xs", y = "count", color = groupLab,
                                 shape = batchLab))
