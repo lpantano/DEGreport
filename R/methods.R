@@ -27,11 +27,11 @@
 degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
     .unique_group <- as.character(unique(metadata[,group]))
     .keep = sapply(.unique_group, function(g){
-        .samples = rownames(metadata)[metadata[,group] == g]
+        .samples = rownames(metadata)[metadata[, group] == g]
         .n = length(.samples)
         rowSums(counts[, .samples] > minreads) >= .n * min
     })
-    counts[rowSums(.keep) > 0,]
+    counts[rowSums(.keep) > 0, ]
 }
     
 
@@ -51,10 +51,10 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 #' data(humanSexDEedgeR)
 #' idx <- c(1:10, 75:85)
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
-#' humanSexDEedgeR$samples[idx,], design=~group)
+#' humanSexDEedgeR$samples[idx, ], design=~group)
 #' dse <- DESeq(dse)
 #' res <- results(dse)
-#' degQC(res$pvalue, counts(dse, normalized=TRUE),colData(dse)$group)
+#' degQC(res$pvalue, counts(dse, normalized=TRUE), colData(dse)$group)
 degQC <- function(pvalue, counts, groups){
     pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
     pvar <- degVar(pvalue, counts)+ theme(legend.position="top")
@@ -78,7 +78,7 @@ degQC <- function(pvalue, counts, groups){
 #' the factor may be bias due to some biological or technical factor.
 #' @examples
 #' data(DEGreportSet)
-#' degCheckFactors(DEGreportSet$counts[,1:10])
+#' degCheckFactors(DEGreportSet$counts[, 1:10])
 degCheckFactors <-
     function(counts)
     {
@@ -89,7 +89,7 @@ degCheckFactors <-
                              geom_histogram(binwidth = 0.3)+
                              theme_bw() +
                              facet_wrap(~variable) +
-                             xlim(-4,4))
+                             xlim(-4, 4))
     }
 
 
@@ -101,27 +101,27 @@ degCheckFactors <-
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' degMean(DEGreportSet$deg[,4],DEGreportSet$counts)
+#' degMean(DEGreportSet$deg[, 4], DEGreportSet$counts)
 degMean <-
-    function(pvalues,counts)
+    function(pvalues, counts)
 {
-    meanv  <-  apply(counts,1,mean)
-    q <- quantile(meanv,seq(.1,1,.1))
+    meanv  <-  apply(counts, 1, mean)
+    q <- quantile(meanv, seq(.1, 1, .1))
     q <- q[!duplicated(q)]
     meanvfac <- cut(meanv,
-                breaks=c(0,q),
+                breaks=c(0, q),
                 labels=names(q),
                 right=TRUE)
     pvalfac  <-  cut(pvalues,
-               breaks=c(-1,seq(.1,1,.1)),
-               labels=seq(0.1,1,0.1),right=TRUE)
+               breaks=c(-1, seq(.1, 1, .1)),
+               labels=seq(0.1, 1, 0.1), right=TRUE)
     d  <-  data.frame(pvalues=factor(pvalfac),
                 meanv=factor(meanvfac))
-    suppressWarnings(ggplot(d,aes(pvalues,fill=meanv))+
+    suppressWarnings(ggplot(d, aes(pvalues, fill=meanv))+
         geom_bar()+
         theme_bw() +
-        scale_fill_brewer("mean\nquantiles",palette="RdYlBu")) +
-        labs(list(x="p-values",y="# genes"))
+        scale_fill_brewer("mean\nquantiles", palette="RdYlBu")) +
+        labs(list(x="p-values", y="# genes"))
 }
 
 #' Distribution of pvalues by standard desviation range
@@ -132,27 +132,27 @@ degMean <-
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' degVar(DEGreportSet$deg[,4],DEGreportSet$counts)
+#' degVar(DEGreportSet$deg[, 4], DEGreportSet$counts)
 degVar <-
-    function(pvalues,counts)
+    function(pvalues, counts)
 {
-    sdv <- apply(counts,1,sd)
-    q <- quantile(sdv,seq(.1,1,.1))
+    sdv <- apply(counts, 1, sd)
+    q <- quantile(sdv, seq(.1, 1, .1))
     q <- q[!duplicated(q)]
     sdvfac <- cut(sdv,
-                breaks=c(0,q),
+                breaks=c(0, q),
                 labels=names(q),
                 right=TRUE)
     pvalfac <- cut(pvalues,
-               breaks=c(-1,seq(.1,1,.1)),
-               labels=seq(0.1,1,0.1),right=TRUE)
-    d <- data.frame(pvalues=factor(pvalfac),
+               breaks=c(-1, seq(.1, 1, .1)),
+               labels=seq(0.1, 1, 0.1), right=TRUE)
+    d <- data.frame(pvalues=factor(pvalfac), 
                 sdv=factor(sdvfac))
-    suppressWarnings(ggplot(d,aes(pvalues,fill=sdv))+
+    suppressWarnings(ggplot(d, aes(pvalues, fill=sdv))+
         geom_bar()+
         theme_bw() +
-        scale_fill_brewer("variance\nquantiles",palette="RdYlBu") +
-        labs(list(x="p-values",y="# genes")))
+        scale_fill_brewer("variance\nquantiles", palette="RdYlBu") +
+        labs(list(x="p-values", y="# genes")))
 }
 
 #' Correlation of the standard desviation and the mean of the abundance of a
@@ -168,31 +168,31 @@ degVar <-
 #' @examples
 #' data(DEGreportSet)
 #' degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
-#'       DEGreportSet$deg[,4],
+#'       DEGreportSet$deg[, 4],
 #'       DEGreportSet$counts)
 degMV <-
     function(group, pvalues, counts, sign=0.01)
 {
     var_ma <- sapply(unique(as.character(group)), function(g){
-        apply(counts[,group==g], 1, sd, na.rm=TRUE)
+        apply(counts[, group==g], 1, sd, na.rm=TRUE)
     })    
     sdv <- apply(var_ma, 1, max)
     mean_ma <- sapply(unique(as.character(group)), function(g){
-        apply(counts[,group==g], 1, mean, na.rm=TRUE)
+        apply(counts[, group==g], 1, mean, na.rm=TRUE)
     })    
     meanv <- apply(mean_ma, 1, min)
-    pv <- cut(pvalues,breaks=c(-1,sign,1.1),
-          labels=c("Sign","NoSig"))
-    d <- data.frame(pvalues=pv,sdv=log2(sdv),
+    pv <- cut(pvalues, breaks=c(-1, sign, 1.1),
+          labels=c("Sign", "NoSig"))
+    d <- data.frame(pvalues=pv, sdv=log2(sdv), 
                 meanv=log2(meanv))
-    suppressWarnings(ggplot(d,aes(meanv,sdv,
+    suppressWarnings(ggplot(d, aes(meanv, sdv,
     colour=pvalues))+
     geom_point()+
-    scale_color_manual(values=c("red",rgb(0.9,0.9,0.9,0.6)))+
+    scale_color_manual(values=c("red", rgb(0.9, 0.9, 0.9, 0.6)))+
     theme_bw()+
-    stat_quantile(aes(meanv,sdv),colour="blue",
-        quantiles = c(0.025,0.975),
-        linetype=2,formula=y ~ x)) +
+    stat_quantile(aes(meanv, sdv), colour="blue",
+        quantiles = c(0.025, 0.975), 
+        linetype=2, formula=y ~ x)) +
         theme(legend.position="top")
 }
 
@@ -208,10 +208,10 @@ degMV <-
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' detag <- row.names(DEGreportSet$deg[1:10,])
-#' degMB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
+#' detag <- row.names(DEGreportSet$deg[1:10, ])
+#' degMB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
 degMB <-
-    function(tags,g1,g2,counts,pop=400)
+    function(tags, g1, g2, counts, pop=400)
 {
     delen <- length(tags)
     g <- ""
@@ -224,19 +224,19 @@ degMB <-
     else {
         replace = FALSE
     }
-    rand <- sample(row.names(counts),pop, replace=replace)
-    g1var <- apply(counts[tags,g1,drop=FALSE],1,mean)    
-    g2var <- apply(counts[tags,g2,drop=FALSE],1,mean)    
+    rand <- sample(row.names(counts), pop,  replace=replace)
+    g1var <- apply(counts[tags, g1, drop=FALSE], 1, mean)    
+    g2var <- apply(counts[tags, g2, drop=FALSE], 1, mean)    
   
-    rand.s1 <- apply(counts[rand,g1,drop=FALSE],1,mean)
-    rand.s2 <- apply(counts[rand,g2,drop=FALSE],1,mean)
-    res <- rbind(data.frame(g="g1",mean=g1var),
-             data.frame(g="g2",mean=g2var))
-    res <- rbind(res,data.frame(g="r1",mean=rand.s1),
-             data.frame(g="r2",mean=rand.s2))
+    rand.s1 <- apply(counts[rand, g1, drop=FALSE], 1, mean)
+    rand.s2 <- apply(counts[rand, g2, drop=FALSE], 1, mean)
+    res <- rbind(data.frame(g="g1", mean=g1var), 
+             data.frame(g="g2", mean=g2var))
+    res <- rbind(res, data.frame(g="r1", mean=rand.s1), 
+             data.frame(g="r2", mean=rand.s2))
 
-    suppressWarnings(ggplot(res,aes(g,mean,
-        fill=g,colour=g))+
+    suppressWarnings(ggplot(res, aes(g, mean, 
+        fill=g, colour=g))+
         geom_violin(alpha=0.2)+
         scale_y_log10()+
         theme_bw())
@@ -254,10 +254,10 @@ degMB <-
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
-#' detag <- row.names(DEGreportSet$deg[1:10,])
-#' degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
+#' detag <- row.names(DEGreportSet$deg[1:10, ])
+#' degVB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
 degVB <-
-    function(tags,g1,g2,counts,pop=400)
+    function(tags, g1, g2, counts, pop=400)
 {
     delen <- length(tags)
     g <- ""
@@ -269,25 +269,25 @@ degVB <-
     else {
         replace = FALSE
     }
-    rand <- sample(row.names(counts),pop)
-    g1var <- apply(counts[tags,g1,drop=FALSE],1,sd)
-    g2var <- apply(counts[tags,g2,drop=FALSE],1,sd)
+    rand <- sample(row.names(counts), pop)
+    g1var <- apply(counts[tags, g1, drop=FALSE], 1, sd)
+    g2var <- apply(counts[tags, g2, drop=FALSE], 1, sd)
 
-    rand.s1 <- apply(counts[rand,g1,drop=FALSE],1,sd)
-    rand.s2 <- apply(counts[rand,g2,drop=FALSE],1,sd)
-    res <- rbind(data.frame(g="g1",var=g1var),
-             data.frame(g="g2",var=g2var))
-    res <- rbind(res,data.frame(g="r1",var=rand.s1),
-             data.frame(g="r2",var=rand.s2))
+    rand.s1 <- apply(counts[rand, g1, drop=FALSE], 1, sd)
+    rand.s2 <- apply(counts[rand, g2, drop=FALSE], 1, sd)
+    res <- rbind(data.frame(g="g1", var=g1var), 
+             data.frame(g="g2", var=g2var))
+    res <- rbind(res, data.frame(g="r1", var=rand.s1), 
+             data.frame(g="r2", var=rand.s2))
 
-    suppressWarnings(ggplot(res,aes(g,var,fill=g,colour=g))+
+    suppressWarnings(ggplot(res, aes(g, var, fill=g, colour=g))+
         geom_violin(alpha=0.2)+
         scale_y_log10()+
         theme_bw())
 }
 
 degNcomb <- function() {
-        .Deprecated("DESeq2::lcfShrink")
+    .Deprecated("DESeq2::lcfShrink")
 }
 
 degComb <- function()
@@ -305,7 +305,7 @@ degBI <- function()
     .Deprecated("DESeq2::lcfShrink")
 }
 
-degBIcmd <- function(x,iter=1000)
+degBIcmd <- function()
 {
     .Deprecated("DESeq2::lcfShrink")
 }
@@ -330,15 +330,15 @@ degPR <- function()
 #' @return R object to be load into vizExp
 #' @examples 
 #' data(DEGreportSet)
-#' de = data.frame(row.names=colnames(DEGreportSet$counts),
+#' de = data.frame(row.names=colnames(DEGreportSet$counts), 
 #' sex = c(rep("M", length(DEGreportSet$g1)),
 #'         rep("F", length(DEGreportSet$g2))))
 #' degObj(DEGreportSet$counts, de, NULL)
 degObj <-
-    function(counts,design,outfile)
+    function(counts, design, outfile)
 {
     deg <- NULL
-    deg <- list(counts, design)
+    deg <- list(counts,  design)
     if (!is.null(outfile))
         save(deg, file=outfile)
     if (is.null(outfile))
