@@ -8,14 +8,14 @@
 degObj(counts, design, outfile)
 }
 \arguments{
-\item{counts}{output from get_rank function}
+\item{counts}{Output from get_rank function.}
 
-\item{design}{colour used for each gene}
+\item{design}{Colour used for each gene.}
 
-\item{outfile}{file that will contain the object}
+\item{outfile}{File that will contain the object.}
 }
 \value{
-R object to be load into vizExp
+R object to be load into vizExp.
 }
 \description{
 Create a deg object that can be used to plot expression values
@@ -23,7 +23,7 @@ Create a deg object that can be used to plot expression values
 }
 \examples{
 data(DEGreportSet)
-de = data.frame(row.names=colnames(DEGreportSet$counts),
+de = data.frame(row.names=colnames(DEGreportSet$counts), 
 sex = c(rep("M", length(DEGreportSet$g1)),
         rep("F", length(DEGreportSet$g2))))
 degObj(DEGreportSet$counts, de, NULL)

@@ -7,18 +7,19 @@
 degMean(pvalues, counts)
 }
 \arguments{
-\item{pvalues}{pvalues of DEG analysis}
+\item{pvalues}{pvalues of DEG analysis.}
 
-\item{counts}{matrix with counts for each samples and each gene.
+\item{counts}{Matrix with counts for each samples and each gene.
 row number should be the same length than pvalues vector.}
 }
 \value{
 ggplot2 object
 }
 \description{
-Distribution of pvalues by expression range
+This function plot the p-values distribution colored by
+the quantiles of the average count data.
 }
 \examples{
 data(DEGreportSet)
-degMean(DEGreportSet$deg[,4],DEGreportSet$counts)
+degMean(DEGreportSet$deg[, 4], DEGreportSet$counts)
 }

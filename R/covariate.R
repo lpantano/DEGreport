@@ -8,13 +8,13 @@
         covariates = na.omit(covariates[,factorcontnames])
 
     covariates[,2] <- as.numeric(covariates[,2])
-    data = list(x = covariates[, 1],
+    data <- list(x = covariates[, 1],
                 y = covariates[, 2])
-    stats = cor.test(scale(data[[1]]),
+    stats <- cor.test(scale(data[[1]]),
                      scale(data[[2]]),
                      method = "kendall", exact = FALSE)
-    cor = stats$estimate
-    pval = stats$p.value
+    cor <- stats$estimate
+    pval <- stats$p.value
 
     return(c(estimate = cor, pval = pval))
 }
@@ -31,7 +31,7 @@
     # and consider those with pve >= (min_pve_pct_pc %):
     pc.var <- pca.res$sdev^2
     pve <- 100 * (pc.var / sum(pc.var))
-    npca <- max(1,length(which(pve >= min_pve_pct_pc)))
+    npca <- max(1, length(which(pve >= min_pve_pct_pc)))
 
     samplepcvals <- pca.res$x[, 1:npca, drop=FALSE]
 
@@ -47,7 +47,8 @@
     # get factor and continuous covariates
     character_vars <- lapply(covar_data, class) == "character"
     covar_data[, character_vars] <- apply(covar_data[, character_vars,
-                                                     drop=FALSE], 1, as.factor)
+                                                     drop = FALSE],
+                                          1L, as.factor)
     
     factorcovariates <- colnames(covar_data)[sapply(covar_data, is.factor)]
     contcovariates <- colnames(covar_data)[sapply(covar_data, is.numeric)]
@@ -58,9 +59,9 @@
     
     cov_cor <- corr.test(compare_data,
                          all_covariates,
-                         use='pairwise.complete.obs',
-                         method=correlationtype,
-                         adjust="none")
+                         use = 'pairwise.complete.obs',
+                         method = correlationtype,
+                         adjust = "none")
     all_cor_vals <- cov_cor$r
     all_cor_p <- cov_cor$p
     
@@ -69,20 +70,20 @@
     rownames(all_cor_p) <- colnames(compare_data)
     colnames(all_cor_p) <- colnames(all_covariates)
     
-    effects.significantcovars = all_cor_vals
-    effects.significantcovars[all_cor_p>max_fdr] = 0
-    effects.significantcovars = colSums(abs(effects.significantcovars)*replicate(dim(effects.significantcovars)[2],weights/sum(weights)))
-    effects.significantcovars = effects.significantcovars[order(abs(effects.significantcovars),decreasing=TRUE)]
+    effects.significantcovars <- all_cor_vals
+    effects.significantcovars[all_cor_p > max_fdr] <- 0
+    effects.significantcovars <- colSums(abs(effects.significantcovars) * replicate(dim(effects.significantcovars)[2L], weights / sum(weights)))
+    effects.significantcovars <- effects.significantcovars[order(abs(effects.significantcovars), decreasing = TRUE)]
 
-    cor_mat = melt(all_cor_p, varnames=c("compare", "covar"))
-    colnames(cor_mat)[colnames(cor_mat) == "value"] = "pvalue"
+    cor_mat <- melt(all_cor_p, varnames = c("compare", "covar"))
+    colnames(cor_mat)[colnames(cor_mat) == "value"] <- "pvalue"
 
-    cor_mat$compare = factor(cor_mat$compare, levels=rownames(all_cor_p))
-    cor_mat$covar = factor(cor_mat$covar, levels=colnames(all_cor_p))
+    cor_mat$compare <- factor(cor_mat$compare, levels = rownames(all_cor_p))
+    cor_mat$covar <- factor(cor_mat$covar, levels = colnames(all_cor_p))
 
-    cor_mat$r = melt(all_cor_vals)$value
-    cor_mat$fdr = p.adjust(cor_mat$pvalue, method="fdr")
-    return(list(mat=cor_mat,
+    cor_mat$r <- melt(all_cor_vals)$value
+    cor_mat$fdr <- p.adjust(cor_mat$pvalue, method = "fdr")
+    return(list(mat = cor_mat,
                 effects.significantcovars = effects.significantcovars))
 }
 
@@ -126,113 +127,64 @@ degCovariates <- function(counts, metadata,
                                       scale = FALSE,
                                       min_pc_pct = 5.0,
                                       correlation = "spearman") {
-    title = paste(ifelse(scale, "s", "un-s"), "caled ",
+    title <- paste(ifelse(scale, "s", "un-s"), "caled ",
                   " data in pca; pve >= ",
                   min_pc_pct, "%; ", correlation,
-                  " correlations ", sep="")
+                  " correlations ", sep = "")
     message(paste("\nrunning pca and calculating correlations for:\n",
-                  title, sep=""))
+                  title, sep = ""))
 
-    metadata = as.data.frame(metadata)
-    pcares <- .runpca(genesbysamples=counts,
-                      scale_data_for_pca=scale,
-                      min_pve_pct_pc=min_pc_pct)
+    metadata <- as.data.frame(metadata)
+    pcares <- .runpca(genesbysamples = counts,
+                      scale_data_for_pca = scale,
+                      min_pve_pct_pc = min_pc_pct)
 
     samplepcvals <- pcares$samplepcvals
     pve <- pcares$pve
     npca <- ncol(samplepcvals)
     colnames(samplepcvals) = paste(colnames(samplepcvals), " (",
-                                   sprintf("%.2f", pve[1:npca]), "%)",
-                                   sep="")
+                                   sprintf("%.2f", pve[1L:npca]), "%)",
+                                   sep = "")
 
     # find covariates without any missing data
-    samplesbyfullcovariates = metadata[, which(apply(metadata, 2, function(dat) all(!is.na(dat))))]
+    samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L, function(dat) all(!is.na(dat))))]
 
-    exclude_vars_from_fdr = setdiff(colnames(metadata),
+    exclude_vars_from_fdr <- setdiff(colnames(metadata),
                                     colnames(samplesbyfullcovariates))
 
-    corrres = .calccompletecorandplot(samplepcvals,
+    corrres <- .calccompletecorandplot(samplepcvals,
                                       samplesbyfullcovariates,
                                       correlation,
                                       title,
                                       weights = pve[1:dim(samplepcvals)[2L]],
                                       exclude_vars_from_fdr)
 
-    significantcovars = corrres$mat[corrres$mat$fdr < fdr,"covar"]
+    significantcovars <- corrres$mat[corrres$mat$fdr < fdr,"covar"]
     ma = corrres$mat
     ma$r[ma$fdr > fdr] <- NA
-    p = ggplot(ma, aes_(fill= ~r,x= ~covar,y= ~compare)) +
+    p = ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
         geom_tile() +
         theme_minimal() +
         ggtitle(title) +
-        scale_fill_gradient2(low="darkblue", high="darkorange",
-                             guide="colorbar", na.value = "grey90",
-                             limits=c(-1,1)) +
+        scale_fill_gradient2(low = "darkblue", high = "darkorange",
+                             guide = "colorbar", na.value = "grey90",
+                             limits = c(-1,1)) +
         theme(axis.text.x = element_text(angle = 90,
                                          hjust = 1,
-                                         vjust=0.5))
+                                         vjust = 0.5))
     print(p)
-    invisible(list(significantcovars=significantcovars,
-                plot=p,
-                cor_matrix=corrres$mat,
+    invisible(list(significantcovars = significantcovars,
+                plot = p,
+                cor_matrix = corrres$mat,
                 effects.significantcovars = corrres$effects.significantcovars,
-                pcs_matrix=samplepcvals))
-}
-
-# calculate correlation between two vectors
-.calc_cor = function(x,y){
-    type = sapply(list(x = x, y = y), class)
-    data = list(x = x, y = y)
-    data = lapply(1:2, function(i){
-        ifelse(type[i] != "numeric",
-               return(as.numeric(as.factor(data[[i]]))),
-               return(data[[i]]))
-    })
-
-    math = "num_num"
-    if (sum(type == "factor") == 2)
-        math = "cat_cat"
-    if (type[1] == "factor" & type[2] != "factor")
-        math = "cat_num"
-    if (type[1] != "factor" & type[2] == "factor") {
-        data = rev(data)
-        math = "cat_num"}
-
-    do = sum(rowSums(cbind(!is.na(x) & !is.na(y)))==1)>10
-    if (!do) return(data.frame(cor=0, pval=1))
-    switch(math,
-           num_num={
-               stats = cor.test(scale(data[[1]]),
-                                scale(data[[2]]),
-                                method = "kendall", exact = FALSE)
-               cor = stats$estimate
-               pval = stats$p.value
-           },
-           cat_num={
-               stats = cor.test(data[[1]],
-                                scale(data[[2]]))
-               cor = stats$estimate
-               pval = stats$p.value
-           },
-           cat_cat={
-               data = lapply(data, function(v){
-                   v[is.na(v)] <- 99
-                   as.factor(v)
-               })
-               stats = assocstats(xtabs(~data[[1]] + data[[2]]))
-               pval = stats$chisq_tests['Pearson', 'P(> X^2)']
-               cor = stats$cramer
-           }
-    )
-
-    data.frame(cor=cor, pval=pval)
+                pcs_matrix = samplepcvals))
 }
 
 degClean <- function(ma){
     lapply(ma, function(x) {
         if (length(unique(x)) < length(x) * 0.20 & is.numeric(x))
             x <- as.factor(x)
-        if ((class(x) %in% c("factor", "character"))){
+        if ((class(x) %in% c("factor", "character"))) {
             .f = as.factor(x)
             if (length(levels(.f)) < 2)
                 return(NULL)
@@ -274,12 +226,6 @@ degClean <- function(ma){
 degCorCov <- function(metadata, fdr=0.05){
     clean <- degClean(metadata) %>%
         mutate_all(as.numeric)
-    # cor <- lapply(names(clean), function(n1){
-    #     lapply(names(clean), function(n2){
-    #         .calc_cor(clean[[n1]], clean[[n2]]) %>%
-    #             mutate(var1 = n1, var2 = n2)
-    #     }) %>% bind_rows()
-    # }) %>% bind_rows()
     cor = .calccompletecorandplot(clean,
                                       clean,
                                       "kendall",
@@ -293,12 +239,10 @@ degCorCov <- function(metadata, fdr=0.05){
         spread(compare, fdr) %>% remove_rownames() %>%
         column_to_rownames("covar")
     corMat[fdrMat > fdr] <- 0
-    hr <- hclust(dist(corMat))
-    hc <- hclust(dist(t(corMat)))
     # corMat[fdrMat > 0.05] <- NA
     cols <- colorRampPalette(c("steelblue", "white", "orange"))(10)
-    if (sum(!is.na(corMat)) > 2){
-        p<-Heatmap(corMat, col = cols)
+    if (sum(!is.na(corMat)) > 2) {
+        p <- Heatmap(corMat, col = cols)
         print(p)
 
     }

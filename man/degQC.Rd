@@ -7,11 +7,11 @@
 degQC(pvalue, counts, groups)
 }
 \arguments{
-\item{pvalue}{pvalues of DEG analysis}
+\item{pvalue}{pvalues of DEG analysis.}
 
-\item{counts}{matrix with counts for each samples and each gene.}
+\item{counts}{Matrix with counts for each samples and each gene.}
 
-\item{groups}{character vector with group name for each sample in the
+\item{groups}{Character vector with group name for each sample in the
 same order than counts column names.}
 }
 \value{
@@ -27,8 +27,8 @@ library(DESeq2)
 data(humanSexDEedgeR)
 idx <- c(1:10, 75:85)
 dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
-humanSexDEedgeR$samples[idx,], design=~group)
+humanSexDEedgeR$samples[idx, ], design=~group)
 dse <- DESeq(dse)
 res <- results(dse)
-degQC(res$pvalue, counts(dse, normalized=TRUE),colData(dse)$group)
+degQC(res$pvalue, counts(dse, normalized=TRUE), colData(dse)$group)
 }

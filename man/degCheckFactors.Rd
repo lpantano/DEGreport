@@ -7,14 +7,16 @@
 degCheckFactors(counts)
 }
 \arguments{
-\item{counts}{matrix with counts for each samples and each gene.
+\item{counts}{Matrix with counts for each samples and each gene.
 row number should be the same length than pvalues vector.}
 }
 \value{
 ggplot2 object
 }
 \description{
-Distribution of gene ratios used to calculate Size Factors.
+This function check the median ratio normalization used by
+DESeq2 and similarly by edgeR to visualy check whether
+the median is the best size factor to represent depth.
 }
 \details{
 This function will plot the gene ratios for each sample. To calculate
@@ -26,5 +28,5 @@ the factor may be bias due to some biological or technical factor.
 }
 \examples{
 data(DEGreportSet)
-degCheckFactors(DEGreportSet$counts[,1:10])
+degCheckFactors(DEGreportSet$counts[, 1:10])
 }

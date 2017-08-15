@@ -1,24 +1,24 @@
-# add function for PCA of discarded genes in the independing filtering by deseq2
+# Add function for PCA of discarded genes in the independing filtering by deseq2
 
 #' Filter genes by group
 #' 
 #' This function will keep only rows that have a minimum counts of
 #' 1 at least in a \code{min} number of samples (default 80%).
 #' 
-#' @param counts matrix with expression data, columns are samples
-#' and rows are genes or other feature
-#' @param metadata data.frame with information about
-#' each column in counts matrix. Rownames should match
+#' @param counts Matrix with expression data, columns are samples
+#'   and rows are genes or other feature.
+#' @param metadata Data.frame with information about
+#'   each column in counts matrix. Rownames should match
 #' \code{colnames(counts)}.
-#' @param group character column in metadata used to
-#' group samples and applied the cutoff
-#' @param min numeric value indicating the minimum
-#' number of samples in each group that should have
-#' more than 0 in count matrix.
-#' @param minreads integer minimum number of reads to consider 
-#' a feature expressed.
+#' @param group Character column in metadata used to
+#'   group samples and applied the cutoff.
+#' @param min Numeric value indicating the minimum
+#'   number of samples in each group that should have
+#'   more than 0 in count matrix.
+#' @param minreads Integer minimum number of reads to consider 
+#'   a feature expressed.
 #' @return count \code{matrix} after filtering genes (features)
-#' with not enough expression in any group.
+#'   with not enough expression in any group.
 #' @examples
 #' data(humanSexDEedgeR)
 #' idx <- c(1:10, 75:85)
@@ -41,10 +41,10 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 #' \code{\link[DEGreport]{degVar}} and \code{\link[DEGreport]{degMV}} in a
 #' single plot. See these functions for further information.
 #' 
-#' @param pvalue  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene.
-#' @param groups character vector with group name for each sample in the
-#' same order than counts column names.
+#' @param pvalue pvalues of DEG analysis.
+#' @param counts Matrix with counts for each samples and each gene.
+#' @param groups Character vector with group name for each sample in the
+#'   same order than counts column names.
 #' @return ggplot2 object
 #' @examples
 #' library(DESeq2)
@@ -66,9 +66,14 @@ degQC <- function(pvalue, counts, groups){
 }
 
 #' Distribution of gene ratios used to calculate Size Factors.
+#' 
+#' This function check the median ratio normalization used by
+#' DESeq2 and similarly by edgeR to visualy check whether
+#' the median is the best size factor to represent depth.
+#' 
 #' @aliases degCheckFactors
-#' @param counts  matrix with counts for each samples and each gene.
-#' row number should be the same length than pvalues vector.
+#' @param counts Matrix with counts for each samples and each gene.
+#'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @details This function will plot the gene ratios for each sample. To calculate
 #' the ratios, it follows the simliar logic than DESeq2/edgeR uses, where the expression
@@ -94,10 +99,13 @@ degCheckFactors <-
 
 
 #' Distribution of pvalues by expression range
-#' @aliases degMean
-#' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene.
-#' row number should be the same length than pvalues vector.
+#' 
+#' This function plot the p-values distribution colored by
+#' the quantiles of the average count data.
+#' 
+#' @param pvalues pvalues of DEG analysis.
+#' @param counts  Matrix with counts for each samples and each gene.
+#'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
@@ -125,10 +133,13 @@ degMean <-
 }
 
 #' Distribution of pvalues by standard desviation range
-#' @aliases degVar
-#' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene.
-#' row number should be the same length than pvalues vector.
+#' 
+#' This function pot the p-valyes distribution colored by
+#' the quantiles of the standard desviation of count data.
+#' 
+#' @param pvalues pvalues of DEG analysis
+#' @param counts Matrix with counts for each samples and each gene.
+#'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
@@ -157,13 +168,13 @@ degVar <-
 
 #' Correlation of the standard desviation and the mean of the abundance of a
 #' set of genes.
-#' @aliases degMV
-#' @param group character vector with group name for each sample in the
-#' same order than counts column names.
-#' @param pvalues  pvalues of DEG analysis
-#' @param counts  matrix with counts for each samples and each gene.
-#' @param sign defining the cutoff to label significant features.
-#' row number should be the same length than pvalues vector.
+#' 
+#' @param group Character vector with group name for each sample in the
+#'   same order than counts column names.
+#' @param pvalues pvalues of DEG analysis.
+#' @param counts Matrix with counts for each samples and each gene.
+#' @param sign Defining the cutoff to label significant features.
+#'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
@@ -199,11 +210,11 @@ degMV <-
 #' Distribution of expression of DE genes compared to the background
 #'
 #' @aliases degMB
-#' @param tags  list of genes that are DE
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
-#' @param counts  matrix with counts for each samples and each gene
-#' Should be same length than pvalues vector
+#' @param tags  List of genes that are DE.
+#' @param g1 List of samples in group 1.
+#' @param g2 List of samples in group 2.
+#' @param counts  Matrix with counts for each samples and each gene
+#'   Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
 #' @examples
@@ -224,7 +235,7 @@ degMB <-
     else {
         replace = FALSE
     }
-    rand <- sample(row.names(counts), pop,  replace=replace)
+    rand <- sample(row.names(counts), pop, replace=replace)
     g1var <- apply(counts[tags, g1, drop=FALSE], 1, mean)    
     g2var <- apply(counts[tags, g2, drop=FALSE], 1, mean)    
   
@@ -245,12 +256,12 @@ degMB <-
 #' Distribution of the standard desviation of
 #'     DE genes compared to the background
 #' @aliases degVB
-#' @param tags  list of genes that are DE
-#' @param g1 list of samples in group 1
-#' @param g2 list of samples in group 2
+#' @param tags List of genes that are DE.
+#' @param g1 List of samples in group 1.
+#' @param g2 List of samples in group 2.
 #' @param counts  matrix with counts for each samples and each gene.
 #'     Should be same length than pvalues vector.
-#' @param pop number of random samples taken for background comparison
+#' @param pop Number of random samples taken for background comparison.
 #' @return ggplot2 object
 #' @examples
 #' data(DEGreportSet)
@@ -324,10 +335,10 @@ degPR <- function()
 #' Create a deg object that can be used to plot expression values
 #'     at shiny server:runGist(9930881)
 #' @aliases degObj
-#' @param counts output from get_rank function
-#' @param design colour used for each gene
-#' @param outfile file that will contain the object
-#' @return R object to be load into vizExp
+#' @param counts Output from get_rank function.
+#' @param design Colour used for each gene.
+#' @param outfile File that will contain the object.
+#' @return R object to be load into vizExp.
 #' @examples 
 #' data(DEGreportSet)
 #' de = data.frame(row.names=colnames(DEGreportSet$counts), 
@@ -338,7 +349,7 @@ degObj <-
     function(counts, design, outfile)
 {
     deg <- NULL
-    deg <- list(counts,  design)
+    deg <- list(counts, design)
     if (!is.null(outfile))
         save(deg, file=outfile)
     if (is.null(outfile))

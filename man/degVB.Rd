@@ -8,16 +8,16 @@
 degVB(tags, g1, g2, counts, pop = 400)
 }
 \arguments{
-\item{tags}{list of genes that are DE}
+\item{tags}{List of genes that are DE.}
 
-\item{g1}{list of samples in group 1}
+\item{g1}{List of samples in group 1.}
 
-\item{g2}{list of samples in group 2}
+\item{g2}{List of samples in group 2.}
 
 \item{counts}{matrix with counts for each samples and each gene.
 Should be same length than pvalues vector.}
 
-\item{pop}{number of random samples taken for background comparison}
+\item{pop}{Number of random samples taken for background comparison.}
 }
 \value{
 ggplot2 object
@@ -28,6 +28,6 @@ Distribution of the standard desviation of
 }
 \examples{
 data(DEGreportSet)
-detag <- row.names(DEGreportSet$deg[1:10,])
-degVB(detag,DEGreportSet$g1,DEGreportSet$g2,DEGreportSet$counts)
+detag <- row.names(DEGreportSet$deg[1:10, ])
+degVB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
 }
