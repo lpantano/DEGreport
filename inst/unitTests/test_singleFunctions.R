@@ -6,7 +6,7 @@ test_degcovariates <- function(){
                                   humanSexDEedgeR$samples[idx,],
                                   design=~group)
     res <- degCovariates(log2(counts(dse) + 0.5), colData(dse))
-    checkTrue(nrow(res$cor_matrix[res$cor_matrix$fdr < 0.05,]) == 3)
+    checkTrue(nrow(res$corMatrix[res$corMatrix$fdr < 0.05,]) == 3)
 }
 
 test_genes <- function(){

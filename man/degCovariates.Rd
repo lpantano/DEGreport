@@ -27,11 +27,13 @@ correlation between pcs and covariates.}
 }
 \value{
 : list:
-a)significantcovars,
-b)plot,
-c)cor_matrix,
-d)effects.significantcovars: that is pcs pct * absolute correlation between covariate and pcs,
-e)pcs_matrix: pcs loading for each sample
+a) significantCovars, covariates with FDR below the cutoff.
+b) plot, heatmap of the correlation found.
+c) corMatrix, correlation, p-value, FDR values
+   for each covariate and PCA pais
+d) effectsSignificantcovars: that is PCs % * absolute
+   correlation between covariate and PCs,
+e) pcsMatrix: PCs loading for each sample
 }
 \description{
 This function will calculate the pcs using prcomp function,

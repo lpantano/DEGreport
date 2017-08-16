@@ -5,16 +5,16 @@
                                                 na.action='remove',
                                                 alpha = 0.05){
     if (na.action == "remove")
-        covariates = na.omit(covariates[,factorcontnames])
+        covariates = na.omit(covariates[, factorcontnames])
 
     covariates[,2] <- as.numeric(covariates[,2])
-    data <- list(x = covariates[, 1],
-                y = covariates[, 2])
-    stats <- cor.test(scale(data[[1]]),
-                     scale(data[[2]]),
+    data <- list(x = covariates[, 1L],
+                y = covariates[, 2L])
+    stats <- cor.test(scale(data[[1L]]),
+                     scale(data[[2L]]),
                      method = "kendall", exact = FALSE)
-    cor <- stats$estimate
-    pval <- stats$p.value
+    cor <- stats[["estimate"]]
+    pval <- stats[["p.value"]]
 
     return(c(estimate = cor, pval = pval))
 }
@@ -24,34 +24,34 @@
                     min_pve_pct_pc = 1.0) {
 
     # estimate variance in data by pc:
-    pca.res <- prcomp(t(genesbysamples), center=TRUE,
-                      scale.=scale_data_for_pca, retx=TRUE)
+    pca.res <- prcomp(t(genesbysamples), center = TRUE,
+                      scale. = scale_data_for_pca, retx = TRUE)
 
     # examine how much variance is explained by pcs,
     # and consider those with pve >= (min_pve_pct_pc %):
-    pc.var <- pca.res$sdev^2
-    pve <- 100 * (pc.var / sum(pc.var))
-    npca <- max(1, length(which(pve >= min_pve_pct_pc)))
+    pc.var <- pca.res$sdev^2L
+    pve <- 100L * (pc.var / sum(pc.var))
+    npca <- max(1L, length(which(pve >= min_pve_pct_pc)))
 
-    samplepcvals <- pca.res$x[, 1:npca, drop=FALSE]
+    samplepcvals <- pca.res$x[, 1L:npca, drop = FALSE]
 
-    list(samplepcvals=samplepcvals, pve=pve)
+    list(samplepcvals = samplepcvals, pve = pve)
 }
 
 # function to calculate correlation and plot
 .calccompletecorandplot <- function(compare_data, covar_data,
-                                   correlationtype, title,
-                                   weights = NULL,
-                                   exclude_vars_from_fdr=NULL,
-                                   max_fdr = 0.1) {
+                                    correlationtype, title,
+                                    weights = NULL,
+                                    exclude_vars_from_fdr=NULL,
+                                    max_fdr = 0.1) {
     # get factor and continuous covariates
     character_vars <- lapply(covar_data, class) == "character"
     covar_data[, character_vars] <- apply(covar_data[, character_vars,
                                                      drop = FALSE],
                                           1L, as.factor)
     
-    factorcovariates <- colnames(covar_data)[sapply(covar_data, is.factor)]
-    contcovariates <- colnames(covar_data)[sapply(covar_data, is.numeric)]
+    factorcovariates <- select_if(covar_data, is.factor) %>% colnames
+    contcovariates <- select_if(covar_data, is.numeric) %>% colnames
     
     all_covariates <- cbind(covar_data[, contcovariates, drop = FALSE],
                             covar_data[, factorcovariates, drop = FALSE] %>%
@@ -78,11 +78,13 @@
     cor_mat <- melt(all_cor_p, varnames = c("compare", "covar"))
     colnames(cor_mat)[colnames(cor_mat) == "value"] <- "pvalue"
 
-    cor_mat$compare <- factor(cor_mat$compare, levels = rownames(all_cor_p))
-    cor_mat$covar <- factor(cor_mat$covar, levels = colnames(all_cor_p))
+    cor_mat[["compare"]] <- factor(cor_mat[["compare"]],
+                                   levels = rownames(all_cor_p))
+    cor_mat[["covar"]] <- factor(cor_mat[["covar"]],
+                                 levels = colnames(all_cor_p))
 
-    cor_mat$r <- melt(all_cor_vals)$value
-    cor_mat$fdr <- p.adjust(cor_mat$pvalue, method = "fdr")
+    cor_mat[["r"]] <- melt(all_cor_vals)[["value"]]
+    cor_mat[["fdr"]] <- p.adjust(cor_mat[["pvalue"]], method = "fdr")
     return(list(mat = cor_mat,
                 effects.significantcovars = effects.significantcovars))
 }
@@ -108,11 +110,13 @@
 #' correlation between pcs and covariates.
 #'
 #' @return: list:
-#' a)significantcovars,
-#' b)plot,
-#' c)cor_matrix,
-#' d)effects.significantcovars: that is pcs pct * absolute correlation between covariate and pcs,
-#' e)pcs_matrix: pcs loading for each sample
+#' a) significantCovars, covariates with FDR below the cutoff.
+#' b) plot, heatmap of the correlation found.
+#' c) corMatrix, correlation, p-value, FDR values
+#'    for each covariate and PCA pais
+#' d) effectsSignificantcovars: that is PCs % * absolute
+#'    correlation between covariate and PCs,
+#' e) pcsMatrix: PCs loading for each sample
 #' @examples
 #' data(humanSexDEedgeR)
 #' library(DESeq2)
@@ -147,7 +151,8 @@ degCovariates <- function(counts, metadata,
                                    sep = "")
 
     # find covariates without any missing data
-    samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L, function(dat) all(!is.na(dat))))]
+    samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L,
+                                                      function(dat) all(!is.na(dat))))]
 
     exclude_vars_from_fdr <- setdiff(colnames(metadata),
                                     colnames(samplesbyfullcovariates))
@@ -156,7 +161,8 @@ degCovariates <- function(counts, metadata,
                                       samplesbyfullcovariates,
                                       correlation,
                                       title,
-                                      weights = pve[1:dim(samplepcvals)[2L]],
+                                      weights =
+                                          pve[1L:dim(samplepcvals)[2L]],
                                       exclude_vars_from_fdr)
 
     significantcovars <- corrres$mat[corrres$mat$fdr < fdr,"covar"]
@@ -168,16 +174,17 @@ degCovariates <- function(counts, metadata,
         ggtitle(title) +
         scale_fill_gradient2(low = "darkblue", high = "darkorange",
                              guide = "colorbar", na.value = "grey90",
-                             limits = c(-1,1)) +
-        theme(axis.text.x = element_text(angle = 90,
-                                         hjust = 1,
+                             limits = c(-1L, 1L)) +
+        theme(axis.text.x = element_text(angle = 90L,
+                                         hjust = 1L,
                                          vjust = 0.5))
     print(p)
-    invisible(list(significantcovars = significantcovars,
+    invisible(list(significantCovars = significantcovars,
                 plot = p,
-                cor_matrix = corrres$mat,
-                effects.significantcovars = corrres$effects.significantcovars,
-                pcs_matrix = samplepcvals))
+                corMatrix = corrres[["mat"]],
+                effectsSignificantCovars =
+                    corrres[["effects.significantcovars"]],
+                pcsMatrix = samplepcvals))
 }
 
 degClean <- function(ma){
@@ -186,7 +193,7 @@ degClean <- function(ma){
             x <- as.factor(x)
         if ((class(x) %in% c("factor", "character"))) {
             .f = as.factor(x)
-            if (length(levels(.f)) < 2)
+            if (length(levels(.f)) < 2L)
                 return(NULL)
             if (length(levels(.f)) > length(.f) * 0.80)
                 return(NULL)
@@ -230,7 +237,7 @@ degCorCov <- function(metadata, fdr=0.05){
                                       clean,
                                       "kendall",
                                       "",
-                                      weights = 1)
+                                      weights = 1L)
     cor
     corMat <- cor$mat[, c("r", "compare", "covar")] %>%
         spread(compare, r) %>% remove_rownames() %>%
@@ -246,6 +253,7 @@ degCorCov <- function(metadata, fdr=0.05){
         print(p)
 
     }
-    invisible(list(cor = cor$mat, corMat = corMat, fdrMat = fdrMat, plot = p))
+    invisible(list(cor = cor$mat, corMat = corMat,
+                   fdrMat = fdrMat, plot = p))
 
 }

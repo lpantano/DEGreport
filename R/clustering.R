@@ -10,29 +10,32 @@
 
 # plot group of genes according time and group
 .plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy=NULL) {
-    ma = as.data.frame(norm_sign)[g_in_c,]
-    ma_long = suppressMessages(melt(cbind(gene=row.names(ma), ma), variable_name = "sample"))
-    ma_long$x = xs[ma_long$sample]
-    ma_long$group = groups[ma_long$sample]
-    splan = max(c(round(length(unique(ma_long$x))/3*2,0), 1))
+    ma <- as.data.frame(norm_sign)[g_in_c,]
+    ma_long <- suppressMessages(melt(cbind(gene = row.names(ma), ma),
+                                     variable_name = "sample"))
+    ma_long$x <- xs[ma_long$sample]
+    ma_long$group <- groups[ma_long$sample]
+    splan <- max(c(round(length(unique(ma_long$x))/3*2,0), 1))
     # ma_long$x=factor(ma_long$x)
-    p = suppressWarnings(
-        ggplot(ma_long, aes_string(x="x", y="value", fill="group", color="group")) +
-        geom_boxplot(alpha=0.3,outlier.size = 0, outlier.shape = NA) +
-        geom_point(alpha=0.4, width = 0.2, size=1,
-                    position = position_jitterdodge(dodge.width=0.9)) +
-        stat_smooth(aes_string(x="x", y="value", group="group", color="group"),
-                    method = "lm",formula = y~poly(x,splan)) +
+    p <- suppressWarnings(
+        ggplot(ma_long, aes_string(x = "x", y = "value",
+                                   fill = "group", color = "group")) +
+        geom_boxplot(alpha = 0.3, outlier.size = 0, outlier.shape = NA) +
+        geom_point(alpha = 0.4, width = 0.2, size = 1,
+                    position = position_jitterdodge(dodge.width = 0.9)) +
+        stat_smooth(aes_string(x = "x", y = "value",
+                               group = "group", color = "group"),
+                    method = "lm", formula = y~poly(x, splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
         ylab("scaled expression") + xlab("") )
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
-    if (length(unique(groups))==1){
-        p = p + scale_color_brewer(guide=FALSE, palette = "Set1") +
-                scale_fill_brewer(guide=FALSE, palette = "Set1")
+    if (length(unique(groups)) == 1) {
+        p <- p + scale_color_brewer(guide = FALSE, palette = "Set1") +
+                scale_fill_brewer(guide = FALSE, palette = "Set1")
     }else{
-        p = p + scale_color_brewer(palette = "Set1") +
+        p <- p + scale_color_brewer(palette = "Set1") +
             scale_fill_brewer(palette = "Set1")
     }
     p
@@ -40,8 +43,8 @@
 
 # Scale from 1 to 0 the expression genes
 .scale <- function(e){
-    .max = max(e)
-    .min = min(e)
+    .max <- max(e)
+    .min <- min(e)
     #(e - min(e))/(max(e) - min(e))
     scale(e)
 }
@@ -50,16 +53,16 @@
     ngroup <- unique(group)
     cor <- lapply(ngroup, function(nc1){
         sapply(ngroup, function(nc2){
-            g1 = colMeans(counts_group[names(group[group==nc1]),])
-            g2 = colMeans(counts_group[names(group[group==nc2]),])
-            (1-cor.test(g1, g2)$estimate)^2
+            g1 = colMeans(counts_group[names(group[group == nc1]),])
+            g2 = colMeans(counts_group[names(group[group == nc2]),])
+            (1 - cor.test(g1, g2)$estimate)^2
         })
     })
     cor <- do.call(rbind, cor)
     colnames(cor) <- ngroup
     rownames(cor) <- ngroup
     h <- hclust(as.dist(cor), method = "ward.D2")
-    c <- cutree(h, h = (1-cutoff)^2)
+    c <- cutree(h, h = (1 - cutoff)^2)
     new <- c[as.character(group)]
     names(new) <- names(group)
     new
@@ -68,20 +71,19 @@
 
 # use diana package to detect clusters
 .make_clusters <- function(counts_group){
-    m = (1-cor(t(counts_group), method = "kendall"))
-    d = as.dist(m^2)
-    c = diana(d, diss = TRUE, stand = FALSE)
-
+    m <- (1 - cor(t(counts_group), method = "kendall"))
+    d <- as.dist(m^2)
+    c <- diana(d, diss = TRUE, stand = FALSE)
     c
 }
 
-.select_genes <- function(c, counts_group, minc=15, 
+.select_genes <- function(c, counts_group, minc=15,
                           reduce=FALSE, cutoff=0.30){
-    select = cutree(as.hclust(c), h = c$dc)
-    select = select[select %in% names(table(select))[table(select)>minc]]
+    select <- cutree(as.hclust(c), h = c$dc)
+    select <- select[select %in% names(table(select))[table(select) > minc]]
     cat("\n\n Working with ", length(select), "genes after filtering: minc > ",minc,"\n\n")
-    if (reduce & length(unique(select) > 1) & ncol(counts_group)>2)
-        select = .reduce(select, counts_group, cutoff)
+    if (reduce & length(unique(select) > 1) & ncol(counts_group) > 2)
+        select <- .reduce(select, counts_group, cutoff)
     return(select)
 }
 
@@ -90,13 +92,13 @@
     counts_group = t(sapply(rownames(ma), function(g){
         sapply(levels(group), function(i){
             idx = which(group == i)
-            mean(ma[g, idx], na.rm=TRUE)
+            mean(ma[g, idx], na.rm = TRUE)
         })
     }))
     colnames(counts_group) = levels(group)
     .logger(head(counts_group), "summarize_scale::counts_group")
     .logger(head(group), "summarize_scale::group")
-    if (scale){
+    if (scale) {
         norm_sign = t(apply(counts_group, 1, .scale))
     }else{
         norm_sign = counts_group
@@ -112,7 +114,7 @@
     .logger(head(clusters), ".median_per_cluster::clusters")
     .t = do.call(rbind, lapply(unique(clusters$cluster), function(nc){
         .g = as.character(clusters$genes[clusters$cluster == nc])
-        .e = apply(ma[.g, ], 2, median.default, na.rm=TRUE)
+        .e = apply(ma[.g, ], 2, median.default, na.rm = TRUE)
         .e
     }))
     rownames(.t) = unique(clusters$cluster)
@@ -121,15 +123,15 @@
 }
 
 .filter <- function(df){
-    .sum = table(df$cluster)
-    .pass = names(.sum)[.sum>4]
+    .sum <- table(df$cluster)
+    .pass <- names(.sum)[.sum > 4]
     df[df$cluster %in% .pass,]
 }
 
 .get_features <- function(genes, norm, mapping){
     if (is.null(mapping))
-        return(data.frame(touse=intersect(genes, rownames(norm)), pair="."))
-    df = mapping[match(genes, mapping[,1]),]
+        return(data.frame(touse = intersect(genes, rownames(norm)), pair = "."))
+    df <- mapping[match(genes, mapping[, 1]),]
     names(df) = c("pair","touse")
     df
 }
@@ -138,14 +140,14 @@
     .logger(length(intersect(genes, rownames(norm))), "num genes")
     .logger(head(norm), "Plot expression")
     .logger(head(metadata), "Plot expression")
-    p=.plot_cluster(norm, genes,
-                    metadata[,time],
-                    metadata[,col], nc) +
+    p <- .plot_cluster(norm, genes,
+                       metadata[,time],
+                       metadata[,col], nc) +
         ggtitle( paste("Pattern of the Genes in", name) )
     print(p)
     .logger(head(melt(as.data.frame(raw[genes,]))), "Plot expression")
-    p = ggplot(melt(as.data.frame(raw[genes,])),
-               aes_string(x="value", color="variable")) + geom_density() +
+    p <- ggplot(melt(as.data.frame(raw[genes,])),
+               aes_string(x = "value", color = "variable")) + geom_density() +
         ggtitle( paste("Expression of the Genes in", name) )
     print(p)
 
@@ -154,19 +156,19 @@
 .integrate <- function(nc1, .exp_base, .clus_base, .norm_base, .metadata_group,
                        .maraw_base, .ma, .norm, .metadata, time, col, summarize,
                        col_transformed, name, mapping=NULL){
-    .genes_nc1 = as.character(.clus_base$genes[.clus_base$cluster==nc1])
-    keep_info =  .get_features(.genes_nc1, .norm, mapping)
+    .genes_nc1 <- as.character(.clus_base$genes[.clus_base$cluster == nc1])
+    keep_info <-  .get_features(.genes_nc1, .norm, mapping)
     keep = as.character(unique(keep_info$touse))
-    if (length(keep)<5)
+    if (length(keep) < 5)
         return(NULL)
-    clusters = degPatterns(as.matrix(.ma[keep,]),
+    clusters <- degPatterns(as.matrix(.ma[keep,]),
                            .metadata,
                            minc = 5, summarize = summarize,
-                           time=time, col = col)
+                           time = time, col = col)
     # print(clusters$pass)
-    if (length(clusters$pass)==0)
+    if (length(clusters$pass) == 0)
         return(NULL)
-    .exp = .median_per_cluster(.norm,
+    .exp <- .median_per_cluster(.norm,
                                clusters$df[clusters$df$cluster %in% clusters$pass,])
     # print(.exp)
     # for (nc2 in rownames(.exp)){
@@ -188,14 +190,14 @@
 }
 
 .group_metadata <- function(metadata, time, col, summarize){
-    if (is.null(col)){
+    if (is.null(col)) {
         col_transformed = "condition"
         metadata[,col_transformed] = rep("one_group", nrow(metadata))
     }
     if (!summarize %in% names(metadata))
         metadata[,summarize] = paste0(metadata[,col_transformed], metadata[,time])
 
-    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all=TRUE)
+    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all = TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     return(metadata_groups)
 }
@@ -225,30 +227,30 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
                      summarize="group", time="time", col="condition",
                      scale=TRUE, mapping=NULL){
     # basicConfig(level='FINEST')
-    stopifnot(length(matrix_list)>1 | length(metadata_list)>1)
-    stopifnot(length(matrix_list)==length(metadata_list))
+    stopifnot(length(matrix_list) > 1 | length(metadata_list) > 1)
+    stopifnot(length(matrix_list) == length(metadata_list))
     matrixnorm_list = list()
     cluster_expression = list()
     metadata_groups_list = list()
     matrixabs_list = list()
-    for (name in names(matrix_list)){
-        .logger(name, msg="Name list")
+    for (name in names(matrix_list)) {
+        .logger(name, msg = "Name list")
         metadata = metadata_list[[name]]
         matrixnorm_list[[name]] = .summarize_scale( as.matrix(matrix_list[[name]]),
-                          group=metadata[,summarize],
-                          scale=scale)
-        .logger(head(matrix_list[[name]]), msg="cluster Matrix")
-        matrixabs_list[[name]] = .summarize_scale( as.matrix(matrix_list[[name]]),
-                                                    group=metadata[,summarize],
-                                                    scale=FALSE)
-        .logger(head(matrixnorm_list[[name]]), msg="Matrix norm DF")
+                          group = metadata[, summarize],
+                          scale = scale)
+        .logger(head(matrix_list[[name]]), msg = "cluster Matrix")
+        matrixabs_list[[name]] = .summarize_scale(as.matrix(matrix_list[[name]]),
+                                                    group = metadata[,summarize],
+                                                    scale = FALSE)
+        .logger(head(matrixnorm_list[[name]]), msg = "Matrix norm DF")
 
         if (is.null(col))
             col_transformed = "condition"
 
         metadata_groups_list[[name]] = .group_metadata(metadata, time, col, summarize)
         .logger(metadata_groups_list[[name]], "Metadata")
-        if (name %in% names(cluster_list)){
+        if (name %in% names(cluster_list)) {
             cluster = cluster_list[[name]]
             cluster_list[[name]] = .filter(cluster[as.character(cluster$genes) %in% rownames(matrix_list[[name]]), ])
             cluster_expression[[name]] = .median_per_cluster(matrixnorm_list[[name]],
@@ -265,7 +267,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     .maraw_base = matrixabs_list[[base]]
     cat("\n\n## Integration of :", paste(names(matrix_list)),"{.tabset}\n\n")
     df = lapply(rownames(.exp_base), function(nc1){
-        .genes_nc1 = as.character(.clus_base$genes[.clus_base$cluster==nc1])
+        .genes_nc1 = as.character(.clus_base$genes[.clus_base$cluster == nc1])
         cat("\n\n### Cluster number ", nc1, "\n\n")
         .plot_base(.genes_nc1, .norm_base, .maraw_base, .metadata_group,
                    time, col_transformed, nc1, paste(base, nc1))
@@ -276,7 +278,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
             .metadata = metadata_list[[name]]
             map = NULL
             if (name %in% names(mapping))
-                map=mapping[[name]]
+                map = mapping[[name]]
             .logger(head(map), "Mapping")
             .integrate(nc1, .exp_base, .clus_base, .norm_base, .metadata_group,
                        .maraw_base, .ma, .norm, .metadata,
@@ -289,16 +291,17 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 }
 
 .table_w_fc <- function(dds, contrast){
-    if (!contrast[[1]][1] %in% names(colData(dds))){
+    if (!contrast[[1]][1] %in% names(colData(dds))) {
         stop("column not in dds object:", contrast[[1]][1])
     }
     fc_df <- do.call(rbind, lapply(contrast, function(cntr){
-        tb <- results(dds, contrast=c(cntr[1], cntr[2], cntr[3]), tidy="TRUE")
-        # print(head(tb))
-        tb  %>% dplyr::select(row, log2FoldChange) %>% mutate(comp=paste0(cntr[2], "vs", cntr[3]))
+        tb <- results(dds, contrast = c(cntr[1], cntr[2], cntr[3]),
+                      tidy = "TRUE")
+        tb  %>% .[, c("row", "log2FoldChange")] %>%
+            mutate(comp = paste0(cntr[2], "vs", cntr[3]))
     }))
     fc_df <- fc_df %>% tidyr::spread(comp, log2FoldChange)
-    rownames(fc_df) = fc_df$row
+    rownames(fc_df) <- fc_df$row
     fc_df[,2:ncol(fc_df)]
 }
 
@@ -311,7 +314,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
 
-    if ("result" %in%  slotNames(ego)){
+    if ("result" %in%  slotNames(ego)) {
         print(knitr::kable(simplify(ego)@result[,1:7]))
         cat("\n\n")
         return(ego)
@@ -319,16 +322,16 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     return(NULL)
 }
 
-.convertIDs <- function( ids, from, to, db, ifMultiple=c("putNA", "useFirst")) {
+.convertIDs <- function(ids, from, to, db, ifMultiple=c("putNA", "useFirst")) {
     stopifnot( inherits( db, "AnnotationDb" ) )
     ifMultiple <- match.arg( ifMultiple )
     if (sum(ids %in% keys(db, from))==0)
         return(ids)
     suppressMessages( selRes <- AnnotationDbi::select(
-        db, keys=ids, keytype=from, columns=c(from,to) ) )
+        db, keys = ids, keytype = from, columns = c(from,to) ) )
     if ( ifMultiple == "putNA" ) {
         duplicatedIds <- selRes[ duplicated( selRes[,from] ), from ]
-        selRes <- selRes[ ! selRes[,from] %in% duplicatedIds, ]
+        selRes <- selRes[ !(selRes[,from] %in% duplicatedIds), ]
     }
     return( selRes[ match( ids, selRes[,from] ), to ] )
 }
@@ -509,8 +512,9 @@ degPCA <- function(counts, metadata, condition="condition",
     idx2 = which(colnames(pc) == pc2)
     comps = data.frame(pc$x)
     comps$Name = rownames(comps)
-    comps = cbind(comps, as.data.frame(metadata)[as.character(comps$Name),])
-    # [Feature] check metadata has name,shape,condition
+    comps = bind_cols(comps, as.data.frame(metadata)[as.character(comps$Name), ,
+                                                     drop=FALSE])
+    # [Feature] check metadata has name, shape, condition
     # [Feature] check counts has same samples than metadata
     p <- ggplot(comps, aes_string(pc1, pc2, color=condition))
     if (!is.null(shape))
@@ -650,7 +654,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     # colnames(counts_group) = unique(metadata[,summarize])
 
     cluster_genes = .make_clusters(counts_group)
-    groups = .select_genes(cluster_genes, counts_group, minc, 
+    groups = .select_genes(cluster_genes, counts_group, minc,
                            reduce=reduce,
                            cutoff=cutoff)
 
@@ -660,7 +664,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         norm_sign = counts_group
     }
     colnames(norm_sign) = colnames(counts_group)
-    metadata_groups = metadata %>% 
+    metadata_groups = metadata %>%
         dplyr::distinct_(summarize, .keep_all=TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     norm_sign = norm_sign[, row.names(metadata_groups)]
@@ -677,7 +681,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         all <- plot_grid(plotlist = plots, ncol=nc)
         print(all)}
 
-    list(df=data.frame(genes=names(groups),cluster=groups), 
+    list(df=data.frame(genes=names(groups),cluster=groups),
          pass=to_plot, plot=all, hr=as.hclust(cluster_genes),
          profile=counts_group)
 }
