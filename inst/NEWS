@@ -1,8 +1,13 @@
 DEGreport News
-CHANGES IN DEGreport  1.13.8
 
-    2017-06-19  Lorena Pantano <lorena.pantano@gmail.com>
-
+CHANGES IN DEGreport  1.13.7
+    2017-08-08  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: new function to analyze the correlation
+             among covaritaes in metatdata
+    Deprecation: all functions related to foldchange accuraty are removed. 
+                 Using lfcShrink much better now.
+    Style: Add more unit tests
     Feature: Accept SE like objects to degPlot and
              use better gene names if rowData has it
     Feature: Use plot_grid for degPattern and save plot
@@ -12,13 +17,7 @@ CHANGES IN DEGreport  1.13.8
     Fix: correctly handling rowData in SE objects for degPlot
     Fix: plot only legend if group > 1
     Feature: More output for degPattern
-
-CHANGES IN DEGreport  1.13.7
-
-    2017-06-07  Lorena Pantano <lorena.pantano@gmail.com>
-
-    Fix: Fix y scale degPlotWide
-    Fix: Improve vignette to have better examples
+    Style: change to lower-cases inside degCovariates function
 
 CHANGES IN DEGreport  1.13.6
     2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
