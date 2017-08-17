@@ -107,12 +107,6 @@ dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
                               humanSexDEedgeR$samples[idx,], 
                               design=~group)
 resCov <- degCovariates(log2(counts(dse)+0.5),
-<<<<<<< HEAD
-                     colData(dse))
-resCov$plot
-@
-
-=======
                         colData(dse))
 resCov$plot
 @
@@ -131,7 +125,6 @@ head(cor)
 @
 
 
->>>>>>> master
 \section{Report from DESeq2 analysis}
 
 Here, we show some useful plots for differentially expressed genes.

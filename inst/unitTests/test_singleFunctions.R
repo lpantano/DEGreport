@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 test_degcovariates <- function(){
     library(DESeq2)
     data(humanSexDEedgeR)
@@ -23,27 +21,11 @@ test_genes <- function(){
     checkTrue(class(degPlot(dse, res = res, n = 3, xs = "group", group="group"))[[2]] == "ggplot")
 }
 
->>>>>>> master
 test_singleFunctions <- 
     function() 
 {
     data(DEGreportSet)
     data(humanSexDEedgeR)
-<<<<<<< HEAD
-    checkTrue(class(degMean(DEGreportSet$deg[,4],
-        DEGreportSet$counts))[[2]]=="ggplot")
-    checkTrue(class(degVar(DEGreportSet$deg[,4],
-        DEGreportSet$counts))[[2]]=="ggplot")
-    checkTrue(class(degMV(humanSexDEedgeR$samples$group,DEGreportSet$deg[,4],
-        DEGreportSet$counts))[[2]]=="ggplot")
-    detag <- row.names(DEGreportSet$deg[1:10,])
-    checkTrue(class(degMB(detag,DEGreportSet$g1,DEGreportSet$g2,
-        DEGreportSet$counts))[[2]]=="ggplot")
-    checkTrue(class(degVB(detag,DEGreportSet$g1,DEGreportSet$g2,
-        DEGreportSet$counts))[[2]]=="ggplot")
-    checkTrue(class(degPR(DEGreportSet$rank))[[2]]=="ggplot")
-}
-=======
     
     checkTrue(class(degMean(DEGreportSet$deg[,4],
         DEGreportSet$counts))[[2]] == "ggplot")
@@ -58,4 +40,3 @@ test_singleFunctions <-
         DEGreportSet$counts))[[2]] == "ggplot")
     checkTrue(class(degVolcano(DEGreportSet$deg[,c("logFC", "PValue")]))[1] == "gtable")
     }
->>>>>>> master

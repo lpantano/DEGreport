@@ -9,29 +9,17 @@ degVar(pvalues, counts)
 \arguments{
 \item{pvalues}{pvalues of DEG analysis}
 
-<<<<<<< HEAD
-\item{counts}{matrix with counts for each samples and each gene.
-=======
 \item{counts}{Matrix with counts for each samples and each gene.
->>>>>>> master
 row number should be the same length than pvalues vector.}
 }
 \value{
 ggplot2 object
 }
 \description{
-<<<<<<< HEAD
-Distribution of pvalues by standard desviation range
-}
-\examples{
-data(DEGreportSet)
-degVar(DEGreportSet$deg[,4],DEGreportSet$counts)
-=======
 This function pot the p-valyes distribution colored by
 the quantiles of the standard desviation of count data.
 }
 \examples{
 data(DEGreportSet)
 degVar(DEGreportSet$deg[, 4], DEGreportSet$counts)
->>>>>>> master
 }

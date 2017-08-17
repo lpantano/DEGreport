@@ -1,6 +1,6 @@
 language: r
 sudo: false
-ist: trusty
+dist: trusty
 cache: packages
 r: bioc-devel
 r_github_packages:
