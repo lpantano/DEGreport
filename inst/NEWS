@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.13.10
     2017-08-24  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Fix: Move to testthat for examples
     Feature: Adding main class and methods to handle DEG output
     Fix: axis in degPCA now show the values
     Feature: Handle multiple contrasts/coefficient for DESeq2 results
