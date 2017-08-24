@@ -27,6 +27,7 @@ fmt <- function(){
 #' stats = DEGreportSet$deg[,c("logFC", "PValue")]
 #' stats$name = row.names(stats)
 #' degVolcano(stats, plot_text=stats)
+#' @export
 degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Distributions",
                                  pval.cutoff=0.05, lfc.cutoff=1, shade.colour="orange",
                                  shade.alpha=0.25, point.colour="gray", point.alpha=0.75,

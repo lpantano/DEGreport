@@ -1,12 +1,19 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.13.10
+    2017-08-24  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Adding main class and methods to handle DEG output
+    Fix: axis in degPCA now show the values
+    Feature: Handle multiple contrasts/coefficient for DESeq2 results
+    
 CHANGES IN DEGreport  1.13.7
     2017-08-08  Lorena Pantano <lorena.pantano@gmail.com>
     
     Feature: new function to analyze the correlation
              among covaritaes in metatdata
     Deprecation: all functions related to foldchange accuraty are removed. 
-                 Using lfcShrink much better now.
+                 Using lfcShrink much better now
     Style: Add more unit tests
     Feature: Accept SE like objects to degPlot and
              use better gene names if rowData has it

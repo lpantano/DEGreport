@@ -97,39 +97,7 @@ figurebyvar <-
         "This figure shows the distribution of SD
         of the two groups." );
 }
-# Wrap figure from \code{plotrank} into a Nozzle object
-figurerank <- 
-    function(tab,out,colors)
-{
-    p <- degPR(tab,colors)
-    File="fcor.jpg"
-    HFile="fcor.pdf"
-    jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
-    print(p)
-    dev.off();
-    pdf(paste( out, HFile, sep="" )  );
-    print(p)
-    dev.off();
-    
-    # create a figure and make it available for exporting
-    newFigure( File, fileHighRes=HFile, exportId="COR",
-                     "This figure shows the correlation between
-                   the rank by score and tha rank by FC" );
-}
 
-# Create table for Nozzle report
-tablerank <- 
-    function(tab,out)
-{
-    countsFile <- "rank.txt"
-    tab <- cbind(row.names(tab),tab)
-    names(tab) <- c("Gene","mean FC","FC at 2.5%","FC at 97.5%",
-                  "Origial FC","score")
-    write.table(tab,paste0(out,"rank.txt"),row.names=FALSE,quote=FALSE,sep="\t")
-    TAB  <-  newTable(tab , file=countsFile, exportId="TABLE_COUNTS",
-                    "Top genes" );
-    return(TAB)
-}
 #' Create report of RNAseq DEG anlaysis
 #' @description This function get the count matrix, pvalues, and FC of a 
 #' DEG analysis and create a report to help to detect possible problems 
@@ -148,19 +116,17 @@ tablerank <-
 #' @param name name of the html file
 #' @param ncores num cores to be used to create report
 #' @return create a html file with all figures and tables
+#' @export
 createReport <- 
     function(g1,g2,counts,tags,pvalues,fc,path,colors="",
                        pop=400,name="DEGreport", ncores=NULL)
 {
     fg1 <- figurepvaluebyexp(pvalues,counts,path)
     fg2 <- figurepvaluebyvar(pvalues,counts,path)
-    fg3 <- figurepvaluebyvarexp(c(rep("G1", length(g1)),
-                                  rep("G2", length(g2))),pvalues,counts,path)
+    fg3 <- figurepvaluebyvarexp(rep("G1", length(g1)),
+                                rep("G2", length(g2)),pvalues,counts,path)
     fg4 <- figurebyexp(tags,g1,g2,counts,path,pop)
     fg5 <- figurebyvar(tags,g1,g2,counts,path,pop)
-    tabrank <- degRank(g1,g2,counts[tags,,drop=FALSE],fc,pop, ncores=ncores)
-    tb1 <- tablerank(tabrank,path)
-    fg6 <- figurerank(tabrank,path,colors)
     report <- ""
     report  <-  newCustomReport( "DEG Report " );
     report  <-  addTo( 
@@ -169,11 +135,9 @@ createReport <-
                        addTo( newSubSection( "Pvalue vs variation" ), fg2),
                        addTo( newSubSection("Pvalue vs abundance/variation"), fg3),    
                        addTo( newSubSection( "Abundance distribution" ), fg4),
-                       addTo( newSubSection( "Variation distribution" ), fg5),
-                       addTo( newSubSection("Rank"), tb1),
-                       addTo( newSubSection("FC vs rank"), fg6)
+                       addTo( newSubSection( "Variation distribution" ), fg5)
         ))
     
-    writeReport( report, filename=paste0(path,name))
+    writeReport( report, filename=paste0(path, name))
 }
 

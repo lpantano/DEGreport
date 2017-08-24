@@ -126,6 +126,7 @@
 #' res <- degCovariates(log2(counts(dse)+0.5),
 #' colData(dse))
 #' res$plot
+#' @export
 degCovariates <- function(counts, metadata,
                                       fdr = 0.1,
                                       scale = FALSE,
@@ -230,6 +231,7 @@ degClean <- function(ma){
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' cor <- degCorCov(colData(dse))
+#' @export
 degCorCov <- function(metadata, fdr=0.05){
     clean <- degClean(metadata) %>%
         mutate_all(as.numeric)

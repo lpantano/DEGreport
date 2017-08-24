@@ -17,6 +17,7 @@
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
 #' @return ggplot showing the expresison of the genes
+#' @export
 degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    group=NULL, batch=NULL,
                    metadata = NULL,
@@ -112,6 +113,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' dse <- DESeq(dse)
 #' degPlotWide(dse, rownames(dse)[1:10], group="group")
+#' @export
 degPlotWide <- function(counts, genes, group, metadata=NULL, batch=NULL){
     if (is.null(metadata))
         metadata = data.frame(colData(counts))

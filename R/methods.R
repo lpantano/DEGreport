@@ -24,6 +24,7 @@
 #' idx <- c(1:10, 75:85)
 #' c <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], "group", min=1)
+#' @export
 degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
     .unique_group <- as.character(unique(metadata[,group]))
     .keep = sapply(.unique_group, function(g){
@@ -55,6 +56,7 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 #' dse <- DESeq(dse)
 #' res <- results(dse)
 #' degQC(res$pvalue, counts(dse, normalized=TRUE), colData(dse)$group)
+#' @export
 degQC <- function(pvalue, counts, groups){
     pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
     pvar <- degVar(pvalue, counts)+ theme(legend.position="top")
@@ -84,6 +86,7 @@ degQC <- function(pvalue, counts, groups){
 #' @examples
 #' data(DEGreportSet)
 #' degCheckFactors(DEGreportSet$counts[, 1:10])
+#' @export
 degCheckFactors <-
     function(counts)
     {
@@ -110,6 +113,7 @@ degCheckFactors <-
 #' @examples
 #' data(DEGreportSet)
 #' degMean(DEGreportSet$deg[, 4], DEGreportSet$counts)
+#' @export
 degMean <-
     function(pvalues, counts)
 {
@@ -144,6 +148,7 @@ degMean <-
 #' @examples
 #' data(DEGreportSet)
 #' degVar(DEGreportSet$deg[, 4], DEGreportSet$counts)
+#' @export
 degVar <-
     function(pvalues, counts)
 {
@@ -181,6 +186,7 @@ degVar <-
 #' degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
 #'       DEGreportSet$deg[, 4],
 #'       DEGreportSet$counts)
+#' @export
 degMV <-
     function(group, pvalues, counts, sign=0.01)
 {
@@ -221,6 +227,7 @@ degMV <-
 #' data(DEGreportSet)
 #' detag <- row.names(DEGreportSet$deg[1:10, ])
 #' degMB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
+#' @export
 degMB <-
     function(tags, g1, g2, counts, pop=400)
 {
@@ -267,6 +274,7 @@ degMB <-
 #' data(DEGreportSet)
 #' detag <- row.names(DEGreportSet$deg[1:10, ])
 #' degVB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
+#' @export
 degVB <-
     function(tags, g1, g2, counts, pop=400)
 {
@@ -345,6 +353,7 @@ degPR <- function()
 #' sex = c(rep("M", length(DEGreportSet$g1)),
 #'         rep("F", length(DEGreportSet$g2))))
 #' degObj(DEGreportSet$counts, de, NULL)
+#' @export
 degObj <-
     function(counts, design, outfile)
 {

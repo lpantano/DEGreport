@@ -1,0 +1,16 @@
+context("Classes and Methods")
+
+test_that("DEGSet",{
+    library(DESeq2)
+    dds <- makeExampleDESeqDataSet(betaSD = 1)
+    colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
+    design(dds) <-  ~ condition + treatment
+    dds <- DESeq(dds)
+    res <- degComps(dds, combs = c("condition"))
+
+    expect_false("lfcSE" %in% (degTable(res[[1]], "shrunk") %>% names))
+    expect_true("lfcSE" %in% (degTable(res[[1]], "raw") %>% names))
+    expect_match(degDefault(res[[1]]), "shrunk")
+    expect_error(degTable(res[[1]], "fake"))
+    expect_identical(res[[1]][["shrunk"]], degTable(res[[1]]))
+})

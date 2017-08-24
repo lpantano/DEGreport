@@ -45,7 +45,6 @@
 .scale <- function(e){
     .max <- max(e)
     .min <- min(e)
-    #(e - min(e))/(max(e) - min(e))
     scale(e)
 }
 
@@ -110,7 +109,8 @@
 
 .median_per_cluster <- function(ma, clusters){
     # matrix, and df
-    .logger(table(clusters$cluster), ".median_per_cluster::table=clusters")
+    .logger(table(clusters$cluster),
+            ".median_per_cluster::table=clusters")
     .logger(head(clusters), ".median_per_cluster::clusters")
     .t = do.call(rbind, lapply(unique(clusters$cluster), function(nc){
         .g = as.character(clusters$genes[clusters$cluster == nc])
@@ -169,7 +169,8 @@
     if (length(clusters$pass) == 0)
         return(NULL)
     .exp <- .median_per_cluster(.norm,
-                               clusters$df[clusters$df$cluster %in% clusters$pass,])
+                               clusters$df %>%
+                               .[clusters$df$cluster %in% clusters$pass,])
     # print(.exp)
     # for (nc2 in rownames(.exp)){
     df = lapply(rownames(.exp), function(nc2){
@@ -253,8 +254,9 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
         if (name %in% names(cluster_list)) {
             cluster = cluster_list[[name]]
             cluster_list[[name]] = .filter(cluster[as.character(cluster$genes) %in% rownames(matrix_list[[name]]), ])
-            cluster_expression[[name]] = .median_per_cluster(matrixnorm_list[[name]],
-                            cluster_list[[name]])
+            cluster_expression[[name]] = .median_per_cluster(
+                matrixnorm_list[[name]],
+                cluster_list[[name]])
         }
         .logger(head(cluster_expression[[name]]), "Cluster summarized")
     }
@@ -387,6 +389,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 #' dse <- DESeq(dse)
 #' res <- degResults(dds=dse, name="test", org=NULL,
 #' do_go=FALSE, group="group", xs="group", path_results = NULL)
+#' @export
 degResults <- function(res=NULL, dds, rlogMat=NULL, name,
                                 org=NULL, FDR=0.05, do_go=FALSE,
                                 FC=0.1, group="condition", xs="time",
@@ -504,15 +507,17 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' degPCA(log2(counts(dse)+0.5), colData(dse), condition="group", name="group", shape="group")
+#' @export
 degPCA <- function(counts, metadata, condition="condition",
                    pc1="PC1", pc2="PC2",
                    name=NULL, shape=NULL){
     pc = .pca_loadings(counts)
-    idx1 = which(colnames(pc) == pc1)
-    idx2 = which(colnames(pc) == pc2)
-    comps = data.frame(pc$x)
+    idx1 = which(names(pc[["percentVar"]]) == pc1)
+    idx2 = which(names(pc[["percentVar"]]) == pc2)
+    comps = data.frame(pc[["x"]])
     comps$Name = rownames(comps)
-    comps = bind_cols(comps, as.data.frame(metadata)[as.character(comps$Name), ,
+    comps = bind_cols(comps,
+                      as.data.frame(metadata)[as.character(comps$Name), ,
                                                      drop=FALSE])
     # [Feature] check metadata has name, shape, condition
     # [Feature] check counts has same samples than metadata
@@ -525,8 +530,12 @@ degPCA <- function(counts, metadata, condition="condition",
         p <- p + geom_point(size=3)
     p +
         scale_color_brewer(palette = "Set1") +
-        xlab(paste0("PC1", ": ", round(pc$percentVar[idx1] * 100), "% variance")) +
-        ylab(paste0("PC2", ": ", round(pc$percentVar[idx2] * 100), "% variance")) +
+        xlab(paste0("PC1", ": ",
+                    round(pc[["percentVar"]][idx1] * 100),
+                    "% variance")) +
+        ylab(paste0("PC2", ": ",
+                    round(pc[["percentVar"]][idx2] * 100),
+                    "% variance")) +
         theme_minimal()
 }
 
@@ -549,6 +558,7 @@ degPCA <- function(counts, metadata, condition="condition",
 #' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
 #' humanSexDEedgeR$samples[idx,], design=~group)
 #' degMDS(counts(dse), condition=colData(dse)$group)
+#' @export
 degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     if (d=="euclidian"){
         distances = dist(t(counts))
@@ -620,6 +630,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' des <- data.frame(row.names=colnames(ma),
 #' group=as.factor(humanSexDEedgeR$samples$group))
 #' res <- degPatterns(ma, des, time="group", col=NULL)
+#' @export
 degPatterns = function(ma, metadata, minc=15, summarize="group",
                        time="time", col="condition",
                        reduce=FALSE,  cutoff=0.70,
@@ -655,23 +666,24 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
 
     cluster_genes = .make_clusters(counts_group)
     groups = .select_genes(cluster_genes, counts_group, minc,
-                           reduce=reduce,
-                           cutoff=cutoff)
+                           reduce = reduce,
+                           cutoff = cutoff)
 
-    if (scale){
+    if (scale) 
         norm_sign = t(apply(counts_group, 1, .scale))
-    }else{
-        norm_sign = counts_group
-    }
+    else norm_sign = counts_group
+
     colnames(norm_sign) = colnames(counts_group)
     metadata_groups = metadata %>%
-        dplyr::distinct_(summarize, .keep_all=TRUE)
+        dplyr::distinct_(summarize, .keep_all = TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     norm_sign = norm_sign[, row.names(metadata_groups)]
     to_plot = unique(groups)
     plots = lapply(to_plot, function(x){
-        .plot_cluster(norm_sign, as.character(names(groups[groups==x])),
-                      metadata_groups[,time], metadata_groups[,col], x, fixy)
+        .plot_cluster(norm_sign,
+                      as.character(names(groups[groups == x])),
+                      metadata_groups[,time],
+                      metadata_groups[,col], x, fixy)
     })
     nc = 3
     all <- NULL
@@ -681,7 +693,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
         all <- plot_grid(plotlist = plots, ncol=nc)
         print(all)}
 
-    list(df=data.frame(genes=names(groups),cluster=groups),
-         pass=to_plot, plot=all, hr=as.hclust(cluster_genes),
-         profile=counts_group)
+    list(df = data.frame(genes = names(groups),cluster = groups),
+         pass = to_plot, plot = all, hr = as.hclust(cluster_genes),
+         profile = counts_group)
 }
