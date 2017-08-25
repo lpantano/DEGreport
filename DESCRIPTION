@@ -13,7 +13,6 @@ biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
 Suggests:
     RUnit,
     BiocStyle,
-    BiocGenerics,
     org.Hs.eg.db,
     AnnotationDbi,
     BiocParallel,
@@ -25,6 +24,7 @@ Imports:
     utils,
     methods,
     Biobase,
+    BiocGenerics,
     S4Vectors,
     SummarizedExperiment,
     DESeq2,
@@ -43,6 +43,7 @@ Imports:
     ComplexHeatmap,
     knitr,
     grDevices,
+    scales,
     stats,
     psych
 Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 

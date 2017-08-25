@@ -21,7 +21,7 @@
 #' @author Lorena Pantano
 #' @export
 DEGResults <- setClass("DEGSet",
-                          contains = "SimpleList",
+                          contains = "list",
                           slots = c(default = "character"))
 
 setValidity("DEGSet", function(object) TRUE)

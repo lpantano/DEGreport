@@ -16,6 +16,7 @@
 #' DEGreport
 #' 
 #' @importFrom S4Vectors SimpleList
+#' @importMethodsFrom BiocGenerics plotMA
 #' @importFrom "grDevices" "dev.off" "jpeg" "pdf" "rgb" "colorRampPalette"
 #' @importFrom "methods" "slotNames"
 #' @importFrom "stats" "as.dist" "as.hclust" "cor" "cor.test"
@@ -46,11 +47,12 @@
 #' @importFrom dplyr group_by
 #' @importFrom dplyr "%>%"
 #' @importFrom dplyr distinct
-#' @importFrom dplyr left_join
+#' @importFrom dplyr left_join inner_join
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
+#' @importFrom scales trans_breaks trans_format math_format
 #' @importFrom tidyr spread
-#' @importFrom tibble column_to_rownames remove_rownames
+#' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap
 #' @importFrom reshape melt melt.data.frame
 #' @importFrom knitr kable
