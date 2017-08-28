@@ -38,7 +38,7 @@ contrasts
 library(DESeq2)
 dds <- makeExampleDESeqDataSet(betaSD=1)
 colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
-design(dds) <-  ~ condition + treatment
+  design(dds) <-  ~ condition + treatment
 dds <- DESeq(dds)
 res <- degComps(dds, combs = c("condition", 2),
               contrast = list("treatment_B_vs_A", c("condition", "A", "B")))

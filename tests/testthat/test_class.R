@@ -13,4 +13,5 @@ test_that("DEGSet",{
     expect_match(degDefault(res[[1]]), "shrunk")
     expect_error(degTable(res[[1]], "fake"))
     expect_identical(res[[1]][["shrunk"]], degTable(res[[1]]))
+    expect_type(degSign(res[[1]]), "character")
 })

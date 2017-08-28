@@ -48,10 +48,12 @@ Create volcano plot from log2FC and adjusted pvalues data frame
 This function was mainly developed by @jnhutchinson.
 }
 \examples{
-data(DEGreportSet)
-stats = DEGreportSet$deg[,c("logFC", "PValue")]
-stats$name = row.names(stats)
-degVolcano(stats, plot_text=stats)
+library(DESeq2)
+dds <- makeExampleDESeqDataSet(betaSD = 1)
+dds <- DESeq(dds)
+stats <- results(dds)[,c("log2FoldChange", "padj")]
+stats[["name"]] <- row.names(stats)
+degVolcano(stats, plot_text = stats[1:10,])
 }
 \author{
 Lorena Pantano, John Hutchinson

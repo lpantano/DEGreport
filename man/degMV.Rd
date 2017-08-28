@@ -26,8 +26,14 @@ Correlation of the standard desviation and the mean of the abundance of a
 set of genes.
 }
 \examples{
-data(DEGreportSet)
-degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
-      DEGreportSet$deg[, 4],
-      DEGreportSet$counts)
+data(humanGender)
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
+degMV(colData(dds)[["group"]],
+      res[, 4],
+      counts(dds, normalized = TRUE))
 }

@@ -28,8 +28,7 @@ maketitle
 
 <<package-load,message=FALSE>>=
 library(DEGreport)
-data(humanSexDEedgeR)
-library(edgeR)
+data(humanGender)
 @
 
 \section{General QC figures from DE analysis}
@@ -42,20 +41,20 @@ going to apply the `glmFit` function or `DESeq2` to get genes differentially exp
 between males and females.
 
 <<chunk-1>>=
-des<-humanSexDEedgeR$design
-fit <- glmFit(humanSexDEedgeR,des)
-lrt <- glmLRT(fit)
-tab<-cbind(lrt$table,p.adjust(lrt$table$PValue,method="BH"))
-detags <- rownames(tab[tab[,5]<=0.1,])
-plotSmear(humanSexDEedgeR, de.tags=detags)
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+                              colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
 @
 
 We need to extract the experiment design data.frame where the condition is 
 Male or Female.
 
 <<chunk-2>>=
-counts<-cpm(humanSexDEedgeR,log=FALSE)
-design<-data.frame(condition=sub("1","Male",sub("0","Female",des[,2])), other=1, row.names=colnames(counts))
+counts <- counts(dds, normalized = TRUE)
+design <- as.data.frame(colData(dds))
 @
 
 \subsection{Size factor QC}
@@ -66,7 +65,7 @@ of gene ratios between each gene and the average gene can show how true this is.
 Not superuseful for many samples because the plot becomes crowed.
 
 <<chunk-size-factor>>=
-degCheckFactors(counts[,1:10])
+degCheckFactors(counts[, 1:6])
 @
 
 
@@ -88,7 +87,7 @@ correlation.
 You can put this tree plots together using \Rcode{degQC}.
 
 <<chunk-qc>>=
-degQC(lrt$table$PValue, counts, design$condition)
+degQC(res[["pvalue"]], counts, design[["group"]])
 @
 
 
@@ -101,13 +100,8 @@ function works with raw data, where clearly library size correlates with
 some of the PCs.
 
 <<chunk-covariates>>=
-library(DESeq2)
-idx <- c(1:5, 75:80)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-                              humanSexDEedgeR$samples[idx,], 
-                              design=~group)
-resCov <- degCovariates(log2(counts(dse)+0.5),
-                        colData(dse))
+resCov <- degCovariates(log2(counts(dds)+0.5),
+                        colData(dds))
 resCov$plot
 @
 
@@ -120,8 +114,8 @@ clinical trials. The following code will return a correlation table, and
 plot the correlation heatmap for all the covariates and metrics in a table.
 
 <<chunk-cor-covariates>>=
-cor <- degCorCov(colData(dse))
-head(cor)
+cor <- degCorCov(colData(dds))
+names(cor)
 @
 
 
@@ -137,11 +131,9 @@ two columns (logFC and pVal). Specific genes can be plot using the option
 to plot the gene name).
 
 <<deseq2-volcano>>=
-dse <- DESeq(dse)
-res <- results(dse)
-res$id <- row.names(res)
-show = as.data.frame(res[1:2, c("log2FoldChange", "padj", "id")])
-degVolcano(as.data.frame(res[,c("log2FoldChange", "padj")]), plot_text = show)
+res[["id"]] <- row.names(res)
+# show <- as.data.frame(res[1:10, c("log2FoldChange", "padj", "id")])
+degVolcano(res[,c("log2FoldChange", "padj")])
 @
 
 \subsection{Gene plots}
@@ -152,13 +144,13 @@ Another classification can be added, like `batch` that will plot points
 with different shapes.
 
 <<deseq2-gene-plots>>=
-degPlot(dds=dse, res = res, n = 6, xs = "group")
+degPlot(dds = dds, res = res, n = 6, xs = "group")
 @
 
 Another option for plotting genes in a wide format:
 
 <<deseq2-gene-plot-wide>>=
-degPlotWide(dse, rownames(dse)[1:5], group="group")
+degPlotWide(dds, rownames(dds)[1:5], group="group")
 @
 
 \subsection{Full report}
@@ -170,8 +162,8 @@ analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
 different files will be saved there.
 
 <<deseq2>>=
-resreport <- degResults(dds=dse, name="test", org=NULL,
-                        do_go=FALSE, group="group", xs="group",
+resreport <- degResults(dds = dds, name = "test", org = NULL,
+                        do_go = FALSE, group = "group", xs = "group",
                         path_results = NULL)
 @
 
@@ -182,7 +174,7 @@ for donwstream analysis. Run the fowlling lines if you want to visualize
 your expression values by condition:
 
 <<chunk-shiny, eval=FALSE>>=
-degObj(counts,design,"degObj.rda")
+degObj(counts, design, "degObj.rda")
 library(shiny)
 shiny::runGitHub("lpantano/shiny", subdir="expression")
 @
@@ -194,8 +186,8 @@ data is a time course experiment. \Rfunction{degPatterns} needs a expression
 matrix, the design experiment and the column used to group samples.
 
 <<pattern>>=
-ma = assay(rlog(dse))[row.names(res)[1:100],]
-res <- degPatterns(ma, as.data.frame(colData(dse)), time="group", col=NULL)
+ma = assay(rlog(dds))[row.names(res)[1:100],]
+res <- degPatterns(ma, design, time = "group", col=NULL)
 @
 
 \section{Useful functions}
@@ -206,8 +198,8 @@ This section shows some useful functions during DEG analysis.
 
 <<chunk-filter>>=
 cat("gene in original count matrix: 1000")
-filter_count <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
-                          humanSexDEedgeR$samples[idx,], "group",
+filter_count <- degFilter(counts(dds),
+                          design, "group",
                           min=1, minreads = 50)
 cat("gene in final count matrix", nrow(filter_count))
 @

@@ -28,11 +28,11 @@ axis
 Plot selected genes on a wide format
 }
 \examples{
-data(humanSexDEedgeR)
+data(humanGender)
 library(DESeq2)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-humanSexDEedgeR$samples[idx,], design=~group)
+dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
 dse <- DESeq(dse)
-degPlotWide(dse, rownames(dse)[1:10], group="group")
+degPlotWide(dse, rownames(dse)[1:10], group = "group")
 }

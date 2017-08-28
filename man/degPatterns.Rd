@@ -4,9 +4,9 @@
 \alias{degPatterns}
 \title{Make groups of genes using expression profile}
 \usage{
-degPatterns(ma, metadata, minc = 15, summarize = "group", time = "time",
-  col = "condition", reduce = FALSE, cutoff = 0.7, scale = TRUE,
-  plot = TRUE, fixy = NULL)
+degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
+  col = NULL, reduce = FALSE, cutoff = 0.7, scale = TRUE, plot = TRUE,
+  fixy = NULL)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
@@ -60,9 +60,9 @@ correlation of the patterns will be used to decide whether
 some need to be merged or not.
 }
 \examples{
-data(humanSexDEedgeR)
-ma <- humanSexDEedgeR$counts[1:100,]
-des <- data.frame(row.names=colnames(ma),
-group=as.factor(humanSexDEedgeR$samples$group))
-res <- degPatterns(ma, des, time="group", col=NULL)
+data(humanGender)
+library(SummarizedExperiment)
+ma <- assays(humanGender)[[1]][1:100,]
+des <- colData(humanGender)
+res <- degPatterns(ma, des, time="group")
 }

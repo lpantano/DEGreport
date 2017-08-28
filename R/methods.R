@@ -20,10 +20,11 @@
 #' @return count \code{matrix} after filtering genes (features)
 #'   with not enough expression in any group.
 #' @examples
-#' data(humanSexDEedgeR)
+#' data(humanGender)
+#' library(SummarizedExperiment)
 #' idx <- c(1:10, 75:85)
-#' c <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], "group", min=1)
+#' c <- degFilter(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], "group", min=1)
 #' @export
 degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
     .unique_group <- as.character(unique(metadata[,group]))
@@ -48,14 +49,14 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 #'   same order than counts column names.
 #' @return ggplot2 object
 #' @examples
+#' data(humanGender)
 #' library(DESeq2)
-#' data(humanSexDEedgeR)
 #' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
-#' humanSexDEedgeR$samples[idx, ], design=~group)
-#' dse <- DESeq(dse)
-#' res <- results(dse)
-#' degQC(res$pvalue, counts(dse, normalized=TRUE), colData(dse)$group)
+#' dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dds <- DESeq(dds)
+#' res <- results(dds)
+#' degQC(res[["pvalue"]], counts(dds, normalized=TRUE), colData(dds)[["group"]])
 #' @export
 degQC <- function(pvalue, counts, groups){
     pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
@@ -84,8 +85,9 @@ degQC <- function(pvalue, counts, groups){
 #' to the median of distributions. If some samples show different distribution,
 #' the factor may be bias due to some biological or technical factor.
 #' @examples
-#' data(DEGreportSet)
-#' degCheckFactors(DEGreportSet$counts[, 1:10])
+#' data(humanGender)
+#' library(SummarizedExperiment)
+#' degCheckFactors(assays(humanGender)[[1]][, 1:10])
 #' @export
 degCheckFactors <-
     function(counts)
@@ -111,8 +113,14 @@ degCheckFactors <-
 #'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
-#' data(DEGreportSet)
-#' degMean(DEGreportSet$deg[, 4], DEGreportSet$counts)
+#' data(humanGender)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dds <- DESeq(dds)
+#' res <- results(dds)
+#' degMean(res[, 4], counts(dds))
 #' @export
 degMean <-
     function(pvalues, counts)
@@ -146,8 +154,14 @@ degMean <-
 #'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
-#' data(DEGreportSet)
-#' degVar(DEGreportSet$deg[, 4], DEGreportSet$counts)
+#' data(humanGender)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dds <- DESeq(dds)
+#' res <- results(dds)
+#' degVar(res[, 4], counts(dds))
 #' @export
 degVar <-
     function(pvalues, counts)
@@ -182,10 +196,16 @@ degVar <-
 #'   row number should be the same length than pvalues vector.
 #' @return ggplot2 object
 #' @examples
-#' data(DEGreportSet)
-#' degMV(c(rep("M", length(DEGreportSet$g1)), rep("F", length(DEGreportSet$g2))),
-#'       DEGreportSet$deg[, 4],
-#'       DEGreportSet$counts)
+#' data(humanGender)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dds <- DESeq(dds)
+#' res <- results(dds)
+#' degMV(colData(dds)[["group"]],
+#'       res[, 4],
+#'       counts(dds, normalized = TRUE))
 #' @export
 degMV <-
     function(group, pvalues, counts, sign=0.01)
@@ -224,9 +244,15 @@ degMV <-
 #' @param pop number of random samples taken for background comparison
 #' @return ggplot2 object
 #' @examples
-#' data(DEGreportSet)
-#' detag <- row.names(DEGreportSet$deg[1:10, ])
-#' degMB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
+#' data(humanGender)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dds <- DESeq(dds)
+#' res <- results(dds)
+#' degMB(row.names(res)[1:20], colData(dds)[["group"]][1:10],
+#'   colData(dds)[["group"]][11:20], counts(dds, normalized = TRUE))
 #' @export
 degMB <-
     function(tags, g1, g2, counts, pop=400)
@@ -271,9 +297,15 @@ degMB <-
 #' @param pop Number of random samples taken for background comparison.
 #' @return ggplot2 object
 #' @examples
-#' data(DEGreportSet)
-#' detag <- row.names(DEGreportSet$deg[1:10, ])
-#' degVB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
+#' data(humanGender)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dds <- DESeq(dds)
+#' res <- results(dds)
+#' degVB(row.names(res)[1:20], colData(dds)[["group"]][1:10],
+#'   colData(dds)[["group"]][11:20], counts(dds, normalized = TRUE))
 #' @export
 degVB <-
     function(tags, g1, g2, counts, pop=400)
@@ -348,11 +380,9 @@ degPR <- function()
 #' @param outfile File that will contain the object.
 #' @return R object to be load into vizExp.
 #' @examples 
-#' data(DEGreportSet)
-#' de = data.frame(row.names=colnames(DEGreportSet$counts), 
-#' sex = c(rep("M", length(DEGreportSet$g1)),
-#'         rep("F", length(DEGreportSet$g2))))
-#' degObj(DEGreportSet$counts, de, NULL)
+#' data(humanGender)
+#' library(SummarizedExperiment)
+#' degObj(assays(humanGender)[[1]], colData(humanGender), NULL)
 #' @export
 degObj <-
     function(counts, design, outfile)

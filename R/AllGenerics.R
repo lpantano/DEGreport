@@ -7,3 +7,8 @@ setGeneric("degTable", function(object, value = NULL)
 #' @export
 setGeneric("degDefault", function(object)
     standardGeneric("degDefault"))
+
+#' @rdname degSign
+#' @export
+setGeneric("degSign", function(object, ...)
+    standardGeneric("degSign"))

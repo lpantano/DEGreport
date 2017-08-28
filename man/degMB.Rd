@@ -25,7 +25,13 @@ ggplot2 object
 Distribution of expression of DE genes compared to the background
 }
 \examples{
-data(DEGreportSet)
-detag <- row.names(DEGreportSet$deg[1:10, ])
-degMB(detag, DEGreportSet$g1, DEGreportSet$g2, DEGreportSet$counts)
+data(humanGender)
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
+degMB(row.names(res)[1:20], colData(dds)[["group"]][1:10],
+  colData(dds)[["group"]][11:20], counts(dds, normalized = TRUE))
 }

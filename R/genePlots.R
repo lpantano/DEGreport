@@ -17,6 +17,14 @@
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
 #' @return ggplot showing the expresison of the genes
+#' @examples 
+#' data(humanGender)
+#' library(DESeq2)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' dse <- DESeq(dse)
+#' degPlot(dse, genes = rownames(dse)[1:10], xs = "group")
 #' @export
 degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    group=NULL, batch=NULL,
@@ -60,7 +68,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     
     if (!is.null(group)) {
         dd[, groupLab] = as.factor(metadata[as.character(dd$sample), group])
-    }else{
+    }else {
         groupLab = "fake"
         dd[, groupLab] = "fake"
     }
@@ -79,7 +87,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
         stat_smooth(fill = "grey80", method = 'loess') +
         geom_point(size = 1, alpha = 0.7,
                    position = position_jitterdodge(dodge.width = 0.9)) +
-        facet_wrap(~gene) +
+        facet_wrap(~gene, scales = "free_y") +
         xlab(xsLab)
     if (length(unique(dd[, groupLab])) == 1L) {
         p = p +
@@ -106,13 +114,13 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
 #' @return ggplot showing the expresison of the genes on the x
 #' axis
 #' @examples
-#' data(humanSexDEedgeR)
+#' data(humanGender)
 #' library(DESeq2)
 #' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], design=~group)
+#' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
 #' dse <- DESeq(dse)
-#' degPlotWide(dse, rownames(dse)[1:10], group="group")
+#' degPlotWide(dse, rownames(dse)[1:10], group = "group")
 #' @export
 degPlotWide <- function(counts, genes, group, metadata=NULL, batch=NULL){
     if (is.null(metadata))

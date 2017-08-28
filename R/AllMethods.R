@@ -26,9 +26,33 @@ setMethod("degTable", signature("DEGSet"), function(object, value=NULL) {
     stop(value, "not found.")
 })
 
+#' Method to get the significant genes
+#' 
+#' Function to get the features that are significant
+#' according to some thresholds from a [DEGSet] class.
+#' 
+#' @author Lorena Pantano
+#' @inheritParams degDefault
+#' @param padj Cutoff for the FDR column.
+#' @param fc Cutoff for the log2FC column.
+#' @param ... Passed to [degTable]. Default: value = NULL.
+#' @rdname degSign
+#' @export
+setMethod("degSign", signature("DEGSet"),
+          function(object, padj = 0.05, fc = 0, ...){
+              df <-  as.data.frame(degTable(object, ...))
+              filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
+              df %>%
+                  rownames_to_column("gene") %>%
+                  subset(., filterOut) %>%
+                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
+                  .[["gene"]]
+              
+          })
+
 #' MA-plot from base means and log fold changes
 #'
-#' MA-plot
+#' MA-plot addaptation to show the shrinking effect.
 #'
 #' @author Victor Barrera
 #' @author Rory Kirchner
@@ -55,7 +79,6 @@ setMethod("degTable", signature("DEGSet"), function(object, value=NULL) {
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("condition_B_vs_A"))
 #' plotMA(res[["condition_B_vs_A"]])
-#' 
 #' @export
 setMethod("plotMA", signature(object = "DEGSet"), function(object, title = NULL,
                                                            label_points = NULL,

@@ -44,3 +44,12 @@ ggplot showing the expresison of the genes
 \description{
 Plot top genes allowing more variables to color and shape points
 }
+\examples{
+data(humanGender)
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
+dse <- DESeq(dse)
+degPlot(dse, genes = rownames(dse)[1:10], xs = "group")
+}

@@ -26,12 +26,13 @@ degPCA(counts, metadata, condition = "condition", pc1 = "PC1",
 nice plot using ggplot2 from prcomp function
 }
 \examples{
-data(humanSexDEedgeR)
+data(humanGender)
 library(DESeq2)
-idx <- c(1:5, 75:80)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-humanSexDEedgeR$samples[idx,], design=~group)
-degPCA(log2(counts(dse)+0.5), colData(dse), condition="group", name="group", shape="group")
+idx <- c(1:10, 75:85)
+dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+colData(humanGender)[idx,], design=~group)
+degPCA(log2(counts(dse)+0.5), colData(dse),
+  condition="group", name="group", shape="group")
 }
 \author{
 Lorena Pantano, Rory Kirchner, Michael Steinbaugh

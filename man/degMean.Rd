@@ -20,6 +20,12 @@ This function plot the p-values distribution colored by
 the quantiles of the average count data.
 }
 \examples{
-data(DEGreportSet)
-degMean(DEGreportSet$deg[, 4], DEGreportSet$counts)
+data(humanGender)
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
+degMean(res[, 4], counts(dds))
 }

@@ -23,12 +23,12 @@ This function joins the output of \code{\link[DEGreport]{degMean}},
 single plot. See these functions for further information.
 }
 \examples{
+data(humanGender)
 library(DESeq2)
-data(humanSexDEedgeR)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx], 
-humanSexDEedgeR$samples[idx, ], design=~group)
-dse <- DESeq(dse)
-res <- results(dse)
-degQC(res$pvalue, counts(dse, normalized=TRUE), colData(dse)$group)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
+degQC(res[["pvalue"]], counts(dds, normalized=TRUE), colData(dds)[["group"]])
 }

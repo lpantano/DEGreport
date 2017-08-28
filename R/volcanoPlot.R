@@ -23,23 +23,26 @@ fmt <- function(){
 #' This function was mainly developed by @jnhutchinson.
 #' @author Lorena Pantano, John Hutchinson
 #' @examples 
-#' data(DEGreportSet)
-#' stats = DEGreportSet$deg[,c("logFC", "PValue")]
-#' stats$name = row.names(stats)
-#' degVolcano(stats, plot_text=stats)
+#' library(DESeq2)
+#' dds <- makeExampleDESeqDataSet(betaSD = 1)
+#' dds <- DESeq(dds)
+#' stats <- results(dds)[,c("log2FoldChange", "padj")]
+#' stats[["name"]] <- row.names(stats)
+#' degVolcano(stats, plot_text = stats[1:10,])
 #' @export
 degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Distributions",
                                  pval.cutoff=0.05, lfc.cutoff=1, shade.colour="orange",
                                  shade.alpha=0.25, point.colour="gray", point.alpha=0.75,
                                  point.outline.colour="darkgray", line.colour="gray",
                                  plot_text=NULL) {
-    if ( !any(side %in% c("both","down","up")) | length(side)>1)
+    stats <- as.data.frame(stats)
+    if (!any(side %in% c("both","down","up")) | length(side)>1)
         stop("side parameter should be: both, up or down.")
     if (ncol(stats)<2)
         stop("Need a data.frame with two columns: logFC and Adjusted.Pvalue")
-    if ( sum( rowSums(is.na(stats)) ) > 0 )
-        stats = stats[rowSums(is.na(stats))==0,]
-    if ( any(stats[,2]>1) | any(stats[,2]<0) )
+    if (sum( rowSums(is.na(stats)) ) > 0)
+        stats = stats[rowSums(is.na(stats)) == 0,]
+    if (any(stats[,2]>1) | any(stats[,2]<0))
         stop("pvalues needs to be >0 and <1")
     names(stats) = c("logFC","adj.P.Val")
     stats[,2] = -log10(stats[,2] + 1e-10)
@@ -55,7 +58,7 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
     scat.poly.down <- with(stats, data.frame(x=as.numeric(c(-lfc.cutoff,  -lfc.cutoff, min(range.lfc),min(range.lfc))), 
                                              y=as.numeric(c(pval.cutoff, max(range.pval), max(range.pval),pval.cutoff))))
     
-    scatter <- ggplot(data=stats, aes_string(x="logFC", y="adj.P.Val")) +
+    scatter <- ggplot(stats, aes_string(x="logFC", y="adj.P.Val")) +
         geom_point(alpha=point.alpha, pch=21, fill=point.colour, color=point.outline.colour) +
         xlab("log2 fold change") + ylab("-log10(adjusted p-value)") +
         theme_bw()+
@@ -69,14 +72,11 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
         scatter = scatter + geom_polygon(data=scat.poly.down, aes_string(x="x",y="y"), fill=shade.colour, alpha=shade.alpha)
 
     if (!is.null(plot_text)){
+        plot_text <- as.data.frame(plot_text)
         names(plot_text) = c("logFC", "adj.P.Val", "name")
         plot_text[,2] <- -log10(plot_text[,2] + 1e-10)
         scatter <- scatter + 
             geom_text_repel(data=plot_text, aes_string(x="logFC", y="adj.P.Val", label="name"), size=3)
     }
-    
-
-    pp.volc <- ggplotGrob(scatter)
-    p = pp.volc
-    invisible(p)
+    scatter
 }

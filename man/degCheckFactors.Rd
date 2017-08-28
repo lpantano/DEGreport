@@ -27,6 +27,7 @@ to the median of distributions. If some samples show different distribution,
 the factor may be bias due to some biological or technical factor.
 }
 \examples{
-data(DEGreportSet)
-degCheckFactors(DEGreportSet$counts[, 1:10])
+data(humanGender)
+library(SummarizedExperiment)
+degCheckFactors(assays(humanGender)[[1]][, 1:10])
 }

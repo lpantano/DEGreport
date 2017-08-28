@@ -33,8 +33,9 @@ This function will keep only rows that have a minimum counts of
 1 at least in a \code{min} number of samples (default 80%).
 }
 \examples{
-data(humanSexDEedgeR)
+data(humanGender)
+library(SummarizedExperiment)
 idx <- c(1:10, 75:85)
-c <- degFilter(humanSexDEedgeR$counts[1:1000, idx],
-humanSexDEedgeR$samples[idx,], "group", min=1)
+c <- degFilter(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], "group", min=1)
 }

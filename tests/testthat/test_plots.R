@@ -1,11 +1,13 @@
 context("Plots")
 
 library(DESeq2)
-data(humanSexDEedgeR)
+data(humanGender)
 idx <- c(1:5, 75:80)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-                              humanSexDEedgeR$samples[idx,],
+counts <- assays(humanGender)[[1]]
+dse <- DESeqDataSetFromMatrix(counts[1:1000, idx],
+                              colData(humanGender)[idx,],
                               design = ~group) %>% DESeq
+
 res <- results(dse)
 
 test_that("degcovariates", {
@@ -40,5 +42,5 @@ test_that("singleFunctions",
                           counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
         expect_true(degVolcano(as.data.frame(res[,c("log2FoldChange", "pvalue")])) %>%
-                        class %>% .[1] == "gtable")
+                        class %>% .[[2]] == "ggplot")
     })

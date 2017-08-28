@@ -22,9 +22,7 @@ Create a deg object that can be used to plot expression values
     at shiny server:runGist(9930881)
 }
 \examples{
-data(DEGreportSet)
-de = data.frame(row.names=colnames(DEGreportSet$counts), 
-sex = c(rep("M", length(DEGreportSet$g1)),
-        rep("F", length(DEGreportSet$g2))))
-degObj(DEGreportSet$counts, de, NULL)
+data(humanGender)
+library(SummarizedExperiment)
+degObj(assays(humanGender)[[1]], colData(humanGender), NULL)
 }

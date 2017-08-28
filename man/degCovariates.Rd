@@ -41,11 +41,11 @@ and correlate categorical and numerical variables from
 metadata.
 }
 \examples{
-data(humanSexDEedgeR)
+data(humanGender)
 library(DESeq2)
-idx <- c(1:5, 75:80)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-humanSexDEedgeR$samples[idx,], design=~group)
+idx <- c(1:10, 75:85)
+dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
 res <- degCovariates(log2(counts(dse)+0.5),
 colData(dse))
 res$plot

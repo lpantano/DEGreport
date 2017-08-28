@@ -29,7 +29,7 @@ after shrinking.}
 MA-plot [ggplot].
 }
 \description{
-MA-plot
+MA-plot addaptation to show the shrinking effect.
 }
 \examples{
 library(DESeq2)
@@ -37,7 +37,6 @@ dds <- makeExampleDESeqDataSet(betaSD=1)
 dds <- DESeq(dds)
 res <- degComps(dds, contrast = list("condition_B_vs_A"))
 plotMA(res[["condition_B_vs_A"]])
-
 }
 \author{
 Victor Barrera

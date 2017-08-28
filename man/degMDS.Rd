@@ -29,10 +29,10 @@ Uses cmdscale to get multidimensional scaling of data matrix,
 and plot the samples with ggplot2.
 }
 \examples{
-data(humanSexDEedgeR)
+data(humanGender)
 library(DESeq2)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-humanSexDEedgeR$samples[idx,], design=~group)
-degMDS(counts(dse), condition=colData(dse)$group)
+dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+  colData(humanGender)[idx,], design=~group)
+degMDS(counts(dse), condition=colData(dse)[["group"]])
 }

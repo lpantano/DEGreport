@@ -11,14 +11,11 @@ Description: Creation of a HTML report of differential expression
 biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
     GeneExpression
 Suggests:
-    RUnit,
     BiocStyle,
-    org.Hs.eg.db,
     AnnotationDbi,
-    BiocParallel,
     testthat
 Depends:
-    R (>= 3.2.0),
+    R (>= 3.4.0),
     quantreg
 Imports:
     utils,
@@ -59,3 +56,4 @@ Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000
+Encoding: UTF-8

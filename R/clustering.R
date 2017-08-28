@@ -9,14 +9,13 @@
 
 
 # plot group of genes according time and group
-.plot_cluster  = function(norm_sign, g_in_c, xs ,groups, title, fixy=NULL) {
+.plot_cluster  = function(norm_sign, g_in_c, xs , groups, title, fixy=NULL) {
     ma <- as.data.frame(norm_sign)[g_in_c,]
     ma_long <- suppressMessages(melt(cbind(gene = row.names(ma), ma),
                                      variable_name = "sample"))
     ma_long$x <- xs[ma_long$sample]
     ma_long$group <- groups[ma_long$sample]
     splan <- max(c(round(length(unique(ma_long$x))/3*2,0), 1))
-    # ma_long$x=factor(ma_long$x)
     p <- suppressWarnings(
         ggplot(ma_long, aes_string(x = "x", y = "value",
                                    fill = "group", color = "group")) +
@@ -381,14 +380,14 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 #' fold change values from different comparisons to add to the output table.
 #' @return ggplot2 object
 #' @examples
-#' data(humanSexDEedgeR)
+#' data(humanGender)
 #' library(DESeq2)
 #' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], design=~group)
+#' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
 #' dse <- DESeq(dse)
-#' res <- degResults(dds=dse, name="test", org=NULL,
-#' do_go=FALSE, group="group", xs="group", path_results = NULL)
+#' res <- degResults(dds = dse, name = "test", org = NULL,
+#'   do_go = FALSE, group = "group", xs = "group", path_results = NULL)
 #' @export
 degResults <- function(res=NULL, dds, rlogMat=NULL, name,
                                 org=NULL, FDR=0.05, do_go=FALSE,
@@ -501,12 +500,13 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' @param shape character if given, column in metadata to shape points
 #' @author Lorena Pantano, Rory Kirchner, Michael Steinbaugh
 #' @examples
-#' data(humanSexDEedgeR)
+#' data(humanGender)
 #' library(DESeq2)
-#' idx <- c(1:5, 75:80)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], design=~group)
-#' degPCA(log2(counts(dse)+0.5), colData(dse), condition="group", name="group", shape="group")
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#' colData(humanGender)[idx,], design=~group)
+#' degPCA(log2(counts(dse)+0.5), colData(dse),
+#'   condition="group", name="group", shape="group")
 #' @export
 degPCA <- function(counts, metadata, condition="condition",
                    pc1="PC1", pc2="PC2",
@@ -552,12 +552,12 @@ degPCA <- function(counts, metadata, condition="condition",
 #' @param yi number of component to plot in y-axis
 #' @return ggplot2 object
 #' @examples
-#' data(humanSexDEedgeR)
+#' data(humanGender)
 #' library(DESeq2)
 #' idx <- c(1:10, 75:85)
-#' dse <- DESeqDataSetFromMatrix(humanSexDEedgeR$counts[1:1000, idx],
-#' humanSexDEedgeR$samples[idx,], design=~group)
-#' degMDS(counts(dse), condition=colData(dse)$group)
+#' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' degMDS(counts(dse), condition=colData(dse)[["group"]])
 #' @export
 degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     if (d=="euclidian"){
@@ -625,20 +625,20 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' with the clusters they belong. \code{pass_to_plot} is a vector
 #' of the clusters that pass the \code{minc} cutoff.
 #' @examples
-#' data(humanSexDEedgeR)
-#' ma <- humanSexDEedgeR$counts[1:100,]
-#' des <- data.frame(row.names=colnames(ma),
-#' group=as.factor(humanSexDEedgeR$samples$group))
-#' res <- degPatterns(ma, des, time="group", col=NULL)
+#' data(humanGender)
+#' library(SummarizedExperiment)
+#' ma <- assays(humanGender)[[1]][1:100,]
+#' des <- colData(humanGender)
+#' res <- degPatterns(ma, des, time="group")
 #' @export
-degPatterns = function(ma, metadata, minc=15, summarize="group",
-                       time="time", col="condition",
-                       reduce=FALSE,  cutoff=0.70,
+degPatterns = function(ma, metadata, minc=15, summarize="merge",
+                       time="time", col=NULL,
+                       reduce=FALSE, cutoff=0.70,
                        scale=TRUE, plot=TRUE, fixy=NULL){
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
     if (is.null(col)){
-        col = "condition"
+        col = "colored"
         metadata[,col] = rep("one_group", nrow(metadata))
     }
     if (!summarize %in% names(metadata))
@@ -669,7 +669,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
                            reduce = reduce,
                            cutoff = cutoff)
 
-    if (scale) 
+    if (scale)
         norm_sign = t(apply(counts_group, 1, .scale))
     else norm_sign = counts_group
 
@@ -689,11 +689,12 @@ degPatterns = function(ma, metadata, minc=15, summarize="group",
     all <- NULL
     if (length(plots) < 3)
         nc = length(plots)
-    if (length(plots)>0){
-        all <- plot_grid(plotlist = plots, ncol=nc)
-        print(all)}
+    if (length(plots) > 0){
+        all <- plot_grid(plotlist = plots, ncol = nc)
+        print(all)
+    }
 
-    list(df = data.frame(genes = names(groups),cluster = groups),
+    invisible(list(df = data.frame(genes = names(groups), cluster = groups),
          pass = to_plot, plot = all, hr = as.hclust(cluster_genes),
-         profile = counts_group)
+         profile = counts_group))
 }
