@@ -8,7 +8,7 @@
 [![BioC Downloads](http://bioconductor.org//shields/downloads/DEGreport.svg)](http://bioconductor.org/packages/3.6/bioc/html/DEGreport.html)
 [![coverage](https://img.shields.io/codecov/c/github/lpantano/DEGreport/master.svg)](https://codecov.io/github/lpantano/DEGreport?branch=master)
 
-QCs, figures and analyses after differential expression analysis.
+QCs, figures and analyses after differential expression with DESeq2 or other similar tool.
 
 Pantano L (2017). DEGreport: Report of DEG analysis. R package version 1.13.8.
 
