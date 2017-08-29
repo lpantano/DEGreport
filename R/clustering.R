@@ -79,7 +79,7 @@
                           reduce=FALSE, cutoff=0.30){
     select <- cutree(as.hclust(c), h = c$dc)
     select <- select[select %in% names(table(select))[table(select) > minc]]
-    cat("\n\n Working with ", length(select), "genes after filtering: minc > ",minc,"\n\n")
+    message("Working with ", length(select), "genes after filtering: minc > ",minc)
     if (reduce & length(unique(select) > 1) & ncol(counts_group) > 2)
         select <- .reduce(select, counts_group, cutoff)
     return(select)
@@ -530,10 +530,10 @@ degPCA <- function(counts, metadata, condition="condition",
         p <- p + geom_point(size=3)
     p +
         scale_color_brewer(palette = "Set1") +
-        xlab(paste0("PC1", ": ",
+        xlab(paste0(pc1, ": ",
                     round(pc[["percentVar"]][idx1] * 100),
                     "% variance")) +
-        ylab(paste0("PC2", ": ",
+        ylab(paste0(pc2, ": ",
                     round(pc[["percentVar"]][idx2] * 100),
                     "% variance")) +
         theme_minimal()
@@ -565,27 +565,31 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     }else if (d=="cor"){
         distances = as.dist((1-cor(counts))^2)
     }
-    fit = cmdscale(distances, eig=TRUE, k=k)
+    fit = cmdscale(distances, eig = TRUE, k = k)
     eigs = data.frame(variance_explained=fit$eig / sum(fit$eig))
-    xnames = paste0("PC",1:k," ",round(eigs[1:k,1]*100,digits=2),"%")
+    xnames = paste0("PC", 1:k, " ", round(eigs[1:k,1]*100,digits=2), "%")
     df = as.data.frame(fit$points[,c(xi,yi)])
     names(df) = c("one", "two")
     df$label = rownames(df)
     if(!is.null(condition)) {
         df$condition = condition
-        p = ggplot(df, aes(one, two, label=label, color=condition)) +
-            geom_text(aes(one, two, label=label), size=3) +
-            labs(list(x=xnames[xi],y=xnames[yi])) +
-            scale_x_continuous(expand=c(0.3, 0.3))
+        p = ggplot(df, aes_string("one", "two",
+                                  label = "label", color = "condition")) +
+            geom_text(aes_string("one", "two",
+                                 label = "label"), size = 3) +
+            labs(list(x = xnames[xi], y = xnames[yi])) +
+            scale_x_continuous(expand = c(0.3, 0.3))
     }
     else {
-        p = ggplot(df, aes(one, two)) +
-            geom_text(aes(one, two, label=label), size=3) +
-            labs(list(x=xnames[xi],y=xnames[yi])) + scale_x_continuous(expand=c(0.3, 0.3))
+        p = ggplot(df, aes_string("one", "two")) +
+            geom_text(aes_string("one", "two",
+                                 label = "label"), size = 3) +
+            labs(list(x = xnames[xi], y = xnames[yi])) +
+            scale_x_continuous(expand = c(0.3, 0.3))
 
     }
 
-    return(p + theme_bw())
+    p
 }
 
 
@@ -655,7 +659,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         message("Large number of genes given. Please,",
                 "make sure is not an error. Normally",
                 "Only DE genes are useful for this function.")
-    cat("\n\nWorking with ", nrow(ma), " genes \n\n")
+    message("Working with ", nrow(ma), " genes.")
     counts_group = t(sapply(rownames(ma), function(g){
         sapply(levels(metadata[,summarize]), function(i){
             idx = which(metadata[,summarize] == i)

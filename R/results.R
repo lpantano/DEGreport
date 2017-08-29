@@ -136,8 +136,8 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
                     limit = NULL,
                     diff = 5) {
     
-    res_unshrunken <- degTable(results, "raw")
-    res_shrunken <- degTable(results)
+    res_unshrunken <- deg(results, "raw")
+    res_shrunken <- deg(results)
     
     res_all <- rownames_to_column(as.data.frame(res_unshrunken),
                                   var = "ID") %>%

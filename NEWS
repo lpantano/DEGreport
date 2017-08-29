@@ -3,12 +3,16 @@ DEGreport News
 CHANGES IN DEGreport 1.13.10
     2017-08-28  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Fix: Change method names to short words.
+    Feature: degVolcano accepts DESeq2Results class.
+    Fix: degPCA print the correct PC number on x/ylabels.
+    Fix: Move NEWS to parent folder.
     Feature: Add method to get significant genes from DEGSet class.
     Feature: Add plotMA method to show shrunken effect. @vbarrera
-    Fix: Move to testthat for examples
-    Feature: Adding main class and methods to handle DEG output
-    Fix: axis in degPCA now show the values
-    Feature: Handle multiple contrasts/coefficient for DESeq2 results
+    Fix: Move to testthat for examples.
+    Feature: Adding main class and methods to handle DEG output.
+    Fix: axis in degPCA now show the values.
+    Feature: Handle multiple contrasts/coefficient for DESeq2 results.
     
 CHANGES IN DEGreport  1.13.7
     2017-08-08  Lorena Pantano <lorena.pantano@gmail.com>

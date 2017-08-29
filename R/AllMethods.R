@@ -13,18 +13,32 @@ setMethod("degDefault", signature("DEGSet"), function(object) {
 #'
 #' @inheritParams degDefault
 #' @param value Character to specify which table to use.
+#' @param tidy Return data.frame, tibble or original class.
+#' @param ... Other parameters to pass for other methods.
 #' @author Lorena Pantano
-#' @rdname degTable
+#' @rdname deg
 #' @export
-setMethod("degTable", signature("DEGSet"), function(object, value=NULL) {
-    if (is.null(value))
-        return(object[[degDefault(object)]])
-    if (value == "raw")
-        return(object[["raw"]])
-    if (value == "shrunk")
-        return(object[["shrunk"]])
-    stop(value, "not found.")
-})
+setMethod("deg", signature("DEGSet"),
+          function(object, value=NULL, tidy = NULL, ...) {
+              df <- NULL
+              if (is.null(value))
+                  df <- object[[degDefault(object)]]
+              else if (value == "raw")
+                  df <- object[["raw"]]
+              else if (value == "shrunk")
+                  df <- (object[["shrunk"]])
+              stopifnot(value %in% c(NULL,"raw", "shrunk"))
+              if (is.null(tidy))
+                  return(df %>% .[order(.[["padj"]]),])
+              if (tidy == "data.frame")
+                  return(as.data.frame(df) %>% .[order(.[["padj"]]),])
+              if (tidy == "tibble")
+                  return(as.data.frame(df) %>%
+                             rownames_to_column("gene") %>%
+                             .[order(.[["padj"]]),] %>%
+                             as_tibble)
+              stop("Not supported format, ", tidy)
+          })
 
 #' Method to get the significant genes
 #' 
@@ -36,11 +50,11 @@ setMethod("degTable", signature("DEGSet"), function(object, value=NULL) {
 #' @param padj Cutoff for the FDR column.
 #' @param fc Cutoff for the log2FC column.
 #' @param ... Passed to [degTable]. Default: value = NULL.
-#' @rdname degSign
+#' @rdname significants
 #' @export
-setMethod("degSign", signature("DEGSet"),
+setMethod("significants", signature("DEGSet"),
           function(object, padj = 0.05, fc = 0, ...){
-              df <-  as.data.frame(degTable(object, ...))
+              df <-  as.data.frame(deg(object, ...))
               filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
               df %>%
                   rownames_to_column("gene") %>%

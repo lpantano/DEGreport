@@ -53,6 +53,7 @@
 #' @importFrom scales trans_breaks trans_format math_format
 #' @importFrom tidyr spread
 #' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
+#'             as_tibble'
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap
 #' @importFrom reshape melt melt.data.frame
 #' @importFrom knitr kable

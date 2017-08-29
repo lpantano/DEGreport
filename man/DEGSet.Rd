@@ -23,6 +23,16 @@ Each element has the following structure:
 To access the raw table use `degTable(dgs, "raw")``, to access the 
 shrunken table use `degTable(dgs, "shrunk")`.
 }
+\examples{
+library(DESeq2)
+dds <- makeExampleDESeqDataSet(betaSD = 1)
+colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
+design(dds) <-  ~ condition + treatment
+dds <- DESeq(dds)
+res <- degComps(dds, combs = c("condition"))
+deg(res[[1]])
+deg(res[[1]], tidy = "tibble")
+}
 \author{
 Lorena Pantano
 }

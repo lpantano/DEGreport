@@ -1,14 +1,14 @@
-#' @rdname degTable
+#' @rdname deg
 #' @export
-setGeneric("degTable", function(object, value = NULL)
-    standardGeneric("degTable"))
+setGeneric("deg", function(object, ...)
+    standardGeneric("deg"))
 
 #' @rdname degDefault
 #' @export
 setGeneric("degDefault", function(object)
     standardGeneric("degDefault"))
 
-#' @rdname degSign
+#' @rdname significants
 #' @export
-setGeneric("degSign", function(object, ...)
-    standardGeneric("degSign"))
+setGeneric("significants", function(object, ...)
+    standardGeneric("significants"))
