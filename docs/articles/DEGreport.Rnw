@@ -1,0 +1,209 @@
+%\VignetteIndexEntry{DEGreport}
+%\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+<<knitr, echo=FALSE, results="hide">>=
+library("knitr")
+opts_chunk$set(tidy=FALSE,
+               fig.width=9,fig.height=5,
+               message=FALSE)
+@ 
+
+
+<<style, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+\title{DEGreport }
+\author{Lorena Pantano}
+\date{Modified: 2 July, 2016. Compiled: \today}
+
+\begin{document}
+maketitle
+\tableofcontents
+\newpage
+
+<<package-load,message=FALSE>>=
+library(DEGreport)
+data(humanGender)
+@
+
+\section{General QC figures from DE analysis}
+
+We are going to do a differential expression analysis with edgeR/DESeq2.
+We have an object that is comming from the edgeR package. 
+It countains a gene count matrix
+for 85 TSI HapMap individuals, and the gender information. With that, we are 
+going to apply the `glmFit` function or `DESeq2` to get genes differentially expressed 
+between males and females.
+
+<<chunk-1>>=
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+                              colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
+@
+
+We need to extract the experiment design data.frame where the condition is 
+Male or Female.
+
+<<chunk-2>>=
+counts <- counts(dds, normalized = TRUE)
+design <- as.data.frame(colData(dds))
+@
+
+\subsection{Size factor QC}
+
+A main assumption in library size factor calculation of edgeR and DESeq2 (and others)
+is that the majority of genes remain unchanged. Plotting the distribution
+of gene ratios between each gene and the average gene can show how true this is.
+Not superuseful for many samples because the plot becomes crowed.
+
+<<chunk-size-factor>>=
+degCheckFactors(counts[, 1:6])
+@
+
+
+\subsection{Mean-Variance QC plots}
+
+p-value distribution gives an idea on how well you model is capturing the input data
+and as well whether it could be some problem for some set of genes. In general,
+you expect to have a flat distribution with peaks at 0 and 1. In this case, we add
+the mean count information to check if any set of genes are enriched in any
+specific p-value range.
+
+Variation (dispersion) and average expresion relationship shouldn't be a factor among
+the differentialy expressed genes. When plotting average mean and standard desviation,
+significant genes should be randomly distributed.
+
+In this case, it would be good to look at the ones that are totally outside the expected 
+correlation.
+
+You can put this tree plots together using \Rcode{degQC}.
+
+<<chunk-qc>>=
+degQC(res[["pvalue"]], counts, design[["group"]])
+@
+
+
+\subsection{Covariates effect on count data}
+
+Another important analysis to do if you have covariates is to calculcate
+the correlation between PCs from PCA analysis to different variables you may
+think are affecting the gene expression. This is a toy example of how the
+function works with raw data, where clearly library size correlates with 
+some of the PCs.
+
+<<chunk-covariates>>=
+resCov <- degCovariates(log2(counts(dds)+0.5),
+                        colData(dds))
+resCov$plot
+@
+
+
+\subsection{Covariates correlation with metrics}
+
+Also, the correlation among covariates and metrics from the analysis can
+be tested. This is useful when the study has multiple variables, like in
+clinical trials. The following code will return a correlation table, and
+plot the correlation heatmap for all the covariates and metrics in a table.
+
+<<chunk-cor-covariates>>=
+cor <- degCorCov(colData(dds))
+names(cor)
+@
+
+
+\section{Report from DESeq2 analysis}
+
+Here, we show some useful plots for differentially expressed genes.
+
+\subsection{Volcano plots}
+
+Volcano plot using the output of DESeq2. It mainly needs data.frame with
+two columns (logFC and pVal). Specific genes can be plot using the option
+\Rcode{plot\_text} (subset of the previous data.frame with a 3rd column to be used
+to plot the gene name).
+
+<<deseq2-volcano>>=
+res[["id"]] <- row.names(res)
+# show <- as.data.frame(res[1:10, c("log2FoldChange", "padj", "id")])
+degVolcano(res[,c("log2FoldChange", "padj")])
+@
+
+\subsection{Gene plots}
+
+Plot top genes coloring by group. Very useful for experiments with nested 
+groups. `xs` can be `time` or `WT`/`KO`, and `group` can be `treated`/`untreated`.
+Another classification can be added, like `batch` that will plot points 
+with different shapes.
+
+<<deseq2-gene-plots>>=
+degPlot(dds = dds, res = res, n = 6, xs = "group")
+@
+
+Another option for plotting genes in a wide format:
+
+<<deseq2-gene-plot-wide>>=
+degPlotWide(dds, rownames(dds)[1:5], group="group")
+@
+
+\subsection{Full report}
+
+If you have a DESeq2 object, you can use degResults to create a full report
+with markdown code inserted,
+including figures and tbale with top de-regulated genes, GO enrichment
+analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
+different files will be saved there.
+
+<<deseq2>>=
+resreport <- degResults(dds = dds, name = "test", org = NULL,
+                        do_go = FALSE, group = "group", xs = "group",
+                        path_results = NULL)
+@
+
+\subsection{Interactive shiny-app}
+
+Browsing gene expression can help to validate results or select some gene
+for donwstream analysis. Run the fowlling lines if you want to visualize
+your expression values by condition:
+
+<<chunk-shiny, eval=FALSE>>=
+degObj(counts, design, "degObj.rda")
+library(shiny)
+shiny::runGitHub("lpantano/shiny", subdir="expression")
+@
+
+\section{Detect patterns of expression}
+
+In this section, we show how to detect pattern of expression. Mainly useful when
+data is a time course experiment. \Rfunction{degPatterns} needs a expression
+matrix, the design experiment and the column used to group samples.
+
+<<pattern>>=
+ma = assay(rlog(dds))[row.names(res)[1:100],]
+res <- degPatterns(ma, design, time = "group", col=NULL)
+@
+
+\section{Useful functions}
+
+This section shows some useful functions during DEG analysis.
+
+\Rfunction{degFilter} helps to filter genes with a minimum read count by group.
+
+<<chunk-filter>>=
+cat("gene in original count matrix: 1000")
+filter_count <- degFilter(counts(dds),
+                          design, "group",
+                          min=1, minreads = 50)
+cat("gene in final count matrix", nrow(filter_count))
+@
+
+
+
+\end{document}
