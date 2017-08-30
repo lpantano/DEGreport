@@ -8,7 +8,7 @@
 \usage{
 deg(object, ...)
 
-\S4method{deg}{DEGSet}(object, value = NULL, tidy = NULL, ...)
+\S4method{deg}{DEGSet}(object, value = NULL, tidy = NULL, top = NULL, ...)
 }
 \arguments{
 \item{object}{[DEGSet]}
@@ -18,9 +18,15 @@ deg(object, ...)
 \item{value}{Character to specify which table to use.}
 
 \item{tidy}{Return data.frame, tibble or original class.}
+
+\item{top}{Limit number of rows to return. Default: All.}
 }
 \description{
 Method to get all table stored for an specific comparison
+}
+\references{
+* Testing it `top` is whole number or not comes from:
+  https://stackoverflow.com/a/3477158
 }
 \author{
 Lorena Pantano

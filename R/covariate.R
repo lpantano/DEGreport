@@ -216,8 +216,9 @@ degClean <- function(ma){
 #'
 #' @param metadata data.frame with samples metadata.
 #' @param fdr numeric value to use as cutoff to determine
-#' the minimum fdr to consider significant correlations
-#' between pcs and covariates.
+#'   the minimum fdr to consider significant correlations
+#'   between pcs and covariates.
+#' @param ... Parameters to pass to [ComplexHeatmap::Heatmap()].
 #'
 #' @return: list:
 #' a) cor, data.frame with pair-wise correlations, pvalues, FDR
@@ -232,7 +233,7 @@ degClean <- function(ma){
 #'   colData(humanGender)[idx,], design=~group)
 #' cor <- degCorCov(colData(dse))
 #' @export
-degCorCov <- function(metadata, fdr=0.05){
+degCorCov <- function(metadata, fdr=0.05, ...){
     clean <- degClean(metadata) %>%
         mutate_all(as.numeric)
     cor = .calccompletecorandplot(clean,
@@ -251,7 +252,7 @@ degCorCov <- function(metadata, fdr=0.05){
     # corMat[fdrMat > 0.05] <- NA
     cols <- colorRampPalette(c("steelblue", "white", "orange"))(10)
     if (sum(!is.na(corMat)) > 2) {
-        p <- Heatmap(corMat, col = cols)
+        p <- Heatmap(corMat, col = cols, ...)
         print(p)
 
     }

@@ -3,6 +3,8 @@ DEGreport News
 CHANGES IN DEGreport 1.13.10
     2017-08-28  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Feature: Pass options to Heatmap in degCorCov.
+    Feature: Add parameter to select top rows from DEGset.
     Fix: Change method names to short words.
     Feature: degVolcano accepts DESeq2Results class.
     Fix: degPCA print the correct PC number on x/ylabels.

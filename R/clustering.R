@@ -79,7 +79,7 @@
                           reduce=FALSE, cutoff=0.30){
     select <- cutree(as.hclust(c), h = c$dc)
     select <- select[select %in% names(table(select))[table(select) > minc]]
-    message("Working with ", length(select), "genes after filtering: minc > ",minc)
+    message("Working with ", length(select), " genes after filtering: minc > ",minc)
     if (reduce & length(unique(select) > 1) & ncol(counts_group) > 2)
         select <- .reduce(select, counts_group, cutoff)
     return(select)

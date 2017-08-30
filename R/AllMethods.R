@@ -14,13 +14,18 @@ setMethod("degDefault", signature("DEGSet"), function(object) {
 #' @inheritParams degDefault
 #' @param value Character to specify which table to use.
 #' @param tidy Return data.frame, tibble or original class.
+#' @param top Limit number of rows to return. Default: All.
 #' @param ... Other parameters to pass for other methods.
 #' @author Lorena Pantano
 #' @rdname deg
+#' @references  
+#' * Testing it `top` is whole number or not comes from:
+#'   https://stackoverflow.com/a/3477158
 #' @export
 setMethod("deg", signature("DEGSet"),
-          function(object, value=NULL, tidy = NULL, ...) {
+          function(object, value=NULL, tidy = NULL, top = NULL, ...) {
               df <- NULL
+
               if (is.null(value))
                   df <- object[[degDefault(object)]]
               else if (value == "raw")
@@ -28,14 +33,22 @@ setMethod("deg", signature("DEGSet"),
               else if (value == "shrunk")
                   df <- (object[["shrunk"]])
               stopifnot(value %in% c(NULL,"raw", "shrunk"))
+              
+              if (is.null(top))
+                  top <- nrow(df)
+              stopifnot(top%%1 == 0)
+              
               if (is.null(tidy))
-                  return(df %>% .[order(.[["padj"]]),])
+                  return(df %>% .[order(.[["padj"]]),] %>%
+                             .[1:top,])
               if (tidy == "data.frame")
-                  return(as.data.frame(df) %>% .[order(.[["padj"]]),])
+                  return(as.data.frame(df) %>% .[order(.[["padj"]]),] %>%
+                             .[1:top,])
               if (tidy == "tibble")
                   return(as.data.frame(df) %>%
                              rownames_to_column("gene") %>%
                              .[order(.[["padj"]]),] %>%
+                             .[1:top,] %>%
                              as_tibble)
               stop("Not supported format, ", tidy)
           })
