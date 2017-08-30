@@ -28,7 +28,6 @@
 #' @import ggplot2
 #' @import utils
 #' @import Nozzle.R1
-#' @import coda
 #' @import edgeR
 #' @import cluster
 #' @import logging
@@ -58,5 +57,6 @@
 #' @importFrom reshape melt melt.data.frame
 #' @importFrom knitr kable
 #' @importFrom methods new slot
+#' @importFrom rlang sym
 #' 
 "_PACKAGE"

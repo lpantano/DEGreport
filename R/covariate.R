@@ -236,27 +236,28 @@ degClean <- function(ma){
 degCorCov <- function(metadata, fdr=0.05, ...){
     clean <- degClean(metadata) %>%
         mutate_all(as.numeric)
-    cor = .calccompletecorandplot(clean,
+    cor <- .calccompletecorandplot(clean,
                                       clean,
                                       "kendall",
                                       "",
                                       weights = 1L)
     cor
-    corMat <- cor$mat[, c("r", "compare", "covar")] %>%
-        spread(compare, r) %>% remove_rownames() %>%
+    corMat <- cor[["mat"]][, c("r", "compare", "covar")] %>%
+        spread(!!sym("compare"), !!sym("r")) %>% remove_rownames() %>%
         column_to_rownames("covar")
-    fdrMat <- cor$mat[, c("fdr", "compare", "covar")] %>%
+    fdrMat <- cor[["mat"]][, c("fdr", "compare", "covar")] %>%
         spread(compare, fdr) %>% remove_rownames() %>%
         column_to_rownames("covar")
     corMat[fdrMat > fdr] <- 0
     # corMat[fdrMat > 0.05] <- NA
     cols <- colorRampPalette(c("steelblue", "white", "orange"))(10)
     if (sum(!is.na(corMat)) > 2) {
-        p <- Heatmap(corMat, col = cols, ...)
+        p <- Heatmap(corMat, col = cols, name = "cor-value",
+                     row_dend_reorder = FALSE, column_dend_reorder = FALSE, ...)
         print(p)
 
     }
-    invisible(list(cor = cor$mat, corMat = corMat,
+    invisible(list(cor = cor[["mat"]], corMat = corMat,
                    fdrMat = fdrMat, plot = p))
 
 }

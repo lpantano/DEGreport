@@ -29,7 +29,6 @@ Imports:
     cowplot,
     ggrepel,
     Nozzle.R1,
-    coda,
     edgeR,
     cluster,
     logging,
@@ -42,7 +41,8 @@ Imports:
     grDevices,
     scales,
     stats,
-    psych
+    psych,
+    rlang
 Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 
   role = c("aut", "cre")),
   person("John", "Hutchinson", email = "@jnhutchinson", role = c("ctb")),
