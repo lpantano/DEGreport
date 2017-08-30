@@ -1,4 +1,4 @@
-#' DEGSet class
+#' DEGSet
 #' 
 #' S4 class to store data from differentially expression analysis.
 #' It should be compatible with different package and stores the information
@@ -30,7 +30,7 @@
 #' deg(res[[1]])
 #' deg(res[[1]], tidy = "tibble")
 #' @export
-DEGResults <- setClass("DEGSet",
+DEGSet <- setClass("DEGSet",
                           contains = "list",
                           slots = c(default = "character"))
 

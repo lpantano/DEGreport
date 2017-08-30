@@ -3,8 +3,7 @@
 \docType{class}
 \name{DEGSet}
 \alias{DEGSet}
-\alias{DEGResults}
-\title{DEGSet class}
+\title{DEGSet}
 \description{
 S4 class to store data from differentially expression analysis.
 It should be compatible with different package and stores the information
