@@ -11,7 +11,7 @@ degFilter(counts, metadata, group, min = 0.8, minreads = 0)
 and rows are genes or other feature.}
 
 \item{metadata}{Data.frame with information about
-  each column in counts matrix. Rownames should match
+each column in counts matrix. Rownames should match
 \code{colnames(counts)}.}
 
 \item{group}{Character column in metadata used to
@@ -21,12 +21,12 @@ group samples and applied the cutoff.}
 number of samples in each group that should have
 more than 0 in count matrix.}
 
-\item{minreads}{Integer minimum number of reads to consider 
+\item{minreads}{Integer minimum number of reads to consider
 a feature expressed.}
 }
 \value{
 count \code{matrix} after filtering genes (features)
-  with not enough expression in any group.
+with not enough expression in any group.
 }
 \description{
 This function will keep only rows that have a minimum counts of

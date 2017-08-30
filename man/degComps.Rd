@@ -2,37 +2,39 @@
 % Please edit documentation in R/results.R
 \name{degComps}
 \alias{degComps}
-\title{Automatize the use of `results()` for multiple comparisons}
+\title{Automatize the use of \code{results()} for multiple comparisons}
 \usage{
 degComps(dds, combs = NULL, contrast = NULL, alpha = 0.05,
   pairs = FALSE)
 }
 \arguments{
-\item{dds}{[DESeq2::DESeqDataSet] obcject.}
+\item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} obcject.}
 
 \item{combs}{Optional vector indicating the coefficients or columns
-fom `colData(dds)` to create group comparisons.}
+fom \code{colData(dds)} to create group comparisons.}
 
-\item{contrast}{Optional vector to specify contrast. See [DESeq2::results()].}
+\item{contrast}{Optional vector to specify contrast. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
 
-\item{alpha}{Numeric value used in independent filtering in [DESeq2::results()].}
+\item{alpha}{Numeric value used in independent filtering in \code{\link[DESeq2:results]{DESeq2::results()}}.}
 
 \item{pairs}{Boolean to indicate whether create all comparisons or only
-use the coefficient already created from [DESeq2::resultsNames()].}
+use the coefficient already created from \code{\link[DESeq2:resultsNames]{DESeq2::resultsNames()}}.}
 }
 \value{
-[DEGSet] with unSrunken and Srunken results.
+\link{DEGSet} with unSrunken and Srunken results.
 }
 \description{
-This function will extract the output of [DEseq2::results()]
-and [DESeq2::lcfSrink()] for multiple comparison using:
+This function will extract the output of \code{\link[DEseq2:results]{DEseq2::results()}}
+and \code{\link[DESeq2:lcfSrink]{DESeq2::lcfSrink()}} for multiple comparison using:
 }
 \details{
-* coefficients
-* contrast
-* Multiple columns in `colData` that match coefficients
-* Multiple columns in `colData` to create all possible
+\itemize{
+\item coefficients
+\item contrast
+\item Multiple columns in \code{colData} that match coefficients
+\item Multiple columns in \code{colData} to create all possible
 contrasts
+}
 }
 \examples{
 library(DESeq2)

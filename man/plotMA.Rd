@@ -10,9 +10,9 @@
   label_column = "symbol", limit = NULL, diff = 5, ...)
 }
 \arguments{
-\item{object}{[DESeqResults] or a data frame of DESeqResults.}
+\item{object}{\link{DESeqResults} or a data frame of DESeqResults.}
 
-\item{title}{*Optional*. Plot title.}
+\item{title}{\emph{Optional}. Plot title.}
 
 \item{label_points}{Optionally label these particular points.}
 
@@ -26,7 +26,7 @@ after shrinking.}
 \item{...}{Optional parameters to pass.}
 }
 \value{
-MA-plot [ggplot].
+MA-plot \link{ggplot}.
 }
 \description{
 MA-plot addaptation to show the shrinking effect.

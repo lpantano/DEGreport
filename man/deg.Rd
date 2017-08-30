@@ -11,7 +11,7 @@ deg(object, ...)
 \S4method{deg}{DEGSet}(object, value = NULL, tidy = NULL, top = NULL, ...)
 }
 \arguments{
-\item{object}{[DEGSet]}
+\item{object}{\link{DEGSet}}
 
 \item{...}{Other parameters to pass for other methods.}
 
@@ -25,8 +25,10 @@ deg(object, ...)
 Method to get all table stored for an specific comparison
 }
 \references{
-* Testing it `top` is whole number or not comes from:
-  https://stackoverflow.com/a/3477158
+\itemize{
+\item Testing it \code{top} is whole number or not comes from:
+https://stackoverflow.com/a/3477158
+}
 }
 \author{
 Lorena Pantano

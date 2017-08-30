@@ -18,7 +18,7 @@ same order than counts column names.}
 ggplot2 object
 }
 \description{
-This function joins the output of \code{\link[DEGreport]{degMean}}, 
+This function joins the output of \code{\link[DEGreport]{degMean}},
 \code{\link[DEGreport]{degVar}} and \code{\link[DEGreport]{degMV}} in a
 single plot. See these functions for further information.
 }

@@ -1,8 +1,8 @@
 #' Plot top genes allowing more variables to color and shape points
 #'
-#' @param dds \link[DESeq2]{DESeqDataSet} object or SummarizedExperiment
+#' @param dds [DESeq2]{DESeqDataSet} object or SummarizedExperiment
 #'   or Matrix or data.frame.
-#' @param res \link[DESeq2]{DESeqResults} object.
+#' @param res [DESeq2]{DESeqResults} object.
 #' @param n Integer number of genes to plot.
 #' @param genes Character of gene names matching rownames of count data.
 #' @param xs Character, colname in colData that will be used as X-axes.
@@ -103,12 +103,12 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
 
 #' Plot selected genes on a wide format
 #'
-#' @param counts \link[DESeq2]{DESeqDataSet} object or expression matrix
+#' @param counts [DESeq2]{DESeqDataSet} object or expression matrix
 #' @param genes character genes to plot.
 #' @param group character, colname in colData to color points and add different
 #' lines for each level
 #' @param metadata data.frame, information for each sample. Not needed if
-#' \link[DESeq2]{DESeqDataSet} given as counts.
+#' [DESeq2]{DESeqDataSet} given as counts.
 #' @param batch character, colname in colData to shape points, normally used by
 #' batch effect visualization
 #' @return ggplot showing the expresison of the genes on the x

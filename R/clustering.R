@@ -208,7 +208,7 @@
 #' The simplest case is if you want to convine the pattern profile
 #' for gene expression data and proteomic data. It will use the first element
 #' as the base for the integration. Then, it will loop through clusters
-#' and run \link{degPatterns} in the second data set to detect patterns that match
+#' and run [degPatterns] in the second data set to detect patterns that match
 #' this one.
 #' @param matrix_list list expression data for each element
 #' @param cluster_list list df item from degPattern output
@@ -361,9 +361,9 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 
 #' Complete report from DESeq2 analysis
 #'
-#' @param res  output from \link[DESeq2]{results} function.
-#' @param dds  \link[DESeq2]{DESeqDataSet} object.
-#' @param rlogMat matrix from \link[DESeq2]{rlog} function.
+#' @param res  output from [DESeq2]{results} function.
+#' @param dds  [DESeq2]{DESeqDataSet} object.
+#' @param rlogMat matrix from [DESeq2]{rlog} function.
 #' @param name string to identify results
 #' @param org an organism annotation object, like org.Mm.eg.db.
 #' NULL if you want to skip this step.
@@ -617,7 +617,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @param scale boolean scale the \code{ma} values by row
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
-#' @details It would be used \link[cluster]{diana} function
+#' @details It would be used [cluster]{diana} function
 #' to detect a value to cut the expression based clustering
 #' at certain height. It can work with one or more groups with 2 or
 #' more several time points. The different patterns can be merged

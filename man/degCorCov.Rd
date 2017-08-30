@@ -14,7 +14,7 @@ degCorCov(metadata, fdr = 0.05, ...)
 the minimum fdr to consider significant correlations
 between pcs and covariates.}
 
-\item{...}{Parameters to pass to [ComplexHeatmap::Heatmap()].}
+\item{...}{Parameters to pass to \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap()}}.}
 }
 \value{
 : list:

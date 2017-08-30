@@ -30,9 +30,9 @@ correlation between pcs and covariates.}
 a) significantCovars, covariates with FDR below the cutoff.
 b) plot, heatmap of the correlation found.
 c) corMatrix, correlation, p-value, FDR values
-   for each covariate and PCA pais
+for each covariate and PCA pais
 d) effectsSignificantcovars: that is PCs % * absolute
-   correlation between covariate and PCs,
+correlation between covariate and PCs,
 e) pcsMatrix: PCs loading for each sample
 }
 \description{

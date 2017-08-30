@@ -11,17 +11,17 @@ It should be compatible with different package and stores the information
 in a way the methods will work with all of them.
 }
 \details{
-For now supporting only [DESeq2::results()] output.
-Use constructor [degComps()] to create the object.
+For now supporting only \code{\link[DESeq2:results]{DESeq2::results()}} output.
+Use constructor \code{\link[=degComps]{degComps()}} to create the object.
 
 The list will contain one element for each comparison done.
 Each element has the following structure:
+\itemize{
+\item DEG table
+\item Optional table with shrunk Fold Change when it has been done.
+}
 
-* DEG table
-* Optional table with shrunk Fold Change when it has been done.
-
-To access the raw table use `degTable(dgs, "raw")``, to access the 
-shrunken table use `degTable(dgs, "shrunk")`.
+To access the raw table use \code{degTable(dgs, "raw")``, to access the shrunken table use}degTable(dgs, "shrunk")`.
 }
 \examples{
 library(DESeq2)

@@ -11,7 +11,7 @@ degDefault(object)
 \S4method{degDefault}{DEGSet}(object)
 }
 \arguments{
-\item{object}{[DEGSet]}
+\item{object}{\link{DEGSet}}
 }
 \description{
 Method to get the default table to use.

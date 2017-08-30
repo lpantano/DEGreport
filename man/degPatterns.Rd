@@ -51,7 +51,7 @@ of the clusters that pass the \code{minc} cutoff.
 Make groups of genes using expression profile
 }
 \details{
-It would be used \link[cluster]{diana} function
+It would be used \link{cluster}{diana} function
 to detect a value to cut the expression based clustering
 at certain height. It can work with one or more groups with 2 or
 more several time points. The different patterns can be merged

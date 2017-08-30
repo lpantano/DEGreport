@@ -3,7 +3,7 @@
 \name{degObj}
 \alias{degObj}
 \title{Create a deg object that can be used to plot expression values
-    at shiny server:runGist(9930881)}
+at shiny server:runGist(9930881)}
 \usage{
 degObj(counts, design, outfile)
 }
@@ -19,7 +19,7 @@ R object to be load into vizExp.
 }
 \description{
 Create a deg object that can be used to plot expression values
-    at shiny server:runGist(9930881)
+at shiny server:runGist(9930881)
 }
 \examples{
 data(humanGender)

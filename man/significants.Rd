@@ -11,9 +11,9 @@ significants(object, ...)
 \S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0, ...)
 }
 \arguments{
-\item{object}{[DEGSet]}
+\item{object}{\link{DEGSet}}
 
-\item{...}{Passed to [degTable]. Default: value = NULL.}
+\item{...}{Passed to \link{degTable}. Default: value = NULL.}
 
 \item{padj}{Cutoff for the FDR column.}
 
@@ -21,7 +21,7 @@ significants(object, ...)
 }
 \description{
 Function to get the features that are significant
-according to some thresholds from a [DEGSet] class.
+according to some thresholds from a \link{DEGSet} class.
 }
 \author{
 Lorena Pantano

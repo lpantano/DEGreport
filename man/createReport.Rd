@@ -12,7 +12,7 @@ createReport(g1, g2, counts, tags, pvalues, fc, path, colors = "",
 
 \item{g2}{group 2}
 
-\item{counts}{matrix with counts for each samples and each gene. 
+\item{counts}{matrix with counts for each samples and each gene.
 Should be same length than pvalues vector.}
 
 \item{tags}{genes of DEG analysis}
@@ -35,7 +35,7 @@ Should be same length than pvalues vector.}
 create a html file with all figures and tables
 }
 \description{
-This function get the count matrix, pvalues, and FC of a 
-DEG analysis and create a report to help to detect possible problems 
-    with the data.
+This function get the count matrix, pvalues, and FC of a
+DEG analysis and create a report to help to detect possible problems
+with the data.
 }
