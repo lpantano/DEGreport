@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DEGSet class — DEGSet-class • DEGreport</title>
+<title>DEGSet class — DEGSet • DEGreport</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -87,14 +87,14 @@ in a way the methods will work with all of them.</p>
         
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For now supporting only [DESeq2::results()] output.
-Use constructor [degComps()] to create the object.</p>
+    <p>For now supporting only <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::results()</a></code> output.
+Use constructor <code><a href='degComps.html'>degComps()</a></code> to create the object.</p>
 <p>The list will contain one element for each comparison done.
-Each element has the following structure:</p>
-<p>* DEG table
-* Optional table with shrunk Fold Change when it has been done.</p>
-<p>To access the raw table use `degTable(dgs, "raw")``, to access the 
-shrunken table use `degTable(dgs, "shrunk")`.</p>
+Each element has the following structure:</p><ul>
+<li><p>DEG table</p></li>
+<li><p>Optional table with shrunk Fold Change when it has been done.</p></li>
+</ul>
+    <p>To access the raw table use <code>deg(dgs, "raw")``, to access the shrunken table use</code>deg(dgs, "shrunk")`.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

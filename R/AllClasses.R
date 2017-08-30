@@ -14,10 +14,11 @@
 #' * DEG table
 #' * Optional table with shrunk Fold Change when it has been done.
 #' 
-#' To access the raw table use `degTable(dgs, "raw")``, to access the 
-#' shrunken table use `degTable(dgs, "shrunk")`. 
+#' To access the raw table use `deg(dgs, "raw")``, to access the 
+#' shrunken table use `deg(dgs, "shrunk")`. 
 #' 
 #' @rdname DEGSet
+#' @name DEGSet
 #' @author Lorena Pantano
 #' @examples
 #' library(DESeq2)

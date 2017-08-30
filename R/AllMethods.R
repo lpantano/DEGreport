@@ -62,7 +62,7 @@ setMethod("deg", signature("DEGSet"),
 #' @inheritParams degDefault
 #' @param padj Cutoff for the FDR column.
 #' @param fc Cutoff for the log2FC column.
-#' @param ... Passed to [degTable]. Default: value = NULL.
+#' @param ... Passed to [deg]. Default: value = NULL.
 #' @rdname significants
 #' @export
 setMethod("significants", signature("DEGSet"),
@@ -85,7 +85,7 @@ setMethod("significants", signature("DEGSet"),
 #' @author Rory Kirchner
 #' @author Lorena Pantano
 #' 
-#' @param object [DESeqResults] or a data frame of DESeqResults.
+#' @param object [DEGSet] class.
 #' @param title *Optional*. Plot title.
 #' @param label_points Optionally label these particular points.
 #' @param label_column Match label_points to this column in the results.

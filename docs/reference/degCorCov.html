@@ -85,7 +85,7 @@ in the metadata table</h1>
 all columns in the metadata</p>
     
 
-    <pre class="usage"><span class='fu'>degCorCov</span>(<span class='no'>metadata</span>, <span class='kw'>fdr</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</pre>
+    <pre class="usage"><span class='fu'>degCorCov</span>(<span class='no'>metadata</span>, <span class='kw'>fdr</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -99,6 +99,10 @@ all columns in the metadata</p>
       <td><p>numeric value to use as cutoff to determine
 the minimum fdr to consider significant correlations
 between pcs and covariates.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Parameters to pass to <code><a href='http://www.rdocumentation.org/packages/ComplexHeatmap/topics/Heatmap'>ComplexHeatmap::Heatmap()</a></code>.</p></td>
     </tr>
     </table>
     

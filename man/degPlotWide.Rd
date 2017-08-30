@@ -7,7 +7,7 @@
 degPlotWide(counts, genes, group, metadata = NULL, batch = NULL)
 }
 \arguments{
-\item{counts}{\link{DESeq2}{DESeqDataSet} object or expression matrix}
+\item{counts}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or expression matrix}
 
 \item{genes}{character genes to plot.}
 
@@ -15,7 +15,7 @@ degPlotWide(counts, genes, group, metadata = NULL, batch = NULL)
 lines for each level}
 
 \item{metadata}{data.frame, information for each sample. Not needed if
-\link{DESeq2}{DESeqDataSet} given as counts.}
+\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} given as counts.}
 
 \item{batch}{character, colname in colData to shape points, normally used by
 batch effect visualization}

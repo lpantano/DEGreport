@@ -13,7 +13,7 @@ significants(object, ...)
 \arguments{
 \item{object}{\link{DEGSet}}
 
-\item{...}{Passed to \link{degTable}. Default: value = NULL.}
+\item{...}{Passed to \link{deg}. Default: value = NULL.}
 
 \item{padj}{Cutoff for the FDR column.}
 

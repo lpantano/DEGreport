@@ -24,8 +24,8 @@ use the coefficient already created from \code{\link[DESeq2:resultsNames]{DESeq2
 \link{DEGSet} with unSrunken and Srunken results.
 }
 \description{
-This function will extract the output of \code{\link[DEseq2:results]{DEseq2::results()}}
-and \code{\link[DESeq2:lcfSrink]{DESeq2::lcfSrink()}} for multiple comparison using:
+This function will extract the output of \code{\link[DESeq2:results]{DESeq2::results()}}
+and \code{\link[DESeq2:lfcShrink]{DESeq2::lfcShrink()}} for multiple comparison using:
 }
 \details{
 \itemize{

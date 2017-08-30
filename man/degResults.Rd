@@ -9,11 +9,11 @@ degResults(res = NULL, dds, rlogMat = NULL, name, org = NULL,
   xs = "time", path_results = ".", contrast = NULL)
 }
 \arguments{
-\item{res}{output from \link{DESeq2}{results} function.}
+\item{res}{output from \code{\link[DESeq2:results]{DESeq2::results()}} function.}
 
-\item{dds}{\link{DESeq2}{DESeqDataSet} object.}
+\item{dds}{\code{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet()}} object.}
 
-\item{rlogMat}{matrix from \link{DESeq2}{rlog} function.}
+\item{rlogMat}{matrix from \code{\link[DESeq2:rlog]{DESeq2::rlog()}} function.}
 
 \item{name}{string to identify results}
 

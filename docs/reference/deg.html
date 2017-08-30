@@ -85,14 +85,14 @@
     <pre class="usage"><span class='fu'>deg</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for DEGSet</span>
-<span class='fu'>deg</span>(<span class='no'>object</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>deg</span>(<span class='no'>object</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>top</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>[DEGSet]</p></td>
+      <td><p><a href='DEGSet.html'>DEGSet</a></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -106,7 +106,18 @@
       <th>tidy</th>
       <td><p>Return data.frame, tibble or original class.</p></td>
     </tr>
+    <tr>
+      <th>top</th>
+      <td><p>Limit number of rows to return. Default: All.</p></td>
+    </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Testing it <code>top</code> is whole number or not comes from:
+https://stackoverflow.com/a/3477158</p></li>
+</ul>
     
 
   </div>
@@ -114,7 +125,9 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#references">References</a></li>
+          </ul>
 
     <h2>Author</h2>
     

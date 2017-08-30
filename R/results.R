@@ -71,8 +71,8 @@
 
 #' Automatize the use of `results()` for multiple comparisons
 #'
-#' This function will extract the output of [DEseq2::results()]
-#' and [DESeq2::lcfSrink()] for multiple comparison using:
+#' This function will extract the output of [DESeq2::results()]
+#' and [DESeq2::lfcShrink()] for multiple comparison using:
 #'
 #' * coefficients
 #' * contrast

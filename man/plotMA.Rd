@@ -10,7 +10,7 @@
   label_column = "symbol", limit = NULL, diff = 5, ...)
 }
 \arguments{
-\item{object}{\link{DESeqResults} or a data frame of DESeqResults.}
+\item{object}{\link{DEGSet} class.}
 
 \item{title}{\emph{Optional}. Plot title.}
 

@@ -9,12 +9,12 @@ degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
   slot = 1L, xsLab = xs, groupLab = group, batchLab = batch)
 }
 \arguments{
-\item{dds}{\link{DESeq2}{DESeqDataSet} object or SummarizedExperiment
+\item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or SummarizedExperiment
 or Matrix or data.frame.}
 
 \item{xs}{Character, colname in colData that will be used as X-axes.}
 
-\item{res}{\link{DESeq2}{DESeqResults} object.}
+\item{res}{\link[DESeq2:DESeqResults]{DESeq2::DESeqResults} object.}
 
 \item{n}{Integer number of genes to plot.}
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Automatize the use of `results()` for multiple comparisons — degComps • DEGreport</title>
+<title>Automatize the use of <code>results()</code> for multiple comparisons — degComps • DEGreport</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -75,12 +75,12 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Automatize the use of `results()` for multiple comparisons</h1>
+    <h1>Automatize the use of <code>results()</code> for multiple comparisons</h1>
     </div>
 
     
-    <p>This function will extract the output of [DEseq2::results()]
-and [DESeq2::lcfSrink()] for multiple comparison using:</p>
+    <p>This function will extract the output of <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::results()</a></code>
+and <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/lfcShrink'>DESeq2::lfcShrink()</a></code> for multiple comparison using:</p>
     
 
     <pre class="usage"><span class='fu'>degComps</span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
@@ -91,39 +91,41 @@ and [DESeq2::lcfSrink()] for multiple comparison using:</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dds</th>
-      <td><p>[DESeq2::DESeqDataSet] obcject.</p></td>
+      <td><p><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeq2::DESeqDataSet</a> obcject.</p></td>
     </tr>
     <tr>
       <th>combs</th>
       <td><p>Optional vector indicating the coefficients or columns
-fom `colData(dds)` to create group comparisons.</p></td>
+fom <code>colData(dds)</code> to create group comparisons.</p></td>
     </tr>
     <tr>
       <th>contrast</th>
-      <td><p>Optional vector to specify contrast. See [DESeq2::results()].</p></td>
+      <td><p>Optional vector to specify contrast. See <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::results()</a></code>.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>Numeric value used in independent filtering in [DESeq2::results()].</p></td>
+      <td><p>Numeric value used in independent filtering in <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::results()</a></code>.</p></td>
     </tr>
     <tr>
       <th>pairs</th>
       <td><p>Boolean to indicate whether create all comparisons or only
-use the coefficient already created from [DESeq2::resultsNames()].</p></td>
+use the coefficient already created from <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::resultsNames()</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>[DEGSet] with unSrunken and Srunken results.</p>
+    <p><a href='DEGSet.html'>DEGSet</a> with unSrunken and Srunken results.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>* coefficients
-* contrast
-* Multiple columns in `colData` that match coefficients
-* Multiple columns in `colData` to create all possible
-contrasts</p>
+    <ul>
+<li><p>coefficients</p></li>
+<li><p>contrast</p></li>
+<li><p>Multiple columns in <code>colData</code> that match coefficients</p></li>
+<li><p>Multiple columns in <code>colData</code> to create all possible
+contrasts</p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

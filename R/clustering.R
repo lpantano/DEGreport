@@ -361,9 +361,9 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
 
 #' Complete report from DESeq2 analysis
 #'
-#' @param res  output from [DESeq2]{results} function.
-#' @param dds  [DESeq2]{DESeqDataSet} object.
-#' @param rlogMat matrix from [DESeq2]{rlog} function.
+#' @param res  output from [DESeq2::results()] function.
+#' @param dds  [DESeq2::DESeqDataSet()] object.
+#' @param rlogMat matrix from [DESeq2::rlog()] function.
 #' @param name string to identify results
 #' @param org an organism annotation object, like org.Mm.eg.db.
 #' NULL if you want to skip this step.
