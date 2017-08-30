@@ -3,6 +3,7 @@
 \docType{class}
 \name{DEGSet}
 \alias{DEGSet}
+\alias{DEGSet-class}
 \title{DEGSet}
 \description{
 S4 class to store data from differentially expression analysis.
@@ -20,7 +21,8 @@ Each element has the following structure:
 \item Optional table with shrunk Fold Change when it has been done.
 }
 
-To access the raw table use \code{deg(dgs, "raw")``, to access the shrunken table use}deg(dgs, "shrunk")`.
+To access the raw table use \code{deg(dgs, "raw")}, to access the
+shrunken table use \code{deg(dgs, "shrunk")} or just \code{deg(dgs)}.
 }
 \examples{
 library(DESeq2)
