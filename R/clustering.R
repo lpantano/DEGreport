@@ -508,26 +508,27 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' degPCA(log2(counts(dse)+0.5), colData(dse),
 #'   condition="group", name="group", shape="group")
 #' @export
-degPCA <- function(counts, metadata, condition="condition",
-                   pc1="PC1", pc2="PC2",
-                   name=NULL, shape=NULL){
-    pc = .pca_loadings(counts)
-    idx1 = which(names(pc[["percentVar"]]) == pc1)
-    idx2 = which(names(pc[["percentVar"]]) == pc2)
-    comps = data.frame(pc[["x"]])
-    comps$Name = rownames(comps)
-    comps = bind_cols(comps,
-                      as.data.frame(metadata)[as.character(comps$Name), ,
-                                                     drop=FALSE])
+degPCA <- function(counts, metadata = NULL, condition=NULL,
+                   pc1 = "PC1", pc2 = "PC2",
+                   name = NULL, shape = NULL){
+    pc <- .pca_loadings(counts)
+    idx1 <- which(names(pc[["percentVar"]]) == pc1)
+    idx2 <- which(names(pc[["percentVar"]]) == pc2)
+    comps <- data.frame(pc[["x"]])
+    comps[["Name"]] <- rownames(comps)
+    if (!is.null(metadata))
+        comps <- bind_cols(comps,
+                           as.data.frame(metadata)[as.character(comps$Name), ,
+                                                   drop=FALSE])
     # [Feature] check metadata has name, shape, condition
     # [Feature] check counts has same samples than metadata
-    p <- ggplot(comps, aes_string(pc1, pc2, color=condition))
-    if (!is.null(shape))
-        p <- ggplot(comps, aes_string(pc1, pc2, color=condition, shape=shape))
+    p <- ggplot(comps, aes_string(pc1, pc2,
+                                  color = condition, shape = shape)) +
+        geom_point(size = 3)
+
     if (!is.null(name))
-        p <- p + geom_text(aes_string(label=name), nudge_x = 1, nudge_y = 1)
-    else
-        p <- p + geom_point(size=3)
+        p <- p + geom_text(aes_string(label = name), nudge_x = 1, nudge_y = 1)
+
     p +
         scale_color_brewer(palette = "Set1") +
         xlab(paste0(pc1, ": ",
@@ -547,7 +548,7 @@ degPCA <- function(counts, metadata, condition="condition",
 #' @param condition vector define groups of samples in counts.
 #' It has to be same order than the count matrix for columns.
 #' @param k integer number of dimensions to get
-#' @param d type of distance to use
+#' @param d type of distance to use, c("euclidian", "cor").
 #' @param xi number of component to plot in x-axis
 #' @param yi number of component to plot in y-axis
 #' @return ggplot2 object
@@ -557,30 +558,31 @@ degPCA <- function(counts, metadata, condition="condition",
 #' idx <- c(1:10, 75:85)
 #' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
 #'   colData(humanGender)[idx,], design=~group)
-#' degMDS(counts(dse), condition=colData(dse)[["group"]])
+#' degMDS(counts(dse), condition = colData(dse)[["group"]])
 #' @export
 degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
-    if (d=="euclidian"){
+    if (d == "euclidian"){
         distances = dist(t(counts))
-    }else if (d=="cor"){
+    }else if (d == "cor"){
         distances = as.dist((1-cor(counts))^2)
+    } else {
+        stop(d, " is not implemented.")
     }
     fit = cmdscale(distances, eig = TRUE, k = k)
-    eigs = data.frame(variance_explained=fit$eig / sum(fit$eig))
-    xnames = paste0("PC", 1:k, " ", round(eigs[1:k,1]*100,digits=2), "%")
-    df = as.data.frame(fit$points[,c(xi,yi)])
+    eigs = data.frame(variance_explained = fit$eig / sum(fit$eig))
+    xnames = paste0("PC", 1:k, " ", round(eigs[1:k, 1] * 100, digits = 2), "%")
+    df = as.data.frame(fit$points[, c(xi,yi)])
     names(df) = c("one", "two")
-    df$label = rownames(df)
+    df[["label"]] = rownames(df)
     if(!is.null(condition)) {
-        df$condition = condition
+        df[["condition"]] = condition
         p = ggplot(df, aes_string("one", "two",
                                   label = "label", color = "condition")) +
             geom_text(aes_string("one", "two",
                                  label = "label"), size = 3) +
             labs(list(x = xnames[xi], y = xnames[yi])) +
             scale_x_continuous(expand = c(0.3, 0.3))
-    }
-    else {
+    } else {
         p = ggplot(df, aes_string("one", "two")) +
             geom_text(aes_string("one", "two",
                                  label = "label"), size = 3) +

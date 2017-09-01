@@ -62,8 +62,8 @@
                          use = 'pairwise.complete.obs',
                          method = correlationtype,
                          adjust = "none")
-    all_cor_vals <- cov_cor$r
-    all_cor_p <- cov_cor$p
+    all_cor_vals <- cov_cor[["r"]]
+    all_cor_p <- cov_cor[["p"]]
     
     rownames(all_cor_vals) <- colnames(compare_data)
     colnames(all_cor_vals) <- colnames(all_covariates)
@@ -124,7 +124,7 @@
 #' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
 #'   colData(humanGender)[idx,], design=~group)
 #' res <- degCovariates(log2(counts(dse)+0.5),
-#' colData(dse))
+#'   colData(dse))
 #' res$plot
 #' @export
 degCovariates <- function(counts, metadata,
@@ -138,16 +138,18 @@ degCovariates <- function(counts, metadata,
                   " correlations ", sep = "")
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
-
     metadata <- as.data.frame(metadata)
+    
+    stopifnot(identical(colnames(counts), rownames(metadata)))
+    
     pcares <- .runpca(genesbysamples = counts,
                       scale_data_for_pca = scale,
                       min_pve_pct_pc = min_pc_pct)
 
-    samplepcvals <- pcares$samplepcvals
-    pve <- pcares$pve
+    samplepcvals <- pcares[["samplepcvals"]]
+    pve <- pcares[["pve"]]
     npca <- ncol(samplepcvals)
-    colnames(samplepcvals) = paste(colnames(samplepcvals), " (",
+    colnames(samplepcvals) <- paste(colnames(samplepcvals), " (",
                                    sprintf("%.2f", pve[1L:npca]), "%)",
                                    sep = "")
 
@@ -156,20 +158,20 @@ degCovariates <- function(counts, metadata,
                                                       function(dat) all(!is.na(dat))))]
 
     exclude_vars_from_fdr <- setdiff(colnames(metadata),
-                                    colnames(samplesbyfullcovariates))
+                                     colnames(samplesbyfullcovariates))
 
     corrres <- .calccompletecorandplot(samplepcvals,
-                                      samplesbyfullcovariates,
-                                      correlation,
-                                      title,
-                                      weights =
-                                          pve[1L:dim(samplepcvals)[2L]],
-                                      exclude_vars_from_fdr)
+                                       samplesbyfullcovariates,
+                                       correlation,
+                                       title,
+                                       weights =
+                                           pve[1L:dim(samplepcvals)[2L]],
+                                       exclude_vars_from_fdr)
 
-    significantcovars <- corrres$mat[corrres$mat$fdr < fdr,"covar"]
-    ma = corrres$mat
-    ma$r[ma$fdr > fdr] <- NA
-    p = ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
+    significantcovars <- corrres[["mat"]][corrres[["mat"]][["fdr"]] < fdr,"covar"]
+    ma <- corrres[["mat"]]
+    ma[["r"]][ma[["fdr"]] > fdr] <- NA
+    p <- ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
         geom_tile() +
         theme_minimal() +
         ggtitle(title) +

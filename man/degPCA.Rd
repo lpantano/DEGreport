@@ -4,7 +4,7 @@
 \alias{degPCA}
 \title{smart PCA from count matrix data}
 \usage{
-degPCA(counts, metadata, condition = "condition", pc1 = "PC1",
+degPCA(counts, metadata = NULL, condition = NULL, pc1 = "PC1",
   pc2 = "PC2", name = NULL, shape = NULL)
 }
 \arguments{

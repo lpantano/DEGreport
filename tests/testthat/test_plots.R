@@ -13,6 +13,7 @@ res <- results(dse)
 test_that("degcovariates", {
     resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse), min_pc_pct = 10)
     expect_true(nrow(resCov[["corMatrix"]][resCov[["corMatrix"]][["fdr"]] < 0.05,]) == 3)
+    expect_error(degCovariates(log2(counts(dse) + 0.5), colData(dse)[2:1,]))
 })
 
 test_that("test_genes", {

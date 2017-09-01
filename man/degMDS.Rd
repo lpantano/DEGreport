@@ -15,7 +15,7 @@ It has to be same order than the count matrix for columns.}
 
 \item{k}{integer number of dimensions to get}
 
-\item{d}{type of distance to use}
+\item{d}{type of distance to use, c("euclidian", "cor").}
 
 \item{xi}{number of component to plot in x-axis}
 
@@ -34,5 +34,5 @@ library(DESeq2)
 idx <- c(1:10, 75:85)
 dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
   colData(humanGender)[idx,], design=~group)
-degMDS(counts(dse), condition=colData(dse)[["group"]])
+degMDS(counts(dse), condition = colData(dse)[["group"]])
 }
