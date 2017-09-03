@@ -34,6 +34,7 @@ Load the package and learn what to do:
 
 `browseVignettes("DEGreport")`
 
+Here is the last devel [vignette](https://bioconductor.org/packages/devel/bioc/vignettes/DEGreport/inst/doc/DEGreport.pdf).
 
 [Bioconductor]: https://bioconductor.org
 [bcbio-nextgen]: https://github.com/chapmanb/bcbio-nextgen
