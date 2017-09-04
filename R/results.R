@@ -199,3 +199,91 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
     }
     p
 }
+
+
+# helper ====
+.summary <- function(object, contrast, alpha){
+    if (class(object) == "DESeqDataSet"){
+        if (is.null(contrast)) {
+            contrast <- resultsNames(object)[[2L]]
+        }
+        return(summary(.guessResults(object, contrast, alpha)))
+    }
+    if (class(object) == "DESeqResults")
+        return(summary(object))
+    if (class(object) == "DEGSet")
+        return(summary(deg(object)))
+    stop("No class supported.")
+}
+#' Print Summary Statistics of Alpha Level Cutoffs
+#'
+#' @rdname degSummary
+#' @name degSummary
+#' 
+#' @param object Can be [DEGSet] or [DESeqDataSet] or [DESeqResults].
+#' @param alpha Numeric vector of desired alpha cutoffs.
+#' @param contrast Character vector to use with [results()] function.
+#' @param caption Character vector to add as caption to the table.
+#' @param kable Whether return a [knitr::kable()] output. Default is data.frame.
+#' @return [data.frame] or [knitr::kable()].
+#' 
+#' @author Lorena Pantano
+#' @references 
+#' * original idea of multiple alpha values and code syntax
+#'   from  Michael Steinbaugh.
+#' @examples
+#' library(DESeq2)
+#' data(humanGender)
+#' idx <- c(1:5, 75:80)
+#' counts <- assays(humanGender)[[1]]
+#' dse <- DESeqDataSetFromMatrix(counts[1:1000, idx],
+#'                               colData(humanGender)[idx,],
+#'                               design = ~group)
+#' dse <- DESeq(dse)
+#' res1 <- results(dse)
+#' res2 <- degComps(dse, contrast = c("group_Male_vs_Female"))
+#' degSummary(dse, contrast = "group_Male_vs_Female")
+#' degSummary(res1)
+#' degSummary(res1, kable = TRUE)
+#' degSummary(res2[[1]])
+#' @export
+degSummary <- function(
+    object,
+    alpha = c(0.1, 0.05, 0.01),
+    contrast = NULL,
+    caption = "",
+    kable = FALSE) {
+
+    if (!is.null(contrast)) {
+        caption <- contrast
+    }
+    df <- lapply(seq_along(alpha), function(a) {
+        info <- capture.output(
+            .summary(object, contrast, alpha[a])
+        ) %>%
+            # Get the lines of interest from summary
+            .[4L:8L]
+        parse <- info[1L:5L] %>%
+            # Extract the values after the colon in summary
+            sapply(function(a) {
+                gsub("^.+\\:\\s(.+)\\s$", "\\1", a)
+            }) %>%
+            # Coerce to character here to remove names
+            as.character
+        data.frame(alpha = parse)
+    }) %>%
+        bind_cols %>%
+        set_colnames(alpha) %>%
+        set_rownames(c("LFC > 0 (up)",
+                       "LFC < 0 (down)",
+                       "outliers",
+                       "low counts",
+                       "cutoff")) 
+    
+    if (kable) 
+        df %>%
+        kable(caption = paste(caption)) %>%
+        show
+    else return(df)
+}
+

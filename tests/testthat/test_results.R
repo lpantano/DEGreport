@@ -5,6 +5,7 @@ colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 design(dds) <-  ~ condition + treatment
 dds <- DESeq(dds)
 res <- results(dds)
+resComps <- degComps(dds, contrast = c("condition_B_vs_A"))
 
 test_that("Combinations", {
     expect_named(.guessComb(dds,
@@ -27,5 +28,9 @@ test_that("Results",{
     expect_match(.guessShrunken(dds, c("condition", "A", "B"), res) %>% class,
                  "DESeqResults")
     expect_error(.guessResults(dds, "condition_C_vs_A", res))
-    
+    expect_type(degSummary(dds, contrast = "condition_B_vs_A"), "list")
+    expect_type(degSummary(res), "list")
+    expect_type(degSummary(resComps[[1]]), "list")
+    expect_error(degSummary(colData(dds)))
+    expect_output(degSummary(res, kable = TRUE), "|")
 })

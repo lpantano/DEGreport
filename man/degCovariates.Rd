@@ -47,7 +47,7 @@ idx <- c(1:10, 75:85)
 dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
   colData(humanGender)[idx,], design=~group)
 res <- degCovariates(log2(counts(dse)+0.5),
-colData(dse))
+  colData(dse))
 res$plot
 }
 \author{

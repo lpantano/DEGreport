@@ -58,5 +58,6 @@
 #' @importFrom knitr kable
 #' @importFrom methods new slot
 #' @importFrom rlang sym
+#' @importFrom magrittr set_colnames set_rownames
 #' 
 "_PACKAGE"

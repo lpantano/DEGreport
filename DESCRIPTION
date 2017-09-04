@@ -39,6 +39,7 @@ Imports:
     ComplexHeatmap,
     knitr,
     grDevices,
+    magrittr,
     scales,
     stats,
     psych,
