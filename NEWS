@@ -1,8 +1,9 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.13.10
-    2017-09-04  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-09-05  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Feature: Allow to plot original MA plot.
     Feature: Adapt summary of DESeq2Results to data.frame and compatible with
              markdown output, and multiple alpha values.
     Fix: links in man pages.

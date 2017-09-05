@@ -92,6 +92,7 @@ setMethod("significants", signature("DEGSet"),
 #' @param limit Absolute maximum to plot on the log2FoldChange.
 #' @param diff Minimum difference between logFoldChange before and
 #'   after shrinking.
+#' @param raw Whether to plot just the unshrunken log2FC.
 #' @param ... Optional parameters to pass.
 #' 
 #' @docType methods
@@ -111,6 +112,8 @@ setMethod("plotMA", signature(object = "DEGSet"), function(object, title = NULL,
                                                            label_points = NULL,
                                                            label_column = "symbol",
                                                            limit = NULL,
-                                                           diff = 5, ...){
-    .plotMA(object, title, label_points, label_column, limit, diff)
+                                                           diff = 5,
+                                                           raw = FALSE,
+                                                           ...){
+    .plotMA(object, title, label_points, label_column, limit, diff, raw = raw)
 })

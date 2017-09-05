@@ -17,4 +17,8 @@ test_that("DEGSet",{
     expect_true(deg(res[[1]], tidy = "tibble") %>% is_tibble)
     expect_equal(deg(res[[1]], top = 5) %>% nrow, 5)
     expect_type(significants(res[[1]]), "character")
+    expect_true(plotMA(res[[1]], diff = 4) %>%
+                    class %>% .[[2]] == "ggplot")
+    expect_true(plotMA(res[[1]], diff = 4, raw = TRUE) %>%
+                    class %>% .[[2]] == "ggplot")
 })
