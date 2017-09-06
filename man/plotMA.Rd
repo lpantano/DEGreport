@@ -7,7 +7,8 @@
 \title{MA-plot from base means and log fold changes}
 \usage{
 \S4method{plotMA}{DEGSet}(object, title = NULL, label_points = NULL,
-  label_column = "symbol", limit = NULL, diff = 5, raw = FALSE, ...)
+  label_column = "symbol", limit = NULL, diff = 5, raw = FALSE,
+  correlation = FALSE, ...)
 }
 \arguments{
 \item{object}{\link{DEGSet} class.}
@@ -24,6 +25,8 @@
 after shrinking.}
 
 \item{raw}{Whether to plot just the unshrunken log2FC.}
+
+\item{correlation}{Whether to plot the correlation of the two logFCs.}
 
 \item{...}{Optional parameters to pass.}
 }

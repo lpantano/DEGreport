@@ -93,6 +93,7 @@ setMethod("significants", signature("DEGSet"),
 #' @param diff Minimum difference between logFoldChange before and
 #'   after shrinking.
 #' @param raw Whether to plot just the unshrunken log2FC.
+#' @param correlation Whether to plot the correlation of the two logFCs.
 #' @param ... Optional parameters to pass.
 #' 
 #' @docType methods
@@ -114,6 +115,8 @@ setMethod("plotMA", signature(object = "DEGSet"), function(object, title = NULL,
                                                            limit = NULL,
                                                            diff = 5,
                                                            raw = FALSE,
+                                                           correlation = FALSE,
                                                            ...){
-    .plotMA(object, title, label_points, label_column, limit, diff, raw = raw)
+    .plotMA(object, title, label_points, label_column,
+            limit, diff, raw, correlation)
 })

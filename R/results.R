@@ -177,15 +177,21 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
         guides(color = FALSE)
 }
 
-# plotMA for DEGSet object
-.plotMA <- function(results, 
-                    title = NULL,
-                    label_points = NULL,
-                    label_column = "symbol",
-                    limit = NULL,
-                    diff = 5,
-                    raw = FALSE) {
-    
+.plot_correlation <- function(res_all){
+    ggplot(res_all, aes_string("log2FoldChange_unshrunken",
+                               "log2FoldChange_shrunken")) +
+        geom_point(size = 0.8, color = "black") +
+        geom_point(data = res_all[res_all[["sign"]],], 
+                   aes_string("log2FoldChange_unshrunken",
+                              "log2FoldChange_shrunken"),
+                   color = "red", size = 0.9) + 
+        xlab("fold change - unshrunken") +
+        ylab(expression(log[2]*" fold change - shrunken")) + # nolint
+        scale_color_manual(values = c("black","red", "green")) +
+        guides(color = FALSE)
+}
+
+.merge_results <- function(results, raw){
     res_unshrunken <- deg(results, "raw")
     res_shrunken <- deg(results)
     base_mean <- "baseMean_shrunken"
@@ -202,7 +208,23 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
     
     res_all[["sign"]] <- res_all[["padj_shrunken"]] < 0.05 * 1
     res_all <- res_all %>% filter(!is.na(.[["padj_shrunken"]]))
+    res_all
+}
+
+# plotMA for DEGSet object
+.plotMA <- function(results, 
+                    title = NULL,
+                    label_points = NULL,
+                    label_column = "symbol",
+                    limit = NULL,
+                    diff = 5,
+                    raw = FALSE,
+                    correlation = FALSE) {
     
+    if (raw & correlation)
+        stop("Use one or another. Incompatible parameters.")
+    
+    res_all <- .merge_results(results, raw)    
     toplot <- (abs(res_all[["log2FoldChange_shrunken"]] - res_all[["log2FoldChange_unshrunken"]])) >= diff
     
     if (!is.null(limit)){
@@ -213,13 +235,17 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
     }
     
     res_all_subset <- res_all[toplot,]
-    if (raw == TRUE)
+    
+    if (correlation)
+        p <- .plot_correlation(res_all)
+    else if (raw)
         p <- .plot_raw(res_all)
     else p <- .plot_shrunken(res_all, res_all_subset)
     
     if (!is.null(title)) {
         p <- p + ggtitle(title)
     }
+    
     if (!is.null(label_points)) {
         labels <- res_all[res_all[[label_column]] %in% label_points, ]
         p <- p + geom_text(data = labels,

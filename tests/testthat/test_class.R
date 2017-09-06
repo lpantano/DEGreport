@@ -21,4 +21,7 @@ test_that("DEGSet",{
                     class %>% .[[2]] == "ggplot")
     expect_true(plotMA(res[[1]], diff = 4, raw = TRUE) %>%
                     class %>% .[[2]] == "ggplot")
+    expect_true(plotMA(res[[1]], diff = 4, correaltion = TRUE) %>%
+                    class %>% .[[2]] == "ggplot")
+    expect_error(plotMA(res[[1]], diff = 4, raw = TRUE, correlation = TRUE))
 })
