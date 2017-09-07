@@ -25,14 +25,11 @@ setMethod("degDefault", signature("DEGSet"), function(object) {
 setMethod("deg", signature("DEGSet"),
           function(object, value=NULL, tidy = NULL, top = NULL, ...) {
               df <- NULL
-
+              stopifnot(value %in% c(NULL, names(object)))
+              
               if (is.null(value))
                   df <- object[[degDefault(object)]]
-              else if (value == "raw")
-                  df <- object[["raw"]]
-              else if (value == "shrunk")
-                  df <- (object[["shrunk"]])
-              stopifnot(value %in% c(NULL,"raw", "shrunk"))
+              else df <- object[[value]]
               
               if (is.null(top))
                   top <- nrow(df)
@@ -63,6 +60,7 @@ setMethod("deg", signature("DEGSet"),
 #' @param padj Cutoff for the FDR column.
 #' @param fc Cutoff for the log2FC column.
 #' @param ... Passed to [deg]. Default: value = NULL.
+#'   Value can be 'raw', 'shrunken'.
 #' @rdname significants
 #' @export
 setMethod("significants", signature("DEGSet"),
@@ -76,6 +74,7 @@ setMethod("significants", signature("DEGSet"),
                   .[["gene"]]
               
           })
+
 
 #' MA-plot from base means and log fold changes
 #'

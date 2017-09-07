@@ -4,15 +4,17 @@
 \alias{degQC}
 \title{Plot main figures showing p-values distribution and mean-variance correlation}
 \usage{
-degQC(pvalue, counts, groups)
+degQC(counts, groups, object = NULL, pvalue = NULL)
 }
 \arguments{
-\item{pvalue}{pvalues of DEG analysis.}
-
 \item{counts}{Matrix with counts for each samples and each gene.}
 
 \item{groups}{Character vector with group name for each sample in the
 same order than counts column names.}
+
+\item{object}{\link{DEGSet} oobject.}
+
+\item{pvalue}{pvalues of DEG analysis.}
 }
 \value{
 ggplot2 object
@@ -30,5 +32,6 @@ dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
   colData(humanGender)[idx,], design=~group)
 dds <- DESeq(dds)
 res <- results(dds)
-degQC(res[["pvalue"]], counts(dds, normalized=TRUE), colData(dds)[["group"]])
+degQC(counts(dds, normalized=TRUE), colData(dds)[["group"]],
+  pvalue = res[["pvalue"]])
 }

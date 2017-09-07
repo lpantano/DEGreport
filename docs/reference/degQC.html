@@ -84,15 +84,11 @@
 single plot. See these functions for further information.</p>
     
 
-    <pre class="usage"><span class='fu'>degQC</span>(<span class='no'>pvalue</span>, <span class='no'>counts</span>, <span class='no'>groups</span>)</pre>
+    <pre class="usage"><span class='fu'>degQC</span>(<span class='no'>counts</span>, <span class='no'>groups</span>, <span class='kw'>object</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>pvalue</th>
-      <td><p>pvalues of DEG analysis.</p></td>
-    </tr>
     <tr>
       <th>counts</th>
       <td><p>Matrix with counts for each samples and each gene.</p></td>
@@ -101,6 +97,14 @@ single plot. See these functions for further information.</p>
       <th>groups</th>
       <td><p>Character vector with group name for each sample in the
 same order than counts column names.</p></td>
+    </tr>
+    <tr>
+      <th>object</th>
+      <td><p><a href='DEGSet.html'>DEGSet</a> oobject.</p></td>
+    </tr>
+    <tr>
+      <th>pvalue</th>
+      <td><p>pvalues of DEG analysis.</p></td>
     </tr>
     </table>
     
@@ -118,7 +122,8 @@ same order than counts column names.</p></td>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>using pre-existing size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='output co'>#&gt; <span class='message'>-- replacing outliers and refitting for 1 genes</span>
 #&gt; <span class='message'>-- DESeq argument 'minReplicatesForReplace' = 7 </span>
 #&gt; <span class='message'>-- original counts are preserved in counts(dds)</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a></span>(<span class='no'>dds</span>)
-<span class='fu'>degQC</span>(<span class='no'>res</span><span class='kw'>[[</span><span class='st'>"pvalue"</span>]], <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>, <span class='kw'>normalized</span><span class='kw'>=</span><span class='fl'>TRUE</span>), <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"group"</span>]])</div></pre>
+<span class='fu'>degQC</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>, <span class='kw'>normalized</span><span class='kw'>=</span><span class='fl'>TRUE</span>), <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"group"</span>]],
+  <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='no'>res</span><span class='kw'>[[</span><span class='st'>"pvalue"</span>]])</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

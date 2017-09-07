@@ -1,8 +1,12 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.13.10
-    2017-09-06  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-09-07  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Feature: Add DEGSet construct to accept other sources.
+    Feature: Adapt degQC to accept DEGSet object.
+    Feature: Allow multiple group for degMB and degVB.
+    Feature: Add optional log2 for gene plotting.
     Feature: Plot correlation of shrunken vs unshruken log2fc.
     Feature: Allow to plot original MA plot.
     Feature: Adapt summary of DESeq2Results to data.frame and compatible with

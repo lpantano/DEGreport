@@ -84,7 +84,25 @@ It should be compatible with different package and stores the information
 in a way the methods will work with all of them.</p>
     
 
-        
+    <pre class="usage"><span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)
+
+<span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>resList</th>
+      <td><p>List with results as elements containing log2FoldChange,
+pvalues and padj as column. Rownames should be feature names. Elements
+should have names.</p></td>
+    </tr>
+    <tr>
+      <th>default</th>
+      <td><p>The name of the element to use by default.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For now supporting only <code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::results()</a></code> output.
@@ -95,7 +113,7 @@ Each element has the following structure:</p><ul>
 <li><p>Optional table with shrunk Fold Change when it has been done.</p></li>
 </ul>
     <p>To access the raw table use <code><a href='deg.html'>deg(dgs, "raw")</a></code>, to access the
-shrunken table use <code><a href='deg.html'>deg(dgs, "shrunk")</a></code> or just <code><a href='deg.html'>deg(dgs)</a></code>.</p>
+shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or just <code><a href='deg.html'>deg(dgs)</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -136,6 +154,7 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunk")</a></code> or jus
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
       

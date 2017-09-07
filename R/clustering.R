@@ -443,9 +443,9 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 
     cat("\n\n### QC for DE genes\n")
     show= !is.na(out_df$pvalue)
-    p = degQC(out_df$pvalue[show],
-              rlogMat[row.names(out_df)[show],],
-              metadata[,xs])
+    p = degQC(rlogMat[row.names(out_df)[show],],
+              metadata[,xs],
+              pvalue = out_df[["pvalue"]][show])
     print(p)
 
     sign = row.names(out_df)[out_df$padj<FDR & !is.na(out_df$padj) & out_df$absMaxLog2FC > FC]

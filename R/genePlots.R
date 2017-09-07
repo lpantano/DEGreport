@@ -13,6 +13,7 @@
 #' @param ann Columns in rowData (if available) used to print gene names.
 #' @param metadata Metadata in case dds is a matrix.
 #' @param slot Name of the slot to use to get count data.
+#' @param log2 Whether to apply or not log2 transformation.
 #' @param xsLab Character, alternative label for x-axis (default: same as xs).
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
@@ -31,6 +32,7 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    metadata = NULL,
                    ann=c("external_gene_name", "symbol"),
                    slot=1L,
+                   log2 = TRUE,
                    xsLab=xs, groupLab=group, batchLab=batch){
     if (class(dds) %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
@@ -49,15 +51,20 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     
     metadata = data.frame(colData(dds))
     if (class(dds) == "DESeqDataSet")
-        counts <- log2(counts(dds, normalized = TRUE) + 0.2)
-    else counts <- log2(assays(dds)[[slot]] + 0.2)
+        counts <- counts(dds, normalized = TRUE)
+    else counts <- assays(dds)[[slot]]
+    
+    if (log2 & max(counts) > 500L)
+        warning("Data seems to be already in log2. Please use log2 = FALSE.")
+    if (log2)
+        log2(counts + 0.2)
     
     newgenes <- genes
     if (ncol(anno) > 0) {
         name <- intersect(names(anno), ann)
-        if (length(name) != 2)
+        if (length(name) != 2L)
             message("No genes were mapped to rowData. check ann parameter values.")
-        if (length(name) == 2)
+        if (length(name) == 2L)
             newgenes <- anno[match(genes, anno[, name[1L]]), name[2L]]
     }
     

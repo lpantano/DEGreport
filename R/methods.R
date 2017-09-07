@@ -43,10 +43,11 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 #' \code{\link[DEGreport]{degVar}} and \code{\link[DEGreport]{degMV}} in a
 #' single plot. See these functions for further information.
 #' 
-#' @param pvalue pvalues of DEG analysis.
 #' @param counts Matrix with counts for each samples and each gene.
 #' @param groups Character vector with group name for each sample in the
 #'   same order than counts column names.
+#' @param object [DEGSet] oobject.
+#' @param pvalue pvalues of DEG analysis.
 #' @return ggplot2 object
 #' @examples
 #' data(humanGender)
@@ -56,16 +57,45 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 #'   colData(humanGender)[idx,], design=~group)
 #' dds <- DESeq(dds)
 #' res <- results(dds)
-#' degQC(res[["pvalue"]], counts(dds, normalized=TRUE), colData(dds)[["group"]])
+#' degQC(counts(dds, normalized=TRUE), colData(dds)[["group"]],
+#'   pvalue = res[["pvalue"]])
 #' @export
-degQC <- function(pvalue, counts, groups){
-    pmean <- degMean(pvalue, counts) + guides(fill=FALSE)
-    pvar <- degVar(pvalue, counts)+ theme(legend.position="top")
-    pmv <- degMV(groups, pvalue, counts)
+degQC <- function(counts, groups, object=NULL, pvalue=NULL){
+    if (is.null(pvalue) & is.null(object))
+        stop("You need to provide DEGset object or pvalue.")
+    if (!is.null(object) & class(object) != "DEGSet")
+        stop("Object should be a DEGSet class.")
+    stopifnot(class(counts) %in% c("matrix", "data.frame"))
+    
+    if (class(object) == "DEGSet"){
+        df <- deg(object, tidy = "tibble")
+        if (length(intersect(rownames(counts), df[["gene"]])) < nrow(df))
+            stop("Not all features in DEGSet are in counts table.")
+        counts <- counts[df[["gene"]],]
+        pvalue <- df[["pvalue"]]
+        padj <- df[["padj"]]
+    }else{
+        padj <- p.adjust(pvalue, method = "fdr")
+    }
+
+    counts <- counts[!is.na(padj),]
+    pvalue <- pvalue[!is.na(padj)]
+    padj <- padj[!is.na(padj)]
+    pmean <- degMean(pvalue, counts) +
+        xlab("pvalues along expression quantiles") +
+        guides(fill = FALSE)
+    pvar <- degVar(pvalue, counts) +
+        xlab("pvalues along variance quantiles") +
+        guides("") +
+        theme(legend.position="top") +
+        theme(legend.text=element_text(size=3),
+              legend.title=element_blank(),
+              legend.key.size = unit(0.5,"line"))
+    pmv <- degMV(groups, padj, counts)
     suppressWarnings(ggdraw() + 
-        draw_plot(pmean, 0, 0.5, 0.6, 0.4 ) +
+        draw_plot(pvar, 0, 0.4, 0.6, 0.6 ) +
         draw_plot(pmv, 0.6, 0, 0.4, 0.7) +
-        draw_plot(pvar, 0, 0, 0.6, 0.6))
+        draw_plot(pmean, 0, 0, 0.6, 0.4))
 }
 
 #' Distribution of gene ratios used to calculate Size Factors.
@@ -215,30 +245,33 @@ degMV <-
     })    
     sdv <- apply(var_ma, 1, max)
     mean_ma <- sapply(unique(as.character(group)), function(g){
-        apply(counts[, group==g], 1, mean, na.rm=TRUE)
+        apply(counts[, group==g], 1, median, na.rm=TRUE)
     })    
     meanv <- apply(mean_ma, 1, min)
     pv <- cut(pvalues, breaks=c(-1, sign, 1.1),
           labels=c("Sign", "NoSig"))
-    d <- data.frame(pvalues=pv, sdv=log2(sdv), 
-                meanv=log2(meanv))
-    suppressWarnings(ggplot(d, aes(meanv, sdv,
-    colour=pvalues))+
-    geom_point()+
-    scale_color_manual(values=c("red", rgb(0.9, 0.9, 0.9, 0.6)))+
-    theme_bw()+
-    stat_quantile(aes(meanv, sdv), colour="blue",
-        quantiles = c(0.025, 0.975), 
-        linetype=2, formula=y ~ x)) +
+    # pv[is.na(pvalues)] <- "NoSig"
+    d <- data.frame(pvalues=pv, max_sd=log2(sdv), 
+                min_median=log2(meanv))
+    red <- d[d[["pvalues"]] == "Sign" & !is.na(d[["pvalues"]]),]
+    black <- rgb(0.9, 0.9, 0.9, 0.6)
+    suppressWarnings(ggplot(d, aes_string("min_median", "max_sd"))+
+                         geom_point(data = d, color = black) +
+                         geom_point(data = red, color = "red") +
+                         scale_color_manual(values=c("red", black))+
+                         theme_bw()+
+                         stat_quantile(aes(min_median, max_sd), colour="blue",
+                                       quantiles = c(0.025, 0.975), 
+                                       linetype=2, formula=y ~ x)) +
         theme(legend.position="top")
-}
+    }
 
 #' Distribution of expression of DE genes compared to the background
 #'
 #' @aliases degMB
 #' @param tags  List of genes that are DE.
-#' @param g1 List of samples in group 1.
-#' @param g2 List of samples in group 2.
+#' @param group Character vector with group name for each sample in the
+#'   same order than counts column names.
 #' @param counts  Matrix with counts for each samples and each gene
 #'   Should be same length than pvalues vector.
 #' @param pop number of random samples taken for background comparison
@@ -251,11 +284,11 @@ degMV <-
 #'   colData(humanGender)[idx,], design=~group)
 #' dds <- DESeq(dds)
 #' res <- results(dds)
-#' degMB(row.names(res)[1:20], colData(dds)[["group"]][1:10],
-#'   colData(dds)[["group"]][11:20], counts(dds, normalized = TRUE))
+#' degMB(row.names(res)[1:20], colData(dds)[["group"]],
+#'   counts(dds, normalized = TRUE))
 #' @export
 degMB <-
-    function(tags, g1, g2, counts, pop=400)
+    function(tags, group, counts, pop=400)
 {
     delen <- length(tags)
     g <- ""
@@ -269,18 +302,25 @@ degMB <-
         replace = FALSE
     }
     rand <- sample(row.names(counts), pop, replace=replace)
-    g1var <- apply(counts[tags, g1, drop=FALSE], 1, mean)    
-    g2var <- apply(counts[tags, g2, drop=FALSE], 1, mean)    
-  
-    rand.s1 <- apply(counts[rand, g1, drop=FALSE], 1, mean)
-    rand.s2 <- apply(counts[rand, g2, drop=FALSE], 1, mean)
-    res <- rbind(data.frame(g="g1", mean=g1var), 
-             data.frame(g="g2", mean=g2var))
-    res <- rbind(res, data.frame(g="r1", mean=rand.s1), 
-             data.frame(g="r2", mean=rand.s2))
+    
+    sign_group <- lapply(unique(as.character(group)), function(g){
+        m <- apply(counts[tags, group==g, drop=FALSE], 1, mean, na.rm=TRUE)
+        data.frame(mean = m, group = g,
+                   type = paste("significants -", g),
+                   stringsAsFactors = FALSE)
+    })    
+    
+    rand_group <- lapply(unique(as.character(group)), function(g){
+        m <- apply(counts[rand, group==g, drop=FALSE], 1, mean, na.rm=TRUE)
+        data.frame(mean = m, group = g,
+                   type = paste("background -", g),
+                   stringsAsFactors = FALSE)
+    }) 
 
-    suppressWarnings(ggplot(res, aes(g, mean, 
-        fill=g, colour=g))+
+    res <- bind_rows(c(sign_group, rand_group))
+
+    suppressWarnings(ggplot(res, aes_string("type", "mean", 
+        fill="group", colour="group"))+
         geom_violin(alpha=0.2)+
         scale_y_log10()+
         theme_bw())
@@ -290,8 +330,8 @@ degMB <-
 #'     DE genes compared to the background
 #' @aliases degVB
 #' @param tags List of genes that are DE.
-#' @param g1 List of samples in group 1.
-#' @param g2 List of samples in group 2.
+#' @param group Character vector with group name for each sample in the
+#'   same order than counts column names.
 #' @param counts  matrix with counts for each samples and each gene.
 #'     Should be same length than pvalues vector.
 #' @param pop Number of random samples taken for background comparison.
@@ -304,11 +344,11 @@ degMB <-
 #'   colData(humanGender)[idx,], design=~group)
 #' dds <- DESeq(dds)
 #' res <- results(dds)
-#' degVB(row.names(res)[1:20], colData(dds)[["group"]][1:10],
-#'   colData(dds)[["group"]][11:20], counts(dds, normalized = TRUE))
+#' degVB(row.names(res)[1:20], colData(dds)[["group"]],
+#'   counts(dds, normalized = TRUE))
 #' @export
 degVB <-
-    function(tags, g1, g2, counts, pop=400)
+    function(tags, group, counts, pop=400)
 {
     delen <- length(tags)
     g <- ""
@@ -321,21 +361,28 @@ degVB <-
         replace = FALSE
     }
     rand <- sample(row.names(counts), pop)
-    g1var <- apply(counts[tags, g1, drop=FALSE], 1, sd)
-    g2var <- apply(counts[tags, g2, drop=FALSE], 1, sd)
-
-    rand.s1 <- apply(counts[rand, g1, drop=FALSE], 1, sd)
-    rand.s2 <- apply(counts[rand, g2, drop=FALSE], 1, sd)
-    res <- rbind(data.frame(g="g1", var=g1var), 
-             data.frame(g="g2", var=g2var))
-    res <- rbind(res, data.frame(g="r1", var=rand.s1), 
-             data.frame(g="r2", var=rand.s2))
-
-    suppressWarnings(ggplot(res, aes(g, var, fill=g, colour=g))+
-        geom_violin(alpha=0.2)+
-        scale_y_log10()+
-        theme_bw())
-}
+    sign_group <- lapply(unique(as.character(group)), function(g){
+        m <- apply(counts[tags, group==g, drop=FALSE], 1, sd, na.rm=TRUE)
+        data.frame(sd = m, group = g,
+                   type = paste("significants -", g),
+                   stringsAsFactors = FALSE)
+    })    
+    
+    rand_group <- lapply(unique(as.character(group)), function(g){
+        m <- apply(counts[rand, group==g, drop=FALSE], 1, sd, na.rm=TRUE)
+        data.frame(sd = m, group = g,
+                   type = paste("background -", g),
+                   stringsAsFactors = FALSE)
+    }) 
+    
+    res <- bind_rows(c(sign_group, rand_group))
+    
+    suppressWarnings(ggplot(res, aes_string("type", "sd", 
+                                            fill="group", colour="group"))+
+                         geom_violin(alpha=0.2)+
+                         scale_y_log10()+
+                         theme_bw())
+    }
 
 degNcomb <- function() {
     .Deprecated("DESeq2::lcfShrink")

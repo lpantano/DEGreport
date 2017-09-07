@@ -6,7 +6,8 @@
 \usage{
 degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
   batch = NULL, metadata = NULL, ann = c("external_gene_name", "symbol"),
-  slot = 1L, xsLab = xs, groupLab = group, batchLab = batch)
+  slot = 1L, log2 = TRUE, xsLab = xs, groupLab = group,
+  batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or SummarizedExperiment
@@ -31,6 +32,8 @@ batch effect visualization.}
 \item{ann}{Columns in rowData (if available) used to print gene names.}
 
 \item{slot}{Name of the slot to use to get count data.}
+
+\item{log2}{Whether to apply or not log2 transformation.}
 
 \item{xsLab}{Character, alternative label for x-axis (default: same as xs).}
 

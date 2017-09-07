@@ -87,7 +87,7 @@ correlation.
 You can put this tree plots together using \Rcode{degQC}.
 
 <<chunk-qc>>=
-degQC(res[["pvalue"]], counts, design[["group"]])
+degQC(counts, design[["group"]], pvalue = res[["pvalue"]])
 @
 
 

@@ -108,7 +108,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
                             pairs = pairs)
     message("Doing ", length(all_combs), " element(s).")
 
-    default <- "shrunk"
+    default <- "shrunken"
     attributes(default) <- list(default = "shrunken")
     message("Doing results() for each element.")
     resUnshrunken <- lapply(all_combs, function(x) .guessResults(dds, x, alpha))
@@ -121,7 +121,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
     names(resShrunken) <- names(all_combs)
     rdsList <- lapply(names(all_combs), function(x)
         new("DEGSet", list(raw = resUnshrunken[[x]],
-                                 shrunk = resShrunken[[x]]),
+                           shrunken = resShrunken[[x]]),
             default = default)
         )
     names(rdsList) <- names(all_combs)
@@ -193,7 +193,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 
 .merge_results <- function(results, raw){
     res_unshrunken <- deg(results, "raw")
-    res_shrunken <- deg(results)
+    res_shrunken <- deg(results, "shrunken")
     base_mean <- "baseMean_shrunken"
     if (raw)
         base_mean <- "baseMean_unshrunken"

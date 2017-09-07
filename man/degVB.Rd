@@ -5,14 +5,13 @@
 \title{Distribution of the standard desviation of
 DE genes compared to the background}
 \usage{
-degVB(tags, g1, g2, counts, pop = 400)
+degVB(tags, group, counts, pop = 400)
 }
 \arguments{
 \item{tags}{List of genes that are DE.}
 
-\item{g1}{List of samples in group 1.}
-
-\item{g2}{List of samples in group 2.}
+\item{group}{Character vector with group name for each sample in the
+same order than counts column names.}
 
 \item{counts}{matrix with counts for each samples and each gene.
 Should be same length than pvalues vector.}
@@ -34,6 +33,6 @@ dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
   colData(humanGender)[idx,], design=~group)
 dds <- DESeq(dds)
 res <- results(dds)
-degVB(row.names(res)[1:20], colData(dds)[["group"]][1:10],
-  colData(dds)[["group"]][11:20], counts(dds, normalized = TRUE))
+degVB(row.names(res)[1:20], colData(dds)[["group"]],
+  counts(dds, normalized = TRUE))
 }

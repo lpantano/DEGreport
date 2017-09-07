@@ -7,13 +7,15 @@ test_that("DEGSet",{
     colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
     design(dds) <-  ~ condition + treatment
     dds <- DESeq(dds)
+    raw <- results(dds)
     res <- degComps(dds, combs = c("condition"))
 
+    expect_warning(DEGSet(list(raw = raw), "raw"))
     expect_true(abs(deg(res[[1]], "raw")[["log2FoldChange"]][[1]]) >
-                    abs(deg(res[[1]], "shrunk")[["log2FoldChange"]][[1]]))
-    expect_match(degDefault(res[[1]]), "shrunk")
+                    abs(deg(res[[1]], "shrunken")[["log2FoldChange"]][[1]]))
+    expect_match(degDefault(res[[1]]), "shrunken")
     expect_error(deg(res[[1]], "fake"))
-    expect_identical(res[[1]][["shrunk"]], deg(res[[1]]))
+    expect_identical(res[[1]][["shrunken"]], deg(res[[1]]))
     expect_true(deg(res[[1]], tidy = "tibble") %>% is_tibble)
     expect_equal(deg(res[[1]], top = 5) %>% nrow, 5)
     expect_type(significants(res[[1]]), "character")

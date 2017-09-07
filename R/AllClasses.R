@@ -15,11 +15,15 @@
 #' * Optional table with shrunk Fold Change when it has been done.
 #' 
 #' To access the raw table use `deg(dgs, "raw")`, to access the 
-#' shrunken table use `deg(dgs, "shrunk")` or just `deg(dgs)`. 
+#' shrunken table use `deg(dgs, "shrunken")` or just `deg(dgs)`. 
 #' 
 #' @rdname DEGSet
 #' @name DEGSet
-#' @aliases DEGSet-class
+#' @param resList List with results as elements containing log2FoldChange,
+#'   pvalues and padj as column. Rownames should be feature names. Elements
+#'   should have names.
+#' @param default The name of the element to use by default.
+#' @aliases DEGSet-class DEGSet
 #' @author Lorena Pantano
 #' @examples
 #' library(DESeq2)
@@ -35,4 +39,21 @@ DEGSet <- setClass("DEGSet",
                           contains = "list",
                           slots = c(default = "character"))
 
-setValidity("DEGSet", function(object) TRUE)
+setValidity("DEGSet", function(object) {
+    stopifnot(!is.null(names(object)))
+    stopifnot(degDefault(object) %in% names(object))
+    if (sum(c("raw", "shrunken") %in% names(object)) < 2)
+        warning("Some functions won't work without
+                 'raw' and 'shrunken' elements in the object.")
+    TRUE
+})
+
+#' @rdname DEGSet
+#' @export
+DEGSet <- function(resList, default){
+    stopifnot(!is.null(names(resList)))
+    stopifnot(default %in% names(resList))
+    
+    new("DEGSet", resList,
+        default = default)
+}

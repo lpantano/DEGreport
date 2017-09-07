@@ -82,7 +82,7 @@
     <p>Distribution of expression of DE genes compared to the background</p>
     
 
-    <pre class="usage"><span class='fu'>degMB</span>(<span class='no'>tags</span>, <span class='no'>g1</span>, <span class='no'>g2</span>, <span class='no'>counts</span>, <span class='kw'>pop</span> <span class='kw'>=</span> <span class='fl'>400</span>)</pre>
+    <pre class="usage"><span class='fu'>degMB</span>(<span class='no'>tags</span>, <span class='no'>group</span>, <span class='no'>counts</span>, <span class='kw'>pop</span> <span class='kw'>=</span> <span class='fl'>400</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -92,12 +92,9 @@
       <td><p>List of genes that are DE.</p></td>
     </tr>
     <tr>
-      <th>g1</th>
-      <td><p>List of samples in group 1.</p></td>
-    </tr>
-    <tr>
-      <th>g2</th>
-      <td><p>List of samples in group 2.</p></td>
+      <th>group</th>
+      <td><p>Character vector with group name for each sample in the
+same order than counts column names.</p></td>
     </tr>
     <tr>
       <th>counts</th>
@@ -124,8 +121,8 @@ Should be same length than pvalues vector.</p></td>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>using pre-existing size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='output co'>#&gt; <span class='message'>-- replacing outliers and refitting for 1 genes</span>
 #&gt; <span class='message'>-- DESeq argument 'minReplicatesForReplace' = 7 </span>
 #&gt; <span class='message'>-- original counts are preserved in counts(dds)</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a></span>(<span class='no'>dds</span>)
-<span class='fu'>degMB</span>(<span class='fu'>row.names</span>(<span class='no'>res</span>)[<span class='fl'>1</span>:<span class='fl'>20</span>], <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"group"</span>]][<span class='fl'>1</span>:<span class='fl'>10</span>],
-  <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"group"</span>]][<span class='fl'>11</span>:<span class='fl'>20</span>], <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='img'><img src='degMB-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='fu'>degMB</span>(<span class='fu'>row.names</span>(<span class='no'>res</span>)[<span class='fl'>1</span>:<span class='fl'>20</span>], <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"group"</span>]],
+  <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='img'><img src='degMB-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
