@@ -34,12 +34,10 @@ test_that("singleFunctions",
                           counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
         detag <- row.names(res[1:10,])
-        expect_true(degMB(detag, colData(dse)[["group"]][1:5],
-                          colData(dse)[["group"]][6:10],
+        expect_true(degMB(detag, colData(dse)[["group"]],
                           counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
-        expect_true(degVB(detag, colData(dse)[["group"]][1:5],
-                          colData(dse)[["group"]][6:10],
+        expect_true(degVB(detag, colData(dse)[["group"]],
                           counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
         expect_true(degVolcano(as.data.frame(res[,c("log2FoldChange", "pvalue")])) %>%

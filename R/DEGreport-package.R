@@ -21,7 +21,7 @@
 #' @importFrom "methods" "slotNames"
 #' @importFrom "stats" "as.dist" "as.hclust" "cor" "cor.test"
 #'             "cutree" "density" "median.default" "quantile" "sd"
-#'             "time" "var" "na.omit" "aov" "prcomp"
+#'             "time" "var" "na.omit" "aov" "prcomp" "median"
 #'             "cmdscale" "dist" "hclust" "p.adjust" "xtabs"
 #' @import ggrepel
 #' @import quantreg
