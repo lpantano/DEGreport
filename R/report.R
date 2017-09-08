@@ -63,7 +63,7 @@ figurepvaluebyvarexp <-
 figurebyexp <- 
     function(tags,g1,g2,counts,out,pop=400)
 {
-    p <- degMB(tags,g1,g2,counts,pop)
+    p <- degMB(tags,c(g1,g2),counts,pop)
     File="fexp.jpg"
     HFile="fexp.pdf"
     jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );
@@ -82,7 +82,7 @@ figurebyexp <-
 figurebyvar <- 
     function(tags,g1,g2,counts,out,pop=400)
 {
-    p <- degVB(tags,g1,g2,counts,pop)
+    p <- degVB(tags,c(g1,g2),counts,pop)
     File="fvar.jpg"
     HFile="fvar.pdf"
     jpeg(paste(out, File, sep="" ) ,width=600,height=400,quality=100 );

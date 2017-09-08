@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.13.10
     2017-09-07  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Fix: Complete vignette with new functions.
     Feature: Add DEGSet construct to accept other sources.
     Feature: Adapt degQC to accept DEGSet object.
     Feature: Allow multiple group for degMB and degVB.

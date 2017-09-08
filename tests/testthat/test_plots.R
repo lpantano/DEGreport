@@ -16,7 +16,7 @@ test_that("degcovariates", {
     expect_error(degCovariates(log2(counts(dse) + 0.5), colData(dse)[2:1,]))
 })
 
-test_that("test_genes", {
+test_that("testGenes", {
     expect_true(degPlotWide(dse, rownames(dse)[1:10], group = "group") %>%
                     class %>% .[[2]] == "ggplot")
     expect_true(degPlot(dse, res = res, n = 3, xs = "group", group = "group") %>%
@@ -41,5 +41,9 @@ test_that("singleFunctions",
                           counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
         expect_true(degVolcano(as.data.frame(res[,c("log2FoldChange", "pvalue")])) %>%
+                        class %>% .[[2]] == "ggplot")
+        expect_true(degPCA(counts(dse)) %>%
+                        class %>% .[[2]] == "ggplot")
+        expect_true(degMDS(counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
     })

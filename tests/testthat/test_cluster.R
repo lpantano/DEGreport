@@ -15,9 +15,14 @@ test_that("transform", {
                                     colData(dse)[["group"]])
     expect_equal(mean(countsGroup), 0)
     hc <- .make_clusters(countsGroup)
+    cluster0 <- .select_genes(hc, countsGroup, minc = 5, reduce = TRUE)
     cluster <- .select_genes(hc, countsGroup, minc = 5)
     expect_equal(unique(cluster), c(1, 2))
+    expect_equal(unique(cluster0), c(1, 2))
     df <- data.frame(cluster = cluster, genes = names(cluster))
     expect_equal(.median_per_cluster(countsGroup, df) %>% mean, 0)
+    expect_equal(.filter(df, 50) %>% nrow, 69)
+    expect_equal(.group_metadata(as.data.frame(colData(dse)),
+                                 "group", "group", "group") %>% nrow, 2)
 })
     

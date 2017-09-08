@@ -97,18 +97,17 @@
     .logger(head(counts_group), "summarize_scale::counts_group")
     .logger(head(group), "summarize_scale::group")
     if (scale) {
-        norm_sign = t(apply(counts_group, 1, .scale))
+        norm_sign <- t(apply(counts_group, 1, .scale))
     }else{
-        norm_sign = counts_group
+        norm_sign <- counts_group
     }
     colnames(norm_sign) = colnames(counts_group)
     norm_sign
 }
 
-
 .median_per_cluster <- function(ma, clusters){
     # matrix, and df
-    .logger(table(clusters$cluster),
+    .logger(table(clusters[["cluster"]]),
             ".median_per_cluster::table=clusters")
     .logger(head(clusters), ".median_per_cluster::clusters")
     .t = do.call(rbind, lapply(unique(clusters$cluster), function(nc){
@@ -121,10 +120,10 @@
     .t
 }
 
-.filter <- function(df){
-    .sum <- table(df$cluster)
-    .pass <- names(.sum)[.sum > 4]
-    df[df$cluster %in% .pass,]
+.filter <- function(df, co = 4){
+    .sum <- table(df[["cluster"]])
+    .pass <- names(.sum)[.sum > co]
+    df[df[["cluster"]] %in% .pass,]
 }
 
 .get_features <- function(genes, norm, mapping){
@@ -157,25 +156,19 @@
                        col_transformed, name, mapping=NULL){
     .genes_nc1 <- as.character(.clus_base$genes[.clus_base$cluster == nc1])
     keep_info <-  .get_features(.genes_nc1, .norm, mapping)
-    keep = as.character(unique(keep_info$touse))
+    keep <- as.character(unique(keep_info$touse))
     if (length(keep) < 5)
         return(NULL)
     clusters <- degPatterns(as.matrix(.ma[keep,]),
                            .metadata,
                            minc = 5, summarize = summarize,
                            time = time, col = col)
-    # print(clusters$pass)
     if (length(clusters$pass) == 0)
         return(NULL)
     .exp <- .median_per_cluster(.norm,
                                clusters$df %>%
                                .[clusters$df$cluster %in% clusters$pass,])
-    # print(.exp)
-    # for (nc2 in rownames(.exp)){
-    df = lapply(rownames(.exp), function(nc2){
-        #print(nc2)
-        # print(.exp_base[nc1,])
-        # print(.exp[nc2,colnames(.exp_base)])
+    df <- lapply(rownames(.exp), function(nc2){
         .genes_nc2 = as.character(clusters$df$genes[clusters$df$cluster==nc2])
         .est = cor.test(.exp_base[nc1,], .exp[nc2,colnames(.exp_base)])
         data.frame(nc1=nc1,
@@ -662,13 +655,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                 "make sure is not an error. Normally",
                 "Only DE genes are useful for this function.")
     message("Working with ", nrow(ma), " genes.")
-    counts_group = t(sapply(rownames(ma), function(g){
-        sapply(levels(metadata[,summarize]), function(i){
-            idx = which(metadata[,summarize] == i)
-            mean(ma[g, idx], na.rm=TRUE)
-        })
-    }))
-    # colnames(counts_group) = unique(metadata[,summarize])
+    counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
 
     cluster_genes = .make_clusters(counts_group)
     groups = .select_genes(cluster_genes, counts_group, minc,
