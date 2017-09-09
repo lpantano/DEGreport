@@ -18,12 +18,19 @@ BiocStyle::latex()
 @
 
 \title{DEGreport }
-\author{Lorena Pantano}
-\date{Modified: 2 July, 2016. Compiled: \today}
+
+\author{Lorena Pantano\thanks{\email{lorena.pantano@gmail.com}}}
+\affil{Harvard TH Chan School of Public Health, Boston, US}
 
 \begin{document}
-maketitle
+
+\maketitle
+
+\packageVersion{\Sexpr{BiocStyle::pkg_ver("DEGreport")}}
+\date{Modified: 2 July, 2016. Compiled: \today}
+
 \tableofcontents
+
 \newpage
 
 <<package-load,message=FALSE>>=
@@ -84,7 +91,7 @@ significant genes should be randomly distributed.
 In this case, it would be good to look at the ones that are totally outside the expected 
 correlation.
 
-You can put this tree plots together using \Rcode{degQC}.
+You can put this tree plots together using \Rfunction{degQC}.
 
 <<chunk-qc>>=
 degQC(counts, design[["group"]], pvalue = res[["pvalue"]])
@@ -102,7 +109,6 @@ some of the PCs.
 <<chunk-covariates>>=
 resCov <- degCovariates(log2(counts(dds)+0.5),
                         colData(dds))
-resCov$plot
 @
 
 
@@ -119,6 +125,18 @@ names(cor)
 @
 
 
+\subsection{QC report}
+
+A quick HTML report can be created with \Rfunction{createReport} to show whether
+a DE analysis is biased to a particular set of genes. It contains the output
+of \Rfunction{degQC}, \Rfunction{degVB} and \Rfunction{degMB}.
+
+<<chunk-qc-report, eval=FALSE>>=
+createReport(colData(dds)[["group"]], counts(dds, normalized = TRUE),
+             row.names(res)[1:20], res[["pvalue"]], path = "~/Downloads")
+@
+
+
 \section{Report from DESeq2 analysis}
 
 Here, we show some useful plots for differentially expressed genes.
@@ -126,9 +144,9 @@ Here, we show some useful plots for differentially expressed genes.
 \subsection{Contrasts}
 
 
-\Rcode{DEGSet} is a class to store the DE results like the one from
-\Rcode{results()} function. DESeq2 offers multiple way to ask for
-contrasts/coefficients. With \Rcode{degComps} is easy to get multiple
+\Rclass{DEGSet} is a class to store the DE results like the one from
+\Rfunction{results} function. \Biocpkg{DESeq2} offers multiple way to ask for
+contrasts/coefficients. With \Rfunction{degComps} is easy to get multiple
 results in a single object:
 
 <<chunk-degComps>>=
@@ -138,17 +156,17 @@ degs <- degComps(dds, combs = "group",
 names(degs)
 @
 
-\Rcode{degs} contains 3 elements, one for each contrast/coefficient asked for.
+\Rfunction{degs} contains 3 elements, one for each contrast/coefficient asked for.
 It contains the results output in the element \Rcode{raw} and the output of
-\Rcode{lfcShrink} in the element \Rcode{shrunken}.
-To obtain the results from one of them, use the method \Rcode{dge}:
+\Rfunction{lfcShrink} in the element \Rfunction{shrunken}.
+To obtain the results from one of them, use the method \Rfunction{dge}:
 
 <<chunk-deg>>=
 deg(degs[[1]])
 @
 
 By default it would output the \Rcode{shrunken} table always, as defined by
-\Rcode{degDefault}, that contains the default table to get.
+\Rfunction{degDefault}, that contains the default table to get.
 
 To get the original results table, use the parameter as this:
 
@@ -190,7 +208,7 @@ plotMA(degs[[1]], limit = 3, correlation = TRUE)
 
 \subsection{Volcano plots}
 
-Volcano plot using the output of DESeq2. It mainly needs data.frame with
+Volcano plot using the output of \Biocpkg{DESeq2}. It mainly needs data.frame with
 two columns (logFC and pVal). Specific genes can be plot using the option
 \Rcode{plot\_text} (subset of the previous data.frame with a 3rd column to be used
 to plot the gene name).

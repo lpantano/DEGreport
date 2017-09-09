@@ -4,35 +4,26 @@
 \alias{createReport}
 \title{Create report of RNAseq DEG anlaysis}
 \usage{
-createReport(g1, g2, counts, tags, pvalues, fc, path, colors = "",
-  pop = 400, name = "DEGreport", ncores = NULL)
+createReport(g, counts, tags, pvalues, path, pop = 400, name = "DEGreport")
 }
 \arguments{
-\item{g1}{group 1}
+\item{g}{Character vector with the group the samples belong to.}
 
-\item{g2}{group 2}
-
-\item{counts}{matrix with counts for each samples and each gene.
+\item{counts}{Matrix with counts for each samples and each gene.
 Should be same length than pvalues vector.}
 
-\item{tags}{genes of DEG analysis}
+\item{tags}{Genes of DEG analysis}
 
 \item{pvalues}{pvalues of DEG analysis}
 
-\item{fc}{FC for each gene}
-
 \item{path}{path to save the figure}
-
-\item{colors}{data frame with colors for each gene}
 
 \item{pop}{random genes for background}
 
 \item{name}{name of the html file}
-
-\item{ncores}{num cores to be used to create report}
 }
 \value{
-create a html file with all figures and tables
+A HTML file with all figures and tables
 }
 \description{
 This function get the count matrix, pvalues, and FC of a

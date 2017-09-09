@@ -1,5 +1,10 @@
 DEGreport News
-
+CHANGES IN DEGreport 1.13.11
+    2017-09-09  Lorena Pantano <lorena.pantano@gmail.com>
+   
+   Feature: Migrate vignette to new BiocStyle.
+   Fix: Automatic QC report. Reduce final report with most important figures.
+   
 CHANGES IN DEGreport 1.13.10
     2017-09-07  Lorena Pantano <lorena.pantano@gmail.com>
     
