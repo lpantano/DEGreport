@@ -84,7 +84,7 @@ DESeq2 and similarly by edgeR to visualy check whether
 the median is the best size factor to represent depth.</p>
     
 
-    <pre class="usage"><span class='fu'>degCheckFactors</span>(<span class='no'>counts</span>)</pre>
+    <pre class="usage"><span class='fu'>degCheckFactors</span>(<span class='no'>counts</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -93,6 +93,10 @@ the median is the best size factor to represent depth.</p>
       <th>counts</th>
       <td><p>Matrix with counts for each samples and each gene.
 row number should be the same length than pvalues vector.</p></td>
+    </tr>
+    <tr>
+      <th>each</th>
+      <td><p>Plot each sample separately.</p></td>
     </tr>
     </table>
     
@@ -109,11 +113,18 @@ of the ratios should approximate to a normal shape and the factors should be sim
 to the median of distributions. If some samples show different distribution,
 the factor may be bias due to some biological or technical factor.</p>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Code to calculate size factors comes from
+<code><a href='http://www.rdocumentation.org/packages/DESeq2/topics/estimateSizeFactorsForMatrix'>DESeq2::estimateSizeFactorsForMatrix()</a></code>.</p></li>
+</ul>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>humanGender</span>)
 <span class='fu'>library</span>(<span class='no'>SummarizedExperiment</span>)
-<span class='fu'>degCheckFactors</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assays</a></span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][, <span class='fl'>1</span>:<span class='fl'>10</span>])</div><div class='output co'>#&gt; <span class='message'>Using  as id variables</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 87 rows containing non-finite values (stat_bin).</span></div><div class='img'><img src='degCheckFactors-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='fu'>degCheckFactors</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assays</a></span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][, <span class='fl'>1</span>:<span class='fl'>10</span>])</div><div class='output co'>#&gt; <span class='warning'>Warning: Unequal factor levels: coercing to character</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 3 rows containing non-finite values (stat_density).</span></div><div class='img'><img src='degCheckFactors-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -123,6 +134,8 @@ the factor may be bias due to some biological or technical factor.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

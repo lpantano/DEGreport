@@ -4,11 +4,13 @@
 \alias{degCheckFactors}
 \title{Distribution of gene ratios used to calculate Size Factors.}
 \usage{
-degCheckFactors(counts)
+degCheckFactors(counts, each = FALSE)
 }
 \arguments{
 \item{counts}{Matrix with counts for each samples and each gene.
 row number should be the same length than pvalues vector.}
+
+\item{each}{Plot each sample separately.}
 }
 \value{
 ggplot2 object
@@ -30,4 +32,10 @@ the factor may be bias due to some biological or technical factor.
 data(humanGender)
 library(SummarizedExperiment)
 degCheckFactors(assays(humanGender)[[1]][, 1:10])
+}
+\references{
+\itemize{
+\item Code to calculate size factors comes from
+\code{\link[DESeq2:estimateSizeFactorsForMatrix]{DESeq2::estimateSizeFactorsForMatrix()}}.
+}
 }

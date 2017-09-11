@@ -107,6 +107,7 @@ degQC <- function(counts, groups, object=NULL, pvalue=NULL){
 #' @aliases degCheckFactors
 #' @param counts Matrix with counts for each samples and each gene.
 #'   row number should be the same length than pvalues vector.
+#' @param each Plot each sample separately.
 #' @return ggplot2 object
 #' @details This function will plot the gene ratios for each sample. To calculate
 #' the ratios, it follows the simliar logic than DESeq2/edgeR uses, where the expression
@@ -114,22 +115,36 @@ degQC <- function(counts, groups, object=NULL, pvalue=NULL){
 #' of the ratios should approximate to a normal shape and the factors should be similar
 #' to the median of distributions. If some samples show different distribution,
 #' the factor may be bias due to some biological or technical factor.
+#' @references 
+#' * Code to calculate size factors comes from
+#'   [DESeq2::estimateSizeFactorsForMatrix()].
 #' @examples
 #' data(humanGender)
 #' library(SummarizedExperiment)
 #' degCheckFactors(assays(humanGender)[[1]][, 1:10])
 #' @export
 degCheckFactors <-
-    function(counts)
+    function(counts, each = FALSE)
     {
-        meanv  <-  rowMeans(counts)
-        ratios <- sweep(counts, 1, meanv, "/")
-        df <- suppressWarnings(reshape::melt.data.frame(as.data.frame(ratios)))
-        suppressWarnings(ggplot(df, aes(value))+
-                             geom_histogram(binwidth = 0.3)+
-                             theme_bw() +
-                             facet_wrap(~variable) +
-                             xlim(-4, 4))
+        counts <- as.data.frame(counts)
+        geoMeanNZ <- function(x) {
+            if (all(x == 0)) { 0 } else { exp( sum(log(x[x > 0])) / length(x) ) }
+        }
+        geoMeans <- apply(counts, 1, geoMeanNZ)
+        loggeomeans <- log(geoMeans)
+        df <- lapply(colnames(counts), function(s) {
+            cnts <- counts[[s]]
+            r <- (log(cnts) - loggeomeans)[is.finite(loggeomeans) & cnts > 0]
+            data.frame(ratios = r,
+                       sample = s)
+        }) %>% bind_rows()
+        p <- ggplot(df, aes(ratios, group = sample)) +
+            geom_density() +
+            theme_bw() +
+            xlim(-4, 4)
+        if (each)
+            p <- p + facet_wrap(~sample)
+        p
     }
 
 

@@ -84,44 +84,31 @@ DEG analysis and create a report to help to detect possible problems
 with the data.</p>
     
 
-    <pre class="usage"><span class='fu'>createReport</span>(<span class='no'>g1</span>, <span class='no'>g2</span>, <span class='no'>counts</span>, <span class='no'>tags</span>, <span class='no'>pvalues</span>, <span class='no'>fc</span>, <span class='no'>path</span>, <span class='kw'>colors</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>pop</span> <span class='kw'>=</span> <span class='fl'>400</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"DEGreport"</span>, <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>createReport</span>(<span class='no'>g</span>, <span class='no'>counts</span>, <span class='no'>tags</span>, <span class='no'>pvalues</span>, <span class='no'>path</span>, <span class='kw'>pop</span> <span class='kw'>=</span> <span class='fl'>400</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"DEGreport"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>g1</th>
-      <td><p>group 1</p></td>
-    </tr>
-    <tr>
-      <th>g2</th>
-      <td><p>group 2</p></td>
+      <th>g</th>
+      <td><p>Character vector with the group the samples belong to.</p></td>
     </tr>
     <tr>
       <th>counts</th>
-      <td><p>matrix with counts for each samples and each gene.
+      <td><p>Matrix with counts for each samples and each gene.
 Should be same length than pvalues vector.</p></td>
     </tr>
     <tr>
       <th>tags</th>
-      <td><p>genes of DEG analysis</p></td>
+      <td><p>Genes of DEG analysis</p></td>
     </tr>
     <tr>
       <th>pvalues</th>
       <td><p>pvalues of DEG analysis</p></td>
     </tr>
     <tr>
-      <th>fc</th>
-      <td><p>FC for each gene</p></td>
-    </tr>
-    <tr>
       <th>path</th>
       <td><p>path to save the figure</p></td>
-    </tr>
-    <tr>
-      <th>colors</th>
-      <td><p>data frame with colors for each gene</p></td>
     </tr>
     <tr>
       <th>pop</th>
@@ -131,15 +118,11 @@ Should be same length than pvalues vector.</p></td>
       <th>name</th>
       <td><p>name of the html file</p></td>
     </tr>
-    <tr>
-      <th>ncores</th>
-      <td><p>num cores to be used to create report</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>create a html file with all figures and tables</p>
+    <p>A HTML file with all figures and tables</p>
     
 
   </div>
