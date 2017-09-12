@@ -1,7 +1,8 @@
 DEGreport News
 CHANGES IN DEGreport 1.13.11
-    2017-09-11  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-09-12  Lorena Pantano <lorena.pantano@gmail.com>
    
+   Feature: significant works with DESeqResults class.
    Fix: log2 in degPlot wasn't active.
    Feature: Allow plot samples together or not in degCheckFactor.
    Feature: Migrate vignette to new BiocStyle.

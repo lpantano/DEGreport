@@ -4,11 +4,14 @@
 \name{significants}
 \alias{significants}
 \alias{significants,DEGSet-method}
+\alias{significants,DESeqResults-method}
 \title{Method to get the significant genes}
 \usage{
 significants(object, ...)
 
 \S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0, ...)
+
+\S4method{significants}{DESeqResults}(object, padj = 0.05, fc = 0, ...)
 }
 \arguments{
 \item{object}{\link{DEGSet}}

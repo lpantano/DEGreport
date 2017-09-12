@@ -72,7 +72,18 @@ setMethod("significants", signature("DEGSet"),
                   subset(., filterOut) %>%
                   .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
                   .[["gene"]]
-              
+          })
+
+#' @rdname significants
+setMethod("significants", signature("DESeqResults"),
+          function(object, padj = 0.05, fc = 0, ...){
+              df <-  as.data.frame(object)
+              filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
+              df %>%
+                  rownames_to_column("gene") %>%
+                  subset(., filterOut) %>%
+                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
+                  .[["gene"]]
           })
 
 
