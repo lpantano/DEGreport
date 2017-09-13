@@ -12,3 +12,13 @@ setGeneric("degDefault", function(object)
 #' @export
 setGeneric("significants", function(object, ...)
     standardGeneric("significants"))
+
+#' @rdname DEGSet
+#' @export
+setGeneric("DEGSetFromEdgeR", function(object, ...)
+    standardGeneric("DEGSetFromEdgeR"))
+
+#' @rdname DEGSet
+#' @export
+setGeneric("DEGSetFromDESeq2", function(object, ...)
+    standardGeneric("DEGSetFromDESeq2"))

@@ -53,7 +53,8 @@ setMethod("deg", signature("DEGSet"),
 #' Method to get the significant genes
 #' 
 #' Function to get the features that are significant
-#' according to some thresholds from a [DEGSet] class.
+#' according to some thresholds from a [DEGSet],
+#' [DESeq2::DESeqResults] and [edgeR::topTags].
 #' 
 #' @author Lorena Pantano
 #' @inheritParams degDefault
@@ -75,6 +76,7 @@ setMethod("significants", signature("DEGSet"),
           })
 
 #' @rdname significants
+#' @export
 setMethod("significants", signature("DESeqResults"),
           function(object, padj = 0.05, fc = 0, ...){
               df <-  as.data.frame(object)
@@ -85,6 +87,83 @@ setMethod("significants", signature("DESeqResults"),
                   .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
                   .[["gene"]]
           })
+
+#' @rdname significants
+#' @export
+setMethod("significants", signature("TopTags"),
+          function(object, padj = 0.05, fc = 0, ...){
+              df <-  as.data.frame(object)
+              filterOut <- abs(df[["logFC"]]) > fc & df[["FDR"]] < padj
+              df %>%
+                  rownames_to_column("gene") %>%
+                  subset(., filterOut) %>%
+                  .[order(abs(.[["logFC"]]), decreasing = TRUE),] %>%
+                  .[["gene"]]
+          })
+
+
+#' @rdname DEGSet
+#' @export
+setMethod("DEGSetFromEdgeR", signature("TopTags"),
+          function(object, default = "shrunken", extras = NULL){
+    name <- paste("contrast_", object[["comparison"]], collapse = "-")
+    df <- as.data.frame(object) %>% set_colnames(c("log2FoldChange",
+                                                "baseMean",
+                                                "pvalue",
+                                                "padj")) %>%
+        DataFrame
+    news <- lapply(extras, function(e){
+        if (class(e) == "TopTags")
+            return(as.data.frame(e) %>% set_colnames(c("log2FoldChange",
+                                                       "baseMean",
+                                                       "pvalue",
+                                                       "padj")) %>%
+                       DataFrame)
+        stop(class(e), " is not a TopTags object.")
+    })
+    names(news) <- names(extras)
+    l <- c(list(raw = df), news)
+    dge <- new("DEGSet", l,
+               default = default)
+    attr(dge, "comparison") <- name
+    dge
+})
+
+#' @rdname DEGSet
+#' @export
+setMethod("DEGSetFromDESeq2", signature("DESeqResults"),
+          function(object, default = "shrunken", extras = NULL){
+    name <- slot(slot(object, "elementMetadata"), "listData")[[2L]][2L]
+    name <- strsplit(name, ":")[[1L]][2L] %>%
+        gsub(" ", "", .)
+    df <- DataFrame(object)
+    news <- lapply(extras, function(e){
+        if (class(e) == "DESeqResults")
+            return(DataFrame(e))
+        stop(class(e), " is not a DESeqResults object.")
+    })
+    names(news) <- names(extras)
+    l <- c(list(raw = df), news)
+    dge <- new("DEGSet", l,
+               default = default)
+    attr(dge, "comparison") <- name
+    dge
+})
+
+# setMethod("DEGSetFromList", signature("list"),
+#           function(object, default = "shrunken"){
+#               dgeList <- lapply(object, function(o){
+#                   if (class(o) == "DESeqResults")
+#                       return(DEGSetFromDESeq2())
+#                   else if (class(o) == "TopTags")
+#                       return(DEGSetFromDESeq2())
+#                   else
+#                       message(class(o), " not supported, skipping.")
+#               })
+#               if (!is.null(names(list)))
+#                 names(dgeList) <- names(list)
+#               dgeList
+# })
 
 
 #' MA-plot from base means and log fold changes

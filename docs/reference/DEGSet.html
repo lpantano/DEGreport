@@ -86,7 +86,19 @@ in a way the methods will work with all of them.</p>
 
     <pre class="usage"><span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)
 
-<span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)</pre>
+<span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)
+
+<span class='fu'>DEGSetFromEdgeR</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+
+<span class='fu'>DEGSetFromDESeq2</span>(<span class='no'>object</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for TopTags</span>
+<span class='fu'>DEGSetFromEdgeR</span>(<span class='no'>object</span>, <span class='kw'>default</span> <span class='kw'>=</span> <span class='st'>"shrunken"</span>,
+  <span class='kw'>extras</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='co'># S4 method for DESeqResults</span>
+<span class='fu'>DEGSetFromDESeq2</span>(<span class='no'>object</span>, <span class='kw'>default</span> <span class='kw'>=</span> <span class='st'>"shrunken"</span>,
+  <span class='kw'>extras</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -100,6 +112,18 @@ should have names.</p></td>
     <tr>
       <th>default</th>
       <td><p>The name of the element to use by default.</p></td>
+    </tr>
+    <tr>
+      <th>object</th>
+      <td><p>Different objects to be transformed to DEGSet.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Optional parameters of the generic.</p></td>
+    </tr>
+    <tr>
+      <th>extras</th>
+      <td><p>List of extra tables related to the same comparison.</p></td>
     </tr>
     </table>
     

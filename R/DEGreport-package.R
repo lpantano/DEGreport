@@ -15,7 +15,7 @@
 
 #' DEGreport
 #' 
-#' @importFrom S4Vectors SimpleList
+#' @importFrom S4Vectors SimpleList DataFrame
 #' @importMethodsFrom BiocGenerics plotMA
 #' @importFrom "grDevices" "dev.off" "jpeg" "pdf" "rgb" "colorRampPalette"
 #' @importFrom "methods" "slotNames"

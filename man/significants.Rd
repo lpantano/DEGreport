@@ -5,6 +5,7 @@
 \alias{significants}
 \alias{significants,DEGSet-method}
 \alias{significants,DESeqResults-method}
+\alias{significants,TopTags-method}
 \title{Method to get the significant genes}
 \usage{
 significants(object, ...)
@@ -12,6 +13,8 @@ significants(object, ...)
 \S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0, ...)
 
 \S4method{significants}{DESeqResults}(object, padj = 0.05, fc = 0, ...)
+
+\S4method{significants}{TopTags}(object, padj = 0.05, fc = 0, ...)
 }
 \arguments{
 \item{object}{\link{DEGSet}}
@@ -25,7 +28,8 @@ Value can be 'raw', 'shrunken'.}
 }
 \description{
 Function to get the features that are significant
-according to some thresholds from a \link{DEGSet} class.
+according to some thresholds from a \link{DEGSet},
+\link[DESeq2:DESeqResults]{DESeq2::DESeqResults} and \link[edgeR:topTags]{edgeR::topTags}.
 }
 \author{
 Lorena Pantano

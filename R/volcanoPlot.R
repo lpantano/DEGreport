@@ -37,8 +37,10 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
                                  plot_text=NULL) {
     if (class(stats) == "DESeqResults")
         stats <- stats[, c("log2FoldChange", "padj")]
-    if (class(stats) == "DEGSet")
+    if (class(stats) == "DEGSet"){
         stats <- deg(stats, tidy = "data.frame")
+        stats <- stats[, c("log2FoldChange", "padj")]
+    }
     stats <- as.data.frame(stats)
     if (!any(side %in% c("both","down","up")) | length(side)>1)
         stop("side parameter should be: both, up or down.")

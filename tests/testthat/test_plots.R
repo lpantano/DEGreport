@@ -1,6 +1,5 @@
 context("Plots")
 
-library(DESeq2)
 data(humanGender)
 idx <- c(1:5, 75:80)
 counts <- assays(humanGender)[[1]]
