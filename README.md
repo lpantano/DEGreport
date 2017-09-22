@@ -16,14 +16,20 @@ Pantano L (2017). DEGreport: Report of DEG analysis. R package version 1.13.8.
 
 This is an [R][] package.
 
-### [Bioconductor][] method
+### [Bioconductor][] stable version
 
 ```r
 source("https://bioconductor.org/biocLite.R")
 biocLite("DEGreport")
 ```
 
-### [devtools][] method
+### [Bioconductor][] latest version
+
+```r
+devtools::install_git("https://git@git.bioconductor.org/packages/DEGreport")
+```
+
+### [devtools][] unstable version
 
 ```r
 install.packages("devtools")
