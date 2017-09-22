@@ -54,6 +54,8 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
         counts <- counts(dds, normalized = TRUE)
     else counts <- assays(dds)[[slot]]
     
+    stopifnot(class(counts) == "data.frame" | class(counts) == "matrix")
+    
     if (log2 & max(counts) < 500L)
         warning("Data seems to be already in log2. Please use log2 = FALSE.")
     if (log2)
