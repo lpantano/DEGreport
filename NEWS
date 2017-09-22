@@ -1,6 +1,6 @@
 DEGreport News
 CHANGES IN DEGreport 1.13.11
-    2017-09-12  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-09-22  Lorena Pantano <lorena.pantano@gmail.com>
    
    Feature: significant works with DESeqResults class.
    Fix: log2 in degPlot wasn't active.
