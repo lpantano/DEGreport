@@ -23,6 +23,7 @@
 #'             "cutree" "density" "median.default" "quantile" "sd"
 #'             "time" "var" "na.omit" "aov" "prcomp" "median"
 #'             "cmdscale" "dist" "hclust" "p.adjust" "xtabs"
+#' @importFrom scales trans_breaks trans_format math_format
 #' @importFrom ConsensusClusterPlus ConsensusClusterPlus
 #' @import ggrepel
 #' @import quantreg
@@ -50,7 +51,6 @@
 #' @importFrom dplyr left_join inner_join
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
-#' @importFrom scales trans_breaks trans_format math_format
 #' @importFrom tidyr spread
 #' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
 #' @importFrom tibble as_tibble

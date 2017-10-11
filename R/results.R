@@ -10,6 +10,7 @@
 
 .guessShrunken <- function(object, what, unShrunken){
     coef <- match(what[[1]], resultsNames(object))
+    object <- object[rownames(unShrunken),]
     if (is.na(coef) & length(what) == 1L)
         stop("coef ", what, " not found in resultsNames().")
     if (length(what) == 1)

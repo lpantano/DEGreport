@@ -89,6 +89,21 @@
                 effects.significantcovars = effects.significantcovars))
 }
 
+.generate_scatter_plot <- function(metadata, corMat){
+    plist <- apply(corMat[corMat[["fdr"]] < 0.1, ], 1, function(row){
+        xs <- strsplit(row[1], " ")[[1]][1]
+        ys <- row[2]
+        ggplot(metadata, aes_string(x = xs, y = ys)) +
+            geom_point() +
+            ggtitle(paste(xs, ys))
+    })
+    names <- corMat[corMat[["fdr"]] < 0.1, ] %>%
+        mutate(name = paste(compare, covar, sep = ":")) %>% 
+        .[["name"]]
+    names(plist) <- names
+    plist
+}
+
 #' Find correlation between pcs and covariates
 #'
 #' This function will calculate the pcs using prcomp function,
@@ -100,14 +115,15 @@
 #' @param counts normalized counts matrix
 #' @param metadata data.frame with samples metadata.
 #' @param fdr numeric value to use as cutoff to determine
-#' the minimum fdr to consider significant correlations
-#' between pcs and covariates.
+#'   the minimum fdr to consider significant correlations
+#'   between pcs and covariates.
 #' @param scale boolean to determine wether counts matrix should be
-#' scaled for pca. default FALSE.
+#'   scaled for pca. default FALSE.
 #' @param min_pc_pct numeric value that will be used as cutoff
-#' to select only pcs that explain more variability than this.
+#'   to select only pcs that explain more variability than this.
 #' @param correlation character determining the method for the
-#' correlation between pcs and covariates.
+#'   correlation between pcs and covariates.
+#' @plot Whether to plot or not the correlation matrix.
 #'
 #' @return: list:
 #' a) significantCovars, covariates with FDR below the cutoff.
@@ -126,16 +142,18 @@
 #' res <- degCovariates(log2(counts(dse)+0.5),
 #'   colData(dse))
 #' res$plot
+#' res$scatterPlot[[1]]
 #' @export
 degCovariates <- function(counts, metadata,
-                                      fdr = 0.1,
-                                      scale = FALSE,
-                                      min_pc_pct = 5.0,
-                                      correlation = "spearman") {
+                          fdr = 0.1,
+                          scale = FALSE,
+                          min_pc_pct = 5.0,
+                          correlation = "spearman",
+                          plot = TRUE) {
     title <- paste(ifelse(scale, "s", "un-s"), "caled ",
-                  " data in pca; pve >= ",
-                  min_pc_pct, "%; ", correlation,
-                  " correlations ", sep = "")
+                   " data in pca; pve >= ",
+                   min_pc_pct, "%; ", correlation,
+                   " correlations ", sep = "")
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
     metadata <- as.data.frame(metadata)
@@ -145,31 +163,32 @@ degCovariates <- function(counts, metadata,
     pcares <- .runpca(genesbysamples = counts,
                       scale_data_for_pca = scale,
                       min_pve_pct_pc = min_pc_pct)
-
+    
     samplepcvals <- pcares[["samplepcvals"]]
     pve <- pcares[["pve"]]
     npca <- ncol(samplepcvals)
+    original_names <- colnames(samplepcvals)
     colnames(samplepcvals) <- paste(colnames(samplepcvals), " (",
-                                   sprintf("%.2f", pve[1L:npca]), "%)",
-                                   sep = "")
-
+                                    sprintf("%.2f", pve[1L:npca]), "%)",
+                                    sep = "")
+    
     # find covariates without any missing data
     samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L,
                                                       function(dat) all(!is.na(dat))))]
-
+    
     exclude_vars_from_fdr <- setdiff(colnames(metadata),
                                      colnames(samplesbyfullcovariates))
-
-    corrres <- .calccompletecorandplot(samplepcvals,
+    
+    corrRes <- .calccompletecorandplot(samplepcvals,
                                        samplesbyfullcovariates,
                                        correlation,
                                        title,
                                        weights =
                                            pve[1L:dim(samplepcvals)[2L]],
                                        exclude_vars_from_fdr)
-
-    significantcovars <- corrres[["mat"]][corrres[["mat"]][["fdr"]] < fdr,"covar"]
-    ma <- corrres[["mat"]]
+    
+    significantcovars <- corrRes[["mat"]][corrRes[["mat"]][["fdr"]] < fdr,"covar"]
+    ma <- corrRes[["mat"]]
     ma[["r"]][ma[["fdr"]] > fdr] <- NA
     p <- ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
         geom_tile() +
@@ -181,13 +200,21 @@ degCovariates <- function(counts, metadata,
         theme(axis.text.x = element_text(angle = 90L,
                                          hjust = 1L,
                                          vjust = 0.5))
-    print(p)
+    samplepcvals <- as.data.frame(samplepcvals) %>% 
+        set_colnames(original_names) %>% 
+        rownames_to_column("samples")
+    samplepcvals <- bind_cols(samplepcvals,
+                              metadata)
+    scatterPlot <- .generate_scatter_plot(samplepcvals, corrRes[["mat"]])
+    if (plot) print(p)
     invisible(list(significantCovars = significantcovars,
                 plot = p,
-                corMatrix = corrres[["mat"]],
+                corMatrix = corrRes[["mat"]],
+                pcsMatrix = samplepcvals,
+                scatterPlot = scatterPlot,
                 effectsSignificantCovars =
-                    corrres[["effects.significantcovars"]],
-                pcsMatrix = samplepcvals))
+                    corrRes[["effects.significantcovars"]]
+                ))
 }
 
 degClean <- function(ma){

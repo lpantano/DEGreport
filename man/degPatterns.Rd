@@ -18,8 +18,9 @@ row number should be the same length than p-values vector.}
 \item{minc}{integer minimum number of genes in a group that
 will be return}
 
-\item{summarize}{character column name in metadata that will be used to gorup
-replicates.
+\item{summarize}{character column name in metadata that will be used to group
+replicates. If the column doesn't exist it'll merge the \code{time} and
+the \code{col} columns, if \code{col} doesn't exist it'll use \code{time} only.
 For instance, a merge between summarize and time parameters:
 control_point0 ... etc}
 

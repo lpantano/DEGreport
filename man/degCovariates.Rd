@@ -5,7 +5,7 @@
 \title{Find correlation between pcs and covariates}
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, min_pc_pct = 5,
-  correlation = "spearman")
+  correlation = "spearman", plot = TRUE)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -49,6 +49,7 @@ dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
 res <- degCovariates(log2(counts(dse)+0.5),
   colData(dse))
 res$plot
+res$scatterPlot[[1]]
 }
 \author{
 : Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal

@@ -606,8 +606,9 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'   row number should be the same length than p-values vector.
 #' @param minc integer minimum number of genes in a group that
 #' will be return
-#' @param summarize character column name in metadata that will be used to gorup
-#'   replicates.
+#' @param summarize character column name in metadata that will be used to group
+#'   replicates. If the column doesn't exist it'll merge the `time` and
+#'   the `col` columns, if `col` doesn't exist it'll use `time` only.
 #'   For instance, a merge between summarize and time parameters:
 #'   control_point0 ... etc
 #' @param time character column name in metadata that will be used as
