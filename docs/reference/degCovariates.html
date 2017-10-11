@@ -85,7 +85,7 @@ metadata.</p>
     
 
     <pre class="usage"><span class='fu'>degCovariates</span>(<span class='no'>counts</span>, <span class='no'>metadata</span>, <span class='kw'>fdr</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>min_pc_pct</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>)</pre>
+  <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -119,6 +119,10 @@ to select only pcs that explain more variability than this.</p></td>
       <td><p>character determining the method for the
 correlation between pcs and covariates.</p></td>
     </tr>
+    <tr>
+      <th>plot</th>
+      <td><p>Whether to plot or not the correlation matrix.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -142,7 +146,7 @@ e) pcsMatrix: PCs loading for each sample</p>
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degCovariates</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>),
   <span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>running pca and calculating correlations for:</span>
-#&gt; <span class='message'>un-scaled  data in pca; pve &gt;= 5%; spearman correlations </span></div><div class='img'><img src='degCovariates-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>res</span>$<span class='no'>plot</span></div><div class='img'><img src='degCovariates-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+#&gt; <span class='message'>un-scaled  data in pca; pve &gt;= 5%; spearman correlations </span></div><div class='img'><img src='degCovariates-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>res</span>$<span class='no'>plot</span></div><div class='img'><img src='degCovariates-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>res</span>$<span class='no'>scatterPlot</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='img'><img src='degCovariates-3.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

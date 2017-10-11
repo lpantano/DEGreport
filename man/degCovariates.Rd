@@ -24,6 +24,8 @@ to select only pcs that explain more variability than this.}
 
 \item{correlation}{character determining the method for the
 correlation between pcs and covariates.}
+
+\item{plot}{Whether to plot or not the correlation matrix.}
 }
 \value{
 : list:

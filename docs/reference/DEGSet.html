@@ -147,32 +147,32 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
 #&gt; Wald test p-value: condition B vs A 
-#&gt; DataFrame with 1000 rows and 5 columns
-#&gt;          baseMean log2FoldChange      stat    pvalue      padj
-#&gt;         &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
-#&gt; gene254   1297.34       -0.07239     8.505 1.823e-17 1.741e-14
-#&gt; gene174    245.74       -0.21299     7.912 2.542e-15 1.214e-12
-#&gt; gene878     51.98       -0.39723    -7.671 1.702e-14 5.417e-12
-#&gt; gene631     55.75        0.09504    -7.310 2.678e-13 6.393e-11
-#&gt; gene253     54.27       -0.40900    -6.885 5.784e-12 1.105e-09
-#&gt; ...           ...            ...       ...       ...       ...
-#&gt; gene843    0.3203         1.1478   0.36759    0.7132        NA
-#&gt; gene846    0.6453         1.1056   0.09192    0.9268        NA
-#&gt; gene863    0.3218         0.5457  -0.34644    0.7290        NA
-#&gt; gene928    0.4599         0.1447   0.59410    0.5524        NA
-#&gt; gene974    0.4876        -1.6675   0.35872    0.7198        NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 6
-#&gt;       gene baseMean log2FoldChange   stat    pvalue      padj
-#&gt;  *   &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-#&gt;  1 gene254  1297.34       -0.07239  8.505 1.823e-17 1.741e-14
-#&gt;  2 gene174   245.74       -0.21299  7.912 2.542e-15 1.214e-12
-#&gt;  3 gene878    51.98       -0.39723 -7.671 1.702e-14 5.417e-12
-#&gt;  4 gene631    55.75        0.09504 -7.310 2.678e-13 6.393e-11
-#&gt;  5 gene253    54.27       -0.40900 -6.885 5.784e-12 1.105e-09
-#&gt;  6  gene78   154.21       -0.18257  6.798 1.059e-11 1.686e-09
-#&gt;  7 gene796    70.54       -1.35350  6.625 3.471e-11 4.735e-09
-#&gt;  8 gene114   107.95       -0.50591 -6.361 1.999e-10 2.386e-08
-#&gt;  9  gene80   667.61       -1.04634  6.249 4.121e-10 4.373e-08
-#&gt; 10 gene529    32.77       -1.48273 -6.072 1.261e-09 1.205e-07
+#&gt; DataFrame with 1000 rows and 6 columns
+#&gt;          baseMean log2FoldChange     lfcSE      stat    pvalue      padj
+#&gt;         &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
+#&gt; gene254   1297.34          2.416    0.2767     8.505 1.823e-17 1.741e-14
+#&gt; gene174    245.74          2.585    0.3269     7.912 2.542e-15 1.214e-12
+#&gt; gene878     51.98         -2.893    0.3671    -7.671 1.702e-14 5.417e-12
+#&gt; gene631     55.75         -2.360    0.3152    -7.310 2.678e-13 6.393e-11
+#&gt; gene253     54.27         -2.559    0.3548    -6.885 5.784e-12 1.105e-09
+#&gt; ...           ...            ...       ...       ...       ...       ...
+#&gt; gene843    0.3203      2.060e-01    0.3454   0.36759    0.7132        NA
+#&gt; gene846    0.6453      5.378e-05    0.4370   0.09192    0.9268        NA
+#&gt; gene863    0.3218     -1.137e-01    0.3454  -0.34644    0.7290        NA
+#&gt; gene928    0.4599      2.198e-01    0.3642   0.59410    0.5524        NA
+#&gt; gene974    0.4876      1.170e-01    0.3666   0.35872    0.7198        NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
+#&gt;       gene baseMean log2FoldChange  lfcSE   stat    pvalue      padj
+#&gt;  *   &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1 gene254  1297.34          2.416 0.2767  8.505 1.823e-17 1.741e-14
+#&gt;  2 gene174   245.74          2.585 0.3269  7.912 2.542e-15 1.214e-12
+#&gt;  3 gene878    51.98         -2.893 0.3671 -7.671 1.702e-14 5.417e-12
+#&gt;  4 gene631    55.75         -2.360 0.3152 -7.310 2.678e-13 6.393e-11
+#&gt;  5 gene253    54.27         -2.559 0.3548 -6.885 5.784e-12 1.105e-09
+#&gt;  6  gene78   154.21          2.322 0.3257  6.798 1.059e-11 1.686e-09
+#&gt;  7 gene796    70.54          1.730 0.2650  6.625 3.471e-11 4.735e-09
+#&gt;  8 gene114   107.95         -2.000 0.3032 -6.361 1.999e-10 2.386e-08
+#&gt;  9  gene80   667.61          1.542 0.2439  6.249 4.121e-10 4.373e-08
+#&gt; 10 gene529    32.77         -2.128 0.3445 -6.072 1.261e-09 1.205e-07
 #&gt; # ... with 990 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

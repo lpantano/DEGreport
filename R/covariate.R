@@ -123,7 +123,7 @@
 #'   to select only pcs that explain more variability than this.
 #' @param correlation character determining the method for the
 #'   correlation between pcs and covariates.
-#' @plot Whether to plot or not the correlation matrix.
+#' @param plot Whether to plot or not the correlation matrix.
 #'
 #' @return: list:
 #' a) significantCovars, covariates with FDR below the cutoff.
