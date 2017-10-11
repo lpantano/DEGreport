@@ -75,6 +75,15 @@
     c
 }
 
+.make_concensus_cluster <- function(counts_group){
+    ConsensusClusterPlus(t(ma[significants(r),]),
+                         reps = 500, maxK = 10, plot = FALSE)
+}
+
+.select_concensus_genes <- function(c){
+    c[[2]][["consensusClass"]]
+}
+
 .select_genes <- function(c, counts_group, minc=15,
                           reduce=FALSE, cutoff=0.30){
     select <- cutree(as.hclust(c), h = c$dc)
@@ -593,36 +602,39 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @aliases degPatterns
 #' @param ma  log2 normalized count matrix
 #' @param metadata  data frame with sample information. Rownames
-#' should match \code{ma} column names
-#' row number should be the same length than p-values vector.
+#'   should match \code{ma} column names
+#'   row number should be the same length than p-values vector.
 #' @param minc integer minimum number of genes in a group that
 #' will be return
 #' @param summarize character column name in metadata that will be used to gorup
-#' replicates.
-#' For instance, a merge between summarize and time parameters:
-#' control_point0 ... etc
+#'   replicates.
+#'   For instance, a merge between summarize and time parameters:
+#'   control_point0 ... etc
 #' @param time character column name in metadata that will be used as
-#' variable that changes, normally a time variable.
+#'   variable that changes, normally a time variable.
 #' @param col character column name in metadata to separate
-#' samples. Normally control/mutant
+#'   samples. Normally control/mutant
+#' @param concensusCluster Indicates whether using [ConsensusClusterPlus]
+#'  or [cluster::diana()]
 #' @param reduce boolean reduce number of clusters using
-#' correlation values between them.
+#'   correlation values between them.
 #' @param cutoff integer threshold for correlation
-#' expression to merge clusters (0 - 1)
+#'   expression to merge clusters (0 - 1)
 #' @param scale boolean scale the \code{ma} values by row
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
-#' @details It would be used [cluster]{diana} function
+#' @details It would be used [cluster::diana()] function
 #' to detect a value to cut the expression based clustering
-#' at certain height. It can work with one or more groups with 2 or
+#' at certain height or [ConsensusClusterPlus].
+#' It can work with one or more groups with 2 or
 #' more several time points. The different patterns can be merged
 #' to get similar ones into only one pattern. The expression
 #' correlation of the patterns will be used to decide whether
 #' some need to be merged or not.
-#' @return list wiht two items. \code{df} is a data.frame
+#' @return list wiht two items. `df`` is a data.frame
 #' with two columns. The first one with genes, the second
-#' with the clusters they belong. \code{pass_to_plot} is a vector
-#' of the clusters that pass the \code{minc} cutoff.
+#' with the clusters they belong. `pass_to_plot` is a vector
+#' of the clusters that pass the `minc` cutoff.
 #' @examples
 #' data(humanGender)
 #' library(SummarizedExperiment)
@@ -632,6 +644,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @export
 degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        time="time", col=NULL,
+                       concensusCluster = TRUE,
                        reduce=FALSE, cutoff=0.70,
                        scale=TRUE, plot=TRUE, fixy=NULL){
     metadata <- as.data.frame(metadata)
@@ -657,11 +670,16 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     message("Working with ", nrow(ma), " genes.")
     counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
 
-    cluster_genes = .make_clusters(counts_group)
-    groups = .select_genes(cluster_genes, counts_group, minc,
-                           reduce = reduce,
-                           cutoff = cutoff)
-
+    if (concensusCluster){
+        cluster_genes = .make_clusters(counts_group)
+        groups = .select_genes(cluster_genes, counts_group, minc,
+                               reduce = reduce,
+                               cutoff = cutoff)
+    }else{
+        cluster_genes = .make_concensus_cluster(counts_group)
+        groups = .select_concensus_genes(cluster_genes)
+    }
+    
     if (scale)
         norm_sign = t(apply(counts_group, 1, .scale))
     else norm_sign = counts_group

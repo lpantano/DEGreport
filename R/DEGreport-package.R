@@ -23,6 +23,7 @@
 #'             "cutree" "density" "median.default" "quantile" "sd"
 #'             "time" "var" "na.omit" "aov" "prcomp" "median"
 #'             "cmdscale" "dist" "hclust" "p.adjust" "xtabs"
+#' @importFrom ConsensusClusterPlus ConsensusClusterPlus
 #' @import ggrepel
 #' @import quantreg
 #' @import ggplot2

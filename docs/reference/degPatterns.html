@@ -83,8 +83,8 @@
     
 
     <pre class="usage"><span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>metadata</span>, <span class='kw'>minc</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>summarize</span> <span class='kw'>=</span> <span class='st'>"merge"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"time"</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reduce</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>fixy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>concensusCluster</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fixy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -122,6 +122,11 @@ variable that changes, normally a time variable.</p></td>
 samples. Normally control/mutant</p></td>
     </tr>
     <tr>
+      <th>concensusCluster</th>
+      <td><p>Indicates whether using ConsensusClusterPlus
+or <code><a href='http://www.rdocumentation.org/packages/cluster/topics/diana'>cluster::diana()</a></code></p></td>
+    </tr>
+    <tr>
       <th>reduce</th>
       <td><p>boolean reduce number of clusters using
 correlation values between them.</p></td>
@@ -147,16 +152,14 @@ expression to merge clusters (0 - 1)</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list wiht two items. <code>df</code> is a data.frame
-with two columns. The first one with genes, the second
-with the clusters they belong. <code>pass_to_plot</code> is a vector
-of the clusters that pass the <code>minc</code> cutoff.</p>
+    <p>list wiht two items. <code>df`` is a data.frame with two columns. The first one with genes, the second with the clusters they belong.</code>pass_to_plot<code>is a vector of the clusters that pass the</code>minc` cutoff.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It would be used clusterdiana function
+    <p>It would be used <code><a href='http://www.rdocumentation.org/packages/cluster/topics/diana'>cluster::diana()</a></code> function
 to detect a value to cut the expression based clustering
-at certain height. It can work with one or more groups with 2 or
+at certain height or ConsensusClusterPlus.
+It can work with one or more groups with 2 or
 more several time points. The different patterns can be merged
 to get similar ones into only one pattern. The expression
 correlation of the patterns will be used to decide whether

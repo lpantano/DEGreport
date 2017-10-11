@@ -5,8 +5,8 @@
 \title{Make groups of genes using expression profile}
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
-  col = NULL, reduce = FALSE, cutoff = 0.7, scale = TRUE, plot = TRUE,
-  fixy = NULL)
+  col = NULL, concensusCluster = TRUE, reduce = FALSE, cutoff = 0.7,
+  scale = TRUE, plot = TRUE, fixy = NULL)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
@@ -29,6 +29,9 @@ variable that changes, normally a time variable.}
 \item{col}{character column name in metadata to separate
 samples. Normally control/mutant}
 
+\item{concensusCluster}{Indicates whether using \link{ConsensusClusterPlus}
+or \code{\link[cluster:diana]{cluster::diana()}}}
+
 \item{reduce}{boolean reduce number of clusters using
 correlation values between them.}
 
@@ -42,18 +45,16 @@ expression to merge clusters (0 - 1)}
 \item{fixy}{vector integers used as ylim in plot}
 }
 \value{
-list wiht two items. \code{df} is a data.frame
-with two columns. The first one with genes, the second
-with the clusters they belong. \code{pass_to_plot} is a vector
-of the clusters that pass the \code{minc} cutoff.
+list wiht two items. \code{df`` is a data.frame with two columns. The first one with genes, the second with the clusters they belong.}pass_to_plot\code{is a vector of the clusters that pass the}minc` cutoff.
 }
 \description{
 Make groups of genes using expression profile
 }
 \details{
-It would be used \link{cluster}{diana} function
+It would be used \code{\link[cluster:diana]{cluster::diana()}} function
 to detect a value to cut the expression based clustering
-at certain height. It can work with one or more groups with 2 or
+at certain height or \link{ConsensusClusterPlus}.
+It can work with one or more groups with 2 or
 more several time points. The different patterns can be merged
 to get similar ones into only one pattern. The expression
 correlation of the patterns will be used to decide whether

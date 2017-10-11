@@ -60,17 +60,22 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>This is an <a href="https://www.r-project.org">R</a> package.</p>
-<div id="bioconductor-method" class="section level3">
+<div id="bioconductor-stable-version" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bioconductor-method" class="anchor"></a><a href="https://bioconductor.org">Bioconductor</a> method</h3>
+<a href="#bioconductor-stable-version" class="anchor"></a><a href="https://bioconductor.org">Bioconductor</a> stable version</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"https://bioconductor.org/biocLite.R"</span>)
 <span class="kw">biocLite</span>(<span class="st">"DEGreport"</span>)</code></pre></div>
 </div>
-<div id="devtools-method" class="section level3">
+<div id="bioconductor-latest-version" class="section level3">
 <h3 class="hasAnchor">
-<a href="#devtools-method" class="anchor"></a><a href="https://cran.r-project.org/package=devtools">devtools</a> method</h3>
+<a href="#bioconductor-latest-version" class="anchor"></a><a href="https://bioconductor.org">Bioconductor</a> latest version</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_git">install_git</a></span>(<span class="st">"https://git@git.bioconductor.org/packages/DEGreport"</span>)</code></pre></div>
+</div>
+<div id="devtools-unstable-version" class="section level3">
+<h3 class="hasAnchor">
+<a href="#devtools-unstable-version" class="anchor"></a><a href="https://cran.r-project.org/package=devtools">devtools</a> unstable version</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
-devtools::<span class="kw">install_github</span>(<span class="st">"lpantano/DEGreport"</span>)</code></pre></div>
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"lpantano/DEGreport"</span>)</code></pre></div>
 <p>Load the package and learn what to do:</p>
 <p><code>browseVignettes("DEGreport")</code></p>
 <p>Here is the last devel <a href="https://bioconductor.org/packages/devel/bioc/vignettes/DEGreport/inst/doc/DEGreport.pdf">vignette</a>.</p>
