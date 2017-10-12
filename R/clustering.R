@@ -76,7 +76,7 @@
 }
 
 .make_concensus_cluster <- function(counts_group){
-    ConsensusClusterPlus(t(ma[significants(r),]),
+    ConsensusClusterPlus(t(counts_group),
                          reps = 500, maxK = 10, plot = FALSE)
 }
 
