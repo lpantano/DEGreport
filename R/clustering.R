@@ -632,7 +632,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' to get similar ones into only one pattern. The expression
 #' correlation of the patterns will be used to decide whether
 #' some need to be merged or not.
-#' @return list wiht two items. `df`` is a data.frame
+#' @return list wiht two items. `df` is a data.frame
 #' with two columns. The first one with genes, the second
 #' with the clusters they belong. `pass_to_plot` is a vector
 #' of the clusters that pass the `minc` cutoff.
@@ -671,7 +671,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     message("Working with ", nrow(ma), " genes.")
     counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
 
-    if (concensusCluster){
+    if (!concensusCluster){
         cluster_genes = .make_clusters(counts_group)
         groups = .select_genes(cluster_genes, counts_group, minc,
                                reduce = reduce,
