@@ -46,7 +46,10 @@ expression to merge clusters (0 - 1)}
 \item{fixy}{vector integers used as ylim in plot}
 }
 \value{
-list wiht two items. \code{df`` is a data.frame with two columns. The first one with genes, the second with the clusters they belong.}pass_to_plot\code{is a vector of the clusters that pass the}minc` cutoff.
+list wiht two items. \code{df} is a data.frame
+with two columns. The first one with genes, the second
+with the clusters they belong. \code{pass_to_plot} is a vector
+of the clusters that pass the \code{minc} cutoff.
 }
 \description{
 Make groups of genes using expression profile
@@ -66,5 +69,5 @@ data(humanGender)
 library(SummarizedExperiment)
 ma <- assays(humanGender)[[1]][1:100,]
 des <- colData(humanGender)
-res <- degPatterns(ma, des, time="group")
+res <- degPatterns(ma, des, time="group", concensusCluster = FALSE)
 }

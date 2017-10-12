@@ -77,7 +77,7 @@
 
 .make_concensus_cluster <- function(counts_group){
     ConsensusClusterPlus(t(counts_group),
-                         reps = 500, maxK = 10, plot = FALSE)
+                         reps = 500, maxK = 10, plot = "png")
 }
 
 .select_concensus_genes <- function(c){
@@ -641,7 +641,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' library(SummarizedExperiment)
 #' ma <- assays(humanGender)[[1]][1:100,]
 #' des <- colData(humanGender)
-#' res <- degPatterns(ma, des, time="group")
+#' res <- degPatterns(ma, des, time="group", concensusCluster = FALSE)
 #' @export
 degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        time="time", col=NULL,
@@ -707,6 +707,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     }
 
     invisible(list(df = data.frame(genes = names(groups), cluster = groups),
-         pass = to_plot, plot = all, hr = as.hclust(cluster_genes),
+         pass = to_plot, plot = all, hr = cluster_genes,
          profile = counts_group))
 }
