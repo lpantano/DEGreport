@@ -90,6 +90,7 @@
 }
 
 .generate_scatter_plot <- function(metadata, corMat){
+    if (sum(corMat[["fdr"]] < 0.1)) return(NULL)
     plist <- apply(corMat[corMat[["fdr"]] < 0.1, ], 1, function(row){
         xs <- strsplit(row[1], " ")[[1]][1]
         ys <- row[2]
