@@ -200,7 +200,7 @@ degCovariates <- function(counts, metadata,
         geom_tile() +
         theme_minimal() +
         ggtitle(title) +
-        geom_text(data = ma[ma[[pvalue]] < 0.05, ], aes(label="*")) +
+        geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*")) +
         scale_fill_gradient2(low = "darkblue", high = "darkorange",
                              guide = "colorbar", na.value = "grey90",
                              limits = c(-1L, 1L)) +
