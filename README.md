@@ -10,7 +10,10 @@
 
 QCs, figures and analyses after differential expression with DESeq2 or other similar tool.
 
-Pantano L (2017). DEGreport: Report of DEG analysis. R package version 1.13.8.
+Pantano L (2017). DEGreport: Report of DEG analysis. R package version 1.13.8. 
+
+DOI: [10.18129/B9.bioc.DEGreport](https://doi.org/doi:10.18129/B9.bioc.DEGreport)
+
 
 ## Installation
 
