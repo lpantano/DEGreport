@@ -128,7 +128,8 @@
 #'
 #' @return: list:
 #' a) significantCovars, covariates with FDR below the cutoff.
-#' b) plot, heatmap of the correlation found.
+#' b) plot, heatmap of the correlation found. * means pvalue < 0.05.
+#'    Only variables with FDR value lower than the cutoff are colored.
 #' c) corMatrix, correlation, p-value, FDR values
 #'    for each covariate and PCA pais
 #' d) effectsSignificantcovars: that is PCs % * absolute
@@ -199,6 +200,7 @@ degCovariates <- function(counts, metadata,
         geom_tile() +
         theme_minimal() +
         ggtitle(title) +
+        geom_text(data = ma[ma[[pvalue]] < 0.05, ], aes(label="*")) +
         scale_fill_gradient2(low = "darkblue", high = "darkorange",
                              guide = "colorbar", na.value = "grey90",
                              limits = c(-1L, 1L)) +

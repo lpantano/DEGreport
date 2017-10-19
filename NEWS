@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.13.12
     2017-10-11  Lorena Pantano <lorena.pantano@gmail.com>
    
+   Fix: Fix NA values in covariates analysis and add pvalue-ploting
    Fix: Avoid error when none covariate is significant
    Feature: Return scatter plots between PCs and metadata in degCovariates.
    Feature: Use ConsensusClusterPlus to cluster genes with degPatterns.

@@ -30,7 +30,8 @@ correlation between pcs and covariates.}
 \value{
 : list:
 a) significantCovars, covariates with FDR below the cutoff.
-b) plot, heatmap of the correlation found.
+b) plot, heatmap of the correlation found. * means pvalue < 0.05.
+Only variables with FDR value lower than the cutoff are colored.
 c) corMatrix, correlation, p-value, FDR values
 for each covariate and PCA pais
 d) effectsSignificantcovars: that is PCs % * absolute
