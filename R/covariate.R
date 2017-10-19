@@ -90,7 +90,7 @@
 }
 
 .generate_scatter_plot <- function(metadata, corMat){
-    if (sum(corMat[["fdr"]] < 0.1)) return(NULL)
+    if (sum(corMat[["fdr"]] < 0.1, na.rm = T) == 0) return(NULL)
     plist <- apply(corMat[corMat[["fdr"]] < 0.1, ], 1, function(row){
         xs <- strsplit(row[1], " ")[[1]][1]
         ys <- row[2]
@@ -158,7 +158,11 @@ degCovariates <- function(counts, metadata,
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
     metadata <- as.data.frame(metadata)
-    
+    metadata <- degClean(metadata) %>%
+        mutate_all(as.numeric) %>% 
+        as.data.frame() %>% 
+        set_rownames(row.names(metadata))
+
     stopifnot(identical(colnames(counts), rownames(metadata)))
     
     pcares <- .runpca(genesbysamples = counts,
@@ -233,7 +237,9 @@ degClean <- function(ma){
         if (sd(x, na.rm = TRUE) == 0)
             return(NULL)
         as.numeric(x)
-    })  %>% Filter(Negate(is.null), .) %>% bind_cols
+    })  %>% Filter(Negate(is.null), .) %>% bind_cols %>%
+        as.data.frame() %>%
+        set_rownames(row.names(ma))
 }
 
 #' Calculate the correlation relationshipt among all covariates
