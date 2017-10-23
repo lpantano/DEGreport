@@ -46,10 +46,11 @@
                                     max_fdr = 0.1) {
     # get factor and continuous covariates
     character_vars <- lapply(covar_data, class) == "character"
-    covar_data[, character_vars] <- apply(covar_data[, character_vars,
-                                                     drop = FALSE],
-                                          1L, as.factor)
-    
+    if (sum(character_vars) > 0 )
+        covar_data[, character_vars] <- apply(covar_data[, character_vars,
+                                                         drop = FALSE],
+                                              1L, as.factor)
+
     factorcovariates <- select_if(covar_data, is.factor) %>% colnames
     contcovariates <- select_if(covar_data, is.numeric) %>% colnames
     
@@ -180,7 +181,7 @@ degCovariates <- function(counts, metadata,
     
     # find covariates without any missing data
     samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L,
-                                                      function(dat) all(!is.na(dat))))]
+                                                      function(dat) all(!is.na(dat)))), drop = FALSE]
     
     exclude_vars_from_fdr <- setdiff(colnames(metadata),
                                      colnames(samplesbyfullcovariates))
@@ -200,13 +201,15 @@ degCovariates <- function(counts, metadata,
         geom_tile() +
         theme_minimal() +
         ggtitle(title) +
-        geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*")) +
         scale_fill_gradient2(low = "darkblue", high = "darkorange",
                              guide = "colorbar", na.value = "grey90",
                              limits = c(-1L, 1L)) +
         theme(axis.text.x = element_text(angle = 90L,
                                          hjust = 1L,
                                          vjust = 0.5))
+    if (sum(ma[["r"]] > 0, na.rm = TRUE))
+        p <- p + geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*"))
+        
     samplepcvals <- as.data.frame(samplepcvals) %>% 
         set_colnames(original_names) %>% 
         rownames_to_column("samples")
