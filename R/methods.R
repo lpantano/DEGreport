@@ -136,7 +136,8 @@ degCheckFactors <-
             cnts <- counts[[s]]
             r <- (log(cnts) - loggeomeans)[is.finite(loggeomeans) & cnts > 0]
             data.frame(ratios = r,
-                       sample = s)
+                       sample = s,
+                       stringsAsFactors = FALSE)
         }) %>% bind_rows()
         p <- ggplot(df, aes(ratios, group = sample)) +
             geom_density() +
