@@ -9,6 +9,7 @@ r: bioc-devel
 r_github_packages:
   - jimhester/covr
 before_install:
+  - sudo apt-get -y --reinstall install ghostscript
   - tlmgr install bera nowidow parnotes marginfix etoolbox titlesec sectsty framed enumitem parskip soul placeins footmisc changepage xstring caption mathtools
 after_success:
   - Rscript -e 'covr::codecov()'
