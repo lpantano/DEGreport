@@ -3,7 +3,8 @@ sudo: false
 dist: trusty
 cache: packages
 addons:
-  - ghostscript
+  packages:
+    - ghostscript
 r: bioc-devel
 r_github_packages:
   - jimhester/covr
