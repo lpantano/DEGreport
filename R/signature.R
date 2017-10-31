@@ -14,7 +14,7 @@
 
 .get_meta <- function(c){
     if (class(c) %in% c("bcbioRNASeq", "DESeqDataSet", "SummarizedExperiment"))
-        return(as.data.frame(colData(c)))
+        return(data.frame(colData(c), stringsAsFactors = FALSE))
     return(NULL)
 }
 
@@ -50,11 +50,14 @@ degSignature <- function(counts, signature, group = NULL, metadata = NULL){
     
     names(signature) <- c("gene", "signature")
     common <- intersect(row.names(c), signature[["gene"]])
-    c[common, ] %>%  melt() %>%  as.data.frame %>% 
+    c[common, ] %>%  melt() %>%  data.frame(., stringsAsFactors = FALSE) %>% 
         set_colnames(c("gene", "sample", "expression")) %>% 
-        left_join(meta %>% rownames_to_column("sample"),
-                  by = "sample") %>% 
-        left_join(signature, by = "gene") %>% 
+        mutate_if(is.factor, as.character) %>% 
+        left_join(meta %>% rownames_to_column("sample") %>% 
+                      mutate_if(is.factor, as.character),
+                  by = "sample") %>%
+        left_join(signature %>% 
+                      mutate_if(is.factor, as.character), by = "gene") %>% 
         group_by(group, signature, sample) %>% 
         summarise(median = median(expression)) %>% 
         ungroup %>% 
