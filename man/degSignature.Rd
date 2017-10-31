@@ -32,6 +32,5 @@ markers, plot for each group, the expression values for all the samples.
 \examples{
 data(humanGender)
 data(geneInfo)
-library(SummarizedExperiment)
 degSignature(humanGender, geneInfo, group = "group")
 }

@@ -38,7 +38,6 @@
 #' @examples
 #' data(humanGender)
 #' data(geneInfo)
-#' library(SummarizedExperiment)
 #' degSignature(humanGender, geneInfo, group = "group")
 #' @export
 degSignature <- function(counts, signature, group = NULL, metadata = NULL){

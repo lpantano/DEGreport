@@ -239,6 +239,19 @@ Another option for plotting genes in a wide format:
 degPlotWide(dds, rownames(dds)[1:5], group="group")
 @
 
+
+\subsection{Markers plots}
+
+Markers can be used to show whether different conditions are enriched in 
+different markers. For instance, in this example, Females and Males show
+different total expression for chromosome X/Y markers
+
+<<markers>>=
+data(geneInfo)
+degSignature(humanGender, geneInfo, group = "group")
+@
+
+
 \subsection{Full report}
 
 If you have a DESeq2 object, you can use degResults to create a full report
