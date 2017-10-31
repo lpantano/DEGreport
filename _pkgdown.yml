@@ -1,0 +1,25 @@
+url: http://lpantano.github.io/DEGreport
+
+template:
+  params:
+    bootswatch: cerulean
+
+authors:
+    Lorena Pantano:
+        href: https://lpantano.github.io
+    Michael Steinbaugh:
+        href: http://steinbaugh.com
+    Rory Kirchner:
+        href: https://github.com/roryk
+    Victor Barrera:
+        href: https://github.com/vbarrera
+    Kenneth Daily:
+    Thanneer Malai Perumal:
+    Mary Piper:
+        href: https://github.com/marypiper
+    Radhika Khetani:
+        href: https://github.com/rkhetani
+    John Hutchinson:
+        href: https://github.com/jnhutchinson
+    Harvard Chan Bioinformatics Core:
+        href: http://bioinformatics.sph.harvard.edu
