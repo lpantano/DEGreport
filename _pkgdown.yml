@@ -2,7 +2,7 @@ url: http://lpantano.github.io/DEGreport
 
 template:
   params:
-    bootswatch: cerulean
+    bootswatch: readable
 
 authors:
     Lorena Pantano:
