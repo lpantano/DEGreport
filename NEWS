@@ -1,5 +1,10 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.15.1
+    2017-10-31  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Add function to plot basic expression signatures.
+
 CHANGES IN DEGreport 1.13.12
     2017-10-11  Lorena Pantano <lorena.pantano@gmail.com>
    
