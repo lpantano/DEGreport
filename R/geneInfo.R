@@ -2,7 +2,7 @@
 #' @title data.frame with chromose information for each gene
 #' @description data.frame with chromose information for each gene
 #' @docType data
-#' @usage colors
+#' @usage geneInfo
 #' @format data.frame
 #' @source biomart
 #' @author Lorena Pantano, 2014-08-14

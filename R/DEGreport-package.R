@@ -45,7 +45,7 @@
 #' @importFrom dplyr summarise
 #' @importFrom dplyr mutate mutate_all
 #' @importFrom dplyr filter
-#' @importFrom dplyr group_by
+#' @importFrom dplyr group_by ungroup
 #' @importFrom dplyr "%>%"
 #' @importFrom dplyr distinct
 #' @importFrom dplyr left_join inner_join
