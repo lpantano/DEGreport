@@ -46,7 +46,7 @@ degSignature <- function(counts, signature, group = NULL, metadata = NULL){
     if (is.null(meta))
         meta <- metadata
     stopifnot(group %in% colnames(meta))
-    
+
     names(signature) <- c("gene", "signature")
     common <- intersect(row.names(c), signature[["gene"]])
     c[common, ] %>%  melt() %>%  data.frame(., stringsAsFactors = FALSE) %>% 
@@ -57,7 +57,7 @@ degSignature <- function(counts, signature, group = NULL, metadata = NULL){
                   by = "sample") %>%
         left_join(signature %>% 
                       mutate_if(is.factor, as.character), by = "gene") %>% 
-        group_by(group, signature, sample) %>% 
+        group_by(!!sym(group), signature, sample) %>% 
         summarise(median = median(expression)) %>% 
         ungroup %>% 
         ggplot(aes_string(x = group, y = "median", color = "signature")) +
