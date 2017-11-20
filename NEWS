@@ -1,8 +1,9 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.1
-    2017-10-31  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-11-13  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Fix: Add checking point in degPCA
     Feature: Add function to plot basic expression signatures.
 
 CHANGES IN DEGreport 1.13.12

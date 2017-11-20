@@ -523,7 +523,10 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                            as.data.frame(metadata)[as.character(comps$Name), ,
                                                    drop=FALSE])
     # [Feature] check metadata has name, shape, condition
-    # [Feature] check counts has same samples than metadata
+    
+    if (!is.null(metadata))
+        stopifnot(all.equal(colnames(counts), rownames(metadata)))
+    
     p <- ggplot(comps, aes_string(pc1, pc2,
                                   color = condition, shape = shape)) +
         geom_point(size = 3)

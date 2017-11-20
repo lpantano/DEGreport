@@ -12,7 +12,7 @@
 #' \code{colnames(counts)}.
 #' @param group Character column in metadata used to
 #'   group samples and applied the cutoff.
-#' @param min Numeric value indicating the minimum
+#' @param min Percentage value indicating the minimum
 #'   number of samples in each group that should have
 #'   more than 0 in count matrix.
 #' @param minreads Integer minimum number of reads to consider 
