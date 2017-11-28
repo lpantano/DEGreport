@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.15.1
-Date: 2017-11-13
+Version: 1.15.2
+Date: 2017-11-28
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -50,6 +50,7 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
   person("John", "Hutchinson", email = "@jnhutchinson", role = c("ctb")),
   person("Victor", "Barrera", email = "@vbarrera", role = c("ctb")),
   person("Mary", "Piper", email = "@marypiper", role = c("ctb")),
+  person("Radhika", "Khetani", email = "@rkhetani", role = c("ctb")),
   person("Kenneth", "Daily", role=c("ctb")),
   person("Thanneer", "Malai Perumal", role=c("ctb")),
   person("Rory", "Kirchner", email="@roryk", role=c("ctb")),

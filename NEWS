@@ -1,5 +1,10 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.15.2
+    2017-11-28  Lorena Pantano <lorena.pantano@gmail.com>
+    
+    Feature: Allow to ask for up/down genes. Thanks to Radhika Khetani.
+
 CHANGES IN DEGreport 1.15.1
     2017-11-13  Lorena Pantano <lorena.pantano@gmail.com>
     

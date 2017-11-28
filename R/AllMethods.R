@@ -60,14 +60,24 @@ setMethod("deg", signature("DEGSet"),
 #' @inheritParams degDefault
 #' @param padj Cutoff for the FDR column.
 #' @param fc Cutoff for the log2FC column.
+#' @param direction Whether to take down/up/ignore. Valid arguments are
+#'   down, up and NULL.
 #' @param ... Passed to [deg]. Default: value = NULL.
 #'   Value can be 'raw', 'shrunken'.
 #' @rdname significants
 #' @export
 setMethod("significants", signature("DEGSet"),
-          function(object, padj = 0.05, fc = 0, ...){
+          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
               df <-  as.data.frame(deg(object, ...))
-              filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
+              if (is.null(direction))
+                  filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
+              else if (direction == "up")
+                  filterOut <- df[["log2FoldChange"]] > fc & df[["padj"]] < padj
+              else if (direction == "down")
+                  filterOut <- df[["log2FoldChange"]] < fc & df[["padj"]] < padj
+              else
+                  stop("Value ", direction, " is not valid: NULL, down, up.")
+              
               df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
@@ -78,9 +88,17 @@ setMethod("significants", signature("DEGSet"),
 #' @rdname significants
 #' @export
 setMethod("significants", signature("DESeqResults"),
-          function(object, padj = 0.05, fc = 0, ...){
+          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
               df <-  as.data.frame(object)
-              filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
+              if (is.null(direction))
+                  filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
+              else if (direction == "up")
+                  filterOut <- df[["log2FoldChange"]] > fc & df[["padj"]] < padj
+              else if (direction == "down")
+                  filterOut <- df[["log2FoldChange"]] < fc & df[["padj"]] < padj
+              else
+                  stop("Value ", direction, " is not valid: NULL, down, up.")
+              
               df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
@@ -91,9 +109,17 @@ setMethod("significants", signature("DESeqResults"),
 #' @rdname significants
 #' @export
 setMethod("significants", signature("TopTags"),
-          function(object, padj = 0.05, fc = 0, ...){
+          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
               df <-  as.data.frame(object)
-              filterOut <- abs(df[["logFC"]]) > fc & df[["FDR"]] < padj
+              if (is.null(direction))
+                filterOut <- abs(df[["logFC"]]) > fc & df[["FDR"]] < padj
+              else if (direction == "up")
+                  filterOut <- df[["logFC"]] > fc & df[["FDR"]] < padj
+              else if (direction == "down")
+                  filterOut <- df[["logFC"]] < fc & df[["FDR"]] < padj
+              else
+                  stop("Value ", direction, " is not valid: NULL, down, up.")
+              
               df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
