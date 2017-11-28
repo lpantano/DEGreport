@@ -17,7 +17,7 @@ each column in counts matrix. Rownames should match
 \item{group}{Character column in metadata used to
 group samples and applied the cutoff.}
 
-\item{min}{Numeric value indicating the minimum
+\item{min}{Percentage value indicating the minimum
 number of samples in each group that should have
 more than 0 in count matrix.}
 

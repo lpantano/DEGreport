@@ -10,11 +10,14 @@
 \usage{
 significants(object, ...)
 
-\S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0, ...)
+\S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0,
+  direction = NULL, ...)
 
-\S4method{significants}{DESeqResults}(object, padj = 0.05, fc = 0, ...)
+\S4method{significants}{DESeqResults}(object, padj = 0.05, fc = 0,
+  direction = NULL, ...)
 
-\S4method{significants}{TopTags}(object, padj = 0.05, fc = 0, ...)
+\S4method{significants}{TopTags}(object, padj = 0.05, fc = 0,
+  direction = NULL, ...)
 }
 \arguments{
 \item{object}{\link{DEGSet}}
@@ -25,6 +28,9 @@ Value can be 'raw', 'shrunken'.}
 \item{padj}{Cutoff for the FDR column.}
 
 \item{fc}{Cutoff for the log2FC column.}
+
+\item{direction}{Whether to take down/up/ignore. Valid arguments are
+down, up and NULL.}
 }
 \description{
 Function to get the features that are significant
