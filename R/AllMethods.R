@@ -68,13 +68,14 @@ setMethod("deg", signature("DEGSet"),
 #' @export
 setMethod("significants", signature("DEGSet"),
           function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+              fc <- abs(fc)
               df <-  as.data.frame(deg(object, ...))
               if (is.null(direction))
                   filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
               else if (direction == "up")
                   filterOut <- df[["log2FoldChange"]] > fc & df[["padj"]] < padj
               else if (direction == "down")
-                  filterOut <- df[["log2FoldChange"]] < fc & df[["padj"]] < padj
+                  filterOut <- df[["log2FoldChange"]] < (-1L * fc) & df[["padj"]] < padj
               else
                   stop("Value ", direction, " is not valid: NULL, down, up.")
               
@@ -89,13 +90,14 @@ setMethod("significants", signature("DEGSet"),
 #' @export
 setMethod("significants", signature("DESeqResults"),
           function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+              fc <- abs(fc)
               df <-  as.data.frame(object)
               if (is.null(direction))
                   filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
               else if (direction == "up")
                   filterOut <- df[["log2FoldChange"]] > fc & df[["padj"]] < padj
               else if (direction == "down")
-                  filterOut <- df[["log2FoldChange"]] < fc & df[["padj"]] < padj
+                  filterOut <- df[["log2FoldChange"]] < (-1L * fc) & df[["padj"]] < padj
               else
                   stop("Value ", direction, " is not valid: NULL, down, up.")
               
@@ -110,13 +112,14 @@ setMethod("significants", signature("DESeqResults"),
 #' @export
 setMethod("significants", signature("TopTags"),
           function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+              fc <- abs(fc)
               df <-  as.data.frame(object)
               if (is.null(direction))
                 filterOut <- abs(df[["logFC"]]) > fc & df[["FDR"]] < padj
               else if (direction == "up")
                   filterOut <- df[["logFC"]] > fc & df[["FDR"]] < padj
               else if (direction == "down")
-                  filterOut <- df[["logFC"]] < fc & df[["FDR"]] < padj
+                  filterOut <- df[["logFC"]] < (-1L * fc) & df[["FDR"]] < padj
               else
                   stop("Value ", direction, " is not valid: NULL, down, up.")
               
