@@ -27,6 +27,7 @@ Other contributors:
   \item John Hutchinson \email{@jnhutchinson} [contributor]
   \item Victor Barrera \email{@vbarrera} [contributor]
   \item Mary Piper \email{@marypiper} [contributor]
+  \item Radhika Khetani \email{@rkhetani} [contributor]
   \item Kenneth Daily [contributor]
   \item Thanneer Malai Perumal [contributor]
   \item Rory Kirchner \email{@roryk} [contributor]
