@@ -3,8 +3,8 @@
     if (is.na(coef) & length(what) == 1L)
         stop("coef ", what, " not found in resultsNames(dds).")
     if (length(what) == 1)
-        res <- results(object, name = what, alpha = alpha)
-    else res <- results(object, contrast = what, alpha = alpha)
+        res <- results(object, name = what, altHypothesis = alpha)
+    else res <- results(object, contrast = what, altHypothesis = alpha)
     res[order(res[["padj"]]),]
 }
 
