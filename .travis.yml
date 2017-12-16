@@ -1,13 +1,13 @@
 language: r
 sudo: true
 dist: trusty
-# cache: packages
+cache: packages
 addons:
   packages:
     - ghostscript
 r: bioc-devel
-r_github_packages:
-  - jimhester/covr
+r_packages:
+  - covr
 before_install:
   - sudo apt-get -y --reinstall install ghostscript
   - tlmgr install bera nowidow parnotes marginfix etoolbox titlesec sectsty framed enumitem parskip soul placeins footmisc changepage xstring caption mathtools
