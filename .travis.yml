@@ -1,7 +1,7 @@
 language: r
 sudo: true
 dist: trusty
-cache: packages
+# cache: packages
 addons:
   packages:
     - ghostscript
