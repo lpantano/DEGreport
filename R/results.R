@@ -3,8 +3,8 @@
     if (is.na(coef) & length(what) == 1L)
         stop("coef ", what, " not found in resultsNames(dds).")
     if (length(what) == 1)
-        res <- results(object, name = what, altHypothesis = alpha)
-    else res <- results(object, contrast = what, altHypothesis = alpha)
+        res <- results(object, name = what)
+    else res <- results(object, contrast = what)
     res[order(res[["padj"]]),]
 }
 
@@ -258,18 +258,18 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 }
 
 
-# helper ====
+# DESeq2 summary helper ====
 .summary <- function(object, contrast, alpha){
     if (class(object) == "DESeqDataSet"){
         if (is.null(contrast)) {
             contrast <- resultsNames(object)[[2L]]
         }
-        return(summary(.guessResults(object, contrast, alpha)))
+        return(summary(.guessResults(object, contrast), alpha = alpha))
     }
     if (class(object) == "DESeqResults")
-        return(summary(object))
+        return(summary(object, alpha = alpha))
     if (class(object) == "DEGSet")
-        return(summary(deg(object)))
+        return(summary(deg(object), alpha = alpha))
     stop("No class supported.")
 }
 #' Print Summary Statistics of Alpha Level Cutoffs

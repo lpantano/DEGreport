@@ -6,6 +6,7 @@
 \alias{significants,DEGSet-method}
 \alias{significants,DESeqResults-method}
 \alias{significants,TopTags-method}
+\alias{significants,list-method}
 \title{Method to get the significant genes}
 \usage{
 significants(object, ...)
@@ -17,6 +18,9 @@ significants(object, ...)
   direction = NULL, ...)
 
 \S4method{significants}{TopTags}(object, padj = 0.05, fc = 0,
+  direction = NULL, ...)
+
+\S4method{significants}{list}(object, padj = 0.05, fc = 0,
   direction = NULL, ...)
 }
 \arguments{

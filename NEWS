@@ -1,8 +1,14 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.2
-    2017-11-28  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-12-12  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Fix: Volcano plot was plotting wrong the shadows in the y-axis.
+    Feature: Get significants for a list of DEGSet objects binding
+             the tables first, calculating a new FDR,
+             and aplying the filter as last step.
+             https://support.bioconductor.org/p/104059/#104072
+    Fix: Use correct option in DESeq2::results to count UP/DOWN genes.
     Feature: Allow to ask for up/down genes. Thanks to Radhika Khetani.
 
 CHANGES IN DEGreport 1.15.1

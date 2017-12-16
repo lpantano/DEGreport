@@ -56,7 +56,7 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
     # get range of log fold change and p-value values to setup plot borders
     range.lfc <- c(floor(min(stats$logFC)), ceiling(max(stats$logFC)))
     range.pval <- c(floor(min(stats$adj.P.Val)), ceiling(max(stats$adj.P.Val)))
-
+    pval.cutoff <- -log10(pval.cutoff)
 
     #make scatter volcano plot
     scat.poly.up <- with(stats, data.frame(x=as.numeric(c(lfc.cutoff,  lfc.cutoff, max(range.lfc),max(range.lfc))), 

@@ -130,6 +130,39 @@ setMethod("significants", signature("TopTags"),
                   .[["gene"]]
           })
 
+.supported <- function(x){
+    return(class(x) %in% c("DEGSet", "DESeqResults"))
+}
+
+#' @rdname significants
+#' @export
+setMethod("significants", signature("list"),
+          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+              object <- object[sapply(object, .supported)]
+              if (length(object) == 0){
+                  message("Only DEGSet and DESeqResults objects are used.")
+                  stop("No compatible objects remained.")
+              }
+              df <- lapply(object, deg, tidy = "tibble") %>%
+                  bind_rows() %>% as.data.frame()
+              df[["fdr"]] <- p.adjust(df[["pvalue"]], method = "fdr")
+              fc <- abs(fc)
+              if (is.null(direction))
+                  filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["fdr"]] < padj
+              else if (direction == "up")
+                  filterOut <- df[["log2FoldChange"]] > fc & df[["fdr"]] < padj
+              else if (direction == "down")
+                  filterOut <- df[["log2FoldChange"]] < (-1L * fc) & df[["fdr"]] < padj
+              else
+                  stop("Value ", direction, " is not valid, different from NULL, down, up.")
+              
+              df %>%
+                  subset(., filterOut) %>%
+                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
+                  .[["gene"]] %>% 
+                  unique
+              
+          })
 
 #' @rdname DEGSet
 #' @export
