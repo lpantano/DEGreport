@@ -8,17 +8,23 @@
     res[order(res[["padj"]]),]
 }
 
-.guessShrunken <- function(object, what, unShrunken){
+.guessShrunken <- function(object, what, unShrunken, method){
     coef <- match(what[[1]], resultsNames(object))
     object <- object[rownames(unShrunken),]
     if (is.na(coef) & length(what) == 1L)
         stop("coef ", what, " not found in resultsNames().")
+    if (length(what) > 1 & method == "apeglm"){
+        warning("apeglm only works with coefficients, changing to normal.")
+        method = "normal"
+    }
     if (length(what) == 1)
         res <- lfcShrink(
             dds = object,
             coef = coef,
-            res = unShrunken)
-    else res <- lfcShrink(object, contrast = what, res = unShrunken)
+            res = unShrunken,
+            type = method)
+    else res <- lfcShrink(object, contrast = what,
+                          res = unShrunken, type = method)
     res[order(res[["padj"]]),]
 }
 
@@ -85,6 +91,7 @@
 #'   fom `colData(dds)` to create group comparisons.
 #' @param contrast Optional vector to specify contrast. See [DESeq2::results()].
 #' @param alpha Numeric value used in independent filtering in [DESeq2::results()].
+#' @param type Type of shrinkage estimator. See [DESeq2::results()].
 #' @param pairs Boolean to indicate whether create all comparisons or only
 #'   use the coefficient already created from [DESeq2::resultsNames()].
 #'   
@@ -101,7 +108,8 @@
 #'               contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
 #' @export
 degComps <- function(dds, combs = NULL, contrast = NULL,
-                          alpha = 0.05, pairs = FALSE) {
+                     alpha = 0.05, type = "normal",
+                     pairs = FALSE) {
     stopifnot(class(dds) == "DESeqDataSet")
 
     all_combs <- .guessComb(dds,
@@ -117,7 +125,8 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
     resShrunken <- lapply(names(all_combs), function(x)
         .guessShrunken(dds,
                        all_combs[[x]],
-                       resUnshrunken[[x]]))
+                       resUnshrunken[[x]],
+                       type))
     
     names(resShrunken) <- names(all_combs)
     rdsList <- lapply(names(all_combs), function(x)

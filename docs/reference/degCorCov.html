@@ -53,7 +53,7 @@ in the metadata table — degCorCov • DEGreport</title>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -121,7 +121,7 @@ b) plot, Heatmap plot of correlation matrix</p>
 <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
   <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
-<span class='no'>cor</span> <span class='kw'>&lt;-</span> <span class='fu'>degCorCov</span>(<span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='img'><img src='degCorCov-6.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='no'>cor</span> <span class='kw'>&lt;-</span> <span class='fu'>degCorCov</span>(<span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='img'><img src='degCorCov-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

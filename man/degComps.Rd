@@ -5,7 +5,7 @@
 \title{Automatize the use of \code{results()} for multiple comparisons}
 \usage{
 degComps(dds, combs = NULL, contrast = NULL, alpha = 0.05,
-  pairs = FALSE)
+  type = "normal", pairs = FALSE)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} obcject.}
@@ -16,6 +16,8 @@ fom \code{colData(dds)} to create group comparisons.}
 \item{contrast}{Optional vector to specify contrast. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
 
 \item{alpha}{Numeric value used in independent filtering in \code{\link[DESeq2:results]{DESeq2::results()}}.}
+
+\item{type}{Type of shrinkage estimator. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
 
 \item{pairs}{Boolean to indicate whether create all comparisons or only
 use the coefficient already created from \code{\link[DESeq2:resultsNames]{DESeq2::resultsNames()}}.}

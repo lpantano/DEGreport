@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -87,13 +87,20 @@ according to some thresholds from a <a href='DEGSet.html'>DEGSet</a>,
     <pre class="usage"><span class='fu'>significants</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for DEGSet</span>
-<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>direction</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for DESeqResults</span>
-<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>direction</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for TopTags</span>
-<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>direction</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for list</span>
+<span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>direction</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -114,6 +121,11 @@ Value can be 'raw', 'shrunken'.</p></td>
     <tr>
       <th>fc</th>
       <td><p>Cutoff for the log2FC column.</p></td>
+    </tr>
+    <tr>
+      <th>direction</th>
+      <td><p>Whether to take down/up/ignore. Valid arguments are
+down, up and NULL.</p></td>
     </tr>
     </table>
     

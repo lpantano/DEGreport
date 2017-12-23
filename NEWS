@@ -1,8 +1,9 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.2
-    2017-12-12  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-12-23  Lorena Pantano <lorena.pantano@gmail.com>
     
+    Feature: Add support to different shrinkage estimator.
     Fix: Volcano plot was plotting wrong the shadows in the y-axis.
     Feature: Get significants for a list of DEGSet objects binding
              the tables first, calculating a new FDR,
