@@ -43,6 +43,7 @@ Imports:
     magrittr,
     scales,
     stats,
+    stringr,
     psych,
     rlang
 Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 
