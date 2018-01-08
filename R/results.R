@@ -91,6 +91,8 @@
 #'   fom `colData(dds)` to create group comparisons.
 #' @param contrast Optional vector to specify contrast. See [DESeq2::results()].
 #' @param alpha Numeric value used in independent filtering in [DESeq2::results()].
+#' @param skip Boolean to indicate whether skip shrinkage. For instance
+#'   when it comes from LRT method.
 #' @param type Type of shrinkage estimator. See [DESeq2::results()].
 #' @param pairs Boolean to indicate whether create all comparisons or only
 #'   use the coefficient already created from [DESeq2::resultsNames()].
@@ -108,7 +110,8 @@
 #'               contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
 #' @export
 degComps <- function(dds, combs = NULL, contrast = NULL,
-                     alpha = 0.05, type = "normal",
+                     alpha = 0.05, skip = FALSE,
+                     type = "normal",
                      pairs = FALSE) {
     stopifnot(class(dds) == "DESeqDataSet")
 
@@ -117,18 +120,23 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
                             pairs = pairs)
     message("Doing ", length(all_combs), " element(s).")
 
-    default <- "shrunken"
-    attributes(default) <- list(default = "shrunken")
     message("Doing results() for each element.")
     resUnshrunken <- lapply(all_combs, function(x) .guessResults(dds, x, alpha))
-    message("Doing lcfSrink() for each element.")
-    resShrunken <- lapply(names(all_combs), function(x)
-        .guessShrunken(dds,
-                       all_combs[[x]],
-                       resUnshrunken[[x]],
-                       type))
-    
-    names(resShrunken) <- names(all_combs)
+    resShrunken <- list()
+    default <- "raw"
+    if (!skip){
+        default <- "shrunken"
+        
+        message("Doing lcfSrink() for each element.")
+        resShrunken <- lapply(names(all_combs), function(x)
+            .guessShrunken(dds,
+                           all_combs[[x]],
+                           resUnshrunken[[x]],
+                           type))
+        
+        names(resShrunken) <- names(all_combs)
+    }
+    attributes(default) <- list(default = default)
     rdsList <- lapply(names(all_combs), function(x)
         new("DEGSet", list(raw = resUnshrunken[[x]],
                            shrunken = resShrunken[[x]]),

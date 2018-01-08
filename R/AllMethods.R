@@ -62,12 +62,14 @@ setMethod("deg", signature("DEGSet"),
 #' @param fc Cutoff for the log2FC column.
 #' @param direction Whether to take down/up/ignore. Valid arguments are
 #'   down, up and NULL.
+#' @param full Whether to return full table or not.
 #' @param ... Passed to [deg]. Default: value = NULL.
 #'   Value can be 'raw', 'shrunken'.
 #' @rdname significants
 #' @export
 setMethod("significants", signature("DEGSet"),
-          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+          function(object, padj = 0.05, fc = 0,
+                   direction = NULL, full = FALSE, ...){
               fc <- abs(fc)
               df <-  as.data.frame(deg(object, ...))
               if (is.null(direction))
@@ -79,17 +81,20 @@ setMethod("significants", signature("DEGSet"),
               else
                   stop("Value ", direction, " is not valid: NULL, down, up.")
               
-              df %>%
+              df <- df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
-                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
-                  .[["gene"]]
+                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),]
+              if (full)
+                  return(as_tibble(df))
+              return(df[["gene"]])
           })
 
 #' @rdname significants
 #' @export
 setMethod("significants", signature("DESeqResults"),
-          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+          function(object, padj = 0.05, fc = 0,
+                   direction = NULL, full = FALSE, ...){
               fc <- abs(fc)
               df <-  as.data.frame(object)
               if (is.null(direction))
@@ -101,17 +106,22 @@ setMethod("significants", signature("DESeqResults"),
               else
                   stop("Value ", direction, " is not valid: NULL, down, up.")
               
-              df %>%
+              df <- df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
-                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
-                  .[["gene"]]
+                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),]
+              
+              if (full)
+                  return(as_tibble(df))
+              return(df[["gene"]])
+              
           })
 
 #' @rdname significants
 #' @export
 setMethod("significants", signature("TopTags"),
-          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
+          function(object, padj = 0.05, fc = 0,
+                   direction = NULL, full = FALSE, ...){
               fc <- abs(fc)
               df <-  as.data.frame(object)
               if (is.null(direction))
@@ -123,45 +133,69 @@ setMethod("significants", signature("TopTags"),
               else
                   stop("Value ", direction, " is not valid: NULL, down, up.")
               
-              df %>%
+              df <- df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
-                  .[order(abs(.[["logFC"]]), decreasing = TRUE),] %>%
-                  .[["gene"]]
+                  .[order(abs(.[["logFC"]]), decreasing = TRUE),]
+              if (full)
+                  return(as_tibble(df))
+              return(df[["gene"]])
+              
           })
 
 .supported <- function(x){
-    return(class(x) %in% c("DEGSet", "DESeqResults"))
+    return(class(x) %in% c("DEGSet"))
+}
+
+.get_contrast_name <- function(x){
+    if (class(x) == "DEGSet"){
+        table = deg(x)
+    }else if (class(x) == "DESeqResults"){
+        table = x
+    }else{
+        stop("Format not supported: ", class(x))
+    }
+    contrast <- slot(table, "elementMetadata") %>% 
+        .[["description"]] %>% 
+        .[2]
+    str_split(contrast, ": ")[[1]][2] %>%
+        make.names
 }
 
 #' @rdname significants
 #' @export
 setMethod("significants", signature("list"),
-          function(object, padj = 0.05, fc = 0, direction = NULL, ...){
-              object <- object[sapply(object, .supported)]
-              if (length(object) == 0){
-                  message("Only DEGSet and DESeqResults objects are used.")
-                  stop("No compatible objects remained.")
+          function(object, padj = 0.05, fc = 0,
+                   direction = NULL, full = FALSE, ...){
+              # object <- object[sapply(object, .supported)]
+              # if (length(object) == 0){
+              #     message("Only DEGSet and DESeqResults objects are used.")
+              #     stop("No compatible objects remained.")
+              # }
+              if (!full){
+                  selected <- lapply(object, significants, 
+                               padj = padj, fc = fc,
+                               direction = direction) %>%
+                      unlist() %>% 
+                      unique()
+                  return(selected)
+              }else{
+                  df <- lapply(object, function(x){
+                      top <- significants(x, padj = padj, fc = fc,
+                                 direction = direction,
+                                 full = full) 
+                      top_renamed <- top %>% 
+                          .[, c("log2FoldChange", "pvalue")] %>% 
+                          set_colnames(paste(colnames(.), 
+                                             .get_contrast_name(x),
+                                             sep = "_"))
+                      top_renamed[["gene"]] <- top[["gene"]]
+                      gather(top_renamed, "variable", "value", -gene)
+                      }) %>% bind_rows() %>% 
+                      spread(., "variable", "value") %>% 
+                      as_tibble()
+                  return(df)
               }
-              df <- lapply(object, deg, tidy = "tibble") %>%
-                  bind_rows() %>% as.data.frame()
-              df[["fdr"]] <- p.adjust(df[["pvalue"]], method = "fdr")
-              fc <- abs(fc)
-              if (is.null(direction))
-                  filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["fdr"]] < padj
-              else if (direction == "up")
-                  filterOut <- df[["log2FoldChange"]] > fc & df[["fdr"]] < padj
-              else if (direction == "down")
-                  filterOut <- df[["log2FoldChange"]] < (-1L * fc) & df[["fdr"]] < padj
-              else
-                  stop("Value ", direction, " is not valid, different from NULL, down, up.")
-              
-              df %>%
-                  subset(., filterOut) %>%
-                  .[order(abs(.[["log2FoldChange"]]), decreasing = TRUE),] %>%
-                  .[["gene"]] %>% 
-                  unique
-              
           })
 
 #' @rdname DEGSet

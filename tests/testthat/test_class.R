@@ -42,6 +42,8 @@ test_that("DEGSet",{
     
     expect_type(significants(res[[1]]), "character")
     expect_type(significants(res[[1]][[1]]), "character")
+    expect_type(significants(res), "character")
+    expect_true(significants(res, full = TRUE) %>% is_tibble)
     
     expect_true(plotMA(res[[1]], diff = 4) %>%
                     class %>% .[[2]] == "ggplot")

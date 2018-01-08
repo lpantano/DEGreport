@@ -51,7 +51,7 @@
 #' @importFrom dplyr left_join inner_join
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
-#' @importFrom tidyr spread
+#' @importFrom tidyr spread gather
 #' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
 #' @importFrom tibble as_tibble
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap

@@ -4,7 +4,7 @@
 \alias{degComps}
 \title{Automatize the use of \code{results()} for multiple comparisons}
 \usage{
-degComps(dds, combs = NULL, contrast = NULL, alpha = 0.05,
+degComps(dds, combs = NULL, contrast = NULL, alpha = 0.05, skip = FALSE,
   type = "normal", pairs = FALSE)
 }
 \arguments{
@@ -16,6 +16,9 @@ fom \code{colData(dds)} to create group comparisons.}
 \item{contrast}{Optional vector to specify contrast. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
 
 \item{alpha}{Numeric value used in independent filtering in \code{\link[DESeq2:results]{DESeq2::results()}}.}
+
+\item{skip}{Boolean to indicate whether skip shrinkage. For instance
+when it comes from LRT method.}
 
 \item{type}{Type of shrinkage estimator. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
 

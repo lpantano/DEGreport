@@ -12,16 +12,16 @@
 significants(object, ...)
 
 \S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0,
-  direction = NULL, ...)
+  direction = NULL, full = FALSE, ...)
 
 \S4method{significants}{DESeqResults}(object, padj = 0.05, fc = 0,
-  direction = NULL, ...)
+  direction = NULL, full = FALSE, ...)
 
 \S4method{significants}{TopTags}(object, padj = 0.05, fc = 0,
-  direction = NULL, ...)
+  direction = NULL, full = FALSE, ...)
 
 \S4method{significants}{list}(object, padj = 0.05, fc = 0,
-  direction = NULL, ...)
+  direction = NULL, full = FALSE, ...)
 }
 \arguments{
 \item{object}{\link{DEGSet}}
@@ -35,6 +35,8 @@ Value can be 'raw', 'shrunken'.}
 
 \item{direction}{Whether to take down/up/ignore. Valid arguments are
 down, up and NULL.}
+
+\item{full}{Whether to return full table or not.}
 }
 \description{
 Function to get the features that are significant
