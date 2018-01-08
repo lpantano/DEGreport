@@ -167,11 +167,6 @@ setMethod("significants", signature("TopTags"),
 setMethod("significants", signature("list"),
           function(object, padj = 0.05, fc = 0,
                    direction = NULL, full = FALSE, ...){
-              # object <- object[sapply(object, .supported)]
-              # if (length(object) == 0){
-              #     message("Only DEGSet and DESeqResults objects are used.")
-              #     stop("No compatible objects remained.")
-              # }
               if (!full){
                   selected <- lapply(object, significants, 
                                padj = padj, fc = fc,
@@ -180,12 +175,18 @@ setMethod("significants", signature("list"),
                       unique()
                   return(selected)
               }else{
+                  object <- object[sapply(object, .supported)]
+                  if (length(object) == 0){
+                      message("Only DEGSet and DESeqResults objects are used.")
+                      stop("No compatible objects remained.")
+                  }
+                  
                   df <- lapply(object, function(x){
                       top <- significants(x, padj = padj, fc = fc,
                                  direction = direction,
                                  full = full) 
                       top_renamed <- top %>% 
-                          .[, c("log2FoldChange", "pvalue")] %>% 
+                          .[, c("log2FoldChange", "padj")] %>% 
                           set_colnames(paste(colnames(.), 
                                              .get_contrast_name(x),
                                              sep = "_"))
