@@ -66,6 +66,16 @@ setMethod("deg", signature("DEGSet"),
 #' @param ... Passed to [deg]. Default: value = NULL.
 #'   Value can be 'raw', 'shrunken'.
 #' @rdname significants
+#' @examples
+#' library(DESeq2)
+#' dds <- makeExampleDESeqDataSet(betaSD=1)
+#' colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
+#'   design(dds) <-  ~ condition + treatment
+#' dds <- DESeq(dds)
+#' res <- degComps(dds, contrast = list("treatment_B_vs_A",
+#'                                      c("condition", "A", "B")))
+#' significants(res, full = TRUE) %>% head
+#' significants(res, full = TRUE, padj = 1) %>% head # all genes
 #' @export
 setMethod("significants", signature("DEGSet"),
           function(object, padj = 0.05, fc = 0,

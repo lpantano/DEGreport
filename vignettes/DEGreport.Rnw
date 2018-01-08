@@ -185,6 +185,18 @@ And easy way to get significant genes is:
 significants(degs[[1]], fc = 0, fdr = 0.05)
 @
 
+This function can be used as well for a list of comparisons:
+
+<<chunk-significants-list>>=
+significants(degs, fc = 0, fdr = 0.05)
+@
+
+And it can returns the full table for a list:
+
+<<chunk-significants-list-full>>=
+significants(degs, fc = 0, fdr = 0.05, full = TRUE)
+@
+
 Since log2FoldChange are shrunken, the method for DEGSet class now can
 plot these changes as follow:
 

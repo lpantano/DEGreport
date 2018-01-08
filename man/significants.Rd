@@ -43,6 +43,17 @@ Function to get the features that are significant
 according to some thresholds from a \link{DEGSet},
 \link[DESeq2:DESeqResults]{DESeq2::DESeqResults} and \link[edgeR:topTags]{edgeR::topTags}.
 }
+\examples{
+library(DESeq2)
+dds <- makeExampleDESeqDataSet(betaSD=1)
+colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
+  design(dds) <-  ~ condition + treatment
+dds <- DESeq(dds)
+res <- degComps(dds, contrast = list("treatment_B_vs_A",
+                                     c("condition", "A", "B")))
+significants(res, full = TRUE) \%>\% head
+significants(res, full = TRUE, padj = 1) \%>\% head # all genes
+}
 \author{
 Lorena Pantano
 }
