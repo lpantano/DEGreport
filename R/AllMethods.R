@@ -68,6 +68,7 @@ setMethod("deg", signature("DEGSet"),
 #' @rdname significants
 #' @examples
 #' library(DESeq2)
+#' library(dplyr)
 #' dds <- makeExampleDESeqDataSet(betaSD=1)
 #' colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 #'   design(dds) <-  ~ condition + treatment

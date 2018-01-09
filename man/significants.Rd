@@ -45,6 +45,7 @@ according to some thresholds from a \link{DEGSet},
 }
 \examples{
 library(DESeq2)
+library(dplyr)
 dds <- makeExampleDESeqDataSet(betaSD=1)
 colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
   design(dds) <-  ~ condition + treatment
