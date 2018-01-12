@@ -21,7 +21,7 @@ significants(object, ...)
   direction = NULL, full = FALSE, ...)
 
 \S4method{significants}{list}(object, padj = 0.05, fc = 0,
-  direction = NULL, full = FALSE, ...)
+  direction = NULL, full = FALSE, newFDR = FALSE, ...)
 }
 \arguments{
 \item{object}{\link{DEGSet}}
@@ -37,6 +37,10 @@ Value can be 'raw', 'shrunken'.}
 down, up and NULL.}
 
 \item{full}{Whether to return full table or not.}
+
+\item{newFDR}{Whether to recalculate the FDR or not.
+See https://support.bioconductor.org/p/104059/#104072.
+Only used when a list is giving to the method.}
 }
 \description{
 Function to get the features that are significant

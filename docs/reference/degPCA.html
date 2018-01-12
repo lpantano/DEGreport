@@ -126,7 +126,7 @@
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
 <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
 <span class='fu'>degPCA</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>), <span class='fu'>colData</span>(<span class='no'>dse</span>),
-  <span class='kw'>condition</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>shape</span><span class='kw'>=</span><span class='st'>"group"</span>)</div><div class='img'><img src='degPCA-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='kw'>condition</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>shape</span><span class='kw'>=</span><span class='st'>"group"</span>)</div><div class='img'><img src='degPCA-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

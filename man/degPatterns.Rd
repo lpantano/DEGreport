@@ -46,10 +46,17 @@ expression to merge clusters (0 - 1)}
 \item{fixy}{vector integers used as ylim in plot}
 }
 \value{
-list wiht two items. \code{df} is a data.frame
+list wiht two items:
+\itemize{
+\item \code{df} is a data.frame
 with two columns. The first one with genes, the second
-with the clusters they belong. \code{pass_to_plot} is a vector
-of the clusters that pass the \code{minc} cutoff.
+with the clusters they belong.
+\item \code{pass} is a vector of the clusters that pass the \code{minc} cutoff.
+\item \code{plot} ggplot figure.
+\item \code{hr} clustering of the genes in hclust format.
+\item \code{profile} normalized count data used in the plot.
+\item \code{raw} data.frame with values used for the plots.
+}
 }
 \description{
 Make groups of genes using expression profile

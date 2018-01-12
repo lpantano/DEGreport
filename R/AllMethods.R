@@ -50,6 +50,19 @@ setMethod("deg", signature("DEGSet"),
               stop("Not supported format, ", tidy)
           })
 
+.filterTable <- function(df, direction, fcn, fc , fdr, padj){
+    filterOut <- NULL
+    if (is.null(direction))
+        filterOut <- abs(df[[fcn]]) > fc & df[[fdr]] < padj
+    else if (direction == "up")
+        filterOut <- df[[fcn]] > fc & df[[fdr]] < padj
+    else if (direction == "down")
+        filterOut <- df[[fcn]] < (-1L * fc) & df[[fdr]] < padj
+    else
+        stop("Value ", direction, " is not valid: NULL, down, up.")
+    return(filterOut)
+}
+
 #' Method to get the significant genes
 #' 
 #' Function to get the features that are significant
@@ -63,6 +76,9 @@ setMethod("deg", signature("DEGSet"),
 #' @param direction Whether to take down/up/ignore. Valid arguments are
 #'   down, up and NULL.
 #' @param full Whether to return full table or not.
+#' @param newFDR Whether to recalculate the FDR or not.
+#'   See https://support.bioconductor.org/p/104059/#104072.
+#'   Only used when a list is giving to the method.
 #' @param ... Passed to [deg]. Default: value = NULL.
 #'   Value can be 'raw', 'shrunken'.
 #' @rdname significants
@@ -83,15 +99,9 @@ setMethod("significants", signature("DEGSet"),
                    direction = NULL, full = FALSE, ...){
               fc <- abs(fc)
               df <-  as.data.frame(deg(object, ...))
-              if (is.null(direction))
-                  filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
-              else if (direction == "up")
-                  filterOut <- df[["log2FoldChange"]] > fc & df[["padj"]] < padj
-              else if (direction == "down")
-                  filterOut <- df[["log2FoldChange"]] < (-1L * fc) & df[["padj"]] < padj
-              else
-                  stop("Value ", direction, " is not valid: NULL, down, up.")
-              
+              filterOut <- .filterTable(df, direction,
+                                        "log2FoldChange", fc,
+                                        "padj", padj)
               df <- df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
@@ -108,14 +118,9 @@ setMethod("significants", signature("DESeqResults"),
                    direction = NULL, full = FALSE, ...){
               fc <- abs(fc)
               df <-  as.data.frame(object)
-              if (is.null(direction))
-                  filterOut <- abs(df[["log2FoldChange"]]) > fc & df[["padj"]] < padj
-              else if (direction == "up")
-                  filterOut <- df[["log2FoldChange"]] > fc & df[["padj"]] < padj
-              else if (direction == "down")
-                  filterOut <- df[["log2FoldChange"]] < (-1L * fc) & df[["padj"]] < padj
-              else
-                  stop("Value ", direction, " is not valid: NULL, down, up.")
+              filterOut <- .filterTable(df, direction,
+                                        "log2FoldChange", fc,
+                                        "padj", padj)
               
               df <- df %>%
                   rownames_to_column("gene") %>%
@@ -135,18 +140,14 @@ setMethod("significants", signature("TopTags"),
                    direction = NULL, full = FALSE, ...){
               fc <- abs(fc)
               df <-  as.data.frame(object)
-              if (is.null(direction))
-                filterOut <- abs(df[["logFC"]]) > fc & df[["FDR"]] < padj
-              else if (direction == "up")
-                  filterOut <- df[["logFC"]] > fc & df[["FDR"]] < padj
-              else if (direction == "down")
-                  filterOut <- df[["logFC"]] < (-1L * fc) & df[["FDR"]] < padj
-              else
-                  stop("Value ", direction, " is not valid: NULL, down, up.")
-              
+              filterOut <- .filterTable(df, direction,
+                                        "logFC", fc,
+                                        "FDR", padj)
+
               df <- df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
+                  rename(padj = FDR, log2FoldChange = logFC) %>% 
                   .[order(abs(.[["logFC"]]), decreasing = TRUE),]
               if (full)
                   return(as_tibble(df))
@@ -177,8 +178,21 @@ setMethod("significants", signature("TopTags"),
 #' @export
 setMethod("significants", signature("list"),
           function(object, padj = 0.05, fc = 0,
-                   direction = NULL, full = FALSE, ...){
+                   direction = NULL, full = FALSE,
+                   newFDR = FALSE, ...){
               if (!full){
+                  if (newFDR){
+                      selected <- lapply(object, significants, 
+                                         padj = 1, fc = 0,
+                                         full = TRUE) %>%
+                          bind_rows() %>% 
+                          mutate(fdr = p.adjust(padj, "fdr")) %>% 
+                          subset(., .filterTable(., direction,
+                                                 "log2FoldChange", fc,
+                                                 "fdr", padj)) %>%
+                          .[["gene"]] %>% 
+                          unique()
+                  }
                   selected <- lapply(object, significants, 
                                padj = padj, fc = fc,
                                direction = direction) %>%
@@ -306,14 +320,15 @@ setMethod("DEGSetFromDESeq2", signature("DESeqResults"),
 #' res <- degComps(dds, contrast = list("condition_B_vs_A"))
 #' plotMA(res[["condition_B_vs_A"]])
 #' @export
-setMethod("plotMA", signature(object = "DEGSet"), function(object, title = NULL,
-                                                           label_points = NULL,
-                                                           label_column = "symbol",
-                                                           limit = NULL,
-                                                           diff = 5,
-                                                           raw = FALSE,
-                                                           correlation = FALSE,
-                                                           ...){
+setMethod("plotMA", signature(object = "DEGSet"), 
+          function(object, title = NULL,
+                   label_points = NULL,
+                   label_column = "symbol",
+                   limit = NULL,
+                   diff = 5,
+                   raw = FALSE,
+                   correlation = FALSE,
+                   ...){
     .plotMA(object, title, label_points, label_column,
             limit, diff, raw, correlation)
 })

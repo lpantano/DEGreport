@@ -635,10 +635,15 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' to get similar ones into only one pattern. The expression
 #' correlation of the patterns will be used to decide whether
 #' some need to be merged or not.
-#' @return list wiht two items. `df` is a data.frame
+#' @return list wiht two items:
+#' *  `df` is a data.frame
 #' with two columns. The first one with genes, the second
-#' with the clusters they belong. `pass_to_plot` is a vector
-#' of the clusters that pass the `minc` cutoff.
+#' with the clusters they belong. 
+#' * `pass` is a vector of the clusters that pass the `minc` cutoff.
+#' * `plot` ggplot figure.
+#' * `hr` clustering of the genes in hclust format.
+#' * `profile` normalized count data used in the plot.
+#' * `raw` data.frame with values used for the plots.
 #' @examples
 #' data(humanGender)
 #' library(SummarizedExperiment)
@@ -708,8 +713,22 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         all <- plot_grid(plotlist = plots, ncol = nc)
         print(all)
     }
-
-    invisible(list(df = data.frame(genes = names(groups), cluster = groups),
+    
+    df = data.frame(genes = names(groups), 
+                    cluster = groups, stringsAsFactors = FALSE)
+    
+    raw = counts_group %>% as.data.frame %>% rownames_to_column("genes") %>%
+        gather(!!sym(summarize), "value", -genes) %>%
+        inner_join(metadata_groups %>%
+                       mutate_if(is.factor, as.character)) %>%
+        inner_join(df, by = "genes") %>%
+        group_by(!!sym(summarize), !!sym("cluster"),
+                 !!sym(time), !!sym(col)) %>%
+        summarise(abundance = median(value)) %>% 
+        ungroup()
+    
+    invisible(list(df,
          pass = to_plot, plot = all, hr = cluster_genes,
-         profile = counts_group))
+         profile = counts_group,
+         raw = raw))
 }
