@@ -145,34 +145,34 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]] <span class='kw'>&lt;-</span> <span class='fu'>sample</span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"condition"</span>]], <span class='fl'>12</span>)
 <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
-<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>found already estimated fitted dispersions, removing these</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
 #&gt; Wald test p-value: condition B vs A 
 #&gt; DataFrame with 1000 rows and 6 columns
 #&gt;          baseMean log2FoldChange     lfcSE      stat    pvalue      padj
 #&gt;         &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
-#&gt; gene168    284.99          2.866    0.3258     8.945 3.716e-19 3.482e-16
-#&gt; gene248   1131.03          2.187    0.2604     8.166 3.201e-16 1.500e-13
-#&gt; gene72     135.85          2.400    0.3094     7.349 1.993e-13 6.223e-11
-#&gt; gene625     56.00         -2.350    0.3172    -7.220 5.203e-13 1.219e-10
-#&gt; gene872     52.23         -2.767    0.3721    -6.996 2.624e-12 4.918e-10
+#&gt; gene928    132.31          3.468    0.3472     9.489 2.324e-21 2.138e-18
+#&gt; gene952     70.21          3.625    0.3834     8.875 6.976e-19 3.209e-16
+#&gt; gene644    455.54          2.266    0.2618     8.634 5.940e-18 1.822e-15
+#&gt; gene515    372.73          2.804    0.3344     8.348 6.967e-17 1.602e-14
+#&gt; gene368     37.82         -2.763    0.3557    -7.532 4.992e-14 9.185e-12
 #&gt; ...           ...            ...       ...       ...       ...       ...
-#&gt; gene941    1.2913       -0.28229    0.4818   0.08827    0.9297        NA
-#&gt; gene962    1.1453       -0.61940    0.4511  -0.60991    0.5419        NA
-#&gt; gene967    0.9839       -0.29527    0.4910  -0.28823    0.7732        NA
-#&gt; gene968    0.4834        0.11466    0.3691   0.34963    0.7266        NA
-#&gt; gene984    1.3625        0.03872    0.5366  -0.05969    0.9524        NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
-#&gt;       gene baseMean log2FoldChange  lfcSE   stat    pvalue      padj
-#&gt;  *   &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-#&gt;  1 gene168   284.99          2.866 0.3258  8.945 3.716e-19 3.482e-16
-#&gt;  2 gene248  1131.03          2.187 0.2604  8.166 3.201e-16 1.500e-13
-#&gt;  3  gene72   135.85          2.400 0.3094  7.349 1.993e-13 6.223e-11
-#&gt;  4 gene625    56.00         -2.350 0.3172 -7.220 5.203e-13 1.219e-10
-#&gt;  5 gene872    52.23         -2.767 0.3721 -6.996 2.624e-12 4.918e-10
-#&gt;  6 gene851    24.73         -2.543 0.3972 -6.395 1.601e-10 2.500e-08
-#&gt;  7 gene327  5001.55          1.709 0.2707  6.277 3.455e-10 4.624e-08
-#&gt;  8 gene247    55.54         -2.316 0.3614 -6.075 1.238e-09 1.450e-07
-#&gt;  9  gene70   878.25          1.263 0.2037  6.032 1.621e-09 1.687e-07
-#&gt; 10 gene514   120.11          1.854 0.2912  5.979 2.241e-09 2.099e-07
+#&gt; gene906    1.3820       -0.35406    0.5346  -1.09121    0.2752        NA
+#&gt; gene943    0.0000             NA        NA        NA        NA        NA
+#&gt; gene956    0.6292       -0.10818    0.3952  -0.15208    0.8791        NA
+#&gt; gene963    0.4705        0.09311    0.3518  -0.01693    0.9865        NA
+#&gt; gene995    0.1578       -0.11622    0.3514  -0.41438    0.6786        NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
+#&gt;    gene    baseMean log2FoldChange lfcSE  stat            pvalue           padj
+#&gt;  * &lt;chr&gt;      &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+#&gt;  1 gene928    132             3.47 0.347  9.49          2.32e⁻²¹       2.14e⁻¹⁸
+#&gt;  2 gene952     70.2           3.63 0.383  8.88          6.98e⁻¹⁹       3.21e⁻¹⁶
+#&gt;  3 gene644    456             2.27 0.262  8.63          5.94e⁻¹⁸       1.82e⁻¹⁵
+#&gt;  4 gene515    373             2.80 0.334  8.35          6.97e⁻¹⁷       1.60e⁻¹⁴
+#&gt;  5 gene368     37.8          -2.76 0.356 -7.53          4.99e⁻¹⁴       9.19e⁻¹²
+#&gt;  6 gene409     68.1          -2.05 0.283 -7.07          1.56e⁻¹²       2.39e⁻¹⁰
+#&gt;  7 gene130    404             1.81 0.258  6.95          3.76e⁻¹²       4.94e⁻¹⁰
+#&gt;  8 gene948    898             2.15 0.300  6.89          5.61e⁻¹²       6.45e⁻¹⁰
+#&gt;  9 gene60     115            -1.97 0.280 -6.83          8.74e⁻¹²       8.93e⁻¹⁰
+#&gt; 10 gene605    133             1.80 0.285  6.13          8.97e⁻¹⁰       8.25e⁻ ⁸
 #&gt; # ... with 990 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

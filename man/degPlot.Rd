@@ -6,8 +6,8 @@
 \usage{
 degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
   batch = NULL, metadata = NULL, ann = c("external_gene_name", "symbol"),
-  slot = 1L, log2 = TRUE, xsLab = xs, groupLab = group,
-  batchLab = batch)
+  slot = 1L, log2 = TRUE, xsLab = xs, color = "black",
+  groupLab = group, batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or SummarizedExperiment
@@ -37,6 +37,9 @@ batch effect visualization.}
 
 \item{xsLab}{Character, alternative label for x-axis (default: same as xs).}
 
+\item{color}{Color to use to plot groups. It can be one color, or a palette
+compatible with \code{\link[ggplot2:scale_color_brewer]{ggplot2::scale_color_brewer()}}.}
+
 \item{groupLab}{Character, alternative label for group (default: same as group).}
 
 \item{batchLab}{Character, alternative label for batch (default: same as batch).}
@@ -55,4 +58,7 @@ dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
   colData(humanGender)[idx,], design=~group)
 dse <- DESeq(dse)
 degPlot(dse, genes = rownames(dse)[1:10], xs = "group")
+degPlot(dse, genes = rownames(dse)[1:10], xs = "group", color = "orange")
+degPlot(dse, genes = rownames(dse)[1:10], xs = "group", group = "group",
+        color = "Accent")
 }

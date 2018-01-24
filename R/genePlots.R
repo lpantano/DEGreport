@@ -15,6 +15,8 @@
 #' @param slot Name of the slot to use to get count data.
 #' @param log2 Whether to apply or not log2 transformation.
 #' @param xsLab Character, alternative label for x-axis (default: same as xs).
+#' @param color Color to use to plot groups. It can be one color, or a palette
+#'   compatible with [ggplot2::scale_color_brewer()].
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
 #' @return ggplot showing the expresison of the genes
@@ -26,6 +28,9 @@
 #'   colData(humanGender)[idx,], design=~group)
 #' dse <- DESeq(dse)
 #' degPlot(dse, genes = rownames(dse)[1:10], xs = "group")
+#' degPlot(dse, genes = rownames(dse)[1:10], xs = "group", color = "orange")
+#' degPlot(dse, genes = rownames(dse)[1:10], xs = "group", group = "group",
+#'         color = "Accent")
 #' @export
 degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    group=NULL, batch=NULL,
@@ -33,7 +38,9 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
                    ann=c("external_gene_name", "symbol"),
                    slot=1L,
                    log2 = TRUE,
-                   xsLab=xs, groupLab=group, batchLab=batch){
+                   xsLab=xs,
+                   color = "black",
+                   groupLab=group, batchLab=batch){
     if (class(dds) %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
                                    colData = metadata)
@@ -100,13 +107,16 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
         facet_wrap(~gene, scales = "free_y") +
         xlab(xsLab)
     if (length(unique(dd[, groupLab])) == 1L) {
+        stopifnot(length(color) == 1)
         p = p +
-            scale_color_manual(guide = FALSE, values = "black") +
-            scale_fill_manual(guide = FALSE, values = "black")
+            scale_color_manual(guide = FALSE, values = color) +
+            scale_fill_manual(guide = FALSE, values = color)
     }else{
+        if (color == "black")
+            color = "Set1"
         p = p +
-            scale_color_brewer(palette = "Set1") +
-            scale_fill_brewer(palette = "Set1")
+            scale_color_brewer(palette = color) +
+            scale_fill_brewer(palette = color)
     }
     p = p + theme_bw() +
         theme(strip.background = element_rect(fill = "white"),

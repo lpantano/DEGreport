@@ -155,9 +155,9 @@ fold change values from different comparisons to add to the output table.</p></t
 <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
   <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
-<span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dse</span>)</div><div class='output co'>#&gt; <span class='message'>using pre-existing size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>found already estimated fitted dispersions, removing these</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='output co'>#&gt; <span class='message'>-- replacing outliers and refitting for 1 genes</span>
+<span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dse</span>)</div><div class='output co'>#&gt; <span class='message'>using pre-existing size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='output co'>#&gt; <span class='message'>-- replacing outliers and refitting for 1 genes</span>
 #&gt; <span class='message'>-- DESeq argument 'minReplicatesForReplace' = 7 </span>
-#&gt; <span class='message'>-- original counts are preserved in counts(dds)</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>found already estimated fitted dispersions, removing these</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degResults</span>(<span class='kw'>dds</span> <span class='kw'>=</span> <span class='no'>dse</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"test"</span>, <span class='kw'>org</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+#&gt; <span class='message'>-- original counts are preserved in counts(dds)</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degResults</span>(<span class='kw'>dds</span> <span class='kw'>=</span> <span class='no'>dse</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"test"</span>, <span class='kw'>org</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>do_go</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>xs</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>path_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='message'>Doing rlog...</span></div><div class='output co'>#&gt; <span class='message'>Getting result...</span></div><div class='output co'>#&gt; ## Comparison:  test {.tabset} 
 #&gt; 
 #&gt; 
@@ -169,18 +169,19 @@ fold change values from different comparisons to add to the output table.</p></t
 #&gt; Normalized counts matrix file at:  test_log2_counts.csv
 #&gt; 
 #&gt; ### MA plot plot
-#&gt; </div><div class='img'><img src='degResults-1.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
+#&gt; 
+#&gt; 
 #&gt; 
 #&gt; ### Volcano plot
 #&gt; 
 #&gt; 
 #&gt; 
-#&gt; ### QC for DE genes</div><div class='img'><img src='degResults-2.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
+#&gt; ### QC for DE genes</div><div class='img'><img src='degResults-3.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; ### Most significants, FDR&lt; 0.05  and log2FC &gt;  0.1 :  10 </div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; 
-#&gt; ### Plots top 9 most significants</div><div class='output co'>#&gt; <span class='message'>No genes were mapped to rowData. check ann parameter values.</span></div><div class='output co'>#&gt; <span class='message'>Using gene as id variables</span></div><div class='img'><img src='degResults-3.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
+#&gt; ### Plots top 9 most significants</div><div class='output co'>#&gt; <span class='message'>No genes were mapped to rowData. check ann parameter values.</span></div><div class='output co'>#&gt; <span class='message'>Using gene as id variables</span></div><div class='img'><img src='degResults-4.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; 
 #&gt; ### Top DE table
