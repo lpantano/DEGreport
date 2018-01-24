@@ -6,7 +6,7 @@
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
   col = NULL, concensusCluster = TRUE, reduce = FALSE, cutoff = 0.7,
-  scale = TRUE, plot = TRUE, fixy = NULL)
+  scale = TRUE, pattern = NULL, plot = TRUE, fixy = NULL)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
@@ -40,6 +40,10 @@ correlation values between them.}
 expression to merge clusters (0 - 1)}
 
 \item{scale}{boolean scale the \code{ma} values by row}
+
+\item{pattern}{numeric vector to be used to find patterns like this
+from the count matrix. As well, it can be a character indicating the
+genes inside the count matrix to be used as reference.}
 
 \item{plot}{boolean plot the clusters found}
 

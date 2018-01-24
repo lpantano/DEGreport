@@ -205,7 +205,10 @@ setMethod("significants", signature("list"),
                       message("Only DEGSet and DESeqResults objects are used.")
                       stop("No compatible objects remained.")
                   }
-                  
+                  different_names <- sapply(object, .get_contrast_name) %>% 
+                      unique()
+                  if(length(different_names) == length(object))
+                      stop("Contrast names are repeated inside the list.")
                   df <- lapply(object, function(x){
                       top <- significants(x, padj = padj, fc = fc,
                                  direction = direction,

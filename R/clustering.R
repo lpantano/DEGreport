@@ -66,6 +66,31 @@
     new
 }
 
+.select_pattern <- function(df){
+    if(!("bycor" %in% colnames(df)))
+        selected = df[df[["fdr"]] < 0.05, "gene"]
+    selected = df[df[["cor"]] > 0.7, "gene"]
+    selected = selected[!is.na(selected)]
+    groups = rep(1, length(selected))
+    names(groups) = selected
+    groups
+}
+
+# find correlation to a pattern
+.find_pattern <- function(counts_group, reference){
+    cor_ma = apply(counts_group, 1, function(x){
+        if(length(x) > 2){
+            c = cor.test(x, reference, method = "kendall")
+            return(data.frame(cor = c$estimate, pval=c$p.value))
+        }else{
+            c = cor(x, reference, method = "kendall")
+            return(data.frame(cor = c[1], pval=0, bycor = 1))
+        }
+    }) %>%  bind_rows()
+    cor_ma[["fdr"]] = p.adjust(cor_ma[["pval"]], "fdr") 
+    cor_ma[["gene"]] = rownames(counts_group)
+    cor_ma
+}
 
 # use diana package to detect clusters
 .make_clusters <- function(counts_group){
@@ -625,6 +650,9 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @param cutoff integer threshold for correlation
 #'   expression to merge clusters (0 - 1)
 #' @param scale boolean scale the \code{ma} values by row
+#' @param pattern numeric vector to be used to find patterns like this
+#'   from the count matrix. As well, it can be a character indicating the
+#'   genes inside the count matrix to be used as reference.
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
 #' @details It would be used [cluster::diana()] function
@@ -655,7 +683,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        time="time", col=NULL,
                        concensusCluster = TRUE,
                        reduce=FALSE, cutoff=0.70,
-                       scale=TRUE, plot=TRUE, fixy=NULL){
+                       scale=TRUE,
+                       pattern = NULL,
+                       plot=TRUE, fixy=NULL){
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
     if (is.null(col)){
@@ -672,21 +702,32 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     if (!is.null(fixy))
         stopifnot(length(fixy) == 2)
 
-    if (nrow(ma)>3000)
+    if (nrow(ma)>3000 & is.null(pattern))
         message("Large number of genes given. Please,",
                 "make sure is not an error. Normally",
                 "Only DE genes are useful for this function.")
     message("Working with ", nrow(ma), " genes.")
     counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
 
-    if (!concensusCluster){
+    if (!concensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)
         groups = .select_genes(cluster_genes, counts_group, minc,
                                reduce = reduce,
                                cutoff = cutoff)
-    }else{
+    }else if (concensusCluster & is.null(pattern)){
         cluster_genes = .make_concensus_cluster(counts_group)
         groups = .select_concensus_genes(cluster_genes)
+    }else if(is.character(pattern)){
+        stopifnot(pattern %in% rownames(counts_group))
+        if (length(pattern) > 1)
+            reference = rowMedians(counts_group[pattern, ])
+        else reference = counts_group[pattern, ]
+        cluster_genes = .find_pattern(counts_group, reference)
+        groups = .select_pattern(cluster_genes)
+    }else if(is.numeric(pattern)){
+        stopifnot(length(pattern) == ncol(counts_group))
+        cluster_genes = .find_pattern(counts_group, pattern)
+        groups = .select_pattern(cluster_genes)
     }
     
     if (scale)
@@ -711,7 +752,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         nc = length(plots)
     if (length(plots) > 0){
         all <- plot_grid(plotlist = plots, ncol = nc)
-        print(all)
+        if (plot)
+            print(all)
     }
     
     df = data.frame(genes = names(groups), 
@@ -727,8 +769,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         summarise(abundance = median(value)) %>% 
         ungroup()
     
-    invisible(list(df,
+    invisible(list(df = df,
          pass = to_plot, plot = all, hr = cluster_genes,
-         profile = counts_group,
+         profile = norm_sign,
          raw = raw))
 }
