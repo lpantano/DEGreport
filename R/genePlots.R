@@ -101,8 +101,12 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
         xlab(xsLab)
     if (length(unique(dd[, groupLab])) == 1L) {
         p = p +
-            scale_color_brewer(guide = !(is.null(group)), palette = "Set1") +
-            scale_fill_brewer(guide = !(is.null(group)), palette = "Set1")
+            scale_color_manual(guide = FALSE, values = "black") +
+            scale_fill_manual(guide = FALSE, values = "black")
+    }else{
+        p = p +
+            scale_color_brewer(palette = "Set1") +
+            scale_fill_brewer(palette = "Set1")
     }
     p = p + theme_bw() +
         theme(strip.background = element_rect(fill = "white"),
