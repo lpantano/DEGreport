@@ -526,6 +526,8 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' @param name character if given, column in metadata to print label
 #' @param shape character if given, column in metadata to shape points
 #' @author Lorena Pantano, Rory Kirchner, Michael Steinbaugh
+#' @return if `results <-` used, the function return the output
+#'   of [prcomp()].
 #' @examples
 #' data(humanGender)
 #' library(DESeq2)
@@ -568,6 +570,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                     round(pc[["percentVar"]][idx2] * 100),
                     "% variance")) +
         theme_minimal()
+    invisible(pca)
 }
 
 #' Plot MDS from normalized count data
@@ -643,7 +646,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'   variable that changes, normally a time variable.
 #' @param col character column name in metadata to separate
 #'   samples. Normally control/mutant
-#' @param concensusCluster Indicates whether using [ConsensusClusterPlus]
+#' @param consensusCluster Indicates whether using [ConsensusClusterPlus]
 #'  or [cluster::diana()]
 #' @param reduce boolean reduce number of clusters using
 #'   correlation values between them.
@@ -681,7 +684,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @export
 degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        time="time", col=NULL,
-                       concensusCluster = TRUE,
+                       consensusCluster = FALSE,
                        reduce=FALSE, cutoff=0.70,
                        scale=TRUE,
                        pattern = NULL,

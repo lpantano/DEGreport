@@ -5,7 +5,7 @@
 \title{Make groups of genes using expression profile}
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
-  col = NULL, concensusCluster = TRUE, reduce = FALSE, cutoff = 0.7,
+  col = NULL, consensusCluster = FALSE, reduce = FALSE, cutoff = 0.7,
   scale = TRUE, pattern = NULL, plot = TRUE, fixy = NULL)
 }
 \arguments{
@@ -30,7 +30,7 @@ variable that changes, normally a time variable.}
 \item{col}{character column name in metadata to separate
 samples. Normally control/mutant}
 
-\item{concensusCluster}{Indicates whether using \link{ConsensusClusterPlus}
+\item{consensusCluster}{Indicates whether using \link{ConsensusClusterPlus}
 or \code{\link[cluster:diana]{cluster::diana()}}}
 
 \item{reduce}{boolean reduce number of clusters using

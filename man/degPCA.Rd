@@ -22,6 +22,10 @@ degPCA(counts, metadata = NULL, condition = NULL, pc1 = "PC1",
 
 \item{shape}{character if given, column in metadata to shape points}
 }
+\value{
+if \code{results &lt;-} used, the function return the output
+of \code{\link[=prcomp]{prcomp()}}.
+}
 \description{
 nice plot using ggplot2 from prcomp function
 }

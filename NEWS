@@ -1,9 +1,12 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.3
-    2017-01-23  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-01-26  Lorena Pantano <lorena.pantano@gmail.com>
         
-        Fiz: degPlot to be able to work with one gene.
+        Feature: Return prcomp output when using degPCA
+        Fix: Typo in degPattern function, and set up to FALSE the
+          use of consensusCluster.
+        Fix: degPlot to be able to work with one gene.
         Feature: Add the option to look for specific patterns, or genes as
             reference.
         Feature: Return scaled values if scale==TRUE in degPattern.

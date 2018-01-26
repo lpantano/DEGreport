@@ -83,7 +83,7 @@
     
 
     <pre class="usage"><span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>metadata</span>, <span class='kw'>minc</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>summarize</span> <span class='kw'>=</span> <span class='st'>"merge"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"time"</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>concensusCluster</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduce</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
+  <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>consensusCluster</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reduce</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
   <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fixy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -123,7 +123,7 @@ variable that changes, normally a time variable.</p></td>
 samples. Normally control/mutant</p></td>
     </tr>
     <tr>
-      <th>concensusCluster</th>
+      <th>consensusCluster</th>
       <td><p>Indicates whether using ConsensusClusterPlus
 or <code><a href='http://www.rdocumentation.org/packages/cluster/topics/diana'>cluster::diana()</a></code></p></td>
     </tr>
@@ -188,7 +188,7 @@ some need to be merged or not.</p>
 <span class='fu'>library</span>(<span class='no'>SummarizedExperiment</span>)
 <span class='no'>ma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assays</a></span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>100</span>,]
 <span class='no'>des</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>colData</a></span>(<span class='no'>humanGender</span>)
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>des</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>concensusCluster</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Working with 100 genes.</span></div><div class='output co'>#&gt; <span class='message'>Working with 100 genes after filtering: minc &gt; 15</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='img'><img src='degPatterns-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>des</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>concensusCluster</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in degPatterns(ma, des, time = "group", concensusCluster = FALSE): unused argument (concensusCluster = FALSE)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
