@@ -680,7 +680,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' library(SummarizedExperiment)
 #' ma <- assays(humanGender)[[1]][1:100,]
 #' des <- colData(humanGender)
-#' res <- degPatterns(ma, des, time="group", concensusCluster = FALSE)
+#' res <- degPatterns(ma, des, time="group")
 #' @export
 degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        time="time", col=NULL,
@@ -712,12 +712,12 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     message("Working with ", nrow(ma), " genes.")
     counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
 
-    if (!concensusCluster & is.null(pattern)){
+    if (!consensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)
         groups = .select_genes(cluster_genes, counts_group, minc,
                                reduce = reduce,
                                cutoff = cutoff)
-    }else if (concensusCluster & is.null(pattern)){
+    }else if (consensusCluster & is.null(pattern)){
         cluster_genes = .make_concensus_cluster(counts_group)
         groups = .select_concensus_genes(cluster_genes)
     }else if(is.character(pattern)){

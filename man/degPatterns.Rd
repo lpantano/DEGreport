@@ -80,5 +80,5 @@ data(humanGender)
 library(SummarizedExperiment)
 ma <- assays(humanGender)[[1]][1:100,]
 des <- colData(humanGender)
-res <- degPatterns(ma, des, time="group", concensusCluster = FALSE)
+res <- degPatterns(ma, des, time="group")
 }
