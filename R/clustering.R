@@ -570,7 +570,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                     round(pc[["percentVar"]][idx2] * 100),
                     "% variance")) +
         theme_minimal()
-    invisible(pca)
+    invisible(pc)
 }
 
 #' Plot MDS from normalized count data
