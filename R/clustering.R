@@ -525,6 +525,7 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' @param condition character column in metadata to use to color samples
 #' @param name character if given, column in metadata to print label
 #' @param shape character if given, column in metadata to shape points
+#' @param data Whether return PCA data or just plot the PCA.
 #' @author Lorena Pantano, Rory Kirchner, Michael Steinbaugh
 #' @return if `results <-` used, the function return the output
 #'   of [prcomp()].
@@ -539,7 +540,8 @@ degResults <- function(res=NULL, dds, rlogMat=NULL, name,
 #' @export
 degPCA <- function(counts, metadata = NULL, condition=NULL,
                    pc1 = "PC1", pc2 = "PC2",
-                   name = NULL, shape = NULL){
+                   name = NULL, shape = NULL,
+                   data = FALSE){
     pc <- .pca_loadings(counts)
     idx1 <- which(names(pc[["percentVar"]]) == pc1)
     idx2 <- which(names(pc[["percentVar"]]) == pc2)
@@ -561,7 +563,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
     if (!is.null(name))
         p <- p + geom_text(aes_string(label = name), nudge_x = 1, nudge_y = 1)
 
-    p +
+    p <- p +
         scale_color_brewer(palette = "Set1") +
         xlab(paste0(pc1, ": ",
                     round(pc[["percentVar"]][idx1] * 100),
@@ -570,7 +572,9 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                     round(pc[["percentVar"]][idx2] * 100),
                     "% variance")) +
         theme_minimal()
-    invisible(pc)
+    if(data)
+        return(list(pca = pc, plot = p))
+    p
 }
 
 #' Plot MDS from normalized count data
