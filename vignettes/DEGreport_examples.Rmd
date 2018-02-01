@@ -1,0 +1,322 @@
+---
+title: "QC and downstream analysis for differential expression RNA-seq"
+shorttitle: "Toolkit for differential expression analysis"
+author: "Lorena Pantano"
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('DEGreport')`"
+abstract: >
+  DEGreport package version: `r packageVersion("DEGreport")`
+output:
+  rmarkdown::html_document:
+    highlight: pygments
+    toc: true
+    fig_width: 5
+vignette: >
+  %\VignetteIndexEntry{QC and downstream analysis for differential expression RNA-seq}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding[utf8]{inputenc}
+  %\VignetteKeywords{DifferentialExpression, Visualization, RNASeq, ReportWriting}
+---
+
+```{r setup, echo=FALSE, results="hide"}
+library(BiocStyle)
+knitr::opts_chunk$set(tidy=FALSE, cache=TRUE,
+                      dev="png",
+                      message=FALSE, error=FALSE,
+                      warning=TRUE)
+```	
+
+
+[Lorena Pantano](lorena.pantano@gmail.com)
+Harvard TH Chan School of Public Health, Boston, US
+
+```{r load-data}
+library(DEGreport)
+data(humanGender)
+```
+
+## General QC figures from DE analysis
+
+We are going to do a differential expression analysis with edgeR/DESeq2.
+We have an object that is coming from the edgeR package. 
+It contains a gene count matrix
+for 85 TSI HapMap individuals, and the gender information. With that, we are 
+going to apply the `glmFit` function or `r Biocpkg("DESeq2")` to get genes differentially expressed 
+between males and females.
+
+```{r experiment}
+library(DESeq2)
+idx <- c(1:10, 75:85)
+dds <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+                              colData(humanGender)[idx,], design=~group)
+dds <- DESeq(dds)
+res <- results(dds)
+```
+
+We need to extract the experiment design data.frame where the condition is 
+Male or Female.
+
+```{r count-design}
+counts <- counts(dds, normalized = TRUE)
+design <- as.data.frame(colData(dds))
+```
+
+### Size factor QC
+
+A main assumption in library size factor calculation of edgeR and DESeq2 (and others)
+is that the majority of genes remain unchanged. Plotting the distribution
+of gene ratios between each gene and the average gene can show how true this is.
+Not super useful for many samples because the plot becomes crowed.
+
+```{r check-factor}
+degCheckFactors(counts[, 1:6])
+```
+
+
+### Mean-Variance QC plots
+
+p-value distribution gives an idea on how well you model is capturing the input data
+and as well whether it could be some problem for some set of genes. In general,
+you expect to have a flat distribution with peaks at 0 and 1. In this case, we add
+the mean count information to check if any set of genes are enriched in any
+specific p-value range.
+
+Variation (dispersion) and average expression relationship shouldn't be a factor among
+the differentially expressed genes. When plotting average mean and standard deviation,
+significant genes should be randomly distributed.
+
+In this case, it would be good to look at the ones that are totally outside the expected 
+correlation.
+
+You can put this tree plots together using `degQC`.
+
+```{r qc}
+degQC(counts, design[["group"]], pvalue = res[["pvalue"]])
+```
+
+
+### Covariates effect on count data
+
+Another important analysis to do if you have covariates is to calculate
+the correlation between PCs from PCA analysis to different variables you may
+think are affecting the gene expression. This is a toy example of how the
+function works with raw data, where clearly library size correlates with 
+some of the PCs.
+
+```{r cov}
+resCov <- degCovariates(log2(counts(dds)+0.5),
+                        colData(dds))
+```
+
+
+### Covariates correlation with metrics
+
+Also, the correlation among covariates and metrics from the analysis can
+be tested. This is useful when the study has multiple variables, like in
+clinical trials. The following code will return a correlation table, and
+plot the correlation heatmap for all the covariates and metrics in a table.
+
+```{r corcov}
+cor <- degCorCov(colData(dds))
+names(cor)
+```
+
+
+### QC report
+
+A quick HTML report can be created with `createReport` to show whether
+a DE analysis is biased to a particular set of genes. It contains the output
+of `degQC, `degVB and `degMB`.
+
+```{r report, eval=FALSE}
+createReport(colData(dds)[["group"]], counts(dds, normalized = TRUE),
+             row.names(res)[1:20], res[["pvalue"]], path = "~/Downloads")
+```
+
+
+## Report from DESeq2 analysis
+
+Here, we show some useful plots for differentially expressed genes.
+
+### Contrasts
+
+`DEGSet` is a class to store the DE results like the one from
+`results` function. `r Biocpkg("DESeq2")` offers multiple way to ask for
+contrasts/coefficients. With `degComps` is easy to get multiple
+results in a single object:
+
+```{r degComps}
+degs <- degComps(dds, combs = "group",
+                 contrast = list("group_Male_vs_Female",
+                                 c("group", "Female", "Male")))
+names(degs)
+```
+
+`degs` contains 3 elements, one for each contrast/coefficient asked for.
+It contains the results output in the element `raw` and the output of
+`lfcShrink` in the element `shrunken`.
+To obtain the results from one of them, use the method `dge`:
+
+```{r deg}
+deg(degs[[1]])
+```
+
+By default it would output the `shrunken` table always, as defined by
+`degDefault`, that contains the default table to get.
+
+To get the original results table, use the parameter as this:
+
+```{r raw}
+deg(degs[[1]], "raw", "tibble")
+```
+
+Note that the format of the output can be changed to tibble, or data.frame with
+a third parameter `tidy`.
+
+The table will be always sorted by padj.
+
+And easy way to get significant genes is:
+
+```{r significants}
+significants(degs[[1]], fc = 0, fdr = 0.05)
+```
+
+This function can be used as well for a list of comparisons:
+
+```{r significants-list}
+significants(degs, fc = 0, fdr = 0.05)
+```
+
+
+And it can returns the full table for a list:
+
+```{r significants-list-full}
+significants(degs, fc = 0, fdr = 0.05, full = TRUE)
+```
+
+
+Since log2FoldChange are shrunken, the method for DEGSet class now can
+plot these changes as follow:
+
+```{r plotMA}
+plotMA(degs[[1]], diff = 2, limit = 3)
+```
+
+
+The blue arrows indicate how foldchange is affected by this new feature.
+
+As well, it can plot the original MA plot:
+
+```{r plotMA-raw}
+plotMA(degs[[1]], diff = 2, limit = 3, raw = TRUE)
+```
+
+
+or the correlation between the original log2FoldChange and the new ones:
+
+```{r plotMA-cor}
+plotMA(degs[[1]], limit = 3, correlation = TRUE)
+```
+
+### Volcano plots
+
+Volcano plot using the output of `r Biocpkg("DESeq2")`. It mainly needs data.frame with
+two columns (logFC and pVal). Specific genes can be plot using the option
+`plot\_text` (subset of the previous data.frame with a 3rd column to be used
+to plot the gene name).
+
+```{r deseq2-volcano}
+res[["id"]] <- row.names(res)
+show <- as.data.frame(res[1:10, c("log2FoldChange", "padj", "id")])
+degVolcano(res[,c("log2FoldChange", "padj")], plot_text = show)
+```
+
+Note that the function is compatible with DEGset. Using
+`degVolcano(degs[[1]])` is valid.
+
+### Gene plots
+
+Plot top genes coloring by group. Very useful for experiments with nested 
+groups. `xs` can be `time` or `WT`/`KO`, and `group` can be `treated`/`untreated`.
+Another classification can be added, like `batch` that will plot points 
+with different shapes.
+
+```{r deseq2-gene-plots}
+degPlot(dds = dds, res = res, n = 6, xs = "group")
+```
+
+Another option for plotting genes in a wide format:
+
+```{r deseq2-gene-plot-wide}
+degPlotWide(dds, rownames(dds)[1:5], group="group")
+```
+
+
+### Markers plots
+
+Markers can be used to show whether different conditions are enriched in 
+different markers. For instance, in this example, Females and Males show
+different total expression for chromosome X/Y markers
+
+```{r markers}
+data(geneInfo)
+degSignature(humanGender, geneInfo, group = "group")
+```
+
+
+### Full report
+
+If you have a DESeq2 object, you can use degResults to create a full report
+with markdown code inserted,
+including figures and table with top de-regulated genes, GO enrichment
+analysis and heatmaps and PCA plots. If you set \Rcode{path\_results},
+different files will be saved there.
+
+```{r deseq2}
+resreport <- degResults(dds = dds, name = "test", org = NULL,
+                        do_go = FALSE, group = "group", xs = "group",
+                        path_results = NULL)
+```
+
+### Interactive shiny-app
+
+Browsing gene expression can help to validate results or select some gene
+for downstream analysis. Run the following lines if you want to visualize
+your expression values by condition:
+
+```{r shiny, eval=FALSE}
+degObj(counts, design, "degObj.rda")
+library(shiny)
+shiny::runGitHub("lpantano/shiny", subdir="expression")
+```
+
+## Detect patterns of expression
+
+In this section, we show how to detect pattern of expression. Mainly useful when
+data is a time course experiment. `degPatterns` needs a expression
+matrix, the design experiment and the column used to group samples.
+
+```{r pattern}
+ma = assay(rlog(dds))[row.names(res)[1:100],]
+res <- degPatterns(ma, design, time = "group")
+```
+
+## Useful functions
+
+This section shows some useful functions during DEG analysis.
+
+`degFilter` helps to filter genes with a minimum read count by group.
+
+```{r filter, results=`asis`}
+cat("gene in original count matrix: 1000")
+filter_count <- degFilter(counts(dds),
+                          design, "group",
+                          min=1, minreads = 50)
+cat("gene in final count matrix", nrow(filter_count))
+```
+
+# Session info
+
+```{r sessionInfo}
+sessionInfo()
+```
