@@ -307,7 +307,7 @@ This section shows some useful functions during DEG analysis.
 
 `degFilter` helps to filter genes with a minimum read count by group.
 
-```{r filter, results="asis""}
+```{r filter, results="asis"}
 cat("gene in original count matrix: 1000")
 filter_count <- degFilter(counts(dds),
                           design, "group",
