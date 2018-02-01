@@ -205,18 +205,21 @@ setMethod("significants", signature("list"),
                       message("Only DEGSet and DESeqResults objects are used.")
                       stop("No compatible objects remained.")
                   }
-                  different_names <- sapply(object, .get_contrast_name) %>% 
+                  different_names <- unique(names(object))
+                  if (length(different_names) != length(object))
+                      different_names <- sapply(object, .get_contrast_name) %>% 
                       unique()
-                  if(length(different_names) == length(object))
+                  if(length(different_names) != length(object))
                       warning("Contrast names are repeated inside the list.")
-                  df <- lapply(object, function(x){
-                      top <- significants(x, padj = padj, fc = fc,
+                  names(object) <- different_names
+                  df <- lapply(different_names, function(x){
+                      top <- significants(object[[x]], padj = padj, fc = fc,
                                  direction = direction,
                                  full = full) 
                       top_renamed <- top %>% 
                           .[, c("log2FoldChange", "padj")] %>% 
                           set_colnames(paste(colnames(.), 
-                                             .get_contrast_name(x),
+                                             x,
                                              sep = "_"))
                       top_renamed[["gene"]] <- top[["gene"]]
                       gather(top_renamed, "variable", "value", -gene)
