@@ -298,7 +298,7 @@ matrix, the design experiment and the column used to group samples.
 
 <<pattern>>=
 ma = assay(rlog(dds))[row.names(res)[1:100],]
-res <- degPatterns(ma, design, time = "group", concensusCluster = FALSE)
+res <- degPatterns(ma, design, time = "group")
 @
 
 \section{Useful functions}

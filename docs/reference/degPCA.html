@@ -60,6 +60,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/DEGreport_examples.html">QC and downstream analysis for differential expression RNA-seq</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -83,7 +95,7 @@
     
 
     <pre class="usage"><span class='fu'>degPCA</span>(<span class='no'>counts</span>, <span class='kw'>metadata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>condition</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pc1</span> <span class='kw'>=</span> <span class='st'>"PC1"</span>,
-  <span class='kw'>pc2</span> <span class='kw'>=</span> <span class='st'>"PC2"</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>pc2</span> <span class='kw'>=</span> <span class='st'>"PC2"</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -116,6 +128,10 @@
       <th>shape</th>
       <td><p>character if given, column in metadata to shape points</p></td>
     </tr>
+    <tr>
+      <th>data</th>
+      <td><p>Whether return PCA data or just plot the PCA.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -131,7 +147,7 @@ of <code>prcomp()</code>.</p>
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
 <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
 <span class='fu'>degPCA</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>), <span class='fu'>colData</span>(<span class='no'>dse</span>),
-  <span class='kw'>condition</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>shape</span><span class='kw'>=</span><span class='st'>"group"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in degPCA(log2(counts(dse) + 0.5), colData(dse), condition = "group",     name = "group", shape = "group"): object 'pca' not found</span></div></pre>
+  <span class='kw'>condition</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>shape</span><span class='kw'>=</span><span class='st'>"group"</span>)</div><div class='img'><img src='degPCA-5.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -1,5 +1,6 @@
 urls:
   reference: http://lpantano.github.io/DEGreport/reference
   article: http://lpantano.github.io/DEGreport/articles
-articles: {}
+articles:
+  DEGreport_examples: DEGreport_examples.html
 
