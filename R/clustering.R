@@ -718,42 +718,42 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
 
     if (!consensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)
-        groups = .select_genes(cluster_genes, counts_group, minc,
+        groups <- .select_genes(cluster_genes, counts_group, minc,
                                reduce = reduce,
                                cutoff = cutoff)
     }else if (consensusCluster & is.null(pattern)){
-        cluster_genes = .make_concensus_cluster(counts_group)
-        groups = .select_concensus_genes(cluster_genes)
+        cluster_genes <- .make_concensus_cluster(counts_group)
+        groups <- .select_concensus_genes(cluster_genes)
     }else if(is.character(pattern)){
         stopifnot(pattern %in% rownames(counts_group))
         if (length(pattern) > 1)
-            reference = rowMedians(counts_group[pattern, ])
-        else reference = counts_group[pattern, ]
-        cluster_genes = .find_pattern(counts_group, reference)
-        groups = .select_pattern(cluster_genes)
+            reference <- rowMedians(counts_group[pattern, ])
+        else reference <- counts_group[pattern, ]
+        cluster_genes <- .find_pattern(counts_group, reference)
+        groups <- .select_pattern(cluster_genes)
     }else if(is.numeric(pattern)){
         stopifnot(length(pattern) == ncol(counts_group))
-        cluster_genes = .find_pattern(counts_group, pattern)
-        groups = .select_pattern(cluster_genes)
+        cluster_genes <- .find_pattern(counts_group, pattern)
+        groups <- .select_pattern(cluster_genes)
     }
     
     if (scale)
-        norm_sign = t(apply(counts_group, 1, .scale))
-    else norm_sign = counts_group
+        norm_sign <- t(apply(counts_group, 1, .scale))
+    else norm_sign <- counts_group
 
-    colnames(norm_sign) = colnames(counts_group)
-    metadata_groups = metadata %>%
+    colnames(norm_sign) <- colnames(counts_group)
+    metadata_groups <- metadata %>%
         dplyr::distinct_(summarize, .keep_all = TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
-    norm_sign = norm_sign[, row.names(metadata_groups)]
-    to_plot = unique(groups)
-    plots = lapply(to_plot, function(x){
+    norm_sign <- norm_sign[, row.names(metadata_groups)]
+    to_plot <- unique(groups)
+    plots <- lapply(to_plot, function(x){
         .plot_cluster(norm_sign,
                       as.character(names(groups[groups == x])),
                       metadata_groups[,time],
                       metadata_groups[,col], x, fixy)
     })
-    nc = 3
+    nc <- 3
     all <- NULL
     if (length(plots) < 3)
         nc = length(plots)
@@ -763,14 +763,17 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
             print(all)
     }
     
-    df = data.frame(genes = names(groups), 
+    df <- data.frame(genes = names(groups), 
                     cluster = groups, stringsAsFactors = FALSE)
     
-    raw = counts_group %>% as.data.frame %>% rownames_to_column("genes") %>%
+    raw <- counts_group %>% as.data.frame %>% 
+        rownames_to_column("genes") %>%
         gather(!!sym(summarize), "value", -genes) %>%
         inner_join(metadata_groups %>%
                        mutate_if(is.factor, as.character)) %>%
-        inner_join(df, by = "genes") %>%
+        inner_join(df, by = "genes")
+    
+    summarise <- raw %>%
         group_by(!!sym(summarize), !!sym("cluster"),
                  !!sym(time), !!sym(col)) %>%
         summarise(abundance = median(value)) %>% 
@@ -779,5 +782,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     invisible(list(df = df,
          pass = to_plot, plot = all, hr = cluster_genes,
          profile = norm_sign,
+         summarise = raw,
          raw = raw))
 }
