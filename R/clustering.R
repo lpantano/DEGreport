@@ -631,8 +631,19 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     p
 }
 
+.remove_low_difference <- function(ma, groupDifference){
+    keep <- rowMax(ma) - rowMin(ma) > groupDifference
+    if (sum(keep) < 10)
+        stop("After applying groupDifference: ", groupDifference,
+             " number of features in matrix is less than 10.",
+             " Reduce the value and try again.")
+    ma[keep,]
+}
 
-#' Make groups of genes using expression profile
+#' Make groups of genes using expression profile. Note that this function
+#' doesn't calculate significant difference between groups, so the
+#' matrix used as input should be already filtered to contain only
+#' genes that are significantly different.
 #'
 #' @aliases degPatterns
 #' @param ma  log2 normalized count matrix
@@ -660,6 +671,10 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @param pattern numeric vector to be used to find patterns like this
 #'   from the count matrix. As well, it can be a character indicating the
 #'   genes inside the count matrix to be used as reference.
+#' @param groupDifference Minimum abundance difference between the
+#'   maximum value and minimum value for each feature. Please, 
+#'   provide the value in the same range than the `ma` value
+#'    ( if `ma` is in log2, `groupDifference` should be inside that range).
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
 #' @details It would be used [cluster::diana()] function
@@ -692,6 +707,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        reduce=FALSE, cutoff=0.70,
                        scale=TRUE,
                        pattern = NULL,
+                       groupDifference = NULL,
                        plot=TRUE, fixy=NULL){
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
@@ -714,6 +730,10 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                 "make sure is not an error. Normally",
                 "Only DE genes are useful for this function.")
     message("Working with ", nrow(ma), " genes.")
+    
+    if (!is.null(groupDifference))
+        ma <- .remove_low_difference(ma, groupDifference)
+    
     counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
 
     if (!consensusCluster & is.null(pattern)){

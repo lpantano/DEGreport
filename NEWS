@@ -1,8 +1,9 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.3
-    2017-02-05  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-02-21  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Feature: Add option to filter genes in degPattern. Thanks Amir Jassim.
         Feature: Return raw and summarise table in degPattern
         Feature: Migrate to rmarkdown for vignette
         Feature: Return prcomp output when using degPCA
