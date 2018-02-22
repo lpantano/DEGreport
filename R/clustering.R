@@ -42,8 +42,6 @@
 
 # Scale from 1 to 0 the expression genes
 .scale <- function(e){
-    .max <- max(e)
-    .min <- min(e)
     scale(e)
 }
 
@@ -120,7 +118,7 @@
 }
 
 # summarize matrix into groups and scale if needed
-.summarize_scale <- function(ma, group, scale=TRUE){
+.summarize_scale <- function(ma, group, scale = TRUE){
     counts_group = t(sapply(rownames(ma), function(g){
         sapply(levels(group), function(i){
             idx = which(group == i)
@@ -633,7 +631,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 
 .remove_low_difference <- function(ma, groupDifference){
     keep <- rowMax(ma) - rowMin(ma) > groupDifference
-    message("Filtering ", sum(keep), " after groupDifference applied.")
+    message("Filtering ", sum(!keep), " after groupDifference applied.")
     if (sum(keep) < 10)
         stop("After applying groupDifference: ", groupDifference,
              " number of features in matrix is less than 10.",
@@ -717,7 +715,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         metadata[,col] = rep("one_group", nrow(metadata))
     }
     if (!summarize %in% names(metadata))
-        metadata[,summarize] = as.factor(paste0(metadata[,col], metadata[,time]))
+        metadata[,summarize] = as.factor(paste0(metadata[,col],
+                                                metadata[,time]))
     stopifnot(class(metadata) == "data.frame")
     stopifnot(class(ma) == "matrix")
     stopifnot(summarize %in% names(metadata))
@@ -732,11 +731,13 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                 "Only DE genes are useful for this function.")
     message("Working with ", nrow(ma), " genes.")
     
+    counts_group <- .summarize_scale(ma,
+                                     metadata[[summarize]],
+                                     FALSE)
     if (!is.null(groupDifference))
-        ma <- .remove_low_difference(ma, groupDifference)
+        counts_group <- .remove_low_difference(counts_group,
+                                               groupDifference)
     
-    counts_group <- .summarize_scale(ma, metadata[[summarize]], FALSE)
-
     if (!consensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)
         groups <- .select_genes(cluster_genes, counts_group, minc,
