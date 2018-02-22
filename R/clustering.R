@@ -633,6 +633,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 
 .remove_low_difference <- function(ma, groupDifference){
     keep <- rowMax(ma) - rowMin(ma) > groupDifference
+    message("Filtering ", sum(keep), " after groupDifference applied.")
     if (sum(keep) < 10)
         stop("After applying groupDifference: ", groupDifference,
              " number of features in matrix is less than 10.",
@@ -800,8 +801,10 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         ungroup()
     
     invisible(list(df = df,
-         pass = to_plot, plot = all, hr = cluster_genes,
+         pass = to_plot,
+         plot = all,
+         hr = cluster_genes,
          profile = norm_sign,
-         summarise = raw,
+         summarise = summarise,
          raw = raw))
 }
