@@ -24,4 +24,9 @@ test_that("transform", {
     expect_equal(.group_metadata(as.data.frame(colData(dse)),
                                  "group", "group", "group") %>% nrow, 2)
 })
-    
+
+test_that("groupDifference", {
+    ma <- matrix(rnorm(50), ncol = 2)
+    ma[1:20, 2] <- 1000 + ma[1:20, 2]
+    expect_equal(.remove_low_difference(ma, 500) %>% nrow(), 20)
+})
