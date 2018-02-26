@@ -24,6 +24,7 @@ Imports:
     methods,
     Biobase,
     BiocGenerics,
+    circlize,
     ConsensusClusterPlus,
     S4Vectors,
     SummarizedExperiment,
