@@ -26,7 +26,7 @@
                                group = "group", color = "group"),
                     method = "lm", formula = y~poly(x, splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
         ylab("scaled expression") + xlab("") )
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])

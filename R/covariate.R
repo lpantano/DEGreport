@@ -125,6 +125,10 @@
 #'   to select only pcs that explain more variability than this.
 #' @param correlation character determining the method for the
 #'   correlation between pcs and covariates.
+#' @param addCovDen boolean. Whether to add the covariates
+#'   dendograme to the plot to see covariates relationship.
+#'   It will show [degCovCor()] dendograme on top of the columns of
+#'   the heatmap..
 #' @param plot Whether to plot or not the correlation matrix.
 #'
 #' @return: list:
@@ -151,12 +155,14 @@ degCovariates <- function(counts, metadata,
                           fdr = 0.1,
                           scale = FALSE,
                           min_pc_pct = 5.0,
-                          correlation = "spearman",
+                          correlation = "kendall",
+                          addCovDen = TRUE,
                           plot = TRUE) {
+    
     title <- paste(ifelse(scale, "s", "un-s"), "caled ",
-                   " data in pca; pve >= ",
-                   min_pc_pct, "%; ", correlation,
-                   " correlations ", sep = "")
+                   " data in pca;\npve >= ",
+                   min_pc_pct, "%;\n", correlation,
+                   " cor ", sep = "")
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
     metadata <- as.data.frame(metadata)
@@ -197,26 +203,53 @@ degCovariates <- function(counts, metadata,
     significantcovars <- corrRes[["mat"]][corrRes[["mat"]][["fdr"]] < fdr,"covar"]
     ma <- corrRes[["mat"]]
     ma[["r"]][ma[["fdr"]] > fdr] <- NA
-    p <- ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
-        geom_tile() +
-        theme_minimal() +
-        ggtitle(title) +
-        scale_fill_gradient2(low = "darkblue", high = "darkorange",
-                             guide = "colorbar", na.value = "grey90",
-                             limits = c(-1L, 1L)) +
-        theme(axis.text.x = element_text(angle = 90L,
-                                         hjust = 1L,
-                                         vjust = 0.5))
-    if (sum(ma[["r"]] > 0, na.rm = TRUE))
-        p <- p + geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*"))
-        
+    corMa <- ma[, c("r", "compare", "covar")] %>%
+        spread(!!sym("compare"), !!sym("r")) %>%
+        remove_rownames() %>%
+        column_to_rownames("covar")
+    
+    cor_meta <- .calccompletecorandplot(samplesbyfullcovariates,
+                                        samplesbyfullcovariates,
+                                        correlation,
+                                        "",
+                                        weights = 1L)
+    
+    corMeta <- cor_meta[["mat"]][, c("r", "compare", "covar")] %>%
+        spread(!!sym("compare"), !!sym("r"), fill = 0) %>%
+        remove_rownames() %>%
+        column_to_rownames("covar") 
+    
+    if (addCovDen){
+        p <- Heatmap(t(corMa),
+                     row_title = title,
+                     cluster_rows = FALSE,
+                     cluster_columns = hclust(as.dist((1-corMeta)^2),
+                                              method = "ward.D"),
+                     col = colorRamp2(c(1, 0, -1),
+                                      c("darkorange", "white", "darkblue")))
+    }else{
+        p <- ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
+            geom_tile() +
+            theme_minimal() +
+            ggtitle(title) +
+            scale_fill_gradient2(low = "darkblue", high = "darkorange",
+                                 guide = "colorbar", na.value = "grey90",
+                                 limits = c(-1L, 1L)) +
+            theme(axis.text.x = element_text(angle = 90L,
+                                             hjust = 1L,
+                                             vjust = 0.5))
+        if (sum(ma[["r"]] > 0, na.rm = TRUE))
+            p <- p + geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*"))
+    }
     samplepcvals <- as.data.frame(samplepcvals) %>% 
         set_colnames(original_names) %>% 
         rownames_to_column("samples")
     samplepcvals <- bind_cols(samplepcvals,
                               metadata)
     scatterPlot <- .generate_scatter_plot(samplepcvals, corrRes[["mat"]])
+    
     if (plot) print(p)
+    
     invisible(list(significantCovars = significantcovars,
                 plot = p,
                 corMatrix = corrRes[["mat"]],
@@ -282,7 +315,7 @@ degCorCov <- function(metadata, fdr=0.05, ...){
                                       "kendall",
                                       "",
                                       weights = 1L)
-    cor
+    
     corMat <- cor[["mat"]][, c("r", "compare", "covar")] %>%
         spread(!!sym("compare"), !!sym("r")) %>% remove_rownames() %>%
         column_to_rownames("covar")
@@ -294,9 +327,9 @@ degCorCov <- function(metadata, fdr=0.05, ...){
     cols <- colorRampPalette(c("steelblue", "white", "orange"))(10)
     if (sum(!is.na(corMat)) > 2) {
         p <- Heatmap(corMat, col = cols, name = "cor-value",
-                     row_dend_reorder = FALSE, column_dend_reorder = FALSE, ...)
+                     row_dend_reorder = FALSE,
+                     column_dend_reorder = FALSE, ...)
         print(p)
-
     }
     invisible(list(cor = cor[["mat"]], corMat = corMat,
                    fdrMat = fdrMat, plot = p))

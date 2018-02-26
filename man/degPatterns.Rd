@@ -2,7 +2,10 @@
 % Please edit documentation in R/clustering.R
 \name{degPatterns}
 \alias{degPatterns}
-\title{Make groups of genes using expression profile}
+\title{Make groups of genes using expression profile. Note that this function
+doesn't calculate significant difference between groups, so the
+matrix used as input should be already filtered to contain only
+genes that are significantly different.}
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
   col = NULL, consensusCluster = FALSE, reduce = FALSE, cutoff = 0.7,
@@ -69,7 +72,10 @@ with the clusters they belong.
 }
 }
 \description{
-Make groups of genes using expression profile
+Make groups of genes using expression profile. Note that this function
+doesn't calculate significant difference between groups, so the
+matrix used as input should be already filtered to contain only
+genes that are significantly different.
 }
 \details{
 It would be used \code{\link[cluster:diana]{cluster::diana()}} function

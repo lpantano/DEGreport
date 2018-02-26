@@ -33,7 +33,7 @@
 #' @import edgeR
 #' @import cluster
 #' @import logging
-#' @importFrom Biobase rowMax
+#' @importFrom Biobase rowMax rowMin
 #' @importFrom DESeq2 plotCounts rlog results resultsNames lfcShrink
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'             colData assay assays rowData
@@ -55,6 +55,7 @@
 #' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
 #' @importFrom tibble as_tibble
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap
+#' @importFrom circlize colorRamp2
 #' @importFrom reshape melt melt.data.frame
 #' @importFrom knitr kable
 #' @importFrom methods new slot

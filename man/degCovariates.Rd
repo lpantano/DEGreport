@@ -5,7 +5,7 @@
 \title{Find correlation between pcs and covariates}
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, min_pc_pct = 5,
-  correlation = "spearman", plot = TRUE)
+  correlation = "kendall", addCovDen = TRUE, plot = TRUE)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -24,6 +24,11 @@ to select only pcs that explain more variability than this.}
 
 \item{correlation}{character determining the method for the
 correlation between pcs and covariates.}
+
+\item{addCovDen}{boolean. Whether to add the covariates
+dendograme to the plot to see covariates relationship.
+It will show \code{\link[=degCovCor]{degCovCor()}} dendograme on top of the columns of
+the heatmap..}
 
 \item{plot}{Whether to plot or not the correlation matrix.}
 }
