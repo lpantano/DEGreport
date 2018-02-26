@@ -10,7 +10,7 @@ dse <- DESeqDataSetFromMatrix(counts[1:1000, idx],
 res <- results(dse)
 
 test_that("degcovariates", {
-    resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse), min_pc_pct = 10)
+    resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse), minPC = 10)
     expect_true(nrow(resCov[["corMatrix"]][resCov[["corMatrix"]][["fdr"]] < 0.05,]) == 3)
     expect_error(degCovariates(log2(counts(dse) + 0.5), colData(dse)[2:1,]))
 })
