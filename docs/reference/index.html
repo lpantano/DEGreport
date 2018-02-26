@@ -58,19 +58,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/DEGreport.html">Get Started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/DEGreport_examples.html">QC and downstream analysis for differential expression RNA-seq</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       
@@ -200,7 +191,10 @@ at shiny server:runGist(9930881)</p></td>
           <td>
             <p><code><a href="degPatterns.html">degPatterns</a></code> </p>
           </td>
-          <td><p>Make groups of genes using expression profile</p></td>
+          <td><p>Make groups of genes using expression profile. Note that this function
+doesn't calculate significant difference between groups, so the
+matrix used as input should be already filtered to contain only
+genes that are significantly different.</p></td>
         </tr><tr>
           <!--  -->
           <td>

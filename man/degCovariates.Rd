@@ -4,7 +4,7 @@
 \alias{degCovariates}
 \title{Find correlation between pcs and covariates}
 \usage{
-degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, min_pc_pct = 5,
+degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, minPC = 5,
   correlation = "kendall", addCovDen = TRUE, plot = TRUE)
 }
 \arguments{
@@ -19,7 +19,7 @@ between pcs and covariates.}
 \item{scale}{boolean to determine wether counts matrix should be
 scaled for pca. default FALSE.}
 
-\item{min_pc_pct}{numeric value that will be used as cutoff
+\item{minPC}{numeric value that will be used as cutoff
 to select only pcs that explain more variability than this.}
 
 \item{correlation}{character determining the method for the

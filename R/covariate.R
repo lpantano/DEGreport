@@ -121,7 +121,7 @@
 #'   between pcs and covariates.
 #' @param scale boolean to determine wether counts matrix should be
 #'   scaled for pca. default FALSE.
-#' @param min_pc_pct numeric value that will be used as cutoff
+#' @param minPC numeric value that will be used as cutoff
 #'   to select only pcs that explain more variability than this.
 #' @param correlation character determining the method for the
 #'   correlation between pcs and covariates.
@@ -154,14 +154,14 @@
 degCovariates <- function(counts, metadata,
                           fdr = 0.1,
                           scale = FALSE,
-                          min_pc_pct = 5.0,
+                          minPC = 5.0,
                           correlation = "kendall",
                           addCovDen = TRUE,
                           plot = TRUE) {
     
     title <- paste(ifelse(scale, "s", "un-s"), "caled ",
                    " data in pca;\npve >= ",
-                   min_pc_pct, "%;\n", correlation,
+                   minPC, "%;\n", correlation,
                    " cor ", sep = "")
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
@@ -175,7 +175,7 @@ degCovariates <- function(counts, metadata,
     
     pcares <- .runpca(genesbysamples = counts,
                       scale_data_for_pca = scale,
-                      min_pve_pct_pc = min_pc_pct)
+                      min_pve_pct_pc = minPC)
     
     samplepcvals <- pcares[["samplepcvals"]]
     pve <- pcares[["pve"]]
@@ -221,6 +221,7 @@ degCovariates <- function(counts, metadata,
     
     if (addCovDen){
         p <- Heatmap(t(corMa),
+                     name = "cor",
                      row_title = title,
                      cluster_rows = FALSE,
                      cluster_columns = hclust(as.dist((1-corMeta)^2),

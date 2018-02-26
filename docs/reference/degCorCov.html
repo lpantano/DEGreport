@@ -59,19 +59,10 @@ in the metadata table — degCorCov • DEGreport</title>
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/DEGreport.html">Get Started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/DEGreport_examples.html">QC and downstream analysis for differential expression RNA-seq</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       
@@ -133,7 +124,7 @@ b) plot, Heatmap plot of correlation matrix</p>
 <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
   <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
-<span class='no'>cor</span> <span class='kw'>&lt;-</span> <span class='fu'>degCorCov</span>(<span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='output co'>#&gt; <span class='error'>Error in print.default(p): attempt to apply non-function</span></div></pre>
+<span class='no'>cor</span> <span class='kw'>&lt;-</span> <span class='fu'>degCorCov</span>(<span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='img'><img src='degCorCov-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
