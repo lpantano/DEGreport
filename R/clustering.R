@@ -629,8 +629,15 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     p
 }
 
-.remove_low_difference <- function(ma, groupDifference){
-    keep <- rowMax(ma) - rowMin(ma) > groupDifference
+.remove_low_difference <- function(ma, groupDifference, each_step){
+    browser()
+    if (!each_step){
+        keep <- rowMax(ma) - rowMin(ma) > groupDifference
+    } else {
+        keep <- sapply(1:(ncol(ma) -1), function(i){
+            abs(ma[,i] - ma[,i + 1]) > groupDifference
+        }) %>% sapply(., function(x) all(x))
+    }
     message("Filtering ", sum(!keep), " after groupDifference applied.")
     if (sum(keep) < 10)
         stop("After applying groupDifference: ", groupDifference,
@@ -674,6 +681,9 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'   maximum value and minimum value for each feature. Please, 
 #'   provide the value in the same range than the `ma` value
 #'    ( if `ma` is in log2, `groupDifference` should be inside that range).
+#' @param eachStep Whether apply `groupDifference` at each stem over
+#'   `time` variable. **This only work properly for one group
+#'    with multiple time points**.
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
 #' @details It would be used [cluster::diana()] function
@@ -707,6 +717,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        scale=TRUE,
                        pattern = NULL,
                        groupDifference = NULL,
+                       eachStep = FALSE,
                        plot=TRUE, fixy=NULL){
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
@@ -736,7 +747,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                                      FALSE)
     if (!is.null(groupDifference))
         counts_group <- .remove_low_difference(counts_group,
-                                               groupDifference)
+                                               groupDifference,
+                                               eachStep)
     
     if (!consensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)

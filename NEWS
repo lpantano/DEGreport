@@ -1,8 +1,10 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.3
-    2017-02-26  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-02-28  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Feature: Add eachStep option to degPattern to apply groupDifference
+          to each time point and not only to the maximum and minimum values.
         Feature: Add covariates dendograme to degCovariates.
         Fix: Wrong matrix in degPattern. Thanks Amir Jassim.
         Feature: Add option to filter genes in degPattern. Thanks Amir Jassim.

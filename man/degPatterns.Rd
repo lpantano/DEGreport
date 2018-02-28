@@ -9,8 +9,8 @@ genes that are significantly different.}
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
   col = NULL, consensusCluster = FALSE, reduce = FALSE, cutoff = 0.7,
-  scale = TRUE, pattern = NULL, groupDifference = NULL, plot = TRUE,
-  fixy = NULL)
+  scale = TRUE, pattern = NULL, groupDifference = NULL,
+  eachStep = FALSE, plot = TRUE, fixy = NULL)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
@@ -53,6 +53,10 @@ genes inside the count matrix to be used as reference.}
 maximum value and minimum value for each feature. Please,
 provide the value in the same range than the \code{ma} value
 ( if \code{ma} is in log2, \code{groupDifference} should be inside that range).}
+
+\item{eachStep}{Whether apply \code{groupDifference} at each stem over
+\code{time} variable. \strong{This only work properly for one group
+with multiple time points}.}
 
 \item{plot}{boolean plot the clusters found}
 
