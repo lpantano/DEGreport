@@ -630,7 +630,6 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 }
 
 .remove_low_difference <- function(ma, groupDifference, each_step){
-    browser()
     if (!each_step){
         keep <- rowMax(ma) - rowMin(ma) > groupDifference
     } else {
@@ -819,5 +818,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
          hr = cluster_genes,
          profile = norm_sign,
          summarise = summarise,
-         raw = raw))
+         raw = raw,
+         counts = ma[raw[["genes"]],]))
 }
