@@ -2,8 +2,8 @@ StatCor <- ggproto("StatCor", Stat,
                    compute_group = function(data, scales, method = "spearman") {
                        data = data[!is.na(data$x) & !is.na(data$y),]
                        cr = cor.test(data$x, data$y, method = method)
-                       
-                       data.frame(x = (max(data$x, na.rm = T) - min(data$x, na.rm = T)) / 2,
+                       x = min(data$x) + (max(data$x) - min(data$x)) / 2
+                       data.frame(x = x,
                                   y = max(data$y, na.rm = T),
                                   label = paste0("Cor (", method, "): ",
                                                  round(cr[["estimate"]], digits = 2),
