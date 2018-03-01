@@ -27,7 +27,7 @@ correlation between pcs and covariates.}
 
 \item{addCovDen}{boolean. Whether to add the covariates
 dendograme to the plot to see covariates relationship.
-It will show \code{\link[=degCovCor]{degCovCor()}} dendograme on top of the columns of
+It will show \code{\link[=degCorCov]{degCorCov()}} dendograme on top of the columns of
 the heatmap..}
 
 \item{plot}{Whether to plot or not the correlation matrix.}

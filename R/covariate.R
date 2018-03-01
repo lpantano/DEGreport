@@ -127,7 +127,7 @@
 #'   correlation between pcs and covariates.
 #' @param addCovDen boolean. Whether to add the covariates
 #'   dendograme to the plot to see covariates relationship.
-#'   It will show [degCovCor()] dendograme on top of the columns of
+#'   It will show [degCorCov()] dendograme on top of the columns of
 #'   the heatmap..
 #' @param plot Whether to plot or not the correlation matrix.
 #'
