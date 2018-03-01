@@ -87,19 +87,57 @@ automatically guessing the position if nothing else specidfied.
 family font, size and colour can be used to change the format.</p>
     
 
-    <pre class="usage"><span class='fu'>geom_cor</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='no'>GeomCor</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>, <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>geom_cor</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>,
+  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>mapping</th>
+      <td><p>Set of aesthetic mappings created by <code>aes()</code> or
+<code>aes_()</code>. If specified and <code>inherit.aes = TRUE</code> (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>The data to be displayed in this layer. There are three
+options:</p>
+<p>If <code>NULL</code>, the default, the data is inherited from the plot
+data as specified in the call to <code>ggplot()</code>.</p>
+<p>A <code>data.frame</code>, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+<code>fortify()</code> for which variables will be created.</p>
+<p>A <code>function</code> will be called with a single argument,
+the plot data. The return value must be a <code>data.frame.</code>, and
+will be used as the layer data.</p></td>
+    </tr>
+    <tr>
       <th>method</th>
       <td><p>Method to calculate the correlation. Values are
 passed to <code>cor.test()</code>. (Spearman, Pearson, Kendall).</p></td>
     </tr>
+    <tr>
+      <th>inherit.aes</th>
+      <td><p>If <code>FALSE</code>, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. <code>borders()</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>other arguments passed on to <code>layer()</code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>color = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p></td>
+    </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>It was integrated after reading this tutorial to extend
+ggplot2 <a href='https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html'>layers</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -108,17 +146,20 @@ passed to <code>cor.test()</code>. (Spearman, Pearson, Kendall).</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>humanGender</span>)
+<span class='fu'>library</span>(<span class='no'>SummarizedExperiment</span>)
 <span class='fu'>library</span>(<span class='no'>ggplot2</span>)
-<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='fu'>as.data.frame</span>(<span class='fu'>assay</span>(<span class='no'>humanGender</span>)[<span class='fl'>1</span>:<span class='fl'>1000</span>,]),
+<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='fu'>as.data.frame</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assay</a></span>(<span class='no'>humanGender</span>)[<span class='fl'>1</span>:<span class='fl'>1000</span>,]),
        <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>NA20502</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>NA20504</span>)) +
   <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_point'>geom_point</a></span>() +
-  <span class='fu'>geom_cor</span>(<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>)</div><div class='img'><img src='geom_cor-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'>geom_cor</span>(<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>)</div><div class='img'><img src='geom_cor-3.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
