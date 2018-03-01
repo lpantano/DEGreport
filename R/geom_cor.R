@@ -64,6 +64,8 @@ GeomCor <- ggproto("GeomText", Geom,
 #' @seealso [ggplot2::layer()]
 #' @param method Method to calculate the correlation. Values are
 #'   passed to [cor.test()]. (Spearman, Pearson, Kendall).
+#' @details It was integrated after reading this tutorial to extend
+#' ggplot2 [layers](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html)
 #' @examples
 #' data(humanGender)
 #' library(ggplot2)

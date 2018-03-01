@@ -96,8 +96,8 @@ genes that are significantly different.</p>
 
     <pre class="usage"><span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>metadata</span>, <span class='kw'>minc</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>summarize</span> <span class='kw'>=</span> <span class='st'>"merge"</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"time"</span>,
   <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>consensusCluster</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reduce</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>groupDifference</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>fixy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>groupDifference</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>eachStep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fixy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -166,6 +166,12 @@ genes inside the count matrix to be used as reference.</p></td>
 maximum value and minimum value for each feature. Please,
 provide the value in the same range than the <code>ma</code> value
 ( if <code>ma</code> is in log2, <code>groupDifference</code> should be inside that range).</p></td>
+    </tr>
+    <tr>
+      <th>eachStep</th>
+      <td><p>Whether apply <code>groupDifference</code> at each stem over
+<code>time</code> variable. <strong>This only work properly for one group
+with multiple time points</strong>.</p></td>
     </tr>
     <tr>
       <th>plot</th>

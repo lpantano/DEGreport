@@ -17,6 +17,10 @@ passed to \code{\link[=cor.test]{cor.test()}}. (Spearman, Pearson, Kendall).}
 automatically guessing the position if nothing else specidfied.
 family font, size and colour can be used to change the format.
 }
+\details{
+It was integrated after reading this tutorial to extend
+ggplot2 \href{https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html}{layers}
+}
 \examples{
 data(humanGender)
 library(ggplot2)
