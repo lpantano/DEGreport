@@ -23,6 +23,7 @@ ggplot2 \href{https://cran.r-project.org/web/packages/ggplot2/vignettes/extendin
 }
 \examples{
 data(humanGender)
+library(SummarizedExperiment)
 library(ggplot2)
 ggplot(as.data.frame(assay(humanGender)[1:1000,]),
        aes(x = NA20502, y = NA20504)) +

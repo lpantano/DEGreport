@@ -68,6 +68,7 @@ GeomCor <- ggproto("GeomText", Geom,
 #' ggplot2 [layers](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html)
 #' @examples
 #' data(humanGender)
+#' library(SummarizedExperiment)
 #' library(ggplot2)
 #' ggplot(as.data.frame(assay(humanGender)[1:1000,]),
 #'        aes(x = NA20502, y = NA20504)) +
