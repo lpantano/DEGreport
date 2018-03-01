@@ -635,7 +635,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     } else {
         keep <- sapply(1:(ncol(ma) -1), function(i){
             abs(ma[,i] - ma[,i + 1]) > groupDifference
-        }) %>% sapply(., function(x) all(x))
+        }) %>% apply(., 1, function(x) all(x))
     }
     message("Filtering ", sum(!keep), " after groupDifference applied.")
     if (sum(keep) < 10)
