@@ -42,7 +42,7 @@ Imports:
     Nozzle.R1,
     psych,
     reshape,
-    rlang
+    rlang,
     scales,
     stats,
     stringr,
