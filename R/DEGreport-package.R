@@ -28,6 +28,7 @@
 #' @import ggrepel
 #' @import quantreg
 #' @import ggplot2
+#' @importFrom ggplot2 layer ggproto
 #' @import utils
 #' @import Nozzle.R1
 #' @import edgeR
@@ -38,6 +39,7 @@
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'             colData assay assays rowData
 #' @importFrom psych corr.test
+#' @importFrom grid textGrob
 #' @importFrom cowplot draw_plot
 #' @importFrom cowplot ggdraw
 #' @importFrom cowplot plot_grid

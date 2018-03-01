@@ -9,6 +9,13 @@ dse <- DESeqDataSetFromMatrix(counts[1:1000, idx],
 
 res <- results(dse)
 
+plot_cor <- function(dse){
+    ggplot(as.data.frame(counts(dse)),
+           aes(x = NA20502, y = NA20504)) +
+        geom_point() +
+        geom_cor(method = "kendall")
+}
+
 test_that("degcovariates", {
     resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse), minPC = 10)
     expect_true(nrow(resCov[["corMatrix"]][resCov[["corMatrix"]][["fdr"]] < 0.05,]) == 3)
@@ -44,5 +51,8 @@ test_that("singleFunctions",
         expect_true(degPCA(counts(dse)) %>%
                         class %>% .[[2]] == "ggplot")
         expect_true(degMDS(counts(dse)) %>%
+                        class %>% .[[2]] == "ggplot")
+       
+        expect_true(plot_cor(dse) %>%
                         class %>% .[[2]] == "ggplot")
     })

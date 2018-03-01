@@ -1,6 +1,6 @@
 Package: DEGreport
 Version: 1.15.3
-Date: 2017-02-28
+Date: 2017-02-29
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -25,30 +25,31 @@ Imports:
     Biobase,
     BiocGenerics,
     circlize,
-    ConsensusClusterPlus,
-    S4Vectors,
-    SummarizedExperiment,
-    DESeq2,
-    ggplot2,
-    cowplot,
-    ggrepel,
-    Nozzle.R1,
-    edgeR,
-    cluster,
-    logging,
-    dplyr,
-    tidyr,
-    tibble,
-    reshape,
     ComplexHeatmap,
-    knitr,
+    cowplot,
+    ConsensusClusterPlus,
+    cluster,
+    DESeq2,
+    dplyr,
+    edgeR,
+    ggplot2,
+    grid,
+    ggrepel,
     grDevices,
+    knitr,
+    logging,
     magrittr,
+    Nozzle.R1,
+    psych,
+    reshape,
+    rlang
     scales,
     stats,
     stringr,
-    psych,
-    rlang
+    S4Vectors,
+    SummarizedExperiment,
+    tidyr,
+    tibble
 Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 
   role = c("aut", "cre")),
   person("John", "Hutchinson", email = "@jnhutchinson", role = c("ctb")),
