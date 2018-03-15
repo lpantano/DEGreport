@@ -1,6 +1,6 @@
 Package: DEGreport
 Version: 1.15.3
-Date: 2017-02-29
+Date: 2017-03-15
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression

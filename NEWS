@@ -1,8 +1,9 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.15.3
-    2017-02-29  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-03-15  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Feature: Plot only when degPatterns has only one gene. Thanks Amir Jassim.
         Feature: Add geom_cor to plot correlation values to a ggplot2 plot.
         Feature: Add eachStep option to degPattern to apply groupDifference
           to each time point and not only to the maximum and minimum values.
