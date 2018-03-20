@@ -281,12 +281,13 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
         if (is.null(contrast)) {
             contrast <- resultsNames(object)[[2L]]
         }
-        return(summary(.guessResults(object, contrast), alpha = alpha))
+        return(capture.output(summary(.guessResults(object, contrast),
+                                      alpha = alpha)))
     }
     if (class(object) == "DESeqResults")
-        return(summary(object, alpha = alpha))
+        return(capture.output(summary(object, alpha = alpha)))
     if (class(object) == "DEGSet")
-        return(summary(deg(object), alpha = alpha))
+        return(capture.output(summary(deg(object), alpha = alpha)))
     stop("No class supported.")
 }
 #' Print Summary Statistics of Alpha Level Cutoffs
@@ -332,11 +333,10 @@ degSummary <- function(
         caption <- contrast
     }
     df <- lapply(seq_along(alpha), function(a) {
-        info <- capture.output(
-            .summary(object, contrast, alpha[a])
-        ) %>%
+        info <- .summary(object, contrast, alpha[a]) %>%
             # Get the lines of interest from summary
-            .[4L:8L]
+            .[4L:8L] %>% 
+            .[.[] != ""]
         parse <- info[1L:5L] %>%
             # Extract the values after the colon in summary
             sapply(function(a) {
