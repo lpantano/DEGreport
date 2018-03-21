@@ -262,6 +262,7 @@ degCovariates <- function(counts, metadata,
 }
 
 degClean <- function(ma){
+    ma <- ma[,colSums(is.na(df))<nrow(df)]
     lapply(ma, function(x) {
         if (length(unique(x)) < length(x) * 0.20 & is.numeric(x))
             x <- as.factor(x)
