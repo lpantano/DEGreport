@@ -1,8 +1,9 @@
 DEGreport News
 
-CHANGES IN DEGreport 1.15.3
-    2017-03-21  Lorena Pantano <lorena.pantano@gmail.com>
+CHANGES IN DEGreport 1.15.4
+    2017-03-27  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Fix: Fix typo in variable inside degClean
         Fix: Remove all columsn with NA values in degClean
         Feature: Plot only when degPatterns has only one gene. Thanks Amir Jassim.
         Feature: Add geom_cor to plot correlation values to a ggplot2 plot.
