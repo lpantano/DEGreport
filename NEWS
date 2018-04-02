@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.15.5
+    2017-04-02  Lorena Pantano <lorena.pantano@gmail.com>
+        
+        Feature: Allow custom y-axis lab in degPlot. Thanks @vbarrera.
+
+
 CHANGES IN DEGreport 1.15.4
     2017-03-27  Lorena Pantano <lorena.pantano@gmail.com>
         

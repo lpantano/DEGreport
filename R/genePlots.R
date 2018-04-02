@@ -14,7 +14,8 @@
 #' @param metadata Metadata in case dds is a matrix.
 #' @param slot Name of the slot to use to get count data.
 #' @param log2 Whether to apply or not log2 transformation.
-#' @param xsLab Character, alternative label for x-axis (default: same as xs).
+#' @param xsLab Character, alternative label for x-axis (default: same as xs)
+#' @param ysLab Character, alternative label for y-axis..
 #' @param color Color to use to plot groups. It can be one color, or a palette
 #'   compatible with [ggplot2::scale_color_brewer()].
 #' @param groupLab Character, alternative label for group (default: same as group).
@@ -32,15 +33,16 @@
 #' degPlot(dse, genes = rownames(dse)[1:10], xs = "group", group = "group",
 #'         color = "Accent")
 #' @export
-degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
-                   group=NULL, batch=NULL,
+degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
+                   group = NULL, batch = NULL,
                    metadata = NULL,
-                   ann=c("external_gene_name", "symbol"),
-                   slot=1L,
+                   ann = c("external_gene_name", "symbol"),
+                   slot = 1L,
                    log2 = TRUE,
-                   xsLab=xs,
+                   xsLab = xs,
+                   ysLab = "abundance",
                    color = "black",
-                   groupLab=group, batchLab=batch){
+                   groupLab = group, batchLab = batch){
     if (class(dds) %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
                                    colData = metadata)
@@ -65,9 +67,11 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
     
     if (log2 & max(counts) < 500L)
         warning("Data seems to be already in log2. Please use log2 = FALSE.")
-    if (log2)
+    if (log2){
         counts <- log2(counts + 0.2)
-    
+        ysLab <- paste("log2", ysLab)
+    }
+
     newgenes <- genes
     if (ncol(anno) > 0) {
         name <- intersect(names(anno), ann)
@@ -105,7 +109,8 @@ degPlot = function(dds, xs, res=NULL, n=9, genes=NULL,
         geom_point(size = 1, alpha = 0.7,
                    position = position_jitterdodge(dodge.width = 0.9)) +
         facet_wrap(~gene, scales = "free_y") +
-        xlab(xsLab)
+        xlab(xsLab) +
+        ylab(ysLab)
     if (length(unique(dd[, groupLab])) == 1L) {
         stopifnot(length(color) == 1)
         p = p +

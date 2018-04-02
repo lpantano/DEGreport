@@ -6,8 +6,8 @@
 \usage{
 degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
   batch = NULL, metadata = NULL, ann = c("external_gene_name", "symbol"),
-  slot = 1L, log2 = TRUE, xsLab = xs, color = "black",
-  groupLab = group, batchLab = batch)
+  slot = 1L, log2 = TRUE, xsLab = xs, ysLab = "abundance",
+  color = "black", groupLab = group, batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or SummarizedExperiment
@@ -35,7 +35,9 @@ batch effect visualization.}
 
 \item{log2}{Whether to apply or not log2 transformation.}
 
-\item{xsLab}{Character, alternative label for x-axis (default: same as xs).}
+\item{xsLab}{Character, alternative label for x-axis (default: same as xs)}
+
+\item{ysLab}{Character, alternative label for y-axis..}
 
 \item{color}{Color to use to plot groups. It can be one color, or a palette
 compatible with \code{\link[ggplot2:scale_color_brewer]{ggplot2::scale_color_brewer()}}.}
