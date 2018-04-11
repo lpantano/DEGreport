@@ -760,18 +760,15 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         dplyr::distinct_(summarize, .keep_all = TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     norm_sign <- norm_sign[, row.names(metadata_groups), drop = FALSE]
-    
     if (nrow(ma) == 1){
         p = .plot_cluster(norm_sign,
                       as.character(rownames(norm_sign)),
                       metadata_groups[,time],
                       metadata_groups[,col], rownames(norm_sign), fixy)
-        print(p)
-        return(invisible(list(plot = p,
-                              profile = norm_sign,
-                              summarise = summarise,
-                              raw = raw,
-                              counts = ma)))
+        cluster_genes <- c()
+        groups <- as.factor("1")
+        names(groups) <- c(row.names(ma))
+
     }else if (!consensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)
         groups <- .select_genes(cluster_genes, counts_group, minc,

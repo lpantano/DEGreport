@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.15.5
     2017-04-02  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Feature: Return same output for degPatterns with single genes. Thanks Amir Jassim.
         Feature: Allow custom y-axis lab in degPlot. Thanks @vbarrera.
 
 
