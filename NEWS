@@ -1,8 +1,9 @@
 DEGreport News
 
-CHANGES IN DEGreport 1.17.0
+CHANGES IN DEGreport 1.17.1
     2017-04-02  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Fix: remove discrete scale color in degPCA.
         Feature: Return same output for degPatterns with single genes. Thanks Amir Jassim.
         Feature: Allow custom y-axis lab in degPlot. Thanks @vbarrera.
 

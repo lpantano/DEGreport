@@ -562,7 +562,6 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
         p <- p + geom_text(aes_string(label = name), nudge_x = 1, nudge_y = 1)
 
     p <- p +
-        scale_color_brewer(palette = "Set1") +
         xlab(paste0(pc1, ": ",
                     round(pc[["percentVar"]][idx1] * 100),
                     "% variance")) +
@@ -570,6 +569,8 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                     round(pc[["percentVar"]][idx2] * 100),
                     "% variance")) +
         theme_minimal()
+    if (is.factor(comps[[condition]]))
+        p <- p + scale_color_brewer(palette = "Set2")
     if(data)
         return(list(pca = pc, plot = p))
     p
