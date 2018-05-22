@@ -545,6 +545,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
     idx2 <- which(names(pc[["percentVar"]]) == pc2)
     comps <- data.frame(pc[["x"]])
     comps[["Name"]] <- rownames(comps)
+    
     if (!is.null(metadata))
         comps <- bind_cols(comps,
                            as.data.frame(metadata)[as.character(comps$Name), ,
@@ -555,11 +556,18 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
         stopifnot(all.equal(colnames(counts), rownames(metadata)))
     
     p <- ggplot(comps, aes_string(pc1, pc2,
-                                  color = condition, shape = shape)) +
+                                  color = condition,
+                                  shape = shape)) +
         geom_point(size = 3)
-
+    
+    if (!is.null(condition)){
+        if (is.factor(comps[[condition]]))
+            p <- p + scale_color_brewer(palette = "Set2")
+    }
+    
     if (!is.null(name))
-        p <- p + geom_text(aes_string(label = name), nudge_x = 1, nudge_y = 1)
+        p <- p + geom_text(aes_string(label = name),
+                           nudge_x = 1, nudge_y = 1)
 
     p <- p +
         xlab(paste0(pc1, ": ",
@@ -569,8 +577,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                     round(pc[["percentVar"]][idx2] * 100),
                     "% variance")) +
         theme_minimal()
-    if (is.factor(comps[[condition]]))
-        p <- p + scale_color_brewer(palette = "Set2")
+    
     if(data)
         return(list(pca = pc, plot = p))
     p
