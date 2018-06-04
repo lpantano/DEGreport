@@ -130,7 +130,14 @@
 #'   It will show [degCorCov()] dendograme on top of the columns of
 #'   the heatmap..
 #' @param plot Whether to plot or not the correlation matrix.
-#'
+#' @details This method is adapeted from Daily et al 2017 article.
+#'   Principal components from PCA analysis are correlated with 
+#'   covariates metadata. Factors are transformed to numeric variables.
+#'   Correlation is measured by cor.test function with Kendall method
+#'   by default.
+#' @references 
+#' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
+#'  
 #' @return: list:
 #' a) significantCovars, covariates with FDR below the cutoff.
 #' b) plot, heatmap of the correlation found. * means pvalue < 0.05.

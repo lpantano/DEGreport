@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +53,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +68,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,6 +78,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,233 +86,228 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;1.15.3</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="createReport.html">createReport</a></code> </p>
-          </td>
-          <td><p>Create report of RNAseq DEG anlaysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="deg.html">deg</a></code> </p>
-          </td>
-          <td><p>Method to get all table stored for an specific comparison</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degCheckFactors.html">degCheckFactors</a></code> </p>
-          </td>
-          <td><p>Distribution of gene ratios used to calculate Size Factors.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degComps.html">degComps</a></code> </p>
-          </td>
-          <td><p>Automatize the use of <code>results()</code> for multiple comparisons</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degCorCov.html">degCorCov</a></code> </p>
-          </td>
-          <td><p>Calculate the correlation relationshipt among all covariates
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        <!--  -->
+        <td>
+          <p><code><a href="DEGSet.html">DEGSet()</a></code> <code><a href="DEGSet.html">DEGSet()</a></code> <code><a href="DEGSet.html">DEGSetFromEdgeR()</a></code> <code><a href="DEGSet.html">DEGSetFromDESeq2()</a></code> </p>
+        </td>
+        <td><p>DEGSet</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="DEGreport-deprecated.html">DEGreport-package</a></code> </p>
+        </td>
+        <td><p>Deprecated functions in package DEGreport</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="createReport.html">createReport()</a></code> </p>
+        </td>
+        <td><p>Create report of RNAseq DEG anlaysis</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="deg.html">deg()</a></code> </p>
+        </td>
+        <td><p>Method to get all table stored for an specific comparison</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degCheckFactors.html">degCheckFactors()</a></code> </p>
+        </td>
+        <td><p>Distribution of gene ratios used to calculate Size Factors.</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degComps.html">degComps()</a></code> </p>
+        </td>
+        <td><p>Automatize the use of <code>results()</code> for multiple comparisons</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degCorCov.html">degCorCov()</a></code> </p>
+        </td>
+        <td><p>Calculate the correlation relationshipt among all covariates
 in the metadata table</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degCovariates.html">degCovariates</a></code> </p>
-          </td>
-          <td><p>Find correlation between pcs and covariates</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degDefault.html">degDefault</a></code> </p>
-          </td>
-          <td><p>Method to get the default table to use.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degFilter.html">degFilter</a></code> </p>
-          </td>
-          <td><p>Filter genes by group</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degMB.html">degMB</a></code> </p>
-          </td>
-          <td><p>Distribution of expression of DE genes compared to the background</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degMDS.html">degMDS</a></code> </p>
-          </td>
-          <td><p>Plot MDS from normalized count data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degMean.html">degMean</a></code> </p>
-          </td>
-          <td><p>Distribution of pvalues by expression range</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degMerge.html">degMerge</a></code> </p>
-          </td>
-          <td><p>Integrate data comming from degPattern into one data object</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degMV.html">degMV</a></code> </p>
-          </td>
-          <td><p>Correlation of the standard desviation and the mean of the abundance of a
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degCovariates.html">degCovariates()</a></code> </p>
+        </td>
+        <td><p>Find correlation between pcs and covariates</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degDefault.html">degDefault()</a></code> </p>
+        </td>
+        <td><p>Method to get the default table to use.</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degFilter.html">degFilter()</a></code> </p>
+        </td>
+        <td><p>Filter genes by group</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degMB.html">degMB()</a></code> </p>
+        </td>
+        <td><p>Distribution of expression of DE genes compared to the background</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degMDS.html">degMDS()</a></code> </p>
+        </td>
+        <td><p>Plot MDS from normalized count data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degMV.html">degMV()</a></code> </p>
+        </td>
+        <td><p>Correlation of the standard desviation and the mean of the abundance of a
 set of genes.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degObj.html">degObj</a></code> </p>
-          </td>
-          <td><p>Create a deg object that can be used to plot expression values
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degMean.html">degMean()</a></code> </p>
+        </td>
+        <td><p>Distribution of pvalues by expression range</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degMerge.html">degMerge()</a></code> </p>
+        </td>
+        <td><p>Integrate data comming from degPattern into one data object</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degObj.html">degObj()</a></code> </p>
+        </td>
+        <td><p>Create a deg object that can be used to plot expression values
 at shiny server:runGist(9930881)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degPatterns.html">degPatterns</a></code> </p>
-          </td>
-          <td><p>Make groups of genes using expression profile. Note that this function
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degPCA.html">degPCA()</a></code> </p>
+        </td>
+        <td><p>smart PCA from count matrix data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degPatterns.html">degPatterns()</a></code> </p>
+        </td>
+        <td><p>Make groups of genes using expression profile. Note that this function
 doesn't calculate significant difference between groups, so the
 matrix used as input should be already filtered to contain only
 genes that are significantly different.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degPCA.html">degPCA</a></code> </p>
-          </td>
-          <td><p>smart PCA from count matrix data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degPlot.html">degPlot</a></code> </p>
-          </td>
-          <td><p>Plot top genes allowing more variables to color and shape points</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degPlotWide.html">degPlotWide</a></code> </p>
-          </td>
-          <td><p>Plot selected genes on a wide format</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degQC.html">degQC</a></code> </p>
-          </td>
-          <td><p>Plot main figures showing p-values distribution and mean-variance correlation</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="DEGreport-deprecated.html">DEGreport-package</a></code> </p>
-          </td>
-          <td><p>Deprecated functions in package DEGreport</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degResults.html">degResults</a></code> </p>
-          </td>
-          <td><p>Complete report from DESeq2 analysis</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="DEGSet.html">DEGSet</a></code> <code><a href="DEGSet.html">DEGSetFromEdgeR</a></code> <code><a href="DEGSet.html">DEGSetFromDESeq2</a></code> </p>
-          </td>
-          <td><p>DEGSet</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degSignature.html">degSignature</a></code> </p>
-          </td>
-          <td><p>Plot gene signature for each group and signature</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degSummary.html">degSummary</a></code> </p>
-          </td>
-          <td><p>Print Summary Statistics of Alpha Level Cutoffs</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degVar.html">degVar</a></code> </p>
-          </td>
-          <td><p>Distribution of pvalues by standard desviation range</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degVB.html">degVB</a></code> </p>
-          </td>
-          <td><p>Distribution of the standard desviation of
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degPlot.html">degPlot()</a></code> </p>
+        </td>
+        <td><p>Plot top genes allowing more variables to color and shape points</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degPlotWide.html">degPlotWide()</a></code> </p>
+        </td>
+        <td><p>Plot selected genes on a wide format</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degQC.html">degQC()</a></code> </p>
+        </td>
+        <td><p>Plot main figures showing p-values distribution and mean-variance correlation</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degResults.html">degResults()</a></code> </p>
+        </td>
+        <td><p>Complete report from DESeq2 analysis</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degSignature.html">degSignature()</a></code> </p>
+        </td>
+        <td><p>Plot gene signature for each group and signature</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degSummary.html">degSummary()</a></code> </p>
+        </td>
+        <td><p>Print Summary Statistics of Alpha Level Cutoffs</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degVB.html">degVB()</a></code> </p>
+        </td>
+        <td><p>Distribution of the standard desviation of
 DE genes compared to the background</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="degVolcano.html">degVolcano</a></code> </p>
-          </td>
-          <td><p>Create volcano plot from log2FC and adjusted pvalues data frame</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="geneInfo.html">geneInfo</a></code> </p>
-          </td>
-          <td><p>data.frame with chromose information for each gene</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="geom_cor.html">geom_cor</a></code> </p>
-          </td>
-          <td><p>Add correlation and p-value to a ggplot2 plot</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="humanGender.html">humanGender</a></code> </p>
-          </td>
-          <td><p>DGEList object for DE genes betwen Male and Females</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="plotMA.html">plotMA</a></code> </p>
-          </td>
-          <td><p>MA-plot from base means and log fold changes</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="significants.html">significants</a></code> </p>
-          </td>
-          <td><p>Method to get the significant genes</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degVar.html">degVar()</a></code> </p>
+        </td>
+        <td><p>Distribution of pvalues by standard desviation range</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="degVolcano.html">degVolcano()</a></code> </p>
+        </td>
+        <td><p>Create volcano plot from log2FC and adjusted pvalues data frame</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="geneInfo.html">geneInfo</a></code> </p>
+        </td>
+        <td><p>data.frame with chromose information for each gene</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="geom_cor.html">geom_cor()</a></code> </p>
+        </td>
+        <td><p>Add correlation and p-value to a ggplot2 plot</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="humanGender.html">humanGender</a></code> </p>
+        </td>
+        <td><p>DGEList object for DE genes betwen Male and Females</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="plotMA.html">plotMA(<i>&lt;DEGSet&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>MA-plot from base means and log fold changes</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="significants.html">significants()</a></code> </p>
+        </td>
+        <td><p>Method to get the significant genes</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -318,11 +324,14 @@ DE genes compared to the background</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

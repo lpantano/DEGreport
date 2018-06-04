@@ -48,6 +48,13 @@ This function will calculate the pcs using prcomp function,
 and correlate categorical and numerical variables from
 metadata.
 }
+\details{
+This method is adapeted from Daily et al 2017 article.
+Principal components from PCA analysis are correlated with
+covariates metadata. Factors are transformed to numeric variables.
+Correlation is measured by cor.test function with Kendall method
+by default.
+}
 \examples{
 data(humanGender)
 library(DESeq2)
@@ -58,6 +65,9 @@ res <- degCovariates(log2(counts(dse)+0.5),
   colData(dse))
 res$plot
 res$scatterPlot[[1]]
+}
+\references{
+Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 }
 \author{
 : Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal

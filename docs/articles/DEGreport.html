@@ -8,14 +8,17 @@
 <title>QC and downstream analysis for differential expression RNA-seq • DEGreport</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="QC and downstream analysis for differential expression RNA-seq">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -35,7 +42,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -51,21 +58,24 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>QC and downstream analysis for differential expression RNA-seq</h1>
                         <h4 class="author">Lorena Pantano</h4>
             
-            <h4 class="date">1 March 2018</h4>
-          </div>
+            <h4 class="date">4 June 2018</h4>
+      
+      
+      <div class="hidden name"><code>DEGreport.Rmd</code></div>
+
+    </div>
 
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <p>DEGreport package version: 1.15.3</p>
+      <p>DEGreport package version: 1.17.1</p>
     </div>
     
-<div class="contents">
 <p><a href="lorena.pantano@gmail.com">Lorena Pantano</a> Harvard TH Chan School of Public Health, Boston, US</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DEGreport)
 <span class="kw">data</span>(humanGender)</code></pre></div>
@@ -87,7 +97,7 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <a href="#size-factor-qc" class="anchor"></a>Size factor QC</h3>
 <p>A main assumption in library size factor calculation of edgeR and DESeq2 (and others) is that the majority of genes remain unchanged. Plotting the distribution of gene ratios between each gene and the average gene can show how true this is. Not super useful for many samples because the plot becomes crowed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degCheckFactors.html">degCheckFactors</a></span>(counts[, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>])</code></pre></div>
-<p><img src="DEGreport_files/figure-html/check-factor-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/check-factor-1.png" width="700"></p>
 </div>
 <div id="mean-variance-qc-plots" class="section level3">
 <h3 class="hasAnchor">
@@ -97,7 +107,7 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <p>In this case, it would be good to look at the ones that are totally outside the expected correlation.</p>
 <p>You can put this tree plots together using <code>degQC</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degQC.html">degQC</a></span>(counts, design[[<span class="st">"group"</span>]], <span class="dt">pvalue =</span> res[[<span class="st">"pvalue"</span>]])</code></pre></div>
-<p><img src="DEGreport_files/figure-html/qc-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/qc-1.png" width="700"></p>
 </div>
 <div id="covariates-effect-on-count-data" class="section level3">
 <h3 class="hasAnchor">
@@ -105,14 +115,14 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <p>Another important analysis to do if you have covariates is to calculate the correlation between PCs from PCA analysis to different variables you may think are affecting the gene expression. This is a toy example of how the function works with raw data, where clearly library size correlates with some of the PCs.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resCov &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degCovariates.html">degCovariates</a></span>(<span class="kw">log2</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds)<span class="op">+</span><span class="fl">0.5</span>),
                         <span class="kw">colData</span>(dds))</code></pre></div>
-<p><img src="DEGreport_files/figure-html/cov-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/cov-1.png" width="700"></p>
 </div>
 <div id="covariates-correlation-with-metrics" class="section level3">
 <h3 class="hasAnchor">
 <a href="#covariates-correlation-with-metrics" class="anchor"></a>Covariates correlation with metrics</h3>
 <p>Also, the correlation among covariates and metrics from the analysis can be tested. This is useful when the study has multiple variables, like in clinical trials. The following code will return a correlation table, and plot the correlation heatmap for all the covariates and metrics in a table.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cor &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degCorCov.html">degCorCov</a></span>(<span class="kw">colData</span>(dds))</code></pre></div>
-<p><img src="DEGreport_files/figure-html/corcov-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/corcov-1.png" width="700"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(cor)</code></pre></div>
 <pre><code>## [1] "cor"    "corMat" "fdrMat" "plot"</code></pre>
 </div>
@@ -217,14 +227,14 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 ## # ... with 1 more variable: padj_group_Male_vs_Female &lt;dbl&gt;</code></pre>
 <p>Since log2FoldChange are shrunken, the method for DEGSet class now can plot these changes as follow:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMA.html">plotMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/plotMA-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/plotMA-1.png" width="700"></p>
 <p>The blue arrows indicate how foldchange is affected by this new feature.</p>
 <p>As well, it can plot the original MA plot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMA.html">plotMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">raw =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/plotMA-raw-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/plotMA-raw-1.png" width="700"></p>
 <p>or the correlation between the original log2FoldChange and the new ones:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMA.html">plotMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">correlation =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/plotMA-cor-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/plotMA-cor-1.png" width="700"></p>
 </div>
 <div id="volcano-plots" class="section level3">
 <h3 class="hasAnchor">
@@ -233,7 +243,7 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res[[<span class="st">"id"</span>]] &lt;-<span class="st"> </span><span class="kw">row.names</span>(res)
 show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw">c</span>(<span class="st">"log2FoldChange"</span>, <span class="st">"padj"</span>, <span class="st">"id"</span>)])
 <span class="kw"><a href="../reference/degVolcano.html">degVolcano</a></span>(res[,<span class="kw">c</span>(<span class="st">"log2FoldChange"</span>, <span class="st">"padj"</span>)], <span class="dt">plot_text =</span> show)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/deseq2-volcano-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/deseq2-volcano-1.png" width="700"></p>
 <p>Note that the function is compatible with DEGset. Using <code><a href="../reference/degVolcano.html">degVolcano(degs[[1]])</a></code> is valid.</p>
 </div>
 <div id="gene-plots" class="section level3">
@@ -241,10 +251,10 @@ show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<sp
 <a href="#gene-plots" class="anchor"></a>Gene plots</h3>
 <p>Plot top genes coloring by group. Very useful for experiments with nested groups. <code>xs</code> can be <code>time</code> or <code>WT</code>/<code>KO</code>, and <code>group</code> can be <code>treated</code>/<code>untreated</code>. Another classification can be added, like <code>batch</code> that will plot points with different shapes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degPlot.html">degPlot</a></span>(<span class="dt">dds =</span> dds, <span class="dt">res =</span> res, <span class="dt">n =</span> <span class="dv">6</span>, <span class="dt">xs =</span> <span class="st">"group"</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/deseq2-gene-plots-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/deseq2-gene-plots-1.png" width="700"></p>
 <p>Another option for plotting genes in a wide format:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degPlotWide.html">degPlotWide</a></span>(dds, <span class="kw">rownames</span>(dds)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="dt">group=</span><span class="st">"group"</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/deseq2-gene-plot-wide-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/deseq2-gene-plot-wide-1.png" width="700"></p>
 </div>
 <div id="markers-plots" class="section level3">
 <h3 class="hasAnchor">
@@ -252,7 +262,7 @@ show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<sp
 <p>Markers can be used to show whether different conditions are enriched in different markers. For instance, in this example, Females and Males show different total expression for chromosome X/Y markers</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(geneInfo)
 <span class="kw"><a href="../reference/degSignature.html">degSignature</a></span>(humanGender, geneInfo, <span class="dt">group =</span> <span class="st">"group"</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/markers-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/markers-1.png" width="700"></p>
 </div>
 <div id="full-report" class="section level3">
 <h3 class="hasAnchor">
@@ -264,7 +274,7 @@ show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<sp
 <pre><code>## ## Comparison:  test {.tabset} 
 ## 
 ## 
-##  NULL 
+##  &lt;br&gt;out of 1000 with nonzero total read count&lt;br&gt;adjusted p-value &lt; 0.1&lt;br&gt;LFC &gt; 0 (up)     : 6, 0.6% &lt;br&gt;LFC &lt; 0 (down)   : 7, 0.7% &lt;br&gt;outliers [1]     : 0, 0% &lt;br&gt;low counts [2]   : 0, 0% &lt;br&gt;(mean count &lt; 47)&lt;br&gt;[1] see 'cooksCutoff' argument of ?results&lt;br&gt;[2] see 'independentFiltering' argument of ?results&lt;br&gt;&lt;br&gt;NULL 
 ## 
 ## 
 ## Differential expression file at:  test_de.csv
@@ -272,7 +282,7 @@ show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<sp
 ## Normalized counts matrix file at:  test_log2_counts.csv
 ## 
 ## ### MA plot plot</code></pre>
-<p><img src="DEGreport_files/figure-html/deseq2-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/deseq2-1.png" width="700"></p>
 <pre><code>## 
 ## 
 ## ### Volcano plot
@@ -280,11 +290,11 @@ show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<sp
 ## 
 ## 
 ## ### QC for DE genes</code></pre>
-<p><img src="DEGreport_files/figure-html/deseq2-2.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/deseq2-2.png" width="700"></p>
 <pre><code>## 
 ## 
 ## ### Most significants, FDR&lt; 0.05  and log2FC &gt;  0.1 :  10</code></pre>
-<p><img src="DEGreport_files/figure-html/deseq2-3.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/deseq2-3.png" width="700"></p>
 <pre><code>## 
 ## 
 ## 
@@ -334,7 +344,7 @@ shiny<span class="op">::</span><span class="kw"><a href="http://www.rdocumentati
 <p>In this section, we show how to detect pattern of expression. Mainly useful when data is a time course experiment. <code>degPatterns</code> needs a expression matrix, the design experiment and the column used to group samples.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ma =<span class="st"> </span><span class="kw">assay</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlog</a></span>(dds))[<span class="kw">row.names</span>(res)[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>],]
 res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degPatterns.html">degPatterns</a></span>(ma, design, <span class="dt">time =</span> <span class="st">"group"</span>)</code></pre></div>
-<p><img src="DEGreport_files/figure-html/pattern-1.png" width="672"></p>
+<p><img src="DEGreport_files/figure-html/pattern-1.png" width="700"></p>
 </div>
 <div id="useful-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -353,7 +363,7 @@ res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degPatt
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.3 (2017-11-30)
+<pre><code>## R version 3.4.4 (2018-03-15)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS High Sierra 10.13.3
 ## 
@@ -369,66 +379,68 @@ res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degPatt
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] bindrcpp_0.2.0.9000        DESeq2_1.19.38            
+##  [1] bindrcpp_0.2.0.9000        DESeq2_1.18.1             
 ##  [3] SummarizedExperiment_1.8.1 DelayedArray_0.4.1        
 ##  [5] matrixStats_0.52.2         Biobase_2.38.0            
-##  [7] GenomicRanges_1.30.2       GenomeInfoDb_1.14.0       
+##  [7] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
 ##  [9] IRanges_2.12.0             S4Vectors_0.16.0          
-## [11] BiocGenerics_0.24.0        DEGreport_1.15.3          
+## [11] BiocGenerics_0.24.0        DEGreport_1.17.1          
 ## [13] quantreg_5.35              SparseM_1.77              
 ## [15] BiocStyle_2.5.41          
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] nlme_3.1-131                bitops_1.0-6               
-##  [3] bit64_0.9-7                 RColorBrewer_1.1-2         
-##  [5] rprojroot_1.2               tools_3.4.3                
-##  [7] backports_1.1.2             utf8_1.1.3                 
-##  [9] R6_2.2.2                    rpart_4.1-11               
-## [11] Hmisc_4.1-1                 DBI_0.7                    
-## [13] lazyeval_0.2.1              colorspace_1.3-2           
-## [15] nnet_7.3-12                 GetoptLong_0.1.6           
-## [17] mnormt_1.5-5                tidyselect_0.2.3           
-## [19] gridExtra_2.3               bit_1.1-12                 
-## [21] Nozzle.R1_1.1-1             compiler_3.4.3             
-## [23] cli_1.0.0                   htmlTable_1.11.2           
-## [25] logging_0.7-103             labeling_0.3               
-## [27] scales_0.5.0                checkmate_1.8.5            
-## [29] psych_1.7.8                 genefilter_1.60.0          
-## [31] stringr_1.3.0               digest_0.6.13              
-## [33] foreign_0.8-69              rmarkdown_1.6.0.9008       
-## [35] XVector_0.18.0              pkgconfig_2.0.1            
-## [37] base64enc_0.1-3             htmltools_0.3.6            
-## [39] highr_0.6                   limma_3.34.9               
-## [41] htmlwidgets_1.0             rlang_0.2.0.9000           
-## [43] GlobalOptions_0.0.12        rstudioapi_0.7             
-## [45] RSQLite_2.0                 bindr_0.1.0.9000           
-## [47] shape_1.4.4                 BiocParallel_1.12.0        
-## [49] acepack_1.4.1               dplyr_0.7.4.9000           
-## [51] RCurl_1.95-4.8              magrittr_1.5               
-## [53] GenomeInfoDbData_0.99.1     Formula_1.2-2              
-## [55] Matrix_1.2-12               Rcpp_0.12.15               
-## [57] munsell_0.4.3               stringi_1.1.6              
-## [59] yaml_2.1.16                 edgeR_3.20.8               
-## [61] zlibbioc_1.24.0             plyr_1.8.4                 
-## [63] grid_3.4.3                  blob_1.1.0                 
-## [65] ggrepel_0.7.0               crayon_1.3.4               
-## [67] lattice_0.20-35             cowplot_0.9.2              
-## [69] splines_3.4.3               annotate_1.56.0            
-## [71] circlize_0.4.3              locfit_1.5-9.1             
-## [73] knitr_1.20                  ComplexHeatmap_1.17.1      
-## [75] pillar_1.1.0                rjson_0.2.15               
-## [77] codetools_0.2-15            geneplotter_1.56.0         
-## [79] glue_1.2.0                  XML_3.98-1.9               
-## [81] evaluate_0.10.1             latticeExtra_0.6-28        
-## [83] data.table_1.10.4-3         MatrixModels_0.4-1         
-## [85] tidyr_0.8.0                 purrr_0.2.4                
-## [87] gtable_0.2.0                reshape_0.8.7              
-## [89] assertthat_0.2.0            ggplot2_2.2.1              
-## [91] xtable_1.8-2                ConsensusClusterPlus_1.42.0
-## [93] survival_2.41-3             tibble_1.4.2               
-## [95] AnnotationDbi_1.40.0        memoise_1.1.0              
-## [97] cluster_2.0.6</code></pre>
-</div>
+##   [1] colorspace_1.3-2            rjson_0.2.15               
+##   [3] rprojroot_1.2               circlize_0.4.3             
+##   [5] htmlTable_1.11.2            XVector_0.18.0             
+##   [7] GlobalOptions_0.0.12        base64enc_0.1-3            
+##   [9] fs_1.2.2                    rstudioapi_0.7             
+##  [11] roxygen2_6.0.1.9000         MatrixModels_0.4-1         
+##  [13] ggrepel_0.7.0               bit64_0.9-7                
+##  [15] AnnotationDbi_1.40.0        xml2_1.1.1                 
+##  [17] codetools_0.2-15            splines_3.4.4              
+##  [19] logging_0.7-103             mnormt_1.5-5               
+##  [21] geneplotter_1.56.0          knitr_1.20                 
+##  [23] Formula_1.2-2               Nozzle.R1_1.1-1            
+##  [25] annotate_1.56.0             cluster_2.0.6              
+##  [27] compiler_3.4.4              backports_1.1.2            
+##  [29] assertthat_0.2.0            Matrix_1.2-14              
+##  [31] lazyeval_0.2.1              cli_1.0.0                  
+##  [33] limma_3.34.9                acepack_1.4.1              
+##  [35] htmltools_0.3.6             tools_3.4.4                
+##  [37] gtable_0.2.0                glue_1.2.0                 
+##  [39] GenomeInfoDbData_0.99.1     dplyr_0.7.4.9000           
+##  [41] Rcpp_0.12.16                pkgdown_1.0.0              
+##  [43] nlme_3.1-131.1              psych_1.8.3.3              
+##  [45] stringr_1.3.0               XML_3.98-1.10              
+##  [47] edgeR_3.20.9                zlibbioc_1.24.0            
+##  [49] MASS_7.3-49                 scales_0.5.0               
+##  [51] RColorBrewer_1.1-2          ComplexHeatmap_1.17.1      
+##  [53] yaml_2.1.18                 memoise_1.1.0              
+##  [55] gridExtra_2.3               ggplot2_2.2.1              
+##  [57] rpart_4.1-13                reshape_0.8.7              
+##  [59] latticeExtra_0.6-28         stringi_1.1.7              
+##  [61] RSQLite_2.0                 highr_0.6                  
+##  [63] genefilter_1.60.0           desc_1.1.1                 
+##  [65] checkmate_1.8.5             BiocParallel_1.12.0        
+##  [67] shape_1.4.4                 rlang_0.2.0.9001           
+##  [69] pkgconfig_2.0.1             commonmark_1.4             
+##  [71] bitops_1.0-6                evaluate_0.10.1            
+##  [73] lattice_0.20-35             purrr_0.2.4                
+##  [75] bindr_0.1.0.9000            labeling_0.3               
+##  [77] htmlwidgets_1.0             cowplot_0.9.2              
+##  [79] bit_1.1-12                  tidyselect_0.2.3           
+##  [81] plyr_1.8.4                  magrittr_1.5               
+##  [83] R6_2.2.2                    Hmisc_4.1-1                
+##  [85] DBI_0.8                     pillar_1.1.0               
+##  [87] foreign_0.8-69              survival_2.41-3            
+##  [89] RCurl_1.95-4.10             nnet_7.3-12                
+##  [91] tibble_1.4.2                crayon_1.3.4               
+##  [93] utf8_1.1.3                  rmarkdown_1.6.0.9008       
+##  [95] GetoptLong_0.1.6            locfit_1.5-9.1             
+##  [97] grid_3.4.4                  data.table_1.10.4-3        
+##  [99] blob_1.1.0                  ConsensusClusterPlus_1.42.0
+## [101] digest_0.6.15               xtable_1.8-2               
+## [103] tidyr_0.8.0                 munsell_0.4.3</code></pre>
 </div>
   </div>
 
@@ -454,11 +466,13 @@ res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degPatt
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

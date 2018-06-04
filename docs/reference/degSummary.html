@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Print Summary Statistics of Alpha Level Cutoffs — degSummary" />
+
+<meta property="og:description" content="Print Summary Statistics of Alpha Level Cutoffs" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +71,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,6 +81,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,20 +89,24 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Print Summary Statistics of Alpha Level Cutoffs</h1>
+    
+    <div class="hidden name"><code>degSummary.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Print Summary Statistics of Alpha Level Cutoffs</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>degSummary</span>(<span class='no'>object</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.05</span>, <span class='fl'>0.01</span>), <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>kable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -134,30 +152,30 @@ from  Michael Steinbaugh.</p></li>
                               <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,],
                               <span class='kw'>design</span> <span class='kw'>=</span> ~<span class='no'>group</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dse</span>)</div><div class='output co'>#&gt; <span class='message'>using pre-existing size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a></span>(<span class='no'>dse</span>)
-<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dse</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"group_Male_vs_Female"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>dse</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='st'>"group_Male_vs_Female"</span>)</div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.1</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.05</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.01</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt;                 0.1 0.05 0.01
-#&gt; LFC &gt; 0 (up)   &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; LFC &lt; 0 (down) &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; outliers       &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; low counts     &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; cutoff         &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>res1</span>)</div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.1</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.05</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.01</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt;                 0.1 0.05 0.01
-#&gt; LFC &gt; 0 (up)   &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; LFC &lt; 0 (down) &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; outliers       &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; low counts     &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; cutoff         &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>res1</span>, <span class='kw'>kable</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.1</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.05</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.01</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; 
+<span class='no'>res2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dse</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"group_Male_vs_Female"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>dse</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='st'>"group_Male_vs_Female"</span>)</div><div class='output co'>#&gt;                              0.1              0.05              0.01
+#&gt; LFC &gt; 0 (up)             4, 0.4%           4, 0.4%           4, 0.4%
+#&gt; LFC &lt; 0 (down)           3, 0.3%           3, 0.3%           1, 0.1%
+#&gt; outliers                 1, 0.1%           1, 0.1%           1, 0.1%
+#&gt; low counts                 0, 0%             0, 0%             0, 0%
+#&gt; cutoff         (mean count &lt; 46) (mean count &lt; 46) (mean count &lt; 46)</div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>res1</span>)</div><div class='output co'>#&gt;                              0.1              0.05              0.01
+#&gt; LFC &gt; 0 (up)             4, 0.4%           4, 0.4%           4, 0.4%
+#&gt; LFC &lt; 0 (down)           3, 0.3%           3, 0.3%           1, 0.1%
+#&gt; outliers                 1, 0.1%           1, 0.1%           1, 0.1%
+#&gt; low counts                 0, 0%             0, 0%             0, 0%
+#&gt; cutoff         (mean count &lt; 46) (mean count &lt; 46) (mean count &lt; 46)</div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>res1</span>, <span class='kw'>kable</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; 
 #&gt; 
-#&gt; |               |0.1 |0.05 |0.01 |
-#&gt; |:--------------|:---|:----|:----|
-#&gt; |LFC &gt; 0 (up)   |NA  |NA   |NA   |
-#&gt; |LFC &lt; 0 (down) |NA  |NA   |NA   |
-#&gt; |outliers       |NA  |NA   |NA   |
-#&gt; |low counts     |NA  |NA   |NA   |
-#&gt; |cutoff         |NA  |NA   |NA   |</div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>res2</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.1</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.05</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 3, 0.3% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.01</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 4, 0.4% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 1, 0.1% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 46)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt;                 0.1 0.05 0.01
-#&gt; LFC &gt; 0 (up)   &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; LFC &lt; 0 (down) &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; outliers       &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; low counts     &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;
-#&gt; cutoff         &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</div></pre>
+#&gt; |               |0.1               |0.05              |0.01              |
+#&gt; |:--------------|:-----------------|:-----------------|:-----------------|
+#&gt; |LFC &gt; 0 (up)   |4, 0.4%           |4, 0.4%           |4, 0.4%           |
+#&gt; |LFC &lt; 0 (down) |3, 0.3%           |3, 0.3%           |1, 0.1%           |
+#&gt; |outliers       |1, 0.1%           |1, 0.1%           |1, 0.1%           |
+#&gt; |low counts     |0, 0%             |0, 0%             |0, 0%             |
+#&gt; |cutoff         |(mean count &lt; 46) |(mean count &lt; 46) |(mean count &lt; 46) |</div><div class='input'><span class='fu'>degSummary</span>(<span class='no'>res2</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt;                              0.1              0.05              0.01
+#&gt; LFC &gt; 0 (up)             4, 0.4%           4, 0.4%           4, 0.4%
+#&gt; LFC &lt; 0 (down)           3, 0.3%           3, 0.3%           1, 0.1%
+#&gt; outliers                 1, 0.1%           1, 0.1%           1, 0.1%
+#&gt; low counts                 0, 0%             0, 0%             0, 0%
+#&gt; cutoff         (mean count &lt; 46) (mean count &lt; 46) (mean count &lt; 46)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -184,11 +202,14 @@ Lorena Pantano
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

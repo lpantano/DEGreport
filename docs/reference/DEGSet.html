@@ -18,13 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="DEGSet — DEGSet" />
+
+<meta property="og:description" content="S4 class to store data from differentially expression analysis.
+It should be compatible with different package and stores the information
+in a way the methods will work with all of them." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +58,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +73,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,6 +83,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,17 +91,21 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>DEGSet</h1>
+    
+    <div class="hidden name"><code>DEGSet.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>S4 class to store data from differentially expression analysis.
 It should be compatible with different package and stores the information
 in a way the methods will work with all of them.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)
 
@@ -103,7 +123,7 @@ in a way the methods will work with all of them.</p>
 <span class='fu'>DEGSetFromDESeq2</span>(<span class='no'>object</span>, <span class='kw'>default</span> <span class='kw'>=</span> <span class='st'>"shrunken"</span>,
   <span class='kw'>extras</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -151,31 +171,31 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
 #&gt; Wald test p-value: condition B vs A 
 #&gt; DataFrame with 1000 rows and 6 columns
-#&gt;          baseMean log2FoldChange     lfcSE      stat    pvalue      padj
-#&gt;         &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
-#&gt; gene928    132.31          3.468    0.3472     9.489 2.324e-21 2.138e-18
-#&gt; gene952     70.21          3.625    0.3834     8.875 6.976e-19 3.209e-16
-#&gt; gene644    455.54          2.266    0.2618     8.634 5.940e-18 1.822e-15
-#&gt; gene515    372.73          2.804    0.3344     8.348 6.967e-17 1.602e-14
-#&gt; gene368     37.82         -2.763    0.3557    -7.532 4.992e-14 9.185e-12
-#&gt; ...           ...            ...       ...       ...       ...       ...
-#&gt; gene906    1.3820       -0.35406    0.5346  -1.09121    0.2752        NA
-#&gt; gene943    0.0000             NA        NA        NA        NA        NA
-#&gt; gene956    0.6292       -0.10818    0.3952  -0.15208    0.8791        NA
-#&gt; gene963    0.4705        0.09311    0.3518  -0.01693    0.9865        NA
-#&gt; gene995    0.1578       -0.11622    0.3514  -0.41438    0.6786        NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
-#&gt;    gene    baseMean log2FoldChange lfcSE  stat            pvalue           padj
-#&gt;  * &lt;chr&gt;      &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;             &lt;dbl&gt;          &lt;dbl&gt;
-#&gt;  1 gene928    132             3.47 0.347  9.49          2.32e⁻²¹       2.14e⁻¹⁸
-#&gt;  2 gene952     70.2           3.63 0.383  8.88          6.98e⁻¹⁹       3.21e⁻¹⁶
-#&gt;  3 gene644    456             2.27 0.262  8.63          5.94e⁻¹⁸       1.82e⁻¹⁵
-#&gt;  4 gene515    373             2.80 0.334  8.35          6.97e⁻¹⁷       1.60e⁻¹⁴
-#&gt;  5 gene368     37.8          -2.76 0.356 -7.53          4.99e⁻¹⁴       9.19e⁻¹²
-#&gt;  6 gene409     68.1          -2.05 0.283 -7.07          1.56e⁻¹²       2.39e⁻¹⁰
-#&gt;  7 gene130    404             1.81 0.258  6.95          3.76e⁻¹²       4.94e⁻¹⁰
-#&gt;  8 gene948    898             2.15 0.300  6.89          5.61e⁻¹²       6.45e⁻¹⁰
-#&gt;  9 gene60     115            -1.97 0.280 -6.83          8.74e⁻¹²       8.93e⁻¹⁰
-#&gt; 10 gene605    133             1.80 0.285  6.13          8.97e⁻¹⁰       8.25e⁻ ⁸
+#&gt;           baseMean log2FoldChange     lfcSE      stat    pvalue      padj
+#&gt;          &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;
+#&gt; gene202     595.74          2.693    0.3128     7.829 4.925e-15 4.058e-12
+#&gt; gene710     117.42          2.392    0.3094     6.934 4.100e-12 1.689e-09
+#&gt; gene365      62.44          2.688    0.3470     6.795 1.084e-11 2.976e-09
+#&gt; gene364     504.52          2.137    0.3042     6.564 5.238e-11 1.079e-08
+#&gt; gene92      220.78          2.058    0.3269     5.430 5.642e-08 9.299e-06
+#&gt; ...            ...            ...       ...       ...       ...       ...
+#&gt; gene984      3.561        1.18342    0.5582    1.5661    0.1173        NA
+#&gt; gene986      1.039       -0.13169    0.5500   -0.7438    0.4570        NA
+#&gt; gene989      1.841        0.79708    0.5677    1.3150    0.1885        NA
+#&gt; gene995      2.886        0.08408    0.5557    1.0914    0.2751        NA
+#&gt; gene1000     2.582       -0.53534    0.5650   -0.8062    0.4201        NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
+#&gt;    gene    baseMean log2FoldChange lfcSE  stat              pvalue         padj
+#&gt;  * &lt;chr&gt;      &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;               &lt;dbl&gt;        &lt;dbl&gt;
+#&gt;  1 gene202    596             2.69 0.313  7.83 0.00000000000000493     4.06e⁻¹²
+#&gt;  2 gene710    117             2.39 0.309  6.93 0.00000000000410        1.69e⁻ ⁹
+#&gt;  3 gene365     62.4           2.69 0.347  6.79 0.0000000000108         2.98e⁻ ⁹
+#&gt;  4 gene364    505             2.14 0.304  6.56 0.0000000000524         1.08e⁻ ⁸
+#&gt;  5 gene92     221             2.06 0.327  5.43 0.0000000564            9.30e⁻ ⁶
+#&gt;  6 gene664    110             1.97 0.350  5.20 0.000000203             2.79e⁻ ⁵
+#&gt;  7 gene577    135            -1.66 0.295 -5.17 0.000000237             2.79e⁻ ⁵
+#&gt;  8 gene564     83.3          -1.93 0.361 -5.12 0.000000308             3.10e⁻ ⁵
+#&gt;  9 gene787     71.0           1.92 0.360  5.08 0.000000376             3.10e⁻ ⁵
+#&gt; 10 gene836     49.2           2.25 0.377  5.08 0.000000371             3.10e⁻ ⁵
 #&gt; # ... with 990 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -201,11 +221,14 @@ Lorena Pantano
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

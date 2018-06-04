@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Complete report from DESeq2 analysis — degResults" />
+
+<meta property="og:description" content="Complete report from DESeq2 analysis" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +71,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,6 +81,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,21 +89,25 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Complete report from DESeq2 analysis</h1>
+    
+    <div class="hidden name"><code>degResults.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Complete report from DESeq2 analysis</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>degResults</span>(<span class='kw'>res</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>dds</span>, <span class='kw'>rlogMat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>name</span>, <span class='kw'>org</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>FDR</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>do_go</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>FC</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"condition"</span>,
   <span class='kw'>xs</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>path_results</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -162,8 +180,9 @@ fold change values from different comparisons to add to the output table.</p></t
 #&gt; <span class='message'>-- DESeq argument 'minReplicatesForReplace' = 7 </span>
 #&gt; <span class='message'>-- original counts are preserved in counts(dds)</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degResults</span>(<span class='kw'>dds</span> <span class='kw'>=</span> <span class='no'>dse</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"test"</span>, <span class='kw'>org</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>do_go</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>xs</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>path_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='message'>Doing rlog...</span></div><div class='output co'>#&gt; <span class='message'>Getting result...</span></div><div class='output co'>#&gt; ## Comparison:  test {.tabset} 
-#&gt; </div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; <span class='message'>out of1000with nonzero total read count</span></div><div class='output co'>#&gt; <span class='message'>adjusted p-value &lt; 0.1</span></div><div class='output co'>#&gt; <span class='message'>LFC &gt; 0 (up)     : 6, 0.6% </span></div><div class='output co'>#&gt; <span class='message'>LFC &lt; 0 (down)   : 7, 0.7% </span></div><div class='output co'>#&gt; <span class='message'>outliers [1]     : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>low counts [2]   : 0, 0% </span></div><div class='output co'>#&gt; <span class='message'>(mean count &lt; 47)</span></div><div class='output co'>#&gt; <span class='message'>[1] see 'cooksCutoff' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'>[2] see 'independentFiltering' argument of ?results</span></div><div class='output co'>#&gt; <span class='message'></span></div><div class='output co'>#&gt; 
-#&gt;  NULL 
+#&gt; 
+#&gt; 
+#&gt;  &lt;br&gt;out of 1000 with nonzero total read count&lt;br&gt;adjusted p-value &lt; 0.1&lt;br&gt;LFC &gt; 0 (up)     : 6, 0.6% &lt;br&gt;LFC &lt; 0 (down)   : 7, 0.7% &lt;br&gt;outliers [1]     : 0, 0% &lt;br&gt;low counts [2]   : 0, 0% &lt;br&gt;(mean count &lt; 47)&lt;br&gt;[1] see 'cooksCutoff' argument of ?results&lt;br&gt;[2] see 'independentFiltering' argument of ?results&lt;br&gt;&lt;br&gt;NULL 
 #&gt; 
 #&gt; 
 #&gt; Differential expression file at:  test_de.csv
@@ -171,18 +190,18 @@ fold change values from different comparisons to add to the output table.</p></t
 #&gt; Normalized counts matrix file at:  test_log2_counts.csv
 #&gt; 
 #&gt; ### MA plot plot
-#&gt; </div><div class='img'><img src='degResults-4.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
+#&gt; </div><div class='img'><img src='degResults-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; ### Volcano plot
 #&gt; 
 #&gt; 
 #&gt; 
-#&gt; ### QC for DE genes</div><div class='img'><img src='degResults-5.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
+#&gt; ### QC for DE genes</div><div class='img'><img src='degResults-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; ### Most significants, FDR&lt; 0.05  and log2FC &gt;  0.1 :  10 </div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; 
-#&gt; ### Plots top 9 most significants</div><div class='output co'>#&gt; <span class='message'>No genes were mapped to rowData. check ann parameter values.</span></div><div class='output co'>#&gt; <span class='message'>Using gene as id variables</span></div><div class='img'><img src='degResults-6.png' alt='' width='700' height='432.632880098887' /></div><div class='output co'>#&gt; 
+#&gt; ### Plots top 9 most significants</div><div class='output co'>#&gt; <span class='message'>No genes were mapped to rowData. check ann parameter values.</span></div><div class='output co'>#&gt; <span class='message'>Using gene as id variables</span></div><div class='img'><img src='degResults-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
 #&gt; 
 #&gt; 
 #&gt; ### Top DE table
@@ -233,11 +252,14 @@ fold change values from different comparisons to add to the output table.</p></t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

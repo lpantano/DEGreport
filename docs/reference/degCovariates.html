@@ -18,13 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Find correlation between pcs and covariates — degCovariates" />
+
+<meta property="og:description" content="This function will calculate the pcs using prcomp function,
+and correlate categorical and numerical variables from
+metadata." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +58,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +73,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,6 +83,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,22 +91,26 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find correlation between pcs and covariates</h1>
+    
+    <div class="hidden name"><code>degCovariates.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function will calculate the pcs using prcomp function,
 and correlate categorical and numerical variables from
 metadata.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>degCovariates</span>(<span class='no'>counts</span>, <span class='no'>metadata</span>, <span class='kw'>fdr</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>minPC</span> <span class='kw'>=</span> <span class='fl'>5</span>,
   <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>, <span class='kw'>addCovDen</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -147,6 +167,18 @@ d) effectsSignificantcovars: that is PCs <!-- % * absolute -->
 correlation between covariate and PCs,
 e) pcsMatrix: PCs loading for each sample</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This method is adapeted from Daily et al 2017 article.
+Principal components from PCA analysis are correlated with
+covariates metadata. Factors are transformed to numeric variables.
+Correlation is measured by cor.test function with Kendall method
+by default.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>humanGender</span>)
@@ -159,7 +191,7 @@ e) pcsMatrix: PCs loading for each sample</p>
 #&gt; <span class='message'>running pca and calculating correlations for:</span>
 #&gt; <span class='message'>un-scaled  data in pca;</span>
 #&gt; <span class='message'>pve &gt;= 5%;</span>
-#&gt; <span class='message'>kendall cor </span></div><div class='img'><img src='degCovariates-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>res</span>$<span class='no'>plot</span></div><div class='img'><img src='degCovariates-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>res</span>$<span class='no'>scatterPlot</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='img'><img src='degCovariates-9.png' alt='' width='700' height='432.632880098887' /></div></pre>
+#&gt; <span class='message'>kendall cor </span></div><div class='img'><img src='degCovariates-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span>$<span class='no'>plot</span></div><div class='img'><img src='degCovariates-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span>$<span class='no'>scatterPlot</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='img'><img src='degCovariates-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -167,6 +199,10 @@ e) pcsMatrix: PCs loading for each sample</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
@@ -184,11 +220,14 @@ e) pcsMatrix: PCs loading for each sample</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

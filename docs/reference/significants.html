@@ -18,13 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Method to get the significant genes — significants" />
+
+<meta property="og:description" content="Function to get the features that are significant
+according to some thresholds from a DEGSet,
+DESeq2::DESeqResults and edgeR::topTags." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +58,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">DEGreport</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +73,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get Started</a>
+  <a href="../articles/DEGreport.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -68,6 +83,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,17 +91,21 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Method to get the significant genes</h1>
+    
+    <div class="hidden name"><code>significants.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Function to get the features that are significant
 according to some thresholds from a <a href='DEGSet.html'>DEGSet</a>,
 <a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqResults'>DESeq2::DESeqResults</a> and <a href='http://www.rdocumentation.org/packages/edgeR/topics/topTags'>edgeR::topTags</a>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>significants</span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
@@ -105,7 +125,7 @@ according to some thresholds from a <a href='DEGSet.html'>DEGSet</a>,
 <span class='fu'>significants</span>(<span class='no'>object</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>fc</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>direction</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>newFDR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -151,22 +171,22 @@ Only used when a list is giving to the method.</p></td>
   <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"treatment_B_vs_A"</span>,
                                      <span class='fu'>c</span>(<span class='st'>"condition"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)))</div><div class='output co'>#&gt; <span class='message'>Doing 2 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span></div><div class='output co'>#&gt; # A tibble: 6 x 3
-#&gt;   gene     log2FoldChange_condition_A_vs_B padj_condition_A_vs_B
-#&gt;   &lt;chr&gt;                              &lt;dbl&gt;                 &lt;dbl&gt;
-#&gt; 1 gene1                               1.76            0.00486   
-#&gt; 2 gene1000                           -1.47            0.00368   
-#&gt; 3 gene103                             2.43            0.000800  
-#&gt; 4 gene111                            -1.16            0.00191   
-#&gt; 5 gene118                            -1.54            0.00000465
-#&gt; 6 gene124                            -1.44            0.00347   </div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
+#&gt;   gene    log2FoldChange_condition_A_vs_B padj_condition_A_vs_B
+#&gt;   &lt;chr&gt;                             &lt;dbl&gt;                 &lt;dbl&gt;
+#&gt; 1 gene103                          -0.944            0.0283    
+#&gt; 2 gene111                           0.943            0.0439    
+#&gt; 3 gene113                          -1.19             0.0103    
+#&gt; 4 gene115                          -1.20             0.0000140 
+#&gt; 5 gene134                          -1.76             0.000262  
+#&gt; 6 gene139                           1.61             0.00000508</div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
 #&gt;   gene     log2FoldChange_c… log2FoldChange_… padj_condition_… padj_treatment_…
 #&gt;   &lt;chr&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-#&gt; 1 gene1                1.76           -0.0560          0.00486            0.997
-#&gt; 2 gene10              -0.588          -0.0963          0.193              0.981
-#&gt; 3 gene100             -0.138          -0.693           0.774              0.432
-#&gt; 4 gene1000            -1.47           -0.315           0.00368            0.981
-#&gt; 5 gene101              0.793           0.193           0.304              0.981
-#&gt; 6 gene102             -0.504          -0.378           0.201              0.887</div></pre>
+#&gt; 1 gene1                0.593           0.0444            0.323            1.000
+#&gt; 2 gene10              -0.182          -0.226             0.811            1.000
+#&gt; 3 gene100              1.18            0.114             0.122            1.000
+#&gt; 4 gene1000            -0.772          -0.0663            0.302            1.000
+#&gt; 5 gene101              1.72            0.257             0.103            1.000
+#&gt; 6 gene102              1.12           -0.102             0.293            1.000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -189,11 +209,14 @@ Lorena Pantano
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create report of RNAseq DEG anlaysis — createReport • DEGreport</title>
+<title>License • DEGreport</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -22,18 +22,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script>
+<script src="pkgdown.js"></script>
 
 
 
-<meta property="og:title" content="Create report of RNAseq DEG anlaysis — createReport" />
-
-<meta property="og:description" content="This function get the count matrix, pvalues, and FC of a
-DEG analysis and create a report to help to detect possible problems
-with the data." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="License" />
 
 
 <!-- mathjax -->
@@ -48,7 +43,7 @@ with the data." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -59,7 +54,7 @@ with the data." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">DEGreport</a>
+        <a class="navbar-link" href="index.html">DEGreport</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
       </span>
     </div>
@@ -67,16 +62,16 @@ with the data." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../articles/DEGreport.html">Get started</a>
+  <a href="articles/DEGreport.html">Get started</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
       </ul>
       
@@ -92,73 +87,38 @@ with the data." />
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>Create report of RNAseq DEG anlaysis</h1>
-    
-    <div class="hidden name"><code>createReport.Rd</code></div>
+      <h1>License</h1>
     </div>
 
-    <div class="ref-description">
-    
-    <p>This function get the count matrix, pvalues, and FC of a
-DEG analysis and create a report to help to detect possible problems
-with the data.</p>
-    
-    </div>
+<pre>The MIT License (MIT)
 
-    <pre class="usage"><span class='fu'>createReport</span>(<span class='no'>g</span>, <span class='no'>counts</span>, <span class='no'>tags</span>, <span class='no'>pvalues</span>, <span class='no'>path</span>, <span class='kw'>pop</span> <span class='kw'>=</span> <span class='fl'>400</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"DEGreport"</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>g</th>
-      <td><p>Character vector with the group the samples belong to.</p></td>
-    </tr>
-    <tr>
-      <th>counts</th>
-      <td><p>Matrix with counts for each samples and each gene.
-Should be same length than pvalues vector.</p></td>
-    </tr>
-    <tr>
-      <th>tags</th>
-      <td><p>Genes of DEG analysis</p></td>
-    </tr>
-    <tr>
-      <th>pvalues</th>
-      <td><p>pvalues of DEG analysis</p></td>
-    </tr>
-    <tr>
-      <th>path</th>
-      <td><p>path to save the figure</p></td>
-    </tr>
-    <tr>
-      <th>pop</th>
-      <td><p>random genes for background</p></td>
-    </tr>
-    <tr>
-      <th>name</th>
-      <td><p>name of the html file</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+Copyright (c) 2014 Lorena
 
-    <p>A HTML file with all figures and tables</p>
-    
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</pre>
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
 
-  </div>
 </div>
+
 
       <footer>
       <div class="copyright">
