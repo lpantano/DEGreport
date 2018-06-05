@@ -1,8 +1,10 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.17.2
-    2017-06-04  Lorena Pantano <lorena.pantano@gmail.com>
+    2017-06-05  Lorena Pantano <lorena.pantano@gmail.com>
         
+        Feature: Improve degCovariates to add effect size of the covariates.
+                 Thanks to @vbarrera
         Fix: Improve degCovariates man pages.
 
 CHANGES IN DEGreport 1.17.1

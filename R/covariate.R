@@ -110,7 +110,11 @@
 #'
 #' This function will calculate the pcs using prcomp function,
 #' and correlate categorical and numerical variables from
-#' metadata.
+#' metadata. The size of the dots indicates the importance of the
+#' metadata, for instance, when the range of the values is pretty
+#' small (from 0.001 to 0.002 in ribosimal content),
+#' the correlation results is not important. See details to know
+#' how this is calculated.
 #'
 #' @author: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
 #'
@@ -128,13 +132,24 @@
 #' @param addCovDen boolean. Whether to add the covariates
 #'   dendograme to the plot to see covariates relationship.
 #'   It will show [degCorCov()] dendograme on top of the columns of
-#'   the heatmap..
+#'   the heatmap.
+#' @param legacy boolean. Whether to plot the legacy version.
 #' @param plot Whether to plot or not the correlation matrix.
 #' @details This method is adapeted from Daily et al 2017 article.
 #'   Principal components from PCA analysis are correlated with 
 #'   covariates metadata. Factors are transformed to numeric variables.
 #'   Correlation is measured by cor.test function with Kendall method
 #'   by default.
+#'   
+#'   The size of the dot, or effect size, indicates the importance of 
+#'   the covariate based on the range of the values. Covariates
+#'   where the range is very small (like a % of mapped reads that
+#'   varies between 0.001 to 0.002) will have a very small dot size.
+#'   To get to this value, each covariate is normalized using this 
+#'   equation: v/max(v). Then the standard deviation is calculated,
+#'   and the minimum and maximum values are set to
+#'   1 and 3 respectively.
+#'   
 #' @references 
 #' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 #'  
@@ -153,8 +168,9 @@
 #' idx <- c(1:10, 75:85)
 #' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
 #'   colData(humanGender)[idx,], design=~group)
+#' res <- degCovariates(log2(counts(dse)+0.5), colData(dse))
 #' res <- degCovariates(log2(counts(dse)+0.5),
-#'   colData(dse))
+#'   colData(dse), legacy = TRUE)
 #' res$plot
 #' res$scatterPlot[[1]]
 #' @export
@@ -164,8 +180,8 @@ degCovariates <- function(counts, metadata,
                           minPC = 5.0,
                           correlation = "kendall",
                           addCovDen = TRUE,
+                          legacy = FALSE,
                           plot = TRUE) {
-    
     title <- paste(ifelse(scale, "s", "un-s"), "caled ",
                    " data in pca;\npve >= ",
                    minPC, "%;\n", correlation,
@@ -226,29 +242,83 @@ degCovariates <- function(counts, metadata,
         remove_rownames() %>%
         column_to_rownames("covar") 
     
-    if (addCovDen){
-        p <- Heatmap(t(corMa),
-                     name = "cor",
-                     row_title = title,
-                     cluster_rows = FALSE,
-                     cluster_columns = hclust(as.dist((1-corMeta)^2),
-                                              method = "ward.D"),
-                     col = colorRamp2(c(1, 0, -1),
-                                      c("darkorange", "white", "darkblue")))
+    hc <-  hclust(as.dist((1-corMeta)^2),
+                method = "ward.D")
+    ma[["covar"]] = as.character(ma[["covar"]])
+    ma <- left_join(ma,
+              data.frame(covar = colnames(samplesbyfullcovariates),
+                         effect_size = apply(samplesbyfullcovariates, 2, function(v) {sd(v/max(v))}), stringsAsFactors = FALSE),
+              by = "covar")
+    ma[["effect_size"]][ma[["effect_size"]] < 0.05] <- 0.05
+    ma[["effect_size"]][ma[["effect_size"]] > 3] <- 3
+
+    if (legacy){
+        if (addCovDen){
+            p <- Heatmap(t(corMa),
+                         name = "cor",
+                         row_title = title,
+                         cluster_rows = FALSE,
+                         cluster_columns = hclust(as.dist((1-corMeta)^2),
+                                                  method = "ward.D"),
+                         col = colorRamp2(c(1, 0, -1),
+                                          c("darkorange", "white", "darkblue")))
+        }else{
+            p <- ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
+                geom_tile() +
+                theme_minimal() +
+                ggtitle(title) +
+                scale_fill_gradient2(low = "darkblue", high = "darkorange",
+                                     guide = "colorbar", na.value = "grey90",
+                                     limits = c(-1L, 1L)) +
+                theme(axis.text.x = element_text(angle = 90L,
+                                                 hjust = 1L,
+                                                 vjust = 0.5))
+            if (sum(ma[["r"]] > 0, na.rm = TRUE))
+                p <- p + geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*"))
+        }
+        
     }else{
-        p <- ggplot(ma, aes_(fill = ~r,x = ~covar,y = ~compare)) +
-            geom_tile() +
+        dhc <- as.dendrogram(hc)
+        # Rectangular lines
+        ddata <- dendro_data(dhc, type = "rectangle")
+        dn = ggplot(ddata[["segments"]]) + 
+            geom_segment(aes(x = x, y = -y, xend = xend, yend = -yend)) + 
+            scale_y_reverse(expand = c(0, 0)) +
+            scale_x_continuous(expand=c(0.01, 0.01)) +
+            xlab("") +
+            ylab("") +
             theme_minimal() +
-            ggtitle(title) +
-            scale_fill_gradient2(low = "darkblue", high = "darkorange",
-                                 guide = "colorbar", na.value = "grey90",
-                                 limits = c(-1L, 1L)) +
+            theme(axis.text.x = element_blank(),
+                  panel.grid.major = element_blank(),
+                  panel.grid.minor = element_blank())
+        
+        ma[["covar"]] <- factor(ma[["covar"]], levels = hc$labels[hc$order])
+        tile = ggplot(ma, aes_(x = ~covar,y = ~compare,
+                               size = ~effect_size, color = ~r)) +
+            geom_point() +
+            theme_minimal() +
+            
+            scale_size_continuous(range = c(0.01, 3)) + 
+            scale_color_gradient2(low = "darkblue", high = "darkorange",
+                                  guide = "colorbar", na.value = "grey90",
+                                  limits = c(-1L, 1L)) +
+            xlab("") +
             theme(axis.text.x = element_text(angle = 90L,
                                              hjust = 1L,
-                                             vjust = 0.5))
-        if (sum(ma[["r"]] > 0, na.rm = TRUE))
-            p <- p + geom_text(data = ma[ma[["pvalue"]] < 0.05, ], aes(label="*"))
+                                             vjust = 0.5),
+                  legend.position = "bottom") +
+            scale_x_discrete(expand=c(0.01,0.01))
+        
+        if (addCovDen){
+            p <- plot_grid(
+                dn, tile, align = "v",
+                nrow = 2, rel_heights = c(1,4)
+            ) + ggtitle(title)
+        }else{
+            p <- tile  + ggtitle(title)
+        }
     }
+
     samplepcvals <- as.data.frame(samplepcvals) %>% 
         set_colnames(original_names) %>% 
         rownames_to_column("samples")

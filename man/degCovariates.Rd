@@ -5,7 +5,8 @@
 \title{Find correlation between pcs and covariates}
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, minPC = 5,
-  correlation = "kendall", addCovDen = TRUE, plot = TRUE)
+  correlation = "kendall", addCovDen = TRUE, legacy = FALSE,
+  plot = TRUE)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -28,7 +29,9 @@ correlation between pcs and covariates.}
 \item{addCovDen}{boolean. Whether to add the covariates
 dendograme to the plot to see covariates relationship.
 It will show \code{\link[=degCorCov]{degCorCov()}} dendograme on top of the columns of
-the heatmap..}
+the heatmap.}
+
+\item{legacy}{boolean. Whether to plot the legacy version.}
 
 \item{plot}{Whether to plot or not the correlation matrix.}
 }
@@ -46,7 +49,11 @@ e) pcsMatrix: PCs loading for each sample
 \description{
 This function will calculate the pcs using prcomp function,
 and correlate categorical and numerical variables from
-metadata.
+metadata. The size of the dots indicates the importance of the
+metadata, for instance, when the range of the values is pretty
+small (from 0.001 to 0.002 in ribosimal content),
+the correlation results is not important. See details to know
+how this is calculated.
 }
 \details{
 This method is adapeted from Daily et al 2017 article.
@@ -54,6 +61,15 @@ Principal components from PCA analysis are correlated with
 covariates metadata. Factors are transformed to numeric variables.
 Correlation is measured by cor.test function with Kendall method
 by default.
+
+The size of the dot, or effect size, indicates the importance of
+the covariate based on the range of the values. Covariates
+where the range is very small (like a % of mapped reads that
+varies between 0.001 to 0.002) will have a very small dot size.
+To get to this value, each covariate is normalized using this
+equation: v/max(v). Then the standard deviation is calculated,
+and the minimum and maximum values are set to
+1 and 3 respectively.
 }
 \examples{
 data(humanGender)
@@ -61,8 +77,9 @@ library(DESeq2)
 idx <- c(1:10, 75:85)
 dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
   colData(humanGender)[idx,], design=~group)
+res <- degCovariates(log2(counts(dse)+0.5), colData(dse))
 res <- degCovariates(log2(counts(dse)+0.5),
-  colData(dse))
+  colData(dse), legacy = TRUE)
 res$plot
 res$scatterPlot[[1]]
 }

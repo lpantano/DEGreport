@@ -29,6 +29,7 @@
 #' @import quantreg
 #' @import ggplot2
 #' @importFrom ggplot2 layer ggproto
+#' @importFrom ggdendro dendro_data
 #' @import utils
 #' @import Nozzle.R1
 #' @import edgeR

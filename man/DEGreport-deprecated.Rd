@@ -19,6 +19,13 @@ in variable genes. There are other methods nowadays like lcfShrink function.
 DEGreport
 }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/lpantano/DEGreport/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Lorena Pantano \email{lorena.pantano@gmail.com}
 
