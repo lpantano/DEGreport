@@ -189,6 +189,8 @@ degCovariates <- function(counts, metadata,
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
     metadata <- as.data.frame(metadata)
+    covar_class <- sapply(metadata[1,], class)
+    
     metadata <- degClean(metadata) %>%
         mutate_all(as.numeric) %>% 
         as.data.frame() %>% 
@@ -211,9 +213,14 @@ degCovariates <- function(counts, metadata,
     # find covariates without any missing data
     samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L,
                                                       function(dat) all(!is.na(dat)))), drop = FALSE]
+    covar_class <- covar_class[colnames(samplesbyfullcovariates)]
     
     exclude_vars_from_fdr <- setdiff(colnames(metadata),
                                      colnames(samplesbyfullcovariates))
+    
+    covar_factors <- samplesbyfullcovariates[,names(covar_class)[covar_class != "numeric"], drop = FALSE]
+    covar_numeric <- samplesbyfullcovariates[,names(covar_class)[covar_class == "numeric"]]
+    samplesbyfullcovariates = cbind(covar_factors, covar_numeric)
     
     corrRes <- .calccompletecorandplot(samplepcvals,
                                        samplesbyfullcovariates,
@@ -245,9 +252,22 @@ degCovariates <- function(counts, metadata,
     hc <-  hclust(as.dist((1-corMeta)^2),
                 method = "ward.D")
     ma[["covar"]] = as.character(ma[["covar"]])
+    ma_sd <- bind_rows(
+        data.frame(covar = colnames(covar_numeric),
+                   effect_size = apply(covar_numeric,
+                                       2,
+                                       function(v) {
+                                           sd(v/max(v))
+                                       }),
+                   stringsAsFactors = FALSE),
+        data.frame(covar = colnames(covar_factors),
+                   effect_size = apply(covar_factors,
+                                       2,
+                                       sd),
+                   stringsAsFactors = FALSE),
+    )
     ma <- left_join(ma,
-              data.frame(covar = colnames(samplesbyfullcovariates),
-                         effect_size = apply(samplesbyfullcovariates, 2, function(v) {sd(v/max(v))}), stringsAsFactors = FALSE),
+                    ma_sd,
               by = "covar")
     ma[["effect_size"]][ma[["effect_size"]] < 0.05] <- 0.05
     ma[["effect_size"]][ma[["effect_size"]] > 3] <- 3
@@ -330,7 +350,7 @@ degCovariates <- function(counts, metadata,
     
     invisible(list(significantCovars = significantcovars,
                 plot = p,
-                corMatrix = corrRes[["mat"]],
+                corMatrix = ma,
                 pcsMatrix = samplepcvals,
                 scatterPlot = scatterPlot,
                 effectsSignificantCovars =
