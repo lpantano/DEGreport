@@ -261,16 +261,14 @@ degCovariates <- function(counts, metadata,
                                        }),
                    stringsAsFactors = FALSE),
         data.frame(covar = colnames(covar_factors),
-                   effect_size = apply(covar_factors,
-                                       2,
-                                       sd),
+                   effect_size = 0.5,
                    stringsAsFactors = FALSE),
     )
     ma <- left_join(ma,
                     ma_sd,
               by = "covar")
-    ma[["effect_size"]][ma[["effect_size"]] < 0.05] <- 0.05
-    ma[["effect_size"]][ma[["effect_size"]] > 3] <- 3
+    ma[["effect_size"]][ma[["effect_size"]] < 0.001] <- 0.001
+    ma[["effect_size"]][ma[["effect_size"]] > 0.5] <- 0.5
 
     if (legacy){
         if (addCovDen){
@@ -319,7 +317,8 @@ degCovariates <- function(counts, metadata,
             geom_point() +
             theme_minimal() +
             
-            scale_size_continuous(range = c(0.01, 3)) + 
+            scale_size_continuous(limits = c(0.001, 0.5),
+                                  range = c(0.5, 5)) + 
             scale_color_gradient2(low = "darkblue", high = "darkorange",
                                   guide = "colorbar", na.value = "grey90",
                                   limits = c(-1L, 1L)) +
