@@ -14,12 +14,12 @@ BugReports: https://github.com/lpantano/DEGreport/issues
 Suggests:
     BiocStyle,
     AnnotationDbi,
+    pheatmap,
     knitr,
     rmarkdown,
     testthat
 Depends:
-    R (>= 3.4.0),
-    quantreg
+    R (>= 3.4.0)
 Imports:
     utils,
     methods,
@@ -43,6 +43,7 @@ Imports:
     magrittr,
     Nozzle.R1,
     psych,
+    RColorBrewer,
     reshape,
     rlang,
     scales,

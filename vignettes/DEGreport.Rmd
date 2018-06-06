@@ -20,7 +20,7 @@ vignette: >
 
 ```{r setup, echo=FALSE, results="hide"}
 library(BiocStyle)
-knitr::opts_chunk$set(tidy=FALSE, cache=TRUE,
+knitr::opts_chunk$set(tidy=FALSE,
                       dev="png",
                       message=FALSE, error=FALSE,
                       warning=TRUE)
@@ -305,6 +305,8 @@ res <- degPatterns(ma, design, time = "group")
 
 This section shows some useful functions during DEG analysis.
 
+### Filter genes by group
+
 `degFilter` helps to filter genes with a minimum read count by group.
 
 ```{r filter, results="asis"}
@@ -314,6 +316,30 @@ filter_count <- degFilter(counts(dds),
                           min=1, minreads = 50)
 cat("gene in final count matrix", nrow(filter_count))
 ```
+
+### Generate colors for metadata variables
+
+This functions allows you to create colors for metadata columns
+to be used as annotation for columns in a heatmap figure.
+
+```{r degColors}
+library(ComplexHeatmap)
+th <- HeatmapAnnotation(df = colData(dds),
+                        col = degColors(colData(dds), TRUE))
+Heatmap(log2(counts(dds) + 0.5)[1:10,],
+        top_annotation = th)
+
+library(pheatmap)
+pheatmap(log2(counts(dds) + 0.5)[1:10,], 
+         annotation_col = as.data.frame(colData(dds))[,1:4],
+         annotation_colors = degColors(colData(dds)[1:4],
+                                       con_values = c("white",
+                                                      "red")
+                                       )
+         )
+
+```
+
 
 # Session info
 

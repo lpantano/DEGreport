@@ -1,3 +1,66 @@
+#' Make nice colors for metadata
+#' 
+#' The function will take a metadata table and use Set2 palette when
+#' number of levels is > 3 or a set or orange/blue colors other wise.
+#' 
+#' @param ann Data.frame with metadata information. Each column will be used to 
+#'   generate a palette suitable for the values in there.
+#' @param col_fun Whether to return a function for continuous variables 
+#'   (compatible with [ComplexHeatmap::HeatmapAnnotation()]) or
+#'   the colors themself (comparible with [pheatmap::pheatmap())]).
+#' @param con_values Color to be used for continuous variables.
+#' @param cat_values Color to be used for 2-levels categorical variables.
+#' @param palette Palette to use from [RColorBrewer::brewer.pal()] for
+#'   multi-levels categorical variables.
+#' @examples 
+#' data(humanGender)
+#' library(DESeq2)
+#' library(ComplexHeatmap)
+#' idx <- c(1:10, 75:85)
+#' dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:10, idx],
+#'   colData(humanGender)[idx,], design=~group)
+#' th <- HeatmapAnnotation(df = colData(dse),
+#'                        col = degColors(colData(dse), TRUE))
+#' Heatmap(log2(counts(dse)+0.5), top_annotation = th)
+#' 
+#' custom <- degColors(colData(dse), TRUE,
+#'           con_values = c("white", "red"),
+#'           cat_values = c("white", "black"),
+#'           palette = "Set1")
+#' th <- HeatmapAnnotation(df = colData(dse),
+#'                         col = custom)
+#' Heatmap(log2(counts(dse)+0.5), top_annotation = th)
+#' @export
+degColors <- function(ann, col_fun = FALSE,
+                      con_values = c("grey80", "black"),
+                      cat_values = c("orange", "steelblue"),
+                      palette = "Set2"){
+    col <- lapply(names(ann), function(a){
+        if (class(ann[[a]][1]) == "numeric"){
+            fn = colorRamp2(c(min(ann[[a]]),
+                              max(ann[[a]])),
+                            con_values)
+            if (col_fun){
+                return(fn)
+            }else{
+                return(fn(ann[[a]]))
+            }
+        }
+        
+        if (length(unique(ann[[a]])) < 3){
+            v <- cat_values[1:length(unique(ann[[a]]))]
+            names(v) <- unique(ann[[a]])
+            return(v)
+        }
+        v <- brewer.pal(length(unique(ann[[a]])), palette)
+        names(v) <- unique(ann[[a]])
+        v
+    })
+    names(col) <- names(ann)
+    col
+}
+
+
 #' Plot top genes allowing more variables to color and shape points
 #'
 #' @param dds [DESeq2::DESeqDataSet] object or SummarizedExperiment

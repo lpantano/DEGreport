@@ -26,7 +26,6 @@
 #' @importFrom scales trans_breaks trans_format math_format
 #' @importFrom ConsensusClusterPlus ConsensusClusterPlus
 #' @import ggrepel
-#' @import quantreg
 #' @import ggplot2
 #' @importFrom ggplot2 layer ggproto
 #' @importFrom ggdendro dendro_data
@@ -59,6 +58,7 @@
 #' @importFrom tibble as_tibble
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap
 #' @importFrom circlize colorRamp2
+#' @importFrom RColorBrewer brewer.pal
 #' @importFrom reshape melt melt.data.frame
 #' @importFrom knitr kable
 #' @importFrom methods new slot

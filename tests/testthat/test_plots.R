@@ -16,6 +16,14 @@ plot_cor <- function(dse){
         geom_cor(method = "kendall")
 }
 
+test_that("colors", {
+    expect_equal(length(degColors(colData(dse))), 5)
+    expect_equal(degColors(colData(dse), TRUE)[[2]] %>% class, "function")
+    expect_equal(degColors(colData(dse), cat_values = c("red", "white"))[[1]],
+                 c(Female = "red", Male = "white"))
+    expect_error(degColors(data.frame(group = c("1", "2", "3")), palette = "Fake"))
+})
+
 test_that("degcovariates", {
     resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse), minPC = 10)
     expect_true(nrow(resCov[["corMatrix"]][resCov[["corMatrix"]][["fdr"]] < 0.05,]) == 3)

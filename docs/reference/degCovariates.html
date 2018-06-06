@@ -32,7 +32,11 @@
 
 <meta property="og:description" content="This function will calculate the pcs using prcomp function,
 and correlate categorical and numerical variables from
-metadata." />
+metadata. The size of the dots indicates the importance of the
+metadata, for instance, when the range of the values is pretty
+small (from 0.001 to 0.002 in ribosimal content),
+the correlation results is not important. See details to know
+how this is calculated." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -103,12 +107,17 @@ metadata." />
     
     <p>This function will calculate the pcs using prcomp function,
 and correlate categorical and numerical variables from
-metadata.</p>
+metadata. The size of the dots indicates the importance of the
+metadata, for instance, when the range of the values is pretty
+small (from 0.001 to 0.002 in ribosimal content),
+the correlation results is not important. See details to know
+how this is calculated.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>degCovariates</span>(<span class='no'>counts</span>, <span class='no'>metadata</span>, <span class='kw'>fdr</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>minPC</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>, <span class='kw'>addCovDen</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>, <span class='kw'>addCovDen</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>legacy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +156,11 @@ correlation between pcs and covariates.</p></td>
       <td><p>boolean. Whether to add the covariates
 dendograme to the plot to see covariates relationship.
 It will show <code><a href='degCorCov.html'>degCorCov()</a></code> dendograme on top of the columns of
-the heatmap..</p></td>
+the heatmap.</p></td>
+    </tr>
+    <tr>
+      <th>legacy</th>
+      <td><p>boolean. Whether to plot the legacy version.</p></td>
     </tr>
     <tr>
       <th>plot</th>
@@ -174,6 +187,14 @@ Principal components from PCA analysis are correlated with
 covariates metadata. Factors are transformed to numeric variables.
 Correlation is measured by cor.test function with Kendall method
 by default.</p>
+<p>The size of the dot, or effect size, indicates the importance of
+the covariate based on the range of the values. Covariates
+where the range is very small (like a <!-- % of mapped reads that -->
+varies between 0.001 to 0.002) will have a very small dot size.
+To get to this value, each covariate is normalized using this
+equation: v/max(v). Then the standard deviation is calculated,
+and the minimum and maximum values are set to
+1 and 3 respectively.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -186,12 +207,16 @@ by default.</p>
 <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
   <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degCovariates</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>),
-  <span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='output co'>#&gt; <span class='message'></span>
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degCovariates</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>), <span class='fu'>colData</span>(<span class='no'>dse</span>))</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>running pca and calculating correlations for:</span>
 #&gt; <span class='message'>un-scaled  data in pca;</span>
 #&gt; <span class='message'>pve &gt;= 5%;</span>
-#&gt; <span class='message'>kendall cor </span></div><div class='img'><img src='degCovariates-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span>$<span class='no'>plot</span></div><div class='img'><img src='degCovariates-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span>$<span class='no'>scatterPlot</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='img'><img src='degCovariates-3.png' alt='' width='700' height='433' /></div></pre>
+#&gt; <span class='message'>kendall cor </span></div><div class='img'><img src='degCovariates-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degCovariates</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>),
+  <span class='fu'>colData</span>(<span class='no'>dse</span>), <span class='kw'>legacy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>running pca and calculating correlations for:</span>
+#&gt; <span class='message'>un-scaled  data in pca;</span>
+#&gt; <span class='message'>pve &gt;= 5%;</span>
+#&gt; <span class='message'>kendall cor </span></div><div class='img'><img src='degCovariates-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span>$<span class='no'>plot</span></div><div class='img'><img src='degCovariates-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>res</span>$<span class='no'>scatterPlot</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='img'><img src='degCovariates-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

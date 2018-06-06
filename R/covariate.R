@@ -298,6 +298,7 @@ degCovariates <- function(counts, metadata,
         }
         
     }else{
+        
         dhc <- as.dendrogram(hc)
         # Rectangular lines
         ddata <- dendro_data(dhc, type = "rectangle")
