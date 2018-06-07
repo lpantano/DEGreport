@@ -23,6 +23,7 @@
 #'             "cutree" "density" "median.default" "quantile" "sd"
 #'             "time" "var" "na.omit" "aov" "prcomp" "median"
 #'             "cmdscale" "dist" "hclust" "p.adjust" "xtabs"
+#'             "as.dendrogram"
 #' @importFrom scales trans_breaks trans_format math_format
 #' @importFrom ConsensusClusterPlus ConsensusClusterPlus
 #' @import ggrepel

@@ -718,7 +718,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' library(SummarizedExperiment)
 #' ma <- assays(humanGender)[[1]][1:100,]
 #' des <- colData(humanGender)
-#' des[["other"]] <- sample(c("a", "b"), 85, replace = T)
+#' des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
 #' res <- degPatterns(ma, des, time="group", col = "other")
 #' # Use the data yourself for custom figures
 #' res[["normalized"]] %>%
