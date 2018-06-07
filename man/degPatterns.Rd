@@ -102,8 +102,8 @@ des <- colData(humanGender)
 des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
 res <- degPatterns(ma, des, time="group", col = "other")
 # Use the data yourself for custom figures
-res[["normalized"]] \%>\%
- ggplot(aes(group, value, color = other, fill = other)) +
+ ggplot(res[["normalized"]],
+        aes(group, value, color = other, fill = other)) +
   geom_boxplot() +
    geom_point(position = position_jitterdodge(dodge.width = 0.9)) +
    # change the method to make it smoother
