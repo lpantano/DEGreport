@@ -709,13 +709,24 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' * `plot` ggplot figure.
 #' * `hr` clustering of the genes in hclust format.
 #' * `profile` normalized count data used in the plot.
-#' * `raw` data.frame with values used for the plots.
+#' * `raw` data.frame with gene values summarized by biological replicates and
+#'   with metadata information attached.
+#' * `summarise` data.frame with clusters values summarized by group and
+#'   with the metadata information attached.
 #' @examples
 #' data(humanGender)
 #' library(SummarizedExperiment)
 #' ma <- assays(humanGender)[[1]][1:100,]
 #' des <- colData(humanGender)
-#' res <- degPatterns(ma, des, time="group")
+#' des[["other"]] <- sample(c("a", "b"), 85, replace = T)
+#' res <- degPatterns(ma, des, time="group", col = "other")
+#' # Use the data yourself for custom figures
+#' res[["normalized"]] %>%
+#'  ggplot(aes(group, value, color = other, fill = other)) +
+#'   geom_boxplot() +
+#'    geom_point(position = position_jitterdodge(dodge.width = 0.9)) +
+#'    # change the method to make it smoother
+#'    geom_smooth(aes(group=other), method = "lm")
 #' @export
 degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        time="time", col=NULL,
@@ -817,7 +828,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     
     df <- data.frame(genes = names(groups), 
                     cluster = groups, stringsAsFactors = FALSE)
-    
+
     raw <- counts_group %>% as.data.frame %>% 
         rownames_to_column("genes") %>%
         gather(!!sym(summarize), "value", -genes) %>%
@@ -828,14 +839,22 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     summarise <- raw %>%
         group_by(!!sym(summarize), !!sym("cluster"),
                  !!sym(time), !!sym(col)) %>%
-        summarise(abundance = median(value)) %>% 
+        summarise(abundance = median(value),
+                  n_genes = n()) %>% 
         ungroup()
+    
+    normalized <- norm_sign %>% as.data.frame %>% 
+        rownames_to_column("genes") %>%
+        gather(!!sym(summarize), "value", -genes) %>%
+        inner_join(metadata_groups %>%
+                       mutate_if(is.factor, as.character)) %>%
+        inner_join(df, by = "genes")
     
     invisible(list(df = df,
          pass = to_plot,
          plot = all,
          hr = cluster_genes,
-         profile = norm_sign,
+         normalized = normalized,
          summarise = summarise,
          raw = raw,
          counts = ma[raw[["genes"]],]))

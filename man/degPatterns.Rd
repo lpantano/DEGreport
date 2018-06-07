@@ -72,7 +72,10 @@ with the clusters they belong.
 \item \code{plot} ggplot figure.
 \item \code{hr} clustering of the genes in hclust format.
 \item \code{profile} normalized count data used in the plot.
-\item \code{raw} data.frame with values used for the plots.
+\item \code{raw} data.frame with gene values summarized by biological replicates and
+with metadata information attached.
+\item \code{summarise} data.frame with clusters values summarized by group and
+with the metadata information attached.
 }
 }
 \description{
@@ -96,5 +99,13 @@ data(humanGender)
 library(SummarizedExperiment)
 ma <- assays(humanGender)[[1]][1:100,]
 des <- colData(humanGender)
-res <- degPatterns(ma, des, time="group")
+des[["other"]] <- sample(c("a", "b"), 85, replace = T)
+res <- degPatterns(ma, des, time="group", col = "other")
+# Use the data yourself for custom figures
+res[["normalized"]] \%>\%
+ ggplot(aes(group, value, color = other, fill = other)) +
+  geom_boxplot() +
+   geom_point(position = position_jitterdodge(dodge.width = 0.9)) +
+   # change the method to make it smoother
+   geom_smooth(aes(group=other), method = "lm")
 }

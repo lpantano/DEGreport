@@ -173,20 +173,20 @@ Only used when a list is giving to the method.</p></td>
                                      <span class='fu'>c</span>(<span class='st'>"condition"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)))</div><div class='output co'>#&gt; <span class='message'>Doing 2 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span></div><div class='output co'>#&gt; # A tibble: 6 x 3
 #&gt;   gene    log2FoldChange_condition_A_vs_B padj_condition_A_vs_B
 #&gt;   &lt;chr&gt;                             &lt;dbl&gt;                 &lt;dbl&gt;
-#&gt; 1 gene103                          -0.944            0.0283    
-#&gt; 2 gene111                           0.943            0.0439    
-#&gt; 3 gene113                          -1.19             0.0103    
-#&gt; 4 gene115                          -1.20             0.0000140 
-#&gt; 5 gene134                          -1.76             0.000262  
-#&gt; 6 gene139                           1.61             0.00000508</div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
+#&gt; 1 gene10                           -1.35            0.0477     
+#&gt; 2 gene109                          -2.03            0.000000188
+#&gt; 3 gene111                          -1.45            0.0301     
+#&gt; 4 gene116                          -1.37            0.00602    
+#&gt; 5 gene12                           -1.60            0.0177     
+#&gt; 6 gene121                           0.690           0.0410     </div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
 #&gt;   gene     log2FoldChange_c… log2FoldChange_… padj_condition_… padj_treatment_…
 #&gt;   &lt;chr&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-#&gt; 1 gene1                0.593           0.0444            0.323            1.000
-#&gt; 2 gene10              -0.182          -0.226             0.811            1.000
-#&gt; 3 gene100              1.18            0.114             0.122            1.000
-#&gt; 4 gene1000            -0.772          -0.0663            0.302            1.000
-#&gt; 5 gene101              1.72            0.257             0.103            1.000
-#&gt; 6 gene102              1.12           -0.102             0.293            1.000</div></pre>
+#&gt; 1 gene1              - 0.282          -0.734            0.939             0.986
+#&gt; 2 gene10             - 1.35           -0.650            0.0477            1.000
+#&gt; 3 gene100             NA               0.129           NA                 1.000
+#&gt; 4 gene1000            NA               0.101           NA                 1.000
+#&gt; 5 gene101            - 0.127          -0.0294           0.924             1.000
+#&gt; 6 gene102            - 0.512           0.0662           0.529             1.000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

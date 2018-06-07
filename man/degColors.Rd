@@ -33,11 +33,11 @@ data(humanGender)
 library(DESeq2)
 library(ComplexHeatmap)
 idx <- c(1:10, 75:85)
-dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:1000, idx],
+dse <- DESeqDataSetFromMatrix(assays(humanGender)[[1]][1:10, idx],
   colData(humanGender)[idx,], design=~group)
 th <- HeatmapAnnotation(df = colData(dse),
                        col = degColors(colData(dse), TRUE))
-Heatmap(log2(counts(dse)+0.5)[1:10,], top_annotation = th)
+Heatmap(log2(counts(dse)+0.5), top_annotation = th)
 
 custom <- degColors(colData(dse), TRUE,
           con_values = c("white", "red"),
@@ -45,5 +45,5 @@ custom <- degColors(colData(dse), TRUE,
           palette = "Set1")
 th <- HeatmapAnnotation(df = colData(dse),
                         col = custom)
-Heatmap(log2(counts(dse)+0.5)[1:10,], top_annotation = th)
+Heatmap(log2(counts(dse)+0.5), top_annotation = th)
 }

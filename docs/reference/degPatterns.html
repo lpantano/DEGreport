@@ -217,7 +217,10 @@ with the clusters they belong.</p></li>
 <li><p><code>plot</code> ggplot figure.</p></li>
 <li><p><code>hr</code> clustering of the genes in hclust format.</p></li>
 <li><p><code>profile</code> normalized count data used in the plot.</p></li>
-<li><p><code>raw</code> data.frame with values used for the plots.</p></li>
+<li><p><code>raw</code> data.frame with gene values summarized by biological replicates and
+with metadata information attached.</p></li>
+<li><p><code>summarise</code> data.frame with clusters values summarized by group and
+with the metadata information attached.</p></li>
 </ul>
 
     
@@ -238,7 +241,14 @@ some need to be merged or not.</p>
 <span class='fu'>library</span>(<span class='no'>SummarizedExperiment</span>)
 <span class='no'>ma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assays</a></span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>100</span>,]
 <span class='no'>des</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>colData</a></span>(<span class='no'>humanGender</span>)
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>des</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='st'>"group"</span>)</div><div class='output co'>#&gt; <span class='message'>Working with 100 genes.</span></div><div class='output co'>#&gt; <span class='message'>Working with 100 genes after filtering: minc &gt; 15</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='img'><img src='degPatterns-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>des</span><span class='kw'>[[</span><span class='st'>"other"</span>]] <span class='kw'>&lt;-</span> <span class='fu'>sample</span>(<span class='fu'>c</span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>), <span class='fl'>85</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='no'>T</span>)
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>des</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"other"</span>)</div><div class='output co'>#&gt; <span class='message'>Working with 100 genes.</span></div><div class='output co'>#&gt; <span class='message'>Working with 66 genes after filtering: minc &gt; 15</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='img'><img src='degPatterns-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Use the data yourself for custom figures</span>
+<span class='no'>res</span><span class='kw'>[[</span><span class='st'>"normalized"</span>]] <span class='kw'>%&gt;%</span>
+ <span class='fu'>ggplot</span>(<span class='fu'>aes</span>(<span class='no'>group</span>, <span class='no'>value</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>other</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>other</span>)) +
+  <span class='fu'>geom_boxplot</span>() +
+   <span class='fu'>geom_point</span>(<span class='kw'>position</span> <span class='kw'>=</span> <span class='fu'>position_jitterdodge</span>(<span class='kw'>dodge.width</span> <span class='kw'>=</span> <span class='fl'>0.9</span>)) +
+   <span class='co'># change the method to make it smoother</span>
+   <span class='fu'>geom_smooth</span>(<span class='fu'>aes</span>(<span class='kw'>group</span><span class='kw'>=</span><span class='no'>other</span>), <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"lm"</span>)</div><div class='img'><img src='degPatterns-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
