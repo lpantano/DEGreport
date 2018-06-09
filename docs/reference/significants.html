@@ -165,28 +165,46 @@ Only used when a list is giving to the method.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DESeq2</span>)
-<span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span><span class='kw'>=</span><span class='fl'>1</span>)
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:matrixStats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    count</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    combine, exprs</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:GenomicRanges’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, union</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:GenomeInfoDb’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:IRanges’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    collapse, desc, intersect, setdiff, slice, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:S4Vectors’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    first, intersect, rename, setdiff, setequal, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:BiocGenerics’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    combine, intersect, setdiff, union</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span><span class='kw'>=</span><span class='fl'>1</span>)
 <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/sample.html'>sample</a></span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"condition"</span>]], <span class='fl'>12</span>)
   <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"treatment_B_vs_A"</span>,
                                      <span class='fu'>c</span>(<span class='st'>"condition"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)))</div><div class='output co'>#&gt; <span class='message'>Doing 2 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span></div><div class='output co'>#&gt; # A tibble: 6 x 3
 #&gt;   gene    log2FoldChange_condition_A_vs_B padj_condition_A_vs_B
 #&gt;   &lt;chr&gt;                             &lt;dbl&gt;                 &lt;dbl&gt;
-#&gt; 1 gene10                           -1.35            0.0477     
-#&gt; 2 gene109                          -2.03            0.000000188
-#&gt; 3 gene111                          -1.45            0.0301     
-#&gt; 4 gene116                          -1.37            0.00602    
-#&gt; 5 gene12                           -1.60            0.0177     
-#&gt; 6 gene121                           0.690           0.0410     </div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
+#&gt; 1 gene1                              1.64             0.0210   
+#&gt; 2 gene106                           -1.28             0.00621  
+#&gt; 3 gene109                           -1.24             0.0139   
+#&gt; 4 gene11                            -1.23             0.00234  
+#&gt; 5 gene117                            1.45             0.0000949
+#&gt; 6 gene119                           -1.27             0.00400  </div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
 #&gt;   gene     log2FoldChange_c… log2FoldChange_… padj_condition_… padj_treatment_…
 #&gt;   &lt;chr&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-#&gt; 1 gene1              - 0.282          -0.734            0.939             0.986
-#&gt; 2 gene10             - 1.35           -0.650            0.0477            1.000
-#&gt; 3 gene100             NA               0.129           NA                 1.000
-#&gt; 4 gene1000            NA               0.101           NA                 1.000
-#&gt; 5 gene101            - 0.127          -0.0294           0.924             1.000
-#&gt; 6 gene102            - 0.512           0.0662           0.529             1.000</div></pre>
+#&gt; 1 gene1                1.64            0.259            0.0210            0.980
+#&gt; 2 gene10               0.510          -0.457            0.583             0.914
+#&gt; 3 gene100              0.875          -0.247            0.201             0.977
+#&gt; 4 gene1000            -0.887           0.0199           0.0774            0.996
+#&gt; 5 gene101              0.149          -0.0370           0.868             0.982
+#&gt; 6 gene102              0.135           0.0286           0.939             0.993</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

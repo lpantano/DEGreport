@@ -152,6 +152,14 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 <code>color = "red"</code> or <code>size = 3</code>. They may also be parameters
 to the paired geom/stat.</p></td>
     </tr>
+    <tr>
+      <th>ypos</th>
+      <td><p>Locate text at that position on the y axis.</p></td>
+    </tr>
+    <tr>
+      <th>xpos</th>
+      <td><p>Locate text at that position on the x axis.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -171,7 +179,8 @@ ggplot2 <a href='https://cran.r-project.org/web/packages/ggplot2/vignettes/exten
 <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='fu'>as.data.frame</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assay</a></span>(<span class='no'>humanGender</span>)[<span class='fl'>1</span>:<span class='fl'>1000</span>,]),
        <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>NA20502</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>NA20504</span>)) +
   <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_point'>geom_point</a></span>() +
-  <span class='fu'>geom_cor</span>(<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>)</div><div class='img'><img src='geom_cor-1.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/lims'>ylim</a></span>(<span class='fl'>0</span>,<span class='fl'>1.1e5</span>) +
+  <span class='fu'>geom_cor</span>(<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>, <span class='kw'>ypos</span> <span class='kw'>=</span> <span class='fl'>1e5</span>)</div><div class='img'><img src='geom_cor-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

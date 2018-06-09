@@ -1,10 +1,18 @@
 StatCor <- ggproto("StatCor", Stat,
-                   compute_group = function(data, scales, method = "spearman") {
+                   compute_group = function(data, scales,
+                                            xpos = NULL, ypos = NULL,
+                                            method = "spearman") {
+                       
                        data = data[!is.na(data$x) & !is.na(data$y),]
                        cr = cor.test(data$x, data$y, method = method)
-                       x = min(data$x) + abs((max(data$x) - min(data$x)) / 2)
+                       x = xpos
+                       if (is.null(x))
+                           x = min(data$x) + abs((max(data$x) - min(data$x)) / 2)
+                       y = ypos
+                       if (is.null(y))
+                           y = scales$y$range$range[2] + 0.1 * scales$y$range$range[2]
                        data.frame(x = x,
-                                  y = max(data$y, na.rm = T),
+                                  y = y,
                                   label = paste0("Cor (", method, "): ",
                                                  round(cr[["estimate"]], digits = 2),
                                                  ", pval: ",
@@ -85,6 +93,8 @@ GeomCor <- ggproto("GeomText", Geom,
 #'   the default plot specification, e.g. [borders()].
 #' @param method Method to calculate the correlation. Values are
 #'   passed to [cor.test()]. (Spearman, Pearson, Kendall).
+#' @param ypos Locate text at that position on the y axis.
+#' @param xpos Locate text at that position on the x axis.
 #' @param ... other arguments passed on to [layer()]. These are
 #'   often aesthetics, used to set an aesthetic to a fixed value, like
 #'   `color = "red"` or `size = 3`. They may also be parameters
@@ -98,7 +108,8 @@ GeomCor <- ggproto("GeomText", Geom,
 #' ggplot(as.data.frame(assay(humanGender)[1:1000,]),
 #'        aes(x = NA20502, y = NA20504)) +
 #'   geom_point() +
-#'   geom_cor(method = "kendall") 
+#'   ylim(0,1.1e5) +
+#'   geom_cor(method = "kendall", ypos = 1e5) 
 #' @export
 geom_cor <- function(mapping = NULL, data = NULL,
                      method = "spearman",

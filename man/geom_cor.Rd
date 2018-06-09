@@ -39,6 +39,10 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
+
+\item{ypos}{Locate text at that position on the y axis.}
+
+\item{xpos}{Locate text at that position on the x axis.}
 }
 \description{
 \code{geom_cor} will add the correlatin, method and p-value to the plot
@@ -56,7 +60,8 @@ library(ggplot2)
 ggplot(as.data.frame(assay(humanGender)[1:1000,]),
        aes(x = NA20502, y = NA20504)) +
   geom_point() +
-  geom_cor(method = "kendall") 
+  ylim(0,1.1e5) +
+  geom_cor(method = "kendall", ypos = 1e5) 
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}}
