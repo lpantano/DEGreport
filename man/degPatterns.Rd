@@ -97,6 +97,7 @@ some need to be merged or not.
 \examples{
 data(humanGender)
 library(SummarizedExperiment)
+library(ggplot)
 ma <- assays(humanGender)[[1]][1:100,]
 des <- colData(humanGender)
 des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
