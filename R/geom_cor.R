@@ -113,6 +113,7 @@ GeomCor <- ggproto("GeomText", Geom,
 #' @export
 geom_cor <- function(mapping = NULL, data = NULL,
                      method = "spearman",
+                     xpos = NULL, ypos = NULL,
                      inherit.aes = TRUE, ...) {
     layer(stat = StatCor,
                    data = data, mapping = mapping, geom = GeomCor,

@@ -4,8 +4,8 @@
 \alias{geom_cor}
 \title{Add correlation and p-value to a \link{ggplot2} plot}
 \usage{
-geom_cor(mapping = NULL, data = NULL, method = "spearman",
-  inherit.aes = TRUE, ...)
+geom_cor(mapping = NULL, data = NULL, method = "spearman", xpos = NULL,
+  ypos = NULL, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -30,6 +30,10 @@ will be used as the layer data.}
 \item{method}{Method to calculate the correlation. Values are
 passed to \code{\link[=cor.test]{cor.test()}}. (Spearman, Pearson, Kendall).}
 
+\item{xpos}{Locate text at that position on the x axis.}
+
+\item{ypos}{Locate text at that position on the y axis.}
+
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
@@ -39,10 +43,6 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
-
-\item{ypos}{Locate text at that position on the y axis.}
-
-\item{xpos}{Locate text at that position on the x axis.}
 }
 \description{
 \code{geom_cor} will add the correlatin, method and p-value to the plot
