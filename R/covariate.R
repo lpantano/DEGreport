@@ -144,11 +144,15 @@
 #'   The size of the dot, or effect size, indicates the importance of 
 #'   the covariate based on the range of the values. Covariates
 #'   where the range is very small (like a % of mapped reads that
-#'   varies between 0.001 to 0.002) will have a very small dot size.
+#'   varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
+#'   The highest value to have is 5 size.
 #'   To get to this value, each covariate is normalized using this 
-#'   equation: v/max(v). Then the standard deviation is calculated,
+#'   equation: 1 - min(v/max(v)),
 #'   and the minimum and maximum values are set to
-#'   1 and 3 respectively.
+#'   0.01 and 1 respectively. 0.5 would mean there is at least
+#'   50% of difference between the minimum value and the maximum value.
+#'   Categorical variables are plot using the maximum size always, since
+#'   it is not possible to estimate the variability.
 #'   
 #' @references 
 #' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
@@ -189,13 +193,16 @@ degCovariates <- function(counts, metadata,
     message(paste("\nrunning pca and calculating correlations for:\n",
                   title, sep = ""))
     metadata <- as.data.frame(metadata)
-    covar_class <- sapply(metadata[1,], class)
     
-    metadata <- degClean(metadata) %>%
+    metadata <- degClean(metadata) 
+    covar_class <- sapply(metadata[1,], class)
+
+    metadata <- metadata %>%
         mutate_all(as.numeric) %>% 
         as.data.frame() %>% 
         set_rownames(row.names(metadata))
-
+    
+    
     stopifnot(identical(colnames(counts), rownames(metadata)))
     
     pcares <- .runpca(genesbysamples = counts,
@@ -220,6 +227,7 @@ degCovariates <- function(counts, metadata,
     
     covar_factors <- samplesbyfullcovariates[,names(covar_class)[covar_class != "numeric"], drop = FALSE]
     covar_numeric <- samplesbyfullcovariates[,names(covar_class)[covar_class == "numeric"]]
+    
     samplesbyfullcovariates = cbind(covar_factors, covar_numeric)
     
     corrRes <- .calccompletecorandplot(samplepcvals,
@@ -251,25 +259,25 @@ degCovariates <- function(counts, metadata,
     
     hc <-  hclust(as.dist((1-corMeta)^2),
                 method = "ward.D")
+    
     ma[["covar"]] = as.character(ma[["covar"]])
+
     ma_sd <- bind_rows(
         data.frame(covar = colnames(covar_numeric),
                    effect_size = apply(covar_numeric,
                                        2,
                                        function(v) {
-                                           sd(v/max(v))
+                                           1 - min(v/max(v))
                                        }),
                    stringsAsFactors = FALSE),
         data.frame(covar = colnames(covar_factors),
-                   effect_size = 0.5,
+                   effect_size = 1,
                    stringsAsFactors = FALSE),
     )
-    ma <- left_join(ma,
-                    ma_sd,
-              by = "covar")
-    ma[["effect_size"]][ma[["effect_size"]] < 0.001] <- 0.001
-    ma[["effect_size"]][ma[["effect_size"]] > 0.5] <- 0.5
-
+    ma <- left_join(ma, ma_sd, by = "covar")
+    ma[["effect_size"]][ma[["effect_size"]] < 0.01] <- 0.01
+    ma[["effect_size"]][ma[["effect_size"]] > 1] <- 1
+    #  browser()
     if (legacy){
         if (addCovDen){
             p <- Heatmap(t(corMa),
@@ -311,14 +319,20 @@ degCovariates <- function(counts, metadata,
                   panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank())
         
-        ma[["covar"]] <- factor(ma[["covar"]], levels = hc$labels[hc$order])
+        
+        ma[["covar"]] <- factor(ma[["covar"]],
+                                levels = hc$labels[hc$order])
+        ma[["type_variable"]] <- "categorical"
+        ma[["type_variable"]][ma[["covar"]]  %in% names(covar_class[covar_class=="numeric"])] <- "numeric"
         tile = ggplot(ma, aes_(x = ~covar,y = ~compare,
-                               size = ~effect_size, color = ~r)) +
+                               size = ~effect_size,
+                               color = ~r,
+                               shape = ~type_variable)) +
             geom_point() +
             theme_minimal() +
-            
-            scale_size_continuous(limits = c(0.001, 0.5),
-                                  range = c(0.5, 5)) + 
+            scale_shape_manual(values = c(15, 16)) + 
+            scale_size_continuous(limits = c(0.01, 1),
+                                  range = c(0.01, 5)) + 
             scale_color_gradient2(low = "darkblue", high = "darkorange",
                                   guide = "colorbar", na.value = "grey90",
                                   limits = c(-1L, 1L)) +

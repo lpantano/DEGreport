@@ -65,11 +65,15 @@ by default.
 The size of the dot, or effect size, indicates the importance of
 the covariate based on the range of the values. Covariates
 where the range is very small (like a % of mapped reads that
-varies between 0.001 to 0.002) will have a very small dot size.
+varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
+The highest value to have is 5 size.
 To get to this value, each covariate is normalized using this
-equation: v/max(v). Then the standard deviation is calculated,
+equation: 1 - min(v/max(v)),
 and the minimum and maximum values are set to
-1 and 3 respectively.
+0.01 and 1 respectively. 0.5 would mean there is at least
+50% of difference between the minimum value and the maximum value.
+Categorical variables are plot using the maximum size always, since
+it is not possible to estimate the variability.
 }
 \examples{
 data(humanGender)
