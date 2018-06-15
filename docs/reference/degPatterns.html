@@ -6,10 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
-matrix used as input should be already filtered to contain only
-genes that are significantly different. — degPatterns • DEGreport</title>
+<title>Make groups of genes using expression profile. — degPatterns • DEGreport</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -31,15 +28,13 @@ genes that are significantly different. — degPatterns • DEGreport</title>
 
 
 
-<meta property="og:title" content="Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
-matrix used as input should be already filtered to contain only
-genes that are significantly different. — degPatterns" />
+<meta property="og:title" content="Make groups of genes using expression profile. — degPatterns" />
 
-<meta property="og:description" content="Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
+<meta property="og:description" content="Note that this function doesn't calculate significant
+difference between groups, so the
 matrix used as input should be already filtered to contain only
-genes that are significantly different." />
+genes that are significantly different or the most interesting genes
+to study." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -101,20 +96,18 @@ genes that are significantly different." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
-matrix used as input should be already filtered to contain only
-genes that are significantly different.</h1>
+    <h1>Make groups of genes using expression profile.</h1>
     
     <div class="hidden name"><code>degPatterns.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
+    <p>Note that this function doesn't calculate significant
+difference between groups, so the
 matrix used as input should be already filtered to contain only
-genes that are significantly different.</p>
+genes that are significantly different or the most interesting genes
+to study.</p>
     
     </div>
 
@@ -226,10 +219,7 @@ with the metadata information attached.</p></li>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It would be used <code><a href='http://www.rdocumentation.org/packages/cluster/topics/diana'>cluster::diana()</a></code> function
-to detect a value to cut the expression based clustering
-at certain height or ConsensusClusterPlus.
-It can work with one or more groups with 2 or
+    <p>It can work with one or more groups with 2 or
 more several time points.
 Before calculating the genes similarity among samples,
 all samples inside the same time point (<code>time</code> parameter) and
@@ -241,6 +231,8 @@ method. A distance matrix is created from those vsalues.
 After that, <code><a href='http://www.rdocumentation.org/packages/cluster/topics/diana'>cluster::diana()</a></code> is used for the
 clustering of gene-gene distance matrix and cut of the tree using
 the divisive coefficient of the clustering, giving as well by diana.
+Alernatively, if <code>consensusCluster</code> is on, it would used
+ConsensusClusterPlus to cut the tree in stable clusters.
 Finally, for each group of genes, only the ones that have genes
 higher than <code>minc</code> parameter will be added to the figure.
 The y-axis in the figure is the results of applying <code>scale()</code>
@@ -260,7 +252,7 @@ some need to be merged or not.</p>
 <span class='no'>ma</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>assays</a></span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>100</span>,]
 <span class='no'>des</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class'>colData</a></span>(<span class='no'>humanGender</span>)
 <span class='no'>des</span><span class='kw'>[[</span><span class='st'>"other"</span>]] <span class='kw'>&lt;-</span> <span class='fu'>sample</span>(<span class='fu'>c</span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>), <span class='fl'>85</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>des</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"other"</span>)</div><div class='output co'>#&gt; <span class='message'>Working with 100 genes.</span></div><div class='output co'>#&gt; <span class='message'>Working with 68 genes after filtering: minc &gt; 15</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='img'><img src='degPatterns-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Use the data yourself for custom figures</span>
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>degPatterns</span>(<span class='no'>ma</span>, <span class='no'>des</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"other"</span>)</div><div class='output co'>#&gt; <span class='message'>Working with 100 genes.</span></div><div class='output co'>#&gt; <span class='message'>Working with 90 genes after filtering: minc &gt; 15</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "merge"</span></div><div class='img'><img src='degPatterns-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Use the data yourself for custom figures</span>
  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='st'>"normalized"</span>]],
         <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='no'>group</span>, <span class='no'>value</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>other</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>other</span>)) +
   <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_boxplot'>geom_boxplot</a></span>() +

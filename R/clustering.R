@@ -654,10 +654,14 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
     ma[keep,]
 }
 
-#' Make groups of genes using expression profile. Note that this function
-#' doesn't calculate significant difference between groups, so the
+#' Make groups of genes using expression profile.
+#' 
+#'  
+#' Note that this function doesn't calculate significant
+#' difference between groups, so the
 #' matrix used as input should be already filtered to contain only
-#' genes that are significantly different.
+#' genes that are significantly different or the most interesting genes
+#' to study.
 #'
 #' @aliases degPatterns
 #' @param ma  log2 normalized count matrix
@@ -694,9 +698,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'    with multiple time points**.
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
-#' @details It would be used [cluster::diana()] function
-#' to detect a value to cut the expression based clustering
-#' at certain height or [ConsensusClusterPlus].
+#' @details 
 #' It can work with one or more groups with 2 or
 #' more several time points. 
 #' Before calculating the genes similarity among samples,
@@ -709,6 +711,8 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' After that, [cluster::diana()] is used for the 
 #' clustering of gene-gene distance matrix and cut of the tree using
 #' the divisive coefficient of the clustering, giving as well by diana.
+#' Alernatively, if `consensusCluster` is on, it would used 
+#' [ConsensusClusterPlus] to cut the tree in stable clusters.
 #' Finally, for each group of genes, only the ones that have genes
 #' higher than `minc` parameter will be added to the figure.
 #' The y-axis in the figure is the results of applying `scale()` 

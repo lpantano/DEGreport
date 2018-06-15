@@ -142,16 +142,8 @@ multi-levels categorical variables.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>humanGender</span>)
 <span class='fu'>library</span>(<span class='no'>DESeq2</span>)
-<span class='fu'>library</span>(<span class='no'>ComplexHeatmap</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: grid</span></div><div class='output co'>#&gt; <span class='message'>========================================</span>
-#&gt; <span class='message'>ComplexHeatmap version 1.17.1</span>
-#&gt; <span class='message'>Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/</span>
-#&gt; <span class='message'>Github page: https://github.com/jokergoo/ComplexHeatmap</span>
-#&gt; <span class='message'>Documentation: http://bioconductor.org/packages/ComplexHeatmap/</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>If you use it in published research, please cite:</span>
-#&gt; <span class='message'>Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional </span>
-#&gt; <span class='message'>  genomic data. Bioinformatics 2016.</span>
-#&gt; <span class='message'>========================================</span></div><div class='input'><span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
+<span class='fu'>library</span>(<span class='no'>ComplexHeatmap</span>)
+<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>idx</span>],
   <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
 <span class='no'>th</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/ComplexHeatmap/topics/HeatmapAnnotation'>HeatmapAnnotation</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>dse</span>),

@@ -2,10 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{degPatterns}
 \alias{degPatterns}
-\title{Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
-matrix used as input should be already filtered to contain only
-genes that are significantly different.}
+\title{Make groups of genes using expression profile.}
 \usage{
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
   col = NULL, consensusCluster = FALSE, reduce = FALSE, cutoff = 0.7,
@@ -79,15 +76,13 @@ with the metadata information attached.
 }
 }
 \description{
-Make groups of genes using expression profile. Note that this function
-doesn't calculate significant difference between groups, so the
+Note that this function doesn't calculate significant
+difference between groups, so the
 matrix used as input should be already filtered to contain only
-genes that are significantly different.
+genes that are significantly different or the most interesting genes
+to study.
 }
 \details{
-It would be used \code{\link[cluster:diana]{cluster::diana()}} function
-to detect a value to cut the expression based clustering
-at certain height or \link{ConsensusClusterPlus}.
 It can work with one or more groups with 2 or
 more several time points.
 Before calculating the genes similarity among samples,
@@ -100,6 +95,8 @@ method. A distance matrix is created from those vsalues.
 After that, \code{\link[cluster:diana]{cluster::diana()}} is used for the
 clustering of gene-gene distance matrix and cut of the tree using
 the divisive coefficient of the clustering, giving as well by diana.
+Alernatively, if \code{consensusCluster} is on, it would used
+\link{ConsensusClusterPlus} to cut the tree in stable clusters.
 Finally, for each group of genes, only the ones that have genes
 higher than \code{minc} parameter will be added to the figure.
 The y-axis in the figure is the results of applying \code{scale()}

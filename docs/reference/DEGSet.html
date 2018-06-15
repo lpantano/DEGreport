@@ -164,36 +164,8 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DESeq2</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: parallel</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘BiocGenerics’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:parallel’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
-#&gt; <span class='message'>    clusterExport, clusterMap, parApply, parCapply, parLapply,</span>
-#&gt; <span class='message'>    parLapplyLB, parRapply, parSapply, parSapplyLB</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    IQR, mad, sd, var, xtabs</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,</span>
-#&gt; <span class='message'>    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,</span>
-#&gt; <span class='message'>    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,</span>
-#&gt; <span class='message'>    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span>
-#&gt; <span class='message'>    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,</span>
-#&gt; <span class='message'>    table, tapply, union, unique, unsplit, which, which.max, which.min</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘S4Vectors’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    expand.grid</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: IRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomeInfoDb</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biobase</span></div><div class='output co'>#&gt; <span class='message'>Welcome to Bioconductor</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    Vignettes contain introductory material; view with</span>
-#&gt; <span class='message'>    'browseVignettes()'. To cite Bioconductor, see</span>
-#&gt; <span class='message'>    'citation("Biobase")', and for packages 'citation("pkgname")'.</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: DelayedArray</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: matrixStats</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘matrixStats’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    anyMissing, rowMedians</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘DelayedArray’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:matrixStats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    apply</span></div><div class='input'><span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DESeq2</span>)
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]] <span class='kw'>&lt;-</span> <span class='fu'>sample</span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"condition"</span>]], <span class='fl'>12</span>)
 <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
