@@ -6,7 +6,7 @@
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, minPC = 5,
   correlation = "kendall", addCovDen = TRUE, legacy = FALSE,
-  plot = TRUE)
+  smart = TRUE, plot = TRUE)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -32,6 +32,10 @@ It will show \code{\link[=degCorCov]{degCorCov()}} dendograme on top of the colu
 the heatmap.}
 
 \item{legacy}{boolean. Whether to plot the legacy version.}
+
+\item{smart}{boolean. Whether to avoid normalization of the
+numeric covariates when calculating effect size. This is not
+used if \code{legacy = TRUE}. See @details for more information.}
 
 \item{plot}{Whether to plot or not the correlation matrix.}
 }
@@ -68,12 +72,15 @@ where the range is very small (like a % of mapped reads that
 varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
 The highest value to have is 5 size.
 To get to this value, each covariate is normalized using this
-equation: 1 - min(v/max(v)),
+equation: \code{1 - min(v/max(v))},
 and the minimum and maximum values are set to
 0.01 and 1 respectively. 0.5 would mean there is at least
 50% of difference between the minimum value and the maximum value.
 Categorical variables are plot using the maximum size always, since
-it is not possible to estimate the variability.
+it is not possible to estimate the variability. By default, it
+won't do \code{v/max(v)} if the values are already between 0-1 or
+0-100, trying to avoid rates and percentage values.
+If you want to ignore the effect size, use \code{legacy = TRUE}.
 }
 \examples{
 data(humanGender)

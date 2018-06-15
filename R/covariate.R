@@ -106,6 +106,42 @@
     plist
 }
 
+.numeric_effect_size <- function(covar_numeric, smart = TRUE){
+    .smart <- function(v) {
+        if (min(v) >= 0 & max(v)<=1)
+            return(max(v)-min(v))
+        if (min(v) >= 0 & max(v)<=100)
+            return(max(v)-min(v))
+        1 - min(v/max(v))
+    }
+    apply(covar_numeric,
+          2, function(v){
+              if (smart)
+                  return(.smart(v))
+              max(v)-min(v)
+          }
+    )
+}
+
+.effect_size <- function(ma, covar_numeric, covar_factors,
+                         smart = TRUE){
+    ma_sd <- bind_rows(
+        data.frame(covar = colnames(covar_numeric),
+                   effect_size = .numeric_effect_size(covar_numeric,
+                                                      smart),
+                   stringsAsFactors = FALSE),
+        data.frame(covar = colnames(covar_factors),
+                   effect_size = 1,
+                   stringsAsFactors = FALSE)
+    )
+    ma <- left_join(ma, ma_sd, by = "covar")
+    ma[["effect_size"]][ma[["effect_size"]] < 0.01] <- 0.01
+    ma[["effect_size"]][ma[["effect_size"]] > 1] <- 1
+    ma[["type_variable"]] <- "categorical"
+    ma[["type_variable"]][ma[["covar"]]  %in% colnames(covar_numeric)] <- "numeric"
+    ma
+}
+
 #' Find correlation between pcs and covariates
 #'
 #' This function will calculate the pcs using prcomp function,
@@ -134,6 +170,9 @@
 #'   It will show [degCorCov()] dendograme on top of the columns of
 #'   the heatmap.
 #' @param legacy boolean. Whether to plot the legacy version.
+#' @param smart boolean. Whether to avoid normalization of the
+#'   numeric covariates when calculating effect size. This is not
+#'   used if `legacy = TRUE`. See @details for more information.
 #' @param plot Whether to plot or not the correlation matrix.
 #' @details This method is adapeted from Daily et al 2017 article.
 #'   Principal components from PCA analysis are correlated with 
@@ -147,12 +186,15 @@
 #'   varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
 #'   The highest value to have is 5 size.
 #'   To get to this value, each covariate is normalized using this 
-#'   equation: 1 - min(v/max(v)),
+#'   equation: `1 - min(v/max(v))`,
 #'   and the minimum and maximum values are set to
 #'   0.01 and 1 respectively. 0.5 would mean there is at least
 #'   50% of difference between the minimum value and the maximum value.
 #'   Categorical variables are plot using the maximum size always, since
-#'   it is not possible to estimate the variability.
+#'   it is not possible to estimate the variability. By default, it 
+#'   won't do `v/max(v)` if the values are already between 0-1 or
+#'   0-100, trying to avoid rates and percentage values.
+#'   If you want to ignore the effect size, use `legacy = TRUE`.
 #'   
 #' @references 
 #' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
@@ -185,6 +227,7 @@ degCovariates <- function(counts, metadata,
                           correlation = "kendall",
                           addCovDen = TRUE,
                           legacy = FALSE,
+                          smart = TRUE,
                           plot = TRUE) {
     title <- paste(ifelse(scale, "s", "un-s"), "caled ",
                    " data in pca;\npve >= ",
@@ -262,21 +305,7 @@ degCovariates <- function(counts, metadata,
     
     ma[["covar"]] = as.character(ma[["covar"]])
 
-    ma_sd <- bind_rows(
-        data.frame(covar = colnames(covar_numeric),
-                   effect_size = apply(covar_numeric,
-                                       2,
-                                       function(v) {
-                                           1 - min(v/max(v))
-                                       }),
-                   stringsAsFactors = FALSE),
-        data.frame(covar = colnames(covar_factors),
-                   effect_size = 1,
-                   stringsAsFactors = FALSE),
-    )
-    ma <- left_join(ma, ma_sd, by = "covar")
-    ma[["effect_size"]][ma[["effect_size"]] < 0.01] <- 0.01
-    ma[["effect_size"]][ma[["effect_size"]] > 1] <- 1
+    ma <- .effect_size(ma, covar_numeric, covar_factors)
     #  browser()
     if (legacy){
         if (addCovDen){
@@ -322,8 +351,7 @@ degCovariates <- function(counts, metadata,
         
         ma[["covar"]] <- factor(ma[["covar"]],
                                 levels = hc$labels[hc$order])
-        ma[["type_variable"]] <- "categorical"
-        ma[["type_variable"]][ma[["covar"]]  %in% names(covar_class[covar_class=="numeric"])] <- "numeric"
+        
         tile = ggplot(ma, aes_(x = ~covar,y = ~compare,
                                size = ~effect_size,
                                color = ~r,
@@ -437,9 +465,10 @@ degCorCov <- function(metadata, fdr=0.05, ...){
         column_to_rownames("covar")
     corMat[fdrMat > fdr] <- 0
     # corMat[fdrMat > 0.05] <- NA
-    cols <- colorRampPalette(c("steelblue", "white", "orange"))(10)
     if (sum(!is.na(corMat)) > 2) {
-        p <- Heatmap(corMat, col = cols, name = "cor-value",
+        p <- Heatmap(corMat, name = "cor-value",
+                     col = colorRamp2(c(-1, 0, 1),
+                                      c("steelblue", "white", "orange")),
                      row_dend_reorder = FALSE,
                      column_dend_reorder = FALSE, ...)
         print(p)

@@ -117,7 +117,7 @@ how this is calculated.</p>
 
     <pre class="usage"><span class='fu'>degCovariates</span>(<span class='no'>counts</span>, <span class='no'>metadata</span>, <span class='kw'>fdr</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>minPC</span> <span class='kw'>=</span> <span class='fl'>5</span>,
   <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='st'>"kendall"</span>, <span class='kw'>addCovDen</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>legacy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>smart</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,6 +163,12 @@ the heatmap.</p></td>
       <td><p>boolean. Whether to plot the legacy version.</p></td>
     </tr>
     <tr>
+      <th>smart</th>
+      <td><p>boolean. Whether to avoid normalization of the
+numeric covariates when calculating effect size. This is not
+used if <code>legacy = TRUE</code>. See @details for more information.</p></td>
+    </tr>
+    <tr>
       <th>plot</th>
       <td><p>Whether to plot or not the correlation matrix.</p></td>
     </tr>
@@ -190,11 +196,18 @@ by default.</p>
 <p>The size of the dot, or effect size, indicates the importance of
 the covariate based on the range of the values. Covariates
 where the range is very small (like a <!-- % of mapped reads that -->
-varies between 0.001 to 0.002) will have a very small dot size.
+varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
+The highest value to have is 5 size.
 To get to this value, each covariate is normalized using this
-equation: v/max(v). Then the standard deviation is calculated,
+equation: <code>1 - min(v/max(v))</code>,
 and the minimum and maximum values are set to
-1 and 3 respectively.</p>
+0.01 and 1 respectively. 0.5 would mean there is at least
+50<!-- % of difference between the minimum value and the maximum value. -->
+Categorical variables are plot using the maximum size always, since
+it is not possible to estimate the variability. By default, it
+won't do <code>v/max(v)</code> if the values are already between 0-1 or
+0-100, trying to avoid rates and percentage values.
+If you want to ignore the effect size, use <code>legacy = TRUE</code>.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

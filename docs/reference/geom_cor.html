@@ -107,8 +107,8 @@ family font, size and colour can be used to change the format.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>geom_cor</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>geom_cor</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"spearman"</span>, <span class='kw'>xpos</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ypos</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +139,14 @@ will be used as the layer data.</p></td>
 passed to <code>cor.test()</code>. (Spearman, Pearson, Kendall).</p></td>
     </tr>
     <tr>
+      <th>xpos</th>
+      <td><p>Locate text at that position on the x axis.</p></td>
+    </tr>
+    <tr>
+      <th>ypos</th>
+      <td><p>Locate text at that position on the y axis.</p></td>
+    </tr>
+    <tr>
       <th>inherit.aes</th>
       <td><p>If <code>FALSE</code>, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
@@ -151,14 +159,6 @@ the default plot specification, e.g. <code>borders()</code>.</p></td>
 often aesthetics, used to set an aesthetic to a fixed value, like
 <code>color = "red"</code> or <code>size = 3</code>. They may also be parameters
 to the paired geom/stat.</p></td>
-    </tr>
-    <tr>
-      <th>ypos</th>
-      <td><p>Locate text at that position on the y axis.</p></td>
-    </tr>
-    <tr>
-      <th>xpos</th>
-      <td><p>Locate text at that position on the x axis.</p></td>
     </tr>
     </table>
     

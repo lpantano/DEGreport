@@ -27,7 +27,7 @@
                     method = "lm", formula = y~poly(x, splan)) +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-        ylab("scaled expression") + xlab("") )
+        ylab("Z-score of gene abundance") + xlab("") )
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups)) == 1) {
@@ -541,6 +541,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                    name = NULL, shape = NULL,
                    data = FALSE){
     pc <- .pca_loadings(counts)
+    # error if pc1/2 are not in columns of pc
     idx1 <- which(names(pc[["percentVar"]]) == pc1)
     idx2 <- which(names(pc[["percentVar"]]) == pc2)
     comps <- data.frame(pc[["x"]])
@@ -697,7 +698,25 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' to detect a value to cut the expression based clustering
 #' at certain height or [ConsensusClusterPlus].
 #' It can work with one or more groups with 2 or
-#' more several time points. The different patterns can be merged
+#' more several time points. 
+#' Before calculating the genes similarity among samples,
+#' all samples inside the same time point (`time` parameter) and
+#' group (`col` paramater) are collapsed together, and the `mean`
+#' value is the representation of the group for the gene abundance.
+#' Then, all pair-wise gene expression are calculated using
+#' `cor.test`  R function using kendall as the statistical
+#' method. A distance matrix is created from those vsalues.
+#' After that, [cluster::diana()] is used for the 
+#' clustering of gene-gene distance matrix and cut of the tree using
+#' the divisive coefficient of the clustering, giving as well by diana.
+#' Finally, for each group of genes, only the ones that have genes
+#' higher than `minc` parameter will be added to the figure.
+#' The y-axis in the figure is the results of applying `scale()` 
+#' R function, what is similar to the meaning of creating a 
+#' `Z-score` where values are centered to the `mean`  and
+#' scaled to the `standard desviation`.
+#' 
+#' The different patterns can be merged
 #' to get similar ones into only one pattern. The expression
 #' correlation of the patterns will be used to decide whether
 #' some need to be merged or not.

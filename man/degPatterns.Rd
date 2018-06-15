@@ -89,7 +89,25 @@ It would be used \code{\link[cluster:diana]{cluster::diana()}} function
 to detect a value to cut the expression based clustering
 at certain height or \link{ConsensusClusterPlus}.
 It can work with one or more groups with 2 or
-more several time points. The different patterns can be merged
+more several time points.
+Before calculating the genes similarity among samples,
+all samples inside the same time point (\code{time} parameter) and
+group (\code{col} paramater) are collapsed together, and the \code{mean}
+value is the representation of the group for the gene abundance.
+Then, all pair-wise gene expression are calculated using
+\code{cor.test}  R function using kendall as the statistical
+method. A distance matrix is created from those vsalues.
+After that, \code{\link[cluster:diana]{cluster::diana()}} is used for the
+clustering of gene-gene distance matrix and cut of the tree using
+the divisive coefficient of the clustering, giving as well by diana.
+Finally, for each group of genes, only the ones that have genes
+higher than \code{minc} parameter will be added to the figure.
+The y-axis in the figure is the results of applying \code{scale()}
+R function, what is similar to the meaning of creating a
+\code{Z-score} where values are centered to the \code{mean}  and
+scaled to the \code{standard desviation}.
+
+The different patterns can be merged
 to get similar ones into only one pattern. The expression
 correlation of the patterns will be used to decide whether
 some need to be merged or not.
