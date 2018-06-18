@@ -576,8 +576,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                     "% variance")) +
         ylab(paste0(pc2, ": ",
                     round(pc[["percentVar"]][idx2] * 100),
-                    "% variance")) +
-        theme_minimal()
+                    "% variance"))
     
     if(data)
         return(list(pca = pc, plot = p))
