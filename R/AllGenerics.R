@@ -15,10 +15,5 @@ setGeneric("significants", function(object, ...)
 
 #' @rdname DEGSet
 #' @export
-setGeneric("DEGSetFromEdgeR", function(object, ...)
-    standardGeneric("DEGSetFromEdgeR"))
-
-#' @rdname DEGSet
-#' @export
-setGeneric("DEGSetFromDESeq2", function(object, ...)
-    standardGeneric("DEGSetFromDESeq2"))
+setGeneric("as.DEGSet", function(object, ...)
+    standardGeneric("as.DEGSet"))

@@ -233,8 +233,8 @@ setMethod("significants", signature("list"),
 
 #' @rdname DEGSet
 #' @export
-setMethod("DEGSetFromEdgeR", signature("TopTags"),
-          function(object, default = "shrunken", extras = NULL){
+setMethod("as.DEGSet", signature("TopTags"),
+          function(object, default = "raw", extras = NULL){
     name <- paste("contrast_", object[["comparison"]], collapse = "-")
     df <- as.data.frame(object) %>% set_colnames(c("log2FoldChange",
                                                 "baseMean",
@@ -252,6 +252,11 @@ setMethod("DEGSetFromEdgeR", signature("TopTags"),
     })
     names(news) <- names(extras)
     l <- c(list(raw = df), news)
+    if (!(default  %in% names(l))){
+        message(default, " not found in names of list:", paste(names(l)))
+        message("Set it up to raw")
+        default == "raw"
+    }
     dge <- new("DEGSet", l,
                default = default)
     attr(dge, "comparison") <- name
@@ -260,7 +265,45 @@ setMethod("DEGSetFromEdgeR", signature("TopTags"),
 
 #' @rdname DEGSet
 #' @export
-setMethod("DEGSetFromDESeq2", signature("DESeqResults"),
+setMethod("as.DEGSet", signature("data.frame"),
+          function(object, contrast, default = "raw", extras = NULL){
+              stopifnot(!is.null(contrast))
+              cols <- c("logFC", "AveExpr", "P.Value", "adj.P.Val")
+              stopifnot(cols  %in% names(object))
+              name <- contrast
+              df <- as.data.frame(object)[,cols] %>%
+                  set_colnames(c("log2FoldChange",
+                                 "baseMean",
+                                 "pvalue",
+                                 "padj")) %>%
+                  DataFrame
+              news <- lapply(extras, function(e){
+                  if (class(e) == "data.frame"){
+                      stopifnot(cols  %in% names(object))
+                      return(as.data.frame(e)[,cols] %>% 
+                                 set_colnames(c("log2FoldChange",
+                                                "baseMean",
+                                                "pvalue",
+                                                "padj")) %>%
+                                 DataFrame)
+                  }
+              })
+              names(news) <- names(extras)
+              l <- c(list(raw = df), news)
+              if (!(default  %in% names(l))){
+                  message(default, " not found in names of list:", paste(names(l)))
+                  message("Set it up to raw")
+                  default == "raw"
+              }
+              dge <- new("DEGSet", l,
+                         default = "raw")
+              attr(dge, "comparison") <- name
+              dge
+          })
+
+#' @rdname DEGSet
+#' @export
+setMethod("as.DEGSet", signature("DESeqResults"),
           function(object, default = "shrunken", extras = NULL){
     name <- slot(slot(object, "elementMetadata"), "listData")[[2L]][2L]
     name <- strsplit(name, ":")[[1L]][2L] %>%
@@ -273,9 +316,15 @@ setMethod("DEGSetFromDESeq2", signature("DESeqResults"),
     })
     names(news) <- names(extras)
     l <- c(list(raw = df), news)
+    if (!(default  %in% names(l))){
+        message(default, " not found in names of list:", paste(names(l)))
+        message("Set it up to raw")
+        default == "raw"
+    }
     dge <- new("DEGSet", l,
                default = default)
     attr(dge, "comparison") <- name
+    .validate(dge)
     dge
 })
 
@@ -293,49 +342,3 @@ setMethod("DEGSetFromDESeq2", signature("DESeqResults"),
 #                 names(dgeList) <- names(list)
 #               dgeList
 # })
-
-
-#' MA-plot from base means and log fold changes
-#'
-#' MA-plot addaptation to show the shrinking effect.
-#'
-#' @author Victor Barrera
-#' @author Rory Kirchner
-#' @author Lorena Pantano
-#' 
-#' @param object [DEGSet] class.
-#' @param title *Optional*. Plot title.
-#' @param label_points Optionally label these particular points.
-#' @param label_column Match label_points to this column in the results.
-#' @param limit Absolute maximum to plot on the log2FoldChange.
-#' @param diff Minimum difference between logFoldChange before and
-#'   after shrinking.
-#' @param raw Whether to plot just the unshrunken log2FC.
-#' @param correlation Whether to plot the correlation of the two logFCs.
-#' @param ... Optional parameters to pass.
-#' 
-#' @docType methods
-#' @rdname plotMA
-#' @name plotMA
-#' @aliases plotMA plotMA,DEGSet-method
-#' 
-#' @return MA-plot [ggplot].
-#' @examples 
-#' library(DESeq2)
-#' dds <- makeExampleDESeqDataSet(betaSD=1)
-#' dds <- DESeq(dds)
-#' res <- degComps(dds, contrast = list("condition_B_vs_A"))
-#' plotMA(res[["condition_B_vs_A"]])
-#' @export
-setMethod("plotMA", signature(object = "DEGSet"), 
-          function(object, title = NULL,
-                   label_points = NULL,
-                   label_column = "symbol",
-                   limit = NULL,
-                   diff = 5,
-                   raw = FALSE,
-                   correlation = FALSE,
-                   ...){
-    .plotMA(object, title, label_points, label_column,
-            limit, diff, raw, correlation)
-})

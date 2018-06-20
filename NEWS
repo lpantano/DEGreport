@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.17.2
     Lorena Pantano <lorena.pantano@gmail.com>
         
+        Feature: Improve support for DEGSet conversion.
         Fix: Remove theme set up for degPCA plot.
         Feature: Make function to generate colors for metadata variables for
                  annotation column in heatmap figure.

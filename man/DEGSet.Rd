@@ -4,24 +4,24 @@
 \name{DEGSet}
 \alias{DEGSet}
 \alias{DEGSet-class}
-\alias{DEGSetFromEdgeR}
-\alias{DEGSetFromDESeq2}
-\alias{DEGSetFromEdgeR,TopTags-method}
-\alias{DEGSetFromDESeq2,DESeqResults-method}
+\alias{as.DEGSet}
+\alias{as.DEGSet,TopTags-method}
+\alias{as.DEGSet,data.frame-method}
+\alias{as.DEGSet,DESeqResults-method}
 \title{DEGSet}
 \usage{
 DEGSet(resList, default)
 
 DEGSet(resList, default)
 
-DEGSetFromEdgeR(object, ...)
+as.DEGSet(object, ...)
 
-DEGSetFromDESeq2(object, ...)
+\S4method{as.DEGSet}{TopTags}(object, default = "raw", extras = NULL)
 
-\S4method{DEGSetFromEdgeR}{TopTags}(object, default = "shrunken",
+\S4method{as.DEGSet}{data.frame}(object, contrast, default = "raw",
   extras = NULL)
 
-\S4method{DEGSetFromDESeq2}{DESeqResults}(object, default = "shrunken",
+\S4method{as.DEGSet}{DESeqResults}(object, default = "shrunken",
   extras = NULL)
 }
 \arguments{
@@ -58,6 +58,8 @@ shrunken table use \code{deg(dgs, "shrunken")} or just \code{deg(dgs)}.
 }
 \examples{
 library(DESeq2)
+library(edgeR)
+library(limma)
 dds <- makeExampleDESeqDataSet(betaSD = 1)
 colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 design(dds) <-  ~ condition + treatment
@@ -65,6 +67,15 @@ dds <- DESeq(dds)
 res <- degComps(dds, combs = c("condition"))
 deg(res[[1]])
 deg(res[[1]], tidy = "tibble")
+# From edgeR
+dge <- DGEList(counts=counts(dds), group=colData(dds)[["treatment"]])
+dge <- estimateCommonDisp(dge)
+res <- as.DEGSet(topTags(exactTest(dge)))
+# From limma
+v <- voom(counts(dds), model.matrix(~treatment, colData(dds)), plot=FALSE)
+fit <- lmFit(v)
+fit <- eBayes(fit, robust=TRUE)
+res <- as.DEGSet(topTable(fit, n = "Inf"), "A_vs_B")
 }
 \author{
 Lorena Pantano

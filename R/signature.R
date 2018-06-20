@@ -1,10 +1,10 @@
-.get_counts <- function(c){
+.get_counts <- function(c, slot){
     if (class(c) == "bcbioRNASeq")
         return(counts(c, "rlog"))
     if (class(c) == "DESeqDataSet")
         return(counts(c, normalized = TRUE))
     if (class(c) == "SummarizedExperiment")
-        return(assay(c))
+        return(assays(c)[[slot]])
     if (class(c) == "data.frame")
         return(c)
     if (class(c) == "matrix")
@@ -34,14 +34,15 @@
 #' @param metadata data frame with sample information. Rownames
 #'   should match \code{ma} column names
 #'   row number should be the same length than p-values vector.
+#' @param slot slotName in the case of SummarizedExperiment objects.
 #' @return ggplot plot.
 #' @examples
 #' data(humanGender)
 #' data(geneInfo)
 #' degSignature(humanGender, geneInfo, group = "group")
 #' @export
-degSignature <- function(counts, signature, group = NULL, metadata = NULL){
-    c <- .get_counts(counts)
+degSignature <- function(counts, signature, group = NULL, metadata = NULL, slot = 1){
+    c <- .get_counts(counts, slot)
     meta <- .get_meta(counts)
     if (is.null(meta))
         meta <- metadata
@@ -52,9 +53,9 @@ degSignature <- function(counts, signature, group = NULL, metadata = NULL){
     c[common, ] %>%  melt() %>%  data.frame(., stringsAsFactors = FALSE) %>% 
         set_colnames(c("gene", "sample", "expression")) %>% 
         mutate_if(is.factor, as.character) %>% 
-        left_join(meta %>% rownames_to_column("sample") %>% 
+        left_join(meta %>% rownames_to_column("degsample") %>% 
                       mutate_if(is.factor, as.character),
-                  by = "sample") %>%
+                  by = c("sample" = "degsample")) %>%
         left_join(signature %>% 
                       mutate_if(is.factor, as.character), by = "gene") %>% 
         group_by(!!sym(group), signature, sample) %>% 

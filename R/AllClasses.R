@@ -30,6 +30,8 @@
 #' @author Lorena Pantano
 #' @examples
 #' library(DESeq2)
+#' library(edgeR)
+#' library(limma)
 #' dds <- makeExampleDESeqDataSet(betaSD = 1)
 #' colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 #' design(dds) <-  ~ condition + treatment
@@ -37,6 +39,15 @@
 #' res <- degComps(dds, combs = c("condition"))
 #' deg(res[[1]])
 #' deg(res[[1]], tidy = "tibble")
+#' # From edgeR
+#' dge <- DGEList(counts=counts(dds), group=colData(dds)[["treatment"]])
+#' dge <- estimateCommonDisp(dge)
+#' res <- as.DEGSet(topTags(exactTest(dge)))
+#' # From limma
+#' v <- voom(counts(dds), model.matrix(~treatment, colData(dds)), plot=FALSE)
+#' fit <- lmFit(v)
+#' fit <- eBayes(fit, robust=TRUE)
+#' res <- as.DEGSet(topTable(fit, n = "Inf"), "A_vs_B")
 #' @export
 DEGSet <- setClass("DEGSet",
                           contains = "list",
@@ -45,11 +56,14 @@ DEGSet <- setClass("DEGSet",
 setValidity("DEGSet", function(object) {
     stopifnot(!is.null(names(object)))
     stopifnot(degDefault(object) %in% names(object))
-    if (sum(c("raw", "shrunken") %in% names(object)) < 2)
-        message("Some functions won't work without
-                 'raw' and 'shrunken' elements in the object.")
     TRUE
 })
+
+.validate <- function(object){
+    if (sum(c("raw", "shrunken") %in% names(object)) < 2)
+        message("Some functions won't work without
+                'raw' and 'shrunken' elements in the object.")
+}
 
 #' @rdname DEGSet
 #' @export

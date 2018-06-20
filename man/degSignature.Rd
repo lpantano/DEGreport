@@ -4,7 +4,7 @@
 \alias{degSignature}
 \title{Plot gene signature for each group and signature}
 \usage{
-degSignature(counts, signature, group = NULL, metadata = NULL)
+degSignature(counts, signature, group = NULL, metadata = NULL, slot = 1)
 }
 \arguments{
 \item{counts}{expression data. It accepts bcbioRNASeq, DESeqDataSet and
@@ -21,6 +21,8 @@ groups.}
 \item{metadata}{data frame with sample information. Rownames
 should match \code{ma} column names
 row number should be the same length than p-values vector.}
+
+\item{slot}{slotName in the case of SummarizedExperiment objects.}
 }
 \value{
 ggplot plot.

@@ -178,12 +178,14 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 }
 
 .plot_raw <- function(res_all){
-    ggplot(res_all, aes_string("baseMean_unshrunken",
-                               "log2FoldChange_unshrunken")) +
+    res_all[["sign"]] <- res_all[["padj"]] < 0.05 * 1
+    res_all <- as.data.frame(res_all)
+    ggplot(res_all, aes_string("baseMean",
+                               "log2FoldChange")) +
         geom_point(size = 0.8, color = "black") +
         geom_point(data = res_all[res_all[["sign"]],], 
-                   aes_string("baseMean_unshrunken",
-                              "log2FoldChange_unshrunken"),
+                   aes_string("baseMean",
+                              "log2FoldChange"),
                    color = "red", size = 0.9) + 
         scale_x_log10(
             breaks = trans_breaks("log10", function(x) 10L ^ x),
@@ -229,8 +231,38 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
     res_all
 }
 
-# plotMA for DEGSet object
-.plotMA <- function(results, 
+#' MA-plot from base means and log fold changes
+#'
+#' MA-plot addaptation to show the shrinking effect.
+#'
+#' @author Victor Barrera
+#' @author Rory Kirchner
+#' @author Lorena Pantano
+#' 
+#' @param object [DEGSet] class.
+#' @param title *Optional*. Plot title.
+#' @param label_points Optionally label these particular points.
+#' @param label_column Match label_points to this column in the results.
+#' @param limit Absolute maximum to plot on the log2FoldChange.
+#' @param diff Minimum difference between logFoldChange before and
+#'   after shrinking.
+#' @param raw Whether to plot just the unshrunken log2FC.
+#' @param correlation Whether to plot the correlation of the two logFCs.
+#' @param ... Optional parameters to pass.
+#' 
+#' @docType methods
+#' @rdname degMA
+#' @name degMA
+#' 
+#' @return MA-plot [ggplot].
+#' @examples 
+#' library(DESeq2)
+#' dds <- makeExampleDESeqDataSet(betaSD=1)
+#' dds <- DESeq(dds)
+#' res <- degComps(dds, contrast = list("condition_B_vs_A"))
+#' plotMA(res[["condition_B_vs_A"]])
+#' @export
+degMA <- function(results, 
                     title = NULL,
                     label_points = NULL,
                     label_column = "symbol",
@@ -238,28 +270,30 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
                     diff = 5,
                     raw = FALSE,
                     correlation = FALSE) {
-    
+    stopifnot(class(results) == "DEGSet")
     if (raw & correlation)
         stop("Use one or another. Incompatible parameters.")
-    
-    res_all <- .merge_results(results, raw)    
-    toplot <- (abs(res_all[["log2FoldChange_shrunken"]] - res_all[["log2FoldChange_unshrunken"]])) >= diff
-    
-    if (!is.null(limit)){
+    if (length(names(results) == 1))
+        raw = TRUE
+    if (raw){
+        p <- .plot_raw(deg(results))
+    }else{
+        res_all <- .merge_results(results, raw)    
+        toplot <- (abs(res_all[["log2FoldChange_shrunken"]] - res_all[["log2FoldChange_unshrunken"]])) >= diff
+        
+        if (!is.null(limit)){
             res_all[["log2FoldChange_shrunken"]][res_all[["log2FoldChange_shrunken"]] < -1 * limit] <-  -1 * limit
             res_all[["log2FoldChange_shrunken"]][res_all[["log2FoldChange_shrunken"]] > 1 * limit] <-  1 * limit
             res_all[["log2FoldChange_unshrunken"]][res_all[["log2FoldChange_unshrunken"]] < -1 * limit] <- -1 * limit
             res_all[["log2FoldChange_unshrunken"]][res_all[["log2FoldChange_unshrunken"]] > 1 * limit] <- 1 * limit
+        }
+        
+        res_all_subset <- res_all[toplot,]
+        
+        if (correlation)
+            p <- .plot_correlation(res_all)
+        else p <- .plot_shrunken(res_all, res_all_subset)
     }
-    
-    res_all_subset <- res_all[toplot,]
-    
-    if (correlation)
-        p <- .plot_correlation(res_all)
-    else if (raw)
-        p <- .plot_raw(res_all)
-    else p <- .plot_shrunken(res_all, res_all_subset)
-    
     if (!is.null(title)) {
         p <- p + ggtitle(title)
     }
