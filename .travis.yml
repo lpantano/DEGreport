@@ -1,11 +1,12 @@
 language: r
-sudo: true
+sudo: required
 dist: trusty
 cache: packages
 warnings_are_errors: false
 addons:
-  packages:
-    - ghostscript
+  apt:
+    packages:
+      - ghostscript
 r: bioc-devel
 r_packages:
   - devtools
