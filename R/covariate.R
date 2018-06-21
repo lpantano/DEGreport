@@ -125,15 +125,18 @@
 
 .effect_size <- function(ma, covar_numeric, covar_factors,
                          smart = TRUE){
-    ma_sd <- bind_rows(
-        data.frame(covar = colnames(covar_numeric),
+    ma_sd <- data.frame(covar = colnames(covar_numeric),
                    effect_size = .numeric_effect_size(covar_numeric,
                                                       smart),
-                   stringsAsFactors = FALSE),
-        data.frame(covar = colnames(covar_factors),
+                   stringsAsFactors = FALSE)
+    if (ncol(covar_factors) > 0){
+        ma_sd <- bind_rows(ma_sd,
+                           data.frame(covar = colnames(covar_factors),
                    effect_size = 1,
                    stringsAsFactors = FALSE)
-    )
+        )
+    }
+
     ma <- left_join(ma, ma_sd, by = "covar")
     ma[["effect_size"]][ma[["effect_size"]] < 0.01] <- 0.01
     ma[["effect_size"]][ma[["effect_size"]] > 1] <- 1
@@ -238,6 +241,7 @@ degCovariates <- function(counts, metadata,
     metadata <- as.data.frame(metadata)
     
     metadata <- degClean(metadata) 
+    
     covar_class <- sapply(metadata[1,], class)
 
     metadata <- metadata %>%
