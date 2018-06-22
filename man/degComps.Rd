@@ -23,7 +23,7 @@ when it comes from LRT method.}
 \item{type}{Type of shrinkage estimator. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
 
 \item{pairs}{Boolean to indicate whether create all comparisons or only
-use the coefficient already created from \code{\link[DESeq2:resultsNames]{DESeq2::resultsNames()}}.}
+use the coefficient already created from \code{DESeq2::resultsNames()}.}
 }
 \value{
 \link{DEGSet} with unSrunken and Srunken results.

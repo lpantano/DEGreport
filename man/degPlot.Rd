@@ -40,7 +40,7 @@ batch effect visualization.}
 \item{ysLab}{Character, alternative label for y-axis..}
 
 \item{color}{Color to use to plot groups. It can be one color, or a palette
-compatible with \code{\link[ggplot2:scale_color_brewer]{ggplot2::scale_color_brewer()}}.}
+compatible with \code{ggplot2::scale_color_brewer()}.}
 
 \item{groupLab}{Character, alternative label for group (default: same as group).}
 

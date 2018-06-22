@@ -80,7 +80,7 @@ degColors <- function(ann, col_fun = FALSE,
 #' @param xsLab Character, alternative label for x-axis (default: same as xs)
 #' @param ysLab Character, alternative label for y-axis..
 #' @param color Color to use to plot groups. It can be one color, or a palette
-#'   compatible with [ggplot2::scale_color_brewer()].
+#'   compatible with `ggplot2::scale_color_brewer()`.
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
 #' @return ggplot showing the expresison of the genes

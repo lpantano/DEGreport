@@ -95,7 +95,7 @@
 #'   when it comes from LRT method.
 #' @param type Type of shrinkage estimator. See [DESeq2::results()].
 #' @param pairs Boolean to indicate whether create all comparisons or only
-#'   use the coefficient already created from [DESeq2::resultsNames()].
+#'   use the coefficient already created from `DESeq2::resultsNames()`.
 #'   
 #' @author Lorena Pantano
 #'
