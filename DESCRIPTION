@@ -1,6 +1,6 @@
 Package: DEGreport
 Version: 1.17.2
-Date: 2017-06-19
+Date: 2017-06-22
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -14,6 +14,7 @@ BugReports: https://github.com/lpantano/DEGreport/issues
 Suggests:
     BiocStyle,
     AnnotationDbi,
+    limma,
     pheatmap,
     knitr,
     rmarkdown,

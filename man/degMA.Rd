@@ -9,6 +9,8 @@ degMA(results, title = NULL, label_points = NULL, label_column = "symbol",
   limit = NULL, diff = 5, raw = FALSE, correlation = FALSE)
 }
 \arguments{
+\item{results}{\link{DEGSet} class.}
+
 \item{title}{\emph{Optional}. Plot title.}
 
 \item{label_points}{Optionally label these particular points.}
@@ -23,10 +25,6 @@ after shrinking.}
 \item{raw}{Whether to plot just the unshrunken log2FC.}
 
 \item{correlation}{Whether to plot the correlation of the two logFCs.}
-
-\item{object}{\link{DEGSet} class.}
-
-\item{...}{Optional parameters to pass.}
 }
 \value{
 MA-plot \link{ggplot}.
@@ -39,7 +37,7 @@ library(DESeq2)
 dds <- makeExampleDESeqDataSet(betaSD=1)
 dds <- DESeq(dds)
 res <- degComps(dds, contrast = list("condition_B_vs_A"))
-plotMA(res[["condition_B_vs_A"]])
+degMA(res[["condition_B_vs_A"]])
 }
 \author{
 Victor Barrera

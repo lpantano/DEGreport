@@ -31,11 +31,13 @@ should have names.}
 
 \item{default}{The name of the element to use by default.}
 
-\item{object}{Different objects to be transformed to DEGSet.}
+\item{object}{Different objects to be transformed to DEGSet when using \code{as.DEGSet}.}
 
 \item{...}{Optional parameters of the generic.}
 
-\item{extras}{List of extra tables related to the same comparison.}
+\item{extras}{List of extra tables related to the same comparison when using \code{as.DEGSet}.}
+
+\item{contrast}{To name the comparison when using \code{as.DEGSet}.}
 }
 \description{
 S4 class to store data from differentially expression analysis.

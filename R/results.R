@@ -239,7 +239,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 #' @author Rory Kirchner
 #' @author Lorena Pantano
 #' 
-#' @param object [DEGSet] class.
+#' @param results [DEGSet] class.
 #' @param title *Optional*. Plot title.
 #' @param label_points Optionally label these particular points.
 #' @param label_column Match label_points to this column in the results.
@@ -248,7 +248,6 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 #'   after shrinking.
 #' @param raw Whether to plot just the unshrunken log2FC.
 #' @param correlation Whether to plot the correlation of the two logFCs.
-#' @param ... Optional parameters to pass.
 #' 
 #' @docType methods
 #' @rdname degMA
@@ -260,7 +259,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 #' dds <- makeExampleDESeqDataSet(betaSD=1)
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("condition_B_vs_A"))
-#' plotMA(res[["condition_B_vs_A"]])
+#' degMA(res[["condition_B_vs_A"]])
 #' @export
 degMA <- function(results, 
                     title = NULL,

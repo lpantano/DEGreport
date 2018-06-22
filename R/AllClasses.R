@@ -23,8 +23,9 @@
 #'   pvalues and padj as column. Rownames should be feature names. Elements
 #'   should have names.
 #' @param default The name of the element to use by default.
-#' @param extras List of extra tables related to the same comparison.
-#' @param object Different objects to be transformed to DEGSet.
+#' @param extras List of extra tables related to the same comparison when using `as.DEGSet`.
+#' @param object Different objects to be transformed to DEGSet when using `as.DEGSet`.
+#' @param contrast To name the comparison when using `as.DEGSet`.
 #' @param ... Optional parameters of the generic.
 #' @aliases DEGSet-class DEGSet
 #' @author Lorena Pantano

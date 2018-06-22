@@ -199,7 +199,7 @@ Since log2FoldChange are shrunken, the method for DEGSet class now can
 plot these changes as follow:
 
 ```{r plotMA}
-plotMA(degs[[1]], diff = 2, limit = 3)
+degMA(degs[[1]], diff = 2, limit = 3)
 ```
 
 
@@ -208,14 +208,14 @@ The blue arrows indicate how foldchange is affected by this new feature.
 As well, it can plot the original MA plot:
 
 ```{r plotMA-raw}
-plotMA(degs[[1]], diff = 2, limit = 3, raw = TRUE)
+degMA(degs[[1]], diff = 2, limit = 3, raw = TRUE)
 ```
 
 
 or the correlation between the original log2FoldChange and the new ones:
 
 ```{r plotMA-cor}
-plotMA(degs[[1]], limit = 3, correlation = TRUE)
+degMA(degs[[1]], limit = 3, correlation = TRUE)
 ```
 
 ### Volcano plots

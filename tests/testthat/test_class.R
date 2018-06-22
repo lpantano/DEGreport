@@ -19,18 +19,12 @@ res <- degComps(dds, combs = c("condition"))
 
 test_that("DEGSet",{
 
-    expect_message(DEGSetFromDESeq2(raw, default = "raw"),
-                "shrunken")
-    expect_type(DEGSetFromDESeq2(raw, extras = list(shrunken = raw)), "list")
-    expect_error(DEGSetFromDESeq2(raw, extras = list(shrunken = rawR)),
+    expect_type(as.DEGSet(raw, extras = list(shrunken = raw)), "list")
+    expect_error(as.DEGSet(raw, extras = list(shrunken = rawR)),
                  "DESeqResults")
     
-    expect_message(DEGSetFromEdgeR(rawR, default = "raw"),
-                "shrunken")
-    expect_type(DEGSetFromEdgeR(rawR,  extras = list(shrunken = rawR)), "list")
-    expect_error(DEGSetFromEdgeR(rawR,  extras = list(shrunken = raw)), "TopTags")
-    
-    expect_message(DEGSet(list(raw = raw), "raw"))
+    expect_type(as.DEGSet(rawR,  extras = list(shrunken = rawR)), "list")
+    expect_error(as.DEGSet(rawR,  extras = list(shrunken = raw)), "TopTags")
     
     expect_true(abs(deg(res[[1]], "raw")[["log2FoldChange"]][[1]]) >
                     abs(deg(res[[1]], "shrunken")[["log2FoldChange"]][[1]]))
@@ -45,11 +39,11 @@ test_that("DEGSet",{
     expect_type(significants(res), "character")
     expect_true(significants(res, full = TRUE) %>% is_tibble)
     
-    expect_true(plotMA(res[[1]], diff = 4) %>%
+    expect_true(degMA(res[[1]], diff = 4) %>%
                     class %>% .[[2]] == "ggplot")
-    expect_true(plotMA(res[[1]], diff = 4, raw = TRUE) %>%
+    expect_true(degMA(res[[1]], diff = 4, raw = TRUE) %>%
                     class %>% .[[2]] == "ggplot")
-    expect_true(plotMA(res[[1]], diff = 4, correaltion = TRUE) %>%
+    expect_true(degMA(res[[1]], diff = 4, correlation = TRUE) %>%
                     class %>% .[[2]] == "ggplot")
-    expect_error(plotMA(res[[1]], diff = 4, raw = TRUE, correlation = TRUE))
+    expect_error(degMA(res[[1]], diff = 4, raw = TRUE, correlation = TRUE))
 })
