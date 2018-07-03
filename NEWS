@@ -1,6 +1,10 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.17.2
+    
+    Fix: Support DESeqResults for list of DEGSets.
+
+CHANGES IN DEGreport 1.17.2
     Lorena Pantano <lorena.pantano@gmail.com>
         
         Fix: degCovariates works with metadata only with numerical variables

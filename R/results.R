@@ -323,6 +323,7 @@ degMA <- function(results,
         return(capture.output(summary(deg(object), alpha = alpha)))
     stop("No class supported.")
 }
+
 #' Print Summary Statistics of Alpha Level Cutoffs
 #'
 #' @rdname degSummary

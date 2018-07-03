@@ -156,7 +156,7 @@ setMethod("significants", signature("TopTags"),
           })
 
 .supported <- function(x){
-    return(class(x) %in% c("DEGSet"))
+    return(class(x) %in% c("DEGSet", "DESeqResults"))
 }
 
 .get_contrast_name <- function(x){
@@ -192,12 +192,13 @@ setMethod("significants", signature("list"),
                                                  "fdr", padj)) %>%
                           .[["gene"]] %>% 
                           unique()
+                  }else{
+                      selected <- lapply(object, significants, 
+                                         padj = padj, fc = fc,
+                                         direction = direction) %>%
+                          unlist() %>% 
+                          unique()
                   }
-                  selected <- lapply(object, significants, 
-                               padj = padj, fc = fc,
-                               direction = direction) %>%
-                      unlist() %>% 
-                      unique()
                   return(selected)
               }else{
                   object <- object[sapply(object, .supported)]
@@ -214,8 +215,8 @@ setMethod("significants", signature("list"),
                   names(object) <- different_names
                   df <- lapply(different_names, function(x){
                       top <- significants(object[[x]], padj = padj, fc = fc,
-                                 direction = direction,
-                                 full = full) 
+                                          direction = direction,
+                                          full = full) 
                       top_renamed <- top %>% 
                           .[, c("log2FoldChange", "padj")] %>% 
                           set_colnames(paste(colnames(.), 
