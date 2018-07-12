@@ -41,6 +41,7 @@
 #'             colData assay assays rowData
 #' @importFrom psych corr.test
 #' @importFrom grid textGrob
+#' @importFrom broom tidy
 #' @importFrom cowplot draw_plot
 #' @importFrom cowplot ggdraw
 #' @importFrom cowplot plot_grid
