@@ -3,6 +3,8 @@ DEGreport News
 CHANGES IN DEGreport 1.17.2
     
     Fix: Support DESeqResults for list of DEGSets.
+    Feature: Add variable selection for covariates that correlate with PCs
+             in degCovariate function.
 
 CHANGES IN DEGreport 1.17.2
     Lorena Pantano <lorena.pantano@gmail.com>

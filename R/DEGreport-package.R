@@ -44,6 +44,7 @@
 #' @importFrom cowplot draw_plot
 #' @importFrom cowplot ggdraw
 #' @importFrom cowplot plot_grid
+#' @importFrom dplyr arrange
 #' @importFrom dplyr select select_if
 #' @importFrom dplyr summarise
 #' @importFrom dplyr mutate mutate_all mutate_if

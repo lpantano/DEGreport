@@ -145,6 +145,31 @@
     ma
 }
 
+# reduce covariates to significant ones that predict PCs
+.reduce_covariates <- function(corMatrix, pcsMatrix){
+    pcs <- colnames(pcsMatrix)[grepl("PC[0-9]+", colnames(pcsMatrix))]
+    lapply(pcs, function(pc){
+        
+        pc_var <- corMatrix %>% 
+            filter(fdr < 0.01, grepl(pc, compare)) %>% 
+            arrange(abs(r)) %>% 
+            .[["covar"]] %>% 
+            as.character()
+        if (length(pc_var) == 0)
+            return(NULL)
+        data <- pcsMatrix[,c(pc, pc_var)]
+        colnames(data)[1] = "PC"
+        
+        pc_sig <- lm(PC~., data=data) %>% 
+            broom::tidy() %>% 
+            filter(p.value < 0.05)
+        pc_sig[["PC"]] = pc
+        pc_sig
+    }) %>% bind_rows() %>% 
+        filter(!grepl("Intercept", !!!sym("term")))
+    
+}
+
 #' Find correlation between pcs and covariates
 #'
 #' This function will calculate the pcs using prcomp function,
@@ -155,7 +180,8 @@
 #' the correlation results is not important. See details to know
 #' how this is calculated.
 #'
-#' @author: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
+#' @author: Lorena Pantano, Victor Barrera, 
+#'          Kenneth Daily and Thanneer Malai Perumal
 #'
 #' @param counts normalized counts matrix
 #' @param metadata data.frame with samples metadata.
@@ -203,14 +229,19 @@
 #' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 #'  
 #' @return: list:
-#' a) significantCovars, covariates with FDR below the cutoff.
-#' b) plot, heatmap of the correlation found. * means pvalue < 0.05.
+#' a) plot, heatmap of the correlation found. * means pvalue < 0.05.
 #'    Only variables with FDR value lower than the cutoff are colored.
-#' c) corMatrix, correlation, p-value, FDR values
+#' b) corMatrix, correlation, p-value, FDR values
 #'    for each covariate and PCA pais
-#' d) effectsSignificantcovars: that is PCs % * absolute
-#'    correlation between covariate and PCs,
-#' e) pcsMatrix: PCs loading for each sample
+#' c) pcsMatrix: PCs loading for each sample
+#' d) scatterPlot: plot for each significant covariate and
+#'    the PC values.
+#' e) significants: contains the significant covariates
+#'   using a linear model to predict the coefficient
+#'   of covariates that have some color in the plot.
+#'   All the columns from the liner model analysis
+#'   are returned.
+#' 
 #' @examples
 #' data(humanGender)
 #' library(DESeq2)
@@ -249,7 +280,6 @@ degCovariates <- function(counts, metadata,
         as.data.frame() %>% 
         set_rownames(row.names(metadata))
     
-    
     stopifnot(identical(colnames(counts), rownames(metadata)))
     
     pcares <- .runpca(genesbysamples = counts,
@@ -263,8 +293,8 @@ degCovariates <- function(counts, metadata,
     colnames(samplepcvals) <- paste(colnames(samplepcvals), " (",
                                     sprintf("%.2f", pve[1L:npca]), "%)",
                                     sep = "")
-    
-    # find covariates without any missing data
+
+        # find covariates without any missing data
     samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L,
                                                       function(dat) all(!is.na(dat)))), drop = FALSE]
     covar_class <- covar_class[colnames(samplesbyfullcovariates)]
@@ -393,14 +423,14 @@ degCovariates <- function(counts, metadata,
     scatterPlot <- .generate_scatter_plot(samplepcvals, corrRes[["mat"]])
     
     if (plot) print(p)
-    
-    invisible(list(significantCovars = significantcovars,
+
+    significants <- .reduce_covariates(ma, samplepcvals)
+    invisible(list(
                 plot = p,
                 corMatrix = ma,
                 pcsMatrix = samplepcvals,
                 scatterPlot = scatterPlot,
-                effectsSignificantCovars =
-                    corrRes[["effects.significantcovars"]]
+                significants = significants
                 ))
 }
 

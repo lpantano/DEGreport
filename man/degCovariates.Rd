@@ -41,14 +41,18 @@ used if \code{legacy = TRUE}. See @details for more information.}
 }
 \value{
 : list:
-a) significantCovars, covariates with FDR below the cutoff.
-b) plot, heatmap of the correlation found. * means pvalue < 0.05.
+a) plot, heatmap of the correlation found. * means pvalue < 0.05.
 Only variables with FDR value lower than the cutoff are colored.
-c) corMatrix, correlation, p-value, FDR values
+b) corMatrix, correlation, p-value, FDR values
 for each covariate and PCA pais
-d) effectsSignificantcovars: that is PCs % * absolute
-correlation between covariate and PCs,
-e) pcsMatrix: PCs loading for each sample
+c) pcsMatrix: PCs loading for each sample
+d) scatterPlot: plot for each significant covariate and
+the PC values.
+e) significants: contains the significant covariates
+using a linear model to predict the coefficient
+of covariates that have some color in the plot.
+All the columns from the liner model analysis
+are returned.
 }
 \description{
 This function will calculate the pcs using prcomp function,
@@ -98,5 +102,6 @@ res$scatterPlot[[1]]
 Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 }
 \author{
-: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
+: Lorena Pantano, Victor Barrera,
+Kenneth Daily and Thanneer Malai Perumal
 }
