@@ -26,6 +26,7 @@ Imports:
     methods,
     Biobase,
     BiocGenerics,
+    broom,
     circlize,
     ComplexHeatmap,
     cowplot,
