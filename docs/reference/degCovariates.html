@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -38,6 +40,7 @@ small (from 0.001 to 0.002 in ribosimal content),
 the correlation results is not important. See details to know
 how this is calculated." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -64,7 +67,7 @@ how this is calculated." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
       </span>
     </div>
 
@@ -177,14 +180,18 @@ used if <code>legacy = TRUE</code>. See @details for more information.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>: list:
-a) significantCovars, covariates with FDR below the cutoff.
-b) plot, heatmap of the correlation found. * means pvalue &lt; 0.05.
+a) plot, heatmap of the correlation found. * means pvalue &lt; 0.05.
 Only variables with FDR value lower than the cutoff are colored.
-c) corMatrix, correlation, p-value, FDR values
+b) corMatrix, correlation, p-value, FDR values
 for each covariate and PCA pais
-d) effectsSignificantcovars: that is PCs <!-- % * absolute -->
-correlation between covariate and PCs,
-e) pcsMatrix: PCs loading for each sample</p>
+c) pcsMatrix: PCs loading for each sample
+d) scatterPlot: plot for each significant covariate and
+the PC values.
+e) significants: contains the significant covariates
+using a linear model to predict the coefficient
+of covariates that have some color in the plot.
+All the columns from the liner model analysis
+are returned.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -247,7 +254,8 @@ If you want to ignore the effect size, use <code>legacy = TRUE</code>.</p>
 
     <h2>Author</h2>
     
-: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
+: Lorena Pantano, Victor Barrera,
+Kenneth Daily and Thanneer Malai Perumal
 
   </div>
 </div>

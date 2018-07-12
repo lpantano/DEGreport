@@ -8,8 +8,8 @@
 <title>QC and downstream analysis for differential expression RNA-seq • DEGreport</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="QC and downstream analysis for differential expression RNA-seq">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="QC and downstream analysis for differential expression RNA-seq">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
       </span>
     </div>
 
@@ -63,7 +63,7 @@
       <h1>QC and downstream analysis for differential expression RNA-seq</h1>
                         <h4 class="author">Lorena Pantano</h4>
             
-            <h4 class="date">15 June 2018</h4>
+            <h4 class="date">12 July 2018</h4>
       
       
       <div class="hidden name"><code>DEGreport.Rmd</code></div>
@@ -73,7 +73,7 @@
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <p>DEGreport package version: 1.17.2</p>
+      <p>DEGreport package version: 1.17.3</p>
     </div>
     
 <p><a href="lorena.pantano@gmail.com">Lorena Pantano</a> Harvard TH Chan School of Public Health, Boston, US</p>
@@ -182,18 +182,18 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <p>To get the original results table, use the parameter as this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/deg.html">deg</a></span>(degs[[<span class="dv">1</span>]], <span class="st">"raw"</span>, <span class="st">"tibble"</span>)</code></pre></div>
 <pre><code>## # A tibble: 1,000 x 7
-##    gene   baseMean log2FoldChange  lfcSE   stat        pvalue         padj
-##  * &lt;chr&gt;     &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
-##  1 ENSG0…   1025           10.2   0.423   24.0      3.18e⁻¹²⁷    3.18e⁻¹²⁴
-##  2 ENSG0…    412            9.24  0.424   21.8      2.10e⁻¹⁰⁵    1.05e⁻¹⁰²
-##  3 ENSG0…    170           10.2   0.658   15.5      4.46e⁻ ⁵⁴    1.49e⁻ ⁵¹
-##  4 ENSG0…    671          - 0.692 0.131  - 5.26     1.41e⁻  ⁷    3.53e⁻  ⁵
-##  5 ENSG0…     92.7        - 0.767 0.161  - 4.76     1.96e⁻  ⁶    3.93e⁻  ⁴
-##  6 ENSG0…    220          - 1.87  0.421  - 4.44     8.89e⁻  ⁶    1.48e⁻  ³
-##  7 ENSG0…   2027          - 0.742 0.176  - 4.21     2.59e⁻  ⁵    3.69e⁻  ³
-##  8 ENSG0…   1234            0.389 0.0952   4.08     4.44e⁻  ⁵    5.56e⁻  ³
-##  9 ENSG0…    394            0.680 0.177    3.85     1.17e⁻  ⁴    1.31e⁻  ²
-## 10 ENSG0…    107          - 1.63  0.459  - 3.56     3.71e⁻  ⁴    3.71e⁻  ²
+##    gene          baseMean log2FoldChange  lfcSE   stat    pvalue      padj
+##  * &lt;chr&gt;            &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 ENSG00000067…   1025.          10.2   0.423   24.0  3.18e-127 3.18e-124
+##  2 ENSG00000012…    412.           9.24  0.424   21.8  2.10e-105 1.05e-102
+##  3 ENSG00000067…    170.          10.2   0.658   15.5  4.46e- 54 1.49e- 51
+##  4 ENSG00000005…    671.          -0.692 0.131   -5.26 1.41e-  7 3.53e-  5
+##  5 ENSG00000006…     92.7         -0.767 0.161   -4.76 1.96e-  6 3.93e-  4
+##  6 ENSG00000073…    220.          -1.87  0.421   -4.44 8.89e-  6 1.48e-  3
+##  7 ENSG00000005…   2027.          -0.742 0.176   -4.21 2.59e-  5 3.69e-  3
+##  8 ENSG00000005…   1234.           0.389 0.0952   4.08 4.44e-  5 5.56e-  3
+##  9 ENSG00000003…    394.           0.680 0.177    3.85 1.17e-  4 1.31e-  2
+## 10 ENSG00000069…    107.          -1.63  0.459   -3.56 3.71e-  4 3.71e-  2
 ## # ... with 990 more rows</code></pre>
 <p>Note that the format of the output can be changed to tibble, or data.frame with a third parameter <code>tidy</code>.</p>
 <p>The table will be always sorted by padj.</p>
@@ -212,28 +212,28 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <p>And it can returns the full table for a list:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs, <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>, <span class="dt">full =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 10 x 5
-##    gene   log2FoldChange_gr… log2FoldChange_gr…  padj_group_Female_vs_Male
-##    &lt;chr&gt;               &lt;dbl&gt;              &lt;dbl&gt;                      &lt;dbl&gt;
-##  1 ENSG0…             -0.494              0.388                  1.31e⁻  ²
-##  2 ENSG0…             -0.351              0.319                  5.56e⁻  ³
-##  3 ENSG0…              0.541             -0.425                  3.69e⁻  ³
-##  4 ENSG0…              0.573             -0.489                  3.53e⁻  ⁵
-##  5 ENSG0…              0.585             -0.473                  3.93e⁻  ⁴
-##  6 ENSG0…             -5.01               3.70                   1.05e⁻¹⁰²
-##  7 ENSG0…             -3.63               1.94                   3.18e⁻¹²⁴
-##  8 ENSG0…             -4.43               3.32                   1.49e⁻ ⁵¹
-##  9 ENSG0…              0.453             -0.260                  3.71e⁻  ²
-## 10 ENSG0…              0.582             -0.339                  1.48e⁻  ³
+##    gene     log2FoldChange_group… log2FoldChange_group… padj_group_Female…
+##    &lt;chr&gt;                    &lt;dbl&gt;                 &lt;dbl&gt;              &lt;dbl&gt;
+##  1 ENSG000…                -0.494                 0.388          1.31e-  2
+##  2 ENSG000…                -0.351                 0.319          5.56e-  3
+##  3 ENSG000…                 0.541                -0.425          3.69e-  3
+##  4 ENSG000…                 0.573                -0.489          3.53e-  5
+##  5 ENSG000…                 0.585                -0.473          3.93e-  4
+##  6 ENSG000…                -5.01                  3.70           1.05e-102
+##  7 ENSG000…                -3.63                  1.94           3.18e-124
+##  8 ENSG000…                -4.43                  3.32           1.49e- 51
+##  9 ENSG000…                 0.453                -0.260          3.71e-  2
+## 10 ENSG000…                 0.582                -0.339          1.48e-  3
 ## # ... with 1 more variable: padj_group_Male_vs_Female &lt;dbl&gt;</code></pre>
 <p>Since log2FoldChange are shrunken, the method for DEGSet class now can plot these changes as follow:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMA.html">plotMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>)</code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-1.png" width="700"></p>
 <p>The blue arrows indicate how foldchange is affected by this new feature.</p>
 <p>As well, it can plot the original MA plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMA.html">plotMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">raw =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">raw =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-raw-1.png" width="700"></p>
 <p>or the correlation between the original log2FoldChange and the new ones:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotMA.html">plotMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">correlation =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">correlation =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-cor-1.png" width="700"></p>
 </div>
 <div id="volcano-plots" class="section level3">
@@ -403,68 +403,70 @@ th &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumenta
 ##  [8] datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] pheatmap_1.0.8             ComplexHeatmap_1.17.1     
+##  [1] pheatmap_1.0.10            ComplexHeatmap_1.17.1     
 ##  [3] bindrcpp_0.2.2.9000        quantreg_5.36             
 ##  [5] SparseM_1.77               DESeq2_1.18.1             
 ##  [7] SummarizedExperiment_1.8.1 DelayedArray_0.4.1        
-##  [9] matrixStats_0.52.2         Biobase_2.38.0            
+##  [9] matrixStats_0.53.1         Biobase_2.38.0            
 ## [11] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
 ## [13] IRanges_2.12.0             S4Vectors_0.16.0          
-## [15] BiocGenerics_0.24.0        DEGreport_1.17.2          
-## [17] BiocStyle_2.5.41          
+## [15] BiocGenerics_0.24.0        DEGreport_1.17.3          
+## [17] BiocStyle_2.6.1           
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] colorspace_1.3-2            rjson_0.2.19               
-##   [3] rprojroot_1.2               circlize_0.4.3             
-##   [5] htmlTable_1.11.2            XVector_0.18.0             
-##   [7] GlobalOptions_0.0.12        base64enc_0.1-3            
+##   [1] colorspace_1.3-2            rjson_0.2.20               
+##   [3] rprojroot_1.3-2             circlize_0.4.4             
+##   [5] htmlTable_1.12              XVector_0.18.0             
+##   [7] GlobalOptions_0.1.0         base64enc_0.1-3            
 ##   [9] ggdendro_0.1-20             fs_1.2.2                   
 ##  [11] rstudioapi_0.7              roxygen2_6.0.1.9000        
 ##  [13] MatrixModels_0.4-1          ggrepel_0.8.0              
 ##  [15] bit64_0.9-7                 AnnotationDbi_1.40.0       
-##  [17] xml2_1.1.1                  splines_3.4.4              
+##  [17] xml2_1.2.0                  splines_3.4.4              
 ##  [19] logging_0.7-103             mnormt_1.5-5               
 ##  [21] geneplotter_1.56.0          knitr_1.20                 
-##  [23] Formula_1.2-2               Nozzle.R1_1.1-1            
-##  [25] annotate_1.56.0             cluster_2.0.6              
-##  [27] compiler_3.4.4              backports_1.1.2            
-##  [29] assertthat_0.2.0            Matrix_1.2-14              
-##  [31] lazyeval_0.2.1              cli_1.0.0                  
-##  [33] limma_3.34.9                acepack_1.4.1              
-##  [35] htmltools_0.3.6             tools_3.4.4                
-##  [37] gtable_0.2.0                glue_1.2.0                 
-##  [39] GenomeInfoDbData_0.99.1     dplyr_0.7.5                
-##  [41] Rcpp_0.12.17                pkgdown_1.0.0              
-##  [43] nlme_3.1-131.1              psych_1.8.4                
-##  [45] stringr_1.3.1               XML_3.98-1.10              
-##  [47] edgeR_3.20.9                zlibbioc_1.24.0            
-##  [49] MASS_7.3-49                 scales_0.5.0               
-##  [51] RColorBrewer_1.1-2          yaml_2.1.19                
-##  [53] memoise_1.1.0               gridExtra_2.3              
-##  [55] ggplot2_2.2.1               rpart_4.1-13               
-##  [57] reshape_0.8.7               latticeExtra_0.6-28        
-##  [59] stringi_1.2.2               RSQLite_2.0                
-##  [61] highr_0.6                   genefilter_1.60.0          
-##  [63] desc_1.1.1                  checkmate_1.8.5            
-##  [65] BiocParallel_1.12.0         shape_1.4.4                
-##  [67] rlang_0.2.0.9001            pkgconfig_2.0.1            
-##  [69] commonmark_1.4              bitops_1.0-6               
-##  [71] evaluate_0.10.1             lattice_0.20-35            
-##  [73] purrr_0.2.5                 bindr_0.1.1.9000           
-##  [75] labeling_0.3                htmlwidgets_1.0            
-##  [77] cowplot_0.9.2               bit_1.1-12                 
-##  [79] tidyselect_0.2.4            plyr_1.8.4                 
-##  [81] magrittr_1.5                R6_2.2.2                   
-##  [83] Hmisc_4.1-1                 DBI_0.8                    
-##  [85] pillar_1.1.0                foreign_0.8-69             
-##  [87] survival_2.41-3             RCurl_1.95-4.10            
-##  [89] nnet_7.3-12                 tibble_1.4.2               
-##  [91] crayon_1.3.4                utf8_1.1.3                 
-##  [93] rmarkdown_1.6.0.9008        GetoptLong_0.1.6           
-##  [95] locfit_1.5-9.1              data.table_1.11.4          
-##  [97] blob_1.1.0                  ConsensusClusterPlus_1.42.0
-##  [99] digest_0.6.15               xtable_1.8-2               
-## [101] tidyr_0.8.1                 munsell_0.4.3</code></pre>
+##  [23] Formula_1.2-3               Nozzle.R1_1.1-1            
+##  [25] broom_0.4.4                 annotate_1.56.2            
+##  [27] cluster_2.0.7-1             compiler_3.4.4             
+##  [29] backports_1.1.2             assertthat_0.2.0           
+##  [31] Matrix_1.2-14               lazyeval_0.2.1             
+##  [33] cli_1.0.0                   limma_3.34.9               
+##  [35] acepack_1.4.1               htmltools_0.3.6            
+##  [37] tools_3.4.4                 gtable_0.2.0               
+##  [39] glue_1.2.0                  GenomeInfoDbData_1.0.0     
+##  [41] reshape2_1.4.3              dplyr_0.7.6                
+##  [43] Rcpp_0.12.17                pkgdown_1.1.0              
+##  [45] nlme_3.1-137                psych_1.8.4                
+##  [47] stringr_1.3.1               XML_3.98-1.11              
+##  [49] edgeR_3.20.9                zlibbioc_1.24.0            
+##  [51] MASS_7.3-50                 scales_0.5.0               
+##  [53] RColorBrewer_1.1-2          yaml_2.1.19                
+##  [55] memoise_1.1.0               gridExtra_2.3              
+##  [57] ggplot2_3.0.0               rpart_4.1-13               
+##  [59] reshape_0.8.7               latticeExtra_0.6-28        
+##  [61] stringi_1.2.3               RSQLite_2.1.1              
+##  [63] highr_0.7                   genefilter_1.60.0          
+##  [65] desc_1.2.0                  checkmate_1.8.5            
+##  [67] BiocParallel_1.12.0         shape_1.4.4                
+##  [69] rlang_0.2.1                 pkgconfig_2.0.1            
+##  [71] commonmark_1.5              bitops_1.0-6               
+##  [73] evaluate_0.10.1             lattice_0.20-35            
+##  [75] purrr_0.2.5                 bindr_0.1.1.9000           
+##  [77] labeling_0.3                htmlwidgets_1.2            
+##  [79] cowplot_0.9.2               bit_1.1-14                 
+##  [81] tidyselect_0.2.4            plyr_1.8.4                 
+##  [83] magrittr_1.5                R6_2.2.2                   
+##  [85] Hmisc_4.1-1                 DBI_1.0.0                  
+##  [87] withr_2.1.2                 pillar_1.2.3               
+##  [89] foreign_0.8-70              survival_2.42-3            
+##  [91] RCurl_1.95-4.10             nnet_7.3-12                
+##  [93] tibble_1.4.2                crayon_1.3.4               
+##  [95] utf8_1.1.3                  rmarkdown_1.10             
+##  [97] GetoptLong_0.1.7            locfit_1.5-9.1             
+##  [99] data.table_1.11.4           blob_1.1.1                 
+## [101] ConsensusClusterPlus_1.42.0 digest_0.6.15              
+## [103] xtable_1.8-2                tidyr_0.8.1                
+## [105] munsell_0.5.0</code></pre>
 </div>
   </div>
 
