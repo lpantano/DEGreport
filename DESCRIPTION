@@ -10,6 +10,7 @@ Description: Creation of a HTML report of differential expression
     variability for each selected gene.
 biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
     GeneExpression
+URL: http://lpantano.github.io/DEGreport/
 BugReports: https://github.com/lpantano/DEGreport/issues
 Suggests:
     BiocStyle,
