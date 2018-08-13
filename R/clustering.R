@@ -16,26 +16,30 @@
     ma_long$x <- xs[ma_long$sample]
     ma_long$group <- groups[ma_long$sample]
     splan <- max(c(round(length(unique(ma_long$x))/3*2,0), 1))
+    ma_long[["line_group"]] = paste(ma_long$gene, ma_long$group)
     p <- suppressWarnings(
         ggplot(ma_long, aes_string(x = "x", y = "value",
                                    fill = "group", color = "group")) +
-        geom_boxplot(alpha = 0.3, outlier.size = 0, outlier.shape = NA) +
-        geom_point(alpha = 0.4, width = 0.2, size = 1,
-                    position = position_jitterdodge(dodge.width = 0.9)) +
-        stat_smooth(aes_string(x = "x", y = "value",
-                               group = "group", color = "group"),
-                    method = "lm", formula = y~poly(x, splan)) +
-        ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-        ylab("Z-score of gene abundance") + xlab("") )
+            geom_boxplot(alpha = 0.3,
+                         outlier.size = 0,
+                         outlier.shape = NA) +
+            geom_point(alpha = 0.4, width = 0.2, size = 1,
+                       position = position_jitterdodge(dodge.width = 0.9)) +
+            stat_smooth(aes_string(x = "x", y = "value",
+                                   group = "group", color = "group"),
+                        method = "lm", formula = y~poly(x, splan)) +
+            geom_line(aes_string(group = "line_group"), alpha = 0.2) +
+            ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
+            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+            ylab("Z-score of gene abundance") + xlab("") )
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups)) == 1) {
-        p <- p + scale_color_brewer(guide = FALSE, palette = "Set1") +
-                scale_fill_brewer(guide = FALSE, palette = "Set1")
+        p <- p + scale_color_brewer(guide = FALSE, palette = "Set2") +
+            scale_fill_brewer(guide = FALSE, palette = "Set2")
     }else{
-        p <- p + scale_color_brewer(palette = "Set1") +
-            scale_fill_brewer(palette = "Set1")
+        p <- p + scale_color_brewer(palette = "Set2") +
+            scale_fill_brewer(palette = "Set2")
     }
     p
 }
@@ -98,13 +102,30 @@
     c
 }
 
-.make_concensus_cluster <- function(counts_group){
+.make_concensus_cluster <- function(counts_group, ...){
     ConsensusClusterPlus(t(counts_group),
-                         reps = 500, maxK = 10, plot = "png")
+                         reps = 500, maxK = 10,
+                         distance = "pearson", finalLinkage = "ward.D2",
+                         ...)
 }
 
 .select_concensus_genes <- function(c){
-    c[[2]][["consensusClass"]]
+    icl <- calcICL(c)
+    consensus <- icl[["itemConsensus"]] %>%
+        group_by(!!!sym("k")) %>% 
+        summarise(score = quantile(!!!sym("itemConsensus"),
+                                   0.75,
+                                   na.rm = TRUE)) %>% 
+        arrange(desc(score), k) %>% .[["k"]] %>% .[1]
+    
+    df <- icl[["itemConsensus"]] %>%
+        filter(k == consensus, itemConsensus > 0.9) %>% 
+        .[,c("item", "cluster")]
+    
+    genes <- df[["cluster"]]
+    names(genes) <- df[["item"]]
+    
+    genes
 }
 
 .select_genes <- function(c, counts_group, minc=15,
@@ -759,7 +780,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        pattern = NULL,
                        groupDifference = NULL,
                        eachStep = FALSE,
-                       plot=TRUE, fixy=NULL){
+                       plot=TRUE, fixy=NULL,
+                       ...){
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
     if (is.null(col)){

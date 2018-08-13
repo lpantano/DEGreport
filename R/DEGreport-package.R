@@ -25,7 +25,7 @@
 #'             "cmdscale" "dist" "hclust" "p.adjust" "xtabs"
 #'             "as.dendrogram"
 #' @importFrom scales trans_breaks trans_format math_format
-#' @importFrom ConsensusClusterPlus ConsensusClusterPlus
+#' @importFrom ConsensusClusterPlus ConsensusClusterPlus calcICL
 #' @import ggrepel
 #' @import ggplot2
 #' @importFrom ggplot2 layer ggproto
