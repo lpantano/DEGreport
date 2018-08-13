@@ -22,6 +22,7 @@ DEGreport
 \seealso{
 Useful links:
 \itemize{
+  \item \url{http://lpantano.github.io/DEGreport/}
   \item Report bugs at \url{https://github.com/lpantano/DEGreport/issues}
 }
 

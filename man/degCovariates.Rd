@@ -34,7 +34,7 @@ the heatmap.}
 \item{legacy}{boolean. Whether to plot the legacy version.}
 
 \item{smart}{boolean. Whether to avoid normalization of the
-numeric covariates when calculating effect size. This is not
+numeric covariates when calculating importance. This is not
 used if \code{legacy = TRUE}. See @details for more information.}
 
 \item{plot}{Whether to plot or not the correlation matrix.}
@@ -51,7 +51,7 @@ the PC values.
 e) significants: contains the significant covariates
 using a linear model to predict the coefficient
 of covariates that have some color in the plot.
-All the columns from the liner model analysis
+All the significant covariates from the liner model analysis
 are returned.
 }
 \description{
@@ -67,24 +67,29 @@ how this is calculated.
 This method is adapeted from Daily et al 2017 article.
 Principal components from PCA analysis are correlated with
 covariates metadata. Factors are transformed to numeric variables.
-Correlation is measured by cor.test function with Kendall method
+Correlation is measured by \code{cor.test} function with Kendall method
 by default.
 
-The size of the dot, or effect size, indicates the importance of
+The size of the dot, or importance, indicates the importance of
 the covariate based on the range of the values. Covariates
 where the range is very small (like a % of mapped reads that
-varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
-The highest value to have is 5 size.
-To get to this value, each covariate is normalized using this
+varies between 0.001 to 0.002) will have a very small size (0.1*max_size).
+The maximum value is set to 5 units.
+To get to importance, each covariate is normalized using this
 equation: \code{1 - min(v/max(v))},
 and the minimum and maximum values are set to
-0.01 and 1 respectively. 0.5 would mean there is at least
+0.01 and 1 respectively. For instance, 0.5 would mean there is at least
 50% of difference between the minimum value and the maximum value.
 Categorical variables are plot using the maximum size always, since
 it is not possible to estimate the variability. By default, it
 won't do \code{v/max(v)} if the values are already between 0-1 or
-0-100, trying to avoid rates and percentage values.
-If you want to ignore the effect size, use \code{legacy = TRUE}.
+0-100 (already normalized values as rates and percentages).
+If you want to ignore the importance, use \code{legacy = TRUE}.
+
+Finally, a linear model is used to calculate the significance
+of the covariates effect on the PCs. For that, this function
+uses \code{lm} to refress the data and uses the p-value calculated by
+each variable in the model to define significance (pvalue < 0.05).
 }
 \examples{
 data(humanGender)

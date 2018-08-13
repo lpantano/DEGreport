@@ -7,7 +7,7 @@
 degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
   col = NULL, consensusCluster = FALSE, reduce = FALSE, cutoff = 0.7,
   scale = TRUE, pattern = NULL, groupDifference = NULL,
-  eachStep = FALSE, plot = TRUE, fixy = NULL)
+  eachStep = FALSE, plot = TRUE, fixy = NULL, ...)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
