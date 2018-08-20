@@ -1,6 +1,6 @@
 Package: DEGreport
 Version: 1.17.3
-Date: 2017-07-13
+Date: 2017-08-15
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -44,6 +44,7 @@ Imports:
     grDevices,
     knitr,
     logging,
+    lasso2,
     magrittr,
     Nozzle.R1,
     psych,

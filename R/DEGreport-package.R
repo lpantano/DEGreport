@@ -56,7 +56,7 @@
 #' @importFrom dplyr left_join inner_join
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
-#' @importFrom tidyr spread gather
+#' @importFrom tidyr spread gather unite
 #' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
 #' @importFrom tibble as_tibble
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap
@@ -68,4 +68,5 @@
 #' @importFrom rlang sym
 #' @importFrom magrittr set_colnames set_rownames
 #' @importFrom stringr str_split
+#' @import lasso2
 "_PACKAGE"

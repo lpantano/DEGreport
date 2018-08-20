@@ -561,6 +561,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                    pc1 = "PC1", pc2 = "PC2",
                    name = NULL, shape = NULL,
                    data = FALSE){
+    # browser()
     pc <- .pca_loadings(counts)
     # error if pc1/2 are not in columns of pc
     idx1 <- which(names(pc[["percentVar"]]) == pc1)
@@ -780,8 +781,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        pattern = NULL,
                        groupDifference = NULL,
                        eachStep = FALSE,
-                       plot=TRUE, fixy=NULL,
-                       ...){
+                       plot=TRUE, fixy=NULL){
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
     if (is.null(col)){

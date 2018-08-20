@@ -1,10 +1,14 @@
 DEGreport News
 
-CHANGES IN DEGreport 1.17.2
+CHANGES IN DEGreport 1.17.3
     
     Fix: Support DESeqResults for list of DEGSets.
     Feature: Add variable selection for covariates that correlate with PCs
              in degCovariate function.
+    Feature: Add lasso as an option to variable selection in covariate
+             analysis.
+    Feature: Fill with colors only significant variables by lm or lasso, and 
+             draw borber for correlated variables by cor.test.
 
 CHANGES IN DEGreport 1.17.2
     Lorena Pantano <lorena.pantano@gmail.com>

@@ -25,8 +25,10 @@ test_that("colors", {
 })
 
 test_that("degcovariates", {
-    resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse), minPC = 10)
-    expect_true(nrow(resCov[["corMatrix"]][resCov[["corMatrix"]][["fdr"]] < 0.05,]) == 3)
+    resCov <- degCovariates(log2(counts(dse) + 0.5), colData(dse))
+    rows <- resCov[["corMatrix"]][resCov[["corMatrix"]][["fdr"]] < 0.05,"compare"]
+    rows <- rows[!is.na(rows)]
+    expect_true(length(rows) == 2)
     expect_error(degCovariates(log2(counts(dse) + 0.5), colData(dse)[2:1,]))
 })
 

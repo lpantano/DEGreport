@@ -6,7 +6,7 @@
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, minPC = 5,
   correlation = "kendall", addCovDen = TRUE, legacy = FALSE,
-  smart = TRUE, plot = TRUE)
+  smart = TRUE, method = "lm", plot = TRUE)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -37,22 +37,27 @@ the heatmap.}
 numeric covariates when calculating importance. This is not
 used if \code{legacy = TRUE}. See @details for more information.}
 
+\item{method}{character. Whether to use \code{lm} or \code{lasso} to
+calculate the significance of the variable during reduction
+step. See @details for more information.}
+
 \item{plot}{Whether to plot or not the correlation matrix.}
 }
 \value{
 : list:
-a) plot, heatmap of the correlation found. * means pvalue < 0.05.
-Only variables with FDR value lower than the cutoff are colored.
-b) corMatrix, correlation, p-value, FDR values
+\itemize{
+\item plot, heatmap showing the signifcance of the variables.
+\item corMatrix, correlation, p-value, FDR values
 for each covariate and PCA pais
-c) pcsMatrix: PCs loading for each sample
-d) scatterPlot: plot for each significant covariate and
+\item pcsMatrix: PCs loading for each sample
+\item scatterPlot: plot for each significant covariate and
 the PC values.
-e) significants: contains the significant covariates
+\item significants: contains the significant covariates
 using a linear model to predict the coefficient
 of covariates that have some color in the plot.
 All the significant covariates from the liner model analysis
 are returned.
+}
 }
 \description{
 This function will calculate the pcs using prcomp function,
@@ -60,7 +65,11 @@ and correlate categorical and numerical variables from
 metadata. The size of the dots indicates the importance of the
 metadata, for instance, when the range of the values is pretty
 small (from 0.001 to 0.002 in ribosimal content),
-the correlation results is not important. See details to know
+the correlation results is not important. If black stroke lines
+are shown, the correlation analysis has a FDR < 0.05 for that
+variable and PC.
+Only significant variables according the linear model are colored.
+See details to know
 how this is calculated.
 }
 \details{
@@ -88,8 +97,9 @@ If you want to ignore the importance, use \code{legacy = TRUE}.
 
 Finally, a linear model is used to calculate the significance
 of the covariates effect on the PCs. For that, this function
-uses \code{lm} to refress the data and uses the p-value calculated by
+uses \code{lm} to regress the data and uses the p-value calculated by
 each variable in the model to define significance (pvalue < 0.05).
+\code{lm} or \code{lasso} can be used here.
 }
 \examples{
 data(humanGender)
