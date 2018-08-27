@@ -5,19 +5,22 @@
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
 degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
-  batch = NULL, metadata = NULL, ann = c("external_gene_name", "symbol"),
-  slot = 1L, log2 = TRUE, xsLab = xs, ysLab = "abundance",
-  color = "black", groupLab = group, batchLab = batch)
+  batch = NULL, metadata = NULL, ann = c("geneID", "symbol"), slot = 1L,
+  log2 = TRUE, xsLab = xs, ysLab = "abundance", color = "black",
+  groupLab = group, batchLab = batch)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or SummarizedExperiment
-or Matrix or data.frame.}
+or Matrix or data.frame. In case of a DESeqDataSet object, always
+the normalized expression will be used
+from \code{counts(dds, normalized = TRUE)}.}
 
 \item{xs}{Character, colname in colData that will be used as X-axes.}
 
 \item{res}{\link[DESeq2:DESeqResults]{DESeq2::DESeqResults} object.}
 
-\item{n}{Integer number of genes to plot.}
+\item{n}{Integer number of genes to plot from the \code{res} object. It will
+take the top N using padj values to order the table.}
 
 \item{genes}{Character of gene names matching rownames of count data.}
 
@@ -29,7 +32,11 @@ batch effect visualization.}
 
 \item{metadata}{Metadata in case dds is a matrix.}
 
-\item{ann}{Columns in rowData (if available) used to print gene names.}
+\item{ann}{Columns in rowData (if available) used to print gene names. First
+element in the vector is the column name in rowData that matches the
+row.names of the \code{dds} or \code{count} object. Second element in the vector
+is the column name in rowData that it will be used as the title for each
+gene or feature figure.}
 
 \item{slot}{Name of the slot to use to get count data.}
 

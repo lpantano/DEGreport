@@ -64,16 +64,23 @@ degColors <- function(ann, col_fun = FALSE,
 #' Plot top genes allowing more variables to color and shape points
 #'
 #' @param dds [DESeq2::DESeqDataSet] object or SummarizedExperiment
-#'   or Matrix or data.frame.
+#'   or Matrix or data.frame. In case of a DESeqDataSet object, always
+#'   the normalized expression will be used
+#'   from `counts(dds, normalized = TRUE)`.
 #' @param res [DESeq2::DESeqResults] object.
-#' @param n Integer number of genes to plot.
+#' @param n Integer number of genes to plot from the `res` object. It will
+#'   take the top N using padj values to order the table.
 #' @param genes Character of gene names matching rownames of count data.
 #' @param xs Character, colname in colData that will be used as X-axes.
 #' @param group Character, colname in colData to color points and add different
 #'   lines for each level.
 #' @param batch Character, colname in colData to shape points, normally used by
 #'   batch effect visualization.
-#' @param ann Columns in rowData (if available) used to print gene names.
+#' @param ann Columns in rowData (if available) used to print gene names. First
+#'   element in the vector is the column name in rowData that matches the
+#'   row.names of the `dds` or `count` object. Second element in the vector
+#'   is the column name in rowData that it will be used as the title for each
+#'   gene or feature figure.
 #' @param metadata Metadata in case dds is a matrix.
 #' @param slot Name of the slot to use to get count data.
 #' @param log2 Whether to apply or not log2 transformation.
@@ -99,7 +106,7 @@ degColors <- function(ann, col_fun = FALSE,
 degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
                    group = NULL, batch = NULL,
                    metadata = NULL,
-                   ann = c("external_gene_name", "symbol"),
+                   ann = c("geneID", "symbol"),
                    slot = 1L,
                    log2 = TRUE,
                    xsLab = xs,
