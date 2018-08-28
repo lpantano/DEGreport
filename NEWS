@@ -2,6 +2,7 @@ DEGreport News
 
 CHANGES IN DEGreport 1.17.3
     
+    Feature: Add specific function to plot degPatterns clusters.
     Fix: Support DESeqResults for list of DEGSets.
     Feature: Add variable selection for covariates that correlate with PCs
              in degCovariate function.

@@ -6,6 +6,15 @@ counts <- assays(humanGender)[[1]]
 dse <- DESeqDataSetFromMatrix(counts[1:1000, idx],
                               colData(humanGender)[idx,],
                               design = ~group) %>% DESeq
+ma <- assays(dse)[[1]]
+des <- colData(dse)
+des[["other"]] <- sample(c("a", "b"), length(idx), replace = TRUE)
+res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
+
+test_that("cluster_plot", {
+    expect_error(degPlotCluster(res, "group", "other"))
+    expect_is(degPlotCluster(res$normalized, "group", "other"), "gg")
+})
 
 test_that("transform", {
     expect_gte(mean(.scale(counts(dse)[1,])), -0.5)

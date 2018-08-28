@@ -7,31 +7,80 @@
         print(toout)
 }
 
+#' Plot clusters from degPattern function output
+#' 
+#' This function helps to format the cluster plots from [degPatterns()].
+#' It allows to control the layers and it returns a ggplot object that
+#' can accept more ggplot functions to allow customization.
+#' 
+#' @param table `normalized` element from [degPatterns()] output.
+#' @param time column name to use in the x-axis.
+#' @param color column name to use to color and divide the samples.
+#' @param points Add points to the plot.
+#' @param boxes Add boxplot to the plot.
+#' @param smooth Add regression line to the plot.
+#' @param lines Add gene lines to the plot.
+#' @param facet Split figures based on cluster ID.
+#' @return [ggplot2] object.
+#' @examples
+#' data(humanGender)
+#' library(SummarizedExperiment)
+#' library(ggplot2)
+#' ma <- assays(humanGender)[[1]][1:100,]
+#' des <- colData(humanGender)
+#' des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
+#' res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
+#' degPlotCluster(res$normalized, "group", "other")
+#' degPlotCluster(res$normalized, "group", "other", lines = FALSE)
+#' @export
+degPlotCluster <- function(table, time, color = NULL,
+                           points = TRUE,
+                           boxes = TRUE,
+                           smooth = TRUE,
+                           lines = TRUE,
+                           facet = TRUE){
+    stopifnot(class(table) == "data.frame")
+    table[["line_group"]] = paste(table[["genes"]], table[[color]])
+    splan <- length(unique(table[[time]])) - 1L
+    if (is.null(color))
+        table[[color]] = NULL
+    p <- ggplot(table, aes_string(x = time, y = "value",
+                                   fill = color, color = color))
+    if (boxes)
+        p <- p + geom_boxplot(alpha = 0.3,
+                              outlier.size = 0,
+                              outlier.shape = NA)
+    if (points)
+        p <- p + 
+        geom_point(alpha = 0.4, size = 1,
+                   position = position_jitterdodge(dodge.width = 0.9))
+    if (smooth)
+        p <- p + 
+        stat_smooth(aes_string(x = time, y = "value",
+                               group = color, color = color),
+                    method = "lm", formula = y~poly(x, splan))
+    if (lines)
+        p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
+    if (facet)
+        p <- p + facet_wrap(~cluster)
+    p <- p + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+        ylab("Z-score of gene abundance") +
+        xlab("")
+    p
+    
+}
 
 # plot group of genes according time and group
-.plot_cluster  = function(norm_sign, g_in_c, xs , groups, title, fixy=NULL) {
+.plot_cluster  <- function(norm_sign, g_in_c, xs , groups, title, fixy=NULL) {
     ma <- as.data.frame(norm_sign)[g_in_c,]
-    ma_long <- suppressMessages(melt(cbind(gene = row.names(ma), ma),
+    ma_long <- suppressMessages(melt(cbind(genes = row.names(ma), ma),
                                      variable_name = "sample"))
     ma_long$x <- xs[ma_long$sample]
     ma_long$group <- groups[ma_long$sample]
-    splan <- max(c(round(length(unique(ma_long$x))/3*2,0), 1))
-    ma_long[["line_group"]] = paste(ma_long$gene, ma_long$group)
-    p <- suppressWarnings(
-        ggplot(ma_long, aes_string(x = "x", y = "value",
-                                   fill = "group", color = "group")) +
-            geom_boxplot(alpha = 0.3,
-                         outlier.size = 0,
-                         outlier.shape = NA) +
-            geom_point(alpha = 0.4, width = 0.2, size = 1,
-                       position = position_jitterdodge(dodge.width = 0.9)) +
-            stat_smooth(aes_string(x = "x", y = "value",
-                                   group = "group", color = "group"),
-                        method = "lm", formula = y~poly(x, splan)) +
-            geom_line(aes_string(group = "line_group"), alpha = 0.2) +
-            ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
-            theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-            ylab("Z-score of gene abundance") + xlab("") )
+    p <- suppressWarnings(degPlotCluster(ma_long, "x", "group", facet = FALSE))
+    p <- p +
+        ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )"))
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups)) == 1) {
@@ -894,6 +943,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         inner_join(metadata_groups %>%
                        mutate_if(is.factor, as.character)) %>%
         inner_join(df, by = "genes")
+    normalized[[time]] = factor(normalized[[time]],
+                                levels = levels(metadata[[time]]))
     
     invisible(list(df = df,
          pass = to_plot,
