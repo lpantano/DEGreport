@@ -82,6 +82,12 @@ setMethod("deg", signature("DEGSet"),
 #' @param ... Passed to [deg]. Default: value = NULL.
 #'   Value can be 'raw', 'shrunken'.
 #' @rdname significants
+#' @return a [dplyr::tbl_df] data frame. `gene` column has the feature name.
+#'  In the case of using this method with the results from [degComps], 
+#'  `log2FoldChange` has the higher foldChange from the comparisons, and
+#'  `padj` has the padj associated to the previous column. Then, there is
+#'  two columns for each comparison, one for the log2FoldChange and another
+#'  for the padj.
 #' @examples
 #' library(DESeq2)
 #' library(dplyr)
@@ -174,6 +180,22 @@ setMethod("significants", signature("TopTags"),
         make.names
 }
 
+.summarise_res <- function(df, cutoff){
+    inner_join(
+        df[,c("gene", names(df)[grepl("log2", names(df))])] %>% 
+            gather("comparison", "value", -gene) %>% 
+            mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison"))),
+        df[,c("gene", names(df)[grepl("padj", names(df))])] %>% 
+            gather("comparison", "value", -gene) %>% 
+            mutate(comparison = gsub("padj_", "", !!!sym("comparison"))),
+        by = c("gene", "comparison"), suffix = c("_fc", "_fdr")
+    ) %>% group_by(!!!sym("gene")) %>%
+        filter(value_fdr < cutoff) %>%
+        summarise(log2FoldChange = value_fc[which.max(value_fc)[1L]],
+                  padj = value_fdr[which.max(value_fc)[1L]]) %>% 
+        right_join(df, by = "gene")
+}
+
 #' @rdname significants
 #' @export
 setMethod("significants", signature("list"),
@@ -228,6 +250,7 @@ setMethod("significants", signature("list"),
                       distinct() %>% 
                       spread(., "variable", "value") %>% 
                       as_tibble()
+                  df <- .summarise_res(df, padj)
                   return(df)
               }
           })

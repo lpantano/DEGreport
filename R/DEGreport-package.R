@@ -53,7 +53,7 @@
 #' @importFrom dplyr group_by ungroup
 #' @importFrom dplyr "%>%"
 #' @importFrom dplyr distinct
-#' @importFrom dplyr left_join inner_join
+#' @importFrom dplyr left_join inner_join right_join
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
 #' @importFrom tidyr spread gather unite

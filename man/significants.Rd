@@ -42,6 +42,14 @@ down, up and NULL.}
 See https://support.bioconductor.org/p/104059/#104072.
 Only used when a list is giving to the method.}
 }
+\value{
+a \link[dplyr:tbl_df]{dplyr::tbl_df} data frame. \code{gene} column has the feature name.
+In the case of using this method with the results from \link{degComps},
+\code{log2FoldChange} has the higher foldChange from the comparisons, and
+\code{padj} has the padj associated to the previous column. Then, there is
+two columns for each comparison, one for the log2FoldChange and another
+for the padj.
+}
 \description{
 Function to get the features that are significant
 according to some thresholds from a \link{DEGSet},

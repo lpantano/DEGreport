@@ -2,6 +2,9 @@ DEGreport News
 
 CHANGES IN DEGreport 1.17.3
     
+    Feature: Add maximum log2FoldChange to the significance output
+             when multiple comparisons are used as inputs.
+    Feature: Remove non-mapped genes in degPlot.
     Feature: Add specific function to plot degPatterns clusters.
     Fix: Support DESeqResults for list of DEGSets.
     Feature: Add variable selection for covariates that correlate with PCs

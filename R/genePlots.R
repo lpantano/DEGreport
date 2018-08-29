@@ -149,11 +149,16 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
             message("No genes were mapped to rowData. check ann parameter values.")
         if (length(name) == 2L)
             newgenes <- anno[match(genes, anno[, name[1L]]), name[2L]]
+        if (sum(is.na(newgenes)) > 0)
+            warning(sum(is.na(newgenes)), " cannot be mapped to ", name[2L], 
+                    ". Those will be skipped.")
     }
     
-    dd = melt(as.data.frame(counts[genes, , drop = FALSE]) %>%
+    dd <- melt(as.data.frame(counts[genes, , drop = FALSE]) %>%
                   mutate(gene = newgenes))
     colnames(dd) = c("gene", "sample", "count")
+    
+    dd <-dd[!is.na(dd[["gene"]]),]
     
     dd$xs = as.factor(metadata[as.character(dd$sample), xs])
     
