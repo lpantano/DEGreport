@@ -22,8 +22,9 @@ This is an [R][] package.
 ### [Bioconductor][] stable version
 
 ```r
-source("https://bioconductor.org/biocLite.R")
-biocLite("DEGreport")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("DEGreport")
 ```
 
 ### [Bioconductor][] latest version
