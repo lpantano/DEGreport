@@ -16,7 +16,7 @@ CHANGES IN DEGreport 1.17.4
     Feature: Fill with colors only significant variables by lm or lasso, and 
              draw borber for correlated variables by cor.test.
 
-CHANGES IN DEGreport 1.17.2
+CHANGES IN DEGreport 1.17.3
     Lorena Pantano <lorena.pantano@gmail.com>
         
         Fix: degCovariates works with metadata only with numerical variables
