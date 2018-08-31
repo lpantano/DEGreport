@@ -4,7 +4,8 @@
 \alias{createReport}
 \title{Create report of RNAseq DEG anlaysis}
 \usage{
-createReport(g, counts, tags, pvalues, path, pop = 400, name = "DEGreport")
+createReport(g, counts, tags, pvalues, path, pop = 400,
+  name = "DEGreport")
 }
 \arguments{
 \item{g}{Character vector with the group the samples belong to.}

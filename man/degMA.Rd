@@ -5,8 +5,9 @@
 \alias{degMA}
 \title{MA-plot from base means and log fold changes}
 \usage{
-degMA(results, title = NULL, label_points = NULL, label_column = "symbol",
-  limit = NULL, diff = 5, raw = FALSE, correlation = FALSE)
+degMA(results, title = NULL, label_points = NULL,
+  label_column = "symbol", limit = NULL, diff = 5, raw = FALSE,
+  correlation = FALSE)
 }
 \arguments{
 \item{results}{\link{DEGSet} class.}

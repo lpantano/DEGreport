@@ -8,7 +8,8 @@
 \usage{
 deg(object, ...)
 
-\S4method{deg}{DEGSet}(object, value = NULL, tidy = NULL, top = NULL, ...)
+\S4method{deg}{DEGSet}(object, value = NULL, tidy = NULL, top = NULL,
+  ...)
 }
 \arguments{
 \item{object}{\link{DEGSet}}

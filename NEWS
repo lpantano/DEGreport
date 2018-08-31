@@ -2,6 +2,8 @@ DEGreport News
 
 CHANGES IN DEGreport 1.17.3
     
+    Feature: Reduce parameter is used to remove outlier points
+             after clustering genes.
     Feature: Add maximum log2FoldChange to the significance output
              when multiple comparisons are used as inputs.
     Feature: Remove non-mapped genes in degPlot.

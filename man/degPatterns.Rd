@@ -4,10 +4,11 @@
 \alias{degPatterns}
 \title{Make groups of genes using expression profile.}
 \usage{
-degPatterns(ma, metadata, minc = 15, summarize = "merge", time = "time",
-  col = NULL, consensusCluster = FALSE, reduce = FALSE, cutoff = 0.7,
-  scale = TRUE, pattern = NULL, groupDifference = NULL,
-  eachStep = FALSE, plot = TRUE, fixy = NULL)
+degPatterns(ma, metadata, minc = 15, summarize = "merge",
+  time = "time", col = NULL, consensusCluster = FALSE,
+  reduce = FALSE, cutoff = 0.7, scale = TRUE, pattern = NULL,
+  groupDifference = NULL, eachStep = FALSE, plot = TRUE,
+  fixy = NULL)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
@@ -34,11 +35,12 @@ samples. Normally control/mutant}
 \item{consensusCluster}{Indicates whether using \link{ConsensusClusterPlus}
 or \code{\link[cluster:diana]{cluster::diana()}}}
 
-\item{reduce}{boolean reduce number of clusters using
-correlation values between them.}
+\item{reduce}{boolean remove genes that are outliers of the cluster
+distribution. \code{boxplot} function is used to flag a gene in any
+group defined by \code{time} and \code{col} as outlier and it is removed
+from the cluster. Not used if \code{consensusCluster} is TRUE.}
 
-\item{cutoff}{integer threshold for correlation
-expression to merge clusters (0 - 1)}
+\item{cutoff}{This is deprecated.}
 
 \item{scale}{boolean scale the \code{ma} values by row}
 
