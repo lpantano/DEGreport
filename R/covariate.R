@@ -145,6 +145,42 @@
     ma
 }
 
+.model <- function(data, method = "lm"){
+    if (method == "lm"){
+        pc_sig <- lm(PC~., data=data) %>% 
+            broom::tidy()
+    }else if (method == "lasso"){
+        pc_sig <- lm.lasso <- l1ce(PC ~ 0 + ., data=data, sweep.out = NULL) %>% 
+            summary() %>% 
+            .[["coefficients"]] %>% 
+            broom::tidy()
+    }
+    names(pc_sig) <- c("term", "estimate", "std.error", "statistic", "p.value")
+    return(pc_sig)
+}
+
+# reduce covariates to significant ones that predict PCs
+.reduce_covariates <- function(corMatrix, pcsMatrix, method = "lm"){
+    pcs <- colnames(pcsMatrix)[grepl("PC[0-9]+", colnames(pcsMatrix))]
+    lapply(pcs, function(pc){
+        pc_var <- corMatrix %>% 
+            filter(fdr < 0.01, grepl(pc, compare)) %>% 
+            arrange(abs(r)) %>% 
+            .[["covar"]] %>% 
+            as.character()
+        if (length(pc_var) == 0)
+            return(NULL)
+        data <- pcsMatrix[,c(pc, pc_var)]
+        colnames(data)[1] = "PC"
+        data[,2:ncol(data)] <- apply(data[,2:ncol(data), drop = FALSE], 2, scale)
+        pc_sig <- .model(data, method)
+        pc_sig[["PC"]] = pc
+        pc_sig %>% filter(p.value < 0.05)
+    }) %>% bind_rows() %>% 
+        filter(!grepl("Intercept", !!!sym("term")))
+    
+}
+
 #' Find correlation between pcs and covariates
 #'
 #' This function will calculate the pcs using prcomp function,
@@ -152,10 +188,15 @@
 #' metadata. The size of the dots indicates the importance of the
 #' metadata, for instance, when the range of the values is pretty
 #' small (from 0.001 to 0.002 in ribosimal content),
-#' the correlation results is not important. See details to know
-#' how this is calculated.
-#'
-#' @author: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
+#' the correlation results is not important. If black stroke lines
+#' are shown, the correlation analysis has a FDR < 0.05 for that
+#' variable and PC.
+#' Only significant variables according the linear model are colored.
+#' See details to know
+#' how this is calculated. 
+#' 
+#' @author: Lorena Pantano, Victor Barrera, 
+#'          Kenneth Daily and Thanneer Malai Perumal
 #'
 #' @param counts normalized counts matrix
 #' @param metadata data.frame with samples metadata.
@@ -174,43 +215,56 @@
 #'   the heatmap.
 #' @param legacy boolean. Whether to plot the legacy version.
 #' @param smart boolean. Whether to avoid normalization of the
-#'   numeric covariates when calculating effect size. This is not
+#'   numeric covariates when calculating importance. This is not
 #'   used if `legacy = TRUE`. See @details for more information.
+#' @param method character. Whether to use `lm` or `lasso` to
+#'   calculate the significance of the variable during reduction
+#'   step. See @details for more information.
 #' @param plot Whether to plot or not the correlation matrix.
 #' @details This method is adapeted from Daily et al 2017 article.
 #'   Principal components from PCA analysis are correlated with 
 #'   covariates metadata. Factors are transformed to numeric variables.
-#'   Correlation is measured by cor.test function with Kendall method
+#'   Correlation is measured by `cor.test` function with Kendall method
 #'   by default.
 #'   
-#'   The size of the dot, or effect size, indicates the importance of 
+#'   The size of the dot, or importance, indicates the importance of 
 #'   the covariate based on the range of the values. Covariates
 #'   where the range is very small (like a % of mapped reads that
-#'   varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
-#'   The highest value to have is 5 size.
-#'   To get to this value, each covariate is normalized using this 
+#'   varies between 0.001 to 0.002) will have a very small size (0.1*max_size).
+#'   The maximum value is set to 5 units.
+#'   To get to importance, each covariate is normalized using this 
 #'   equation: `1 - min(v/max(v))`,
 #'   and the minimum and maximum values are set to
-#'   0.01 and 1 respectively. 0.5 would mean there is at least
+#'   0.01 and 1 respectively. For instance, 0.5 would mean there is at least
 #'   50% of difference between the minimum value and the maximum value.
 #'   Categorical variables are plot using the maximum size always, since
 #'   it is not possible to estimate the variability. By default, it 
 #'   won't do `v/max(v)` if the values are already between 0-1 or
-#'   0-100, trying to avoid rates and percentage values.
-#'   If you want to ignore the effect size, use `legacy = TRUE`.
+#'   0-100 (already normalized values as rates and percentages).
+#'   If you want to ignore the importance, use `legacy = TRUE`.
 #'   
+#'   Finally, a linear model is used to calculate the significance
+#'   of the covariates effect on the PCs. For that, this function
+#'   uses `lm` to regress the data and uses the p-value calculated by
+#'   each variable in the model to define significance (pvalue < 0.05).
+#'   `lm` or `lasso` can be used here.
 #' @references 
 #' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 #'  
 #' @return: list:
-#' a) significantCovars, covariates with FDR below the cutoff.
-#' b) plot, heatmap of the correlation found. * means pvalue < 0.05.
-#'    Only variables with FDR value lower than the cutoff are colored.
-#' c) corMatrix, correlation, p-value, FDR values
-#'    for each covariate and PCA pais
-#' d) effectsSignificantcovars: that is PCs % * absolute
-#'    correlation between covariate and PCs,
-#' e) pcsMatrix: PCs loading for each sample
+#' 
+#' * plot, heatmap showing the signifcance of the variables. 
+#' * corMatrix, correlation, p-value, FDR values
+#'   for each covariate and PCA pais
+#' * pcsMatrix: PCs loading for each sample
+#' * scatterPlot: plot for each significant covariate and
+#'   the PC values.
+#' * significants: contains the significant covariates
+#'   using a linear model to predict the coefficient
+#'   of covariates that have some color in the plot.
+#'   All the significant covariates from the liner model analysis
+#'   are returned.
+#' 
 #' @examples
 #' data(humanGender)
 #' library(DESeq2)
@@ -231,6 +285,7 @@ degCovariates <- function(counts, metadata,
                           addCovDen = TRUE,
                           legacy = FALSE,
                           smart = TRUE,
+                          method = "lm",
                           plot = TRUE) {
     title <- paste(ifelse(scale, "s", "un-s"), "caled ",
                    " data in pca;\npve >= ",
@@ -249,7 +304,6 @@ degCovariates <- function(counts, metadata,
         as.data.frame() %>% 
         set_rownames(row.names(metadata))
     
-    
     stopifnot(identical(colnames(counts), rownames(metadata)))
     
     pcares <- .runpca(genesbysamples = counts,
@@ -258,13 +312,16 @@ degCovariates <- function(counts, metadata,
     
     samplepcvals <- pcares[["samplepcvals"]]
     pve <- pcares[["pve"]]
-    npca <- ncol(samplepcvals)
     original_names <- colnames(samplepcvals)
-    colnames(samplepcvals) <- paste(colnames(samplepcvals), " (",
-                                    sprintf("%.2f", pve[1L:npca]), "%)",
-                                    sep = "")
-    
-    # find covariates without any missing data
+    pc_pct <- data.frame(
+        pc = colnames(samplepcvals),
+        pct = paste(" (",
+                    sprintf("%.2f", pve[1L:ncol(samplepcvals)]), "%)",
+                    sep = ""),
+        stringsAsFactors = FALSE
+        )
+
+        # find covariates without any missing data
     samplesbyfullcovariates <- metadata[, which(apply(metadata, 2L,
                                                       function(dat) all(!is.na(dat)))), drop = FALSE]
     covar_class <- covar_class[colnames(samplesbyfullcovariates)]
@@ -285,9 +342,9 @@ degCovariates <- function(counts, metadata,
                                            pve[1L:dim(samplepcvals)[2L]],
                                        exclude_vars_from_fdr)
     
-    significantcovars <- corrRes[["mat"]][corrRes[["mat"]][["fdr"]] < fdr,"covar"]
     ma <- corrRes[["mat"]]
     ma[["r"]][ma[["fdr"]] > fdr] <- NA
+    ma[["fdr"]][ma[["fdr"]] > fdr] <- NA
     corMa <- ma[, c("r", "compare", "covar")] %>%
         spread(!!sym("compare"), !!sym("r")) %>%
         remove_rownames() %>%
@@ -308,9 +365,25 @@ degCovariates <- function(counts, metadata,
                 method = "ward.D")
     
     ma[["covar"]] = as.character(ma[["covar"]])
+    ma[["compare"]] = as.character(ma[["compare"]])
 
     ma <- .effect_size(ma, covar_numeric, covar_factors)
-    #  browser()
+    
+    samplepcvals <- as.data.frame(samplepcvals) %>% 
+        set_colnames(original_names) %>% 
+        rownames_to_column("samples")
+    samplepcvals <- bind_cols(samplepcvals,
+                              metadata)
+    significants <- .reduce_covariates(ma, samplepcvals, method)
+    scatterPlot <- .generate_scatter_plot(samplepcvals, corrRes[["mat"]])
+    
+    ma_plot <- left_join(ma,
+                         significants[,c("estimate", "p.value", "PC", "term")],
+              by = c("compare" = "PC", 
+                     "covar" = "term")) %>% 
+        left_join(pc_pct, by = c("compare" = "pc")) %>% 
+        unite(col = "compare", !!!sym("compare"), !!!sym("pct"), sep = " ")
+    ma_plot[["r"]][is.na(ma_plot[["p.value"]])] = NA
     if (legacy){
         if (addCovDen){
             p <- Heatmap(t(corMa),
@@ -353,19 +426,26 @@ degCovariates <- function(counts, metadata,
                   panel.grid.minor = element_blank())
         
         
-        ma[["covar"]] <- factor(ma[["covar"]],
+        ma_plot[["covar"]] <- factor(ma_plot[["covar"]],
                                 levels = hc$labels[hc$order])
-        
-        tile = ggplot(ma, aes_(x = ~covar,y = ~compare,
-                               size = ~effect_size,
-                               color = ~r,
-                               shape = ~type_variable)) +
+        # browser()
+        tile <- ggplot(ma_plot, aes_(x = ~covar,y = ~compare,
+                             size = ~effect_size,
+                             color = ~r,
+                             fill = ~r,
+                             shape = ~type_variable)) +
             geom_point() +
+            geom_point(data = filter(ma_plot, !is.na(fdr)),
+                       stroke = 1, color="black") +
             theme_minimal() +
-            scale_shape_manual(values = c(15, 16)) + 
-            scale_size_continuous(limits = c(0.01, 1),
+            scale_shape_manual(values = c(22, 21)) + 
+            scale_size_continuous(name = "importance",
+                                  limits = c(0.01, 1),
                                   range = c(0.01, 5)) + 
             scale_color_gradient2(low = "darkblue", high = "darkorange",
+                                  guide = "colorbar", na.value = "grey90",
+                                  limits = c(-1L, 1L)) +
+            scale_fill_gradient2(low = "darkblue", high = "darkorange",
                                   guide = "colorbar", na.value = "grey90",
                                   limits = c(-1L, 1L)) +
             xlab("") +
@@ -385,22 +465,15 @@ degCovariates <- function(counts, metadata,
         }
     }
 
-    samplepcvals <- as.data.frame(samplepcvals) %>% 
-        set_colnames(original_names) %>% 
-        rownames_to_column("samples")
-    samplepcvals <- bind_cols(samplepcvals,
-                              metadata)
-    scatterPlot <- .generate_scatter_plot(samplepcvals, corrRes[["mat"]])
     
     if (plot) print(p)
-    
-    invisible(list(significantCovars = significantcovars,
+
+    invisible(list(
                 plot = p,
                 corMatrix = ma,
                 pcsMatrix = samplepcvals,
                 scatterPlot = scatterPlot,
-                effectsSignificantCovars =
-                    corrRes[["effects.significantcovars"]]
+                significants = significants
                 ))
 }
 

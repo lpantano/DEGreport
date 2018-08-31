@@ -25,7 +25,7 @@ degPCA(counts, metadata = NULL, condition = NULL, pc1 = "PC1",
 \item{data}{Whether return PCA data or just plot the PCA.}
 }
 \value{
-if \code{results &lt;-} used, the function return the output
+if \code{results <-} used, the function return the output
 of \code{\link[=prcomp]{prcomp()}}.
 }
 \description{

@@ -1,5 +1,21 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.17.4
+    
+    Feature: Reduce parameter is used to remove outlier points
+             after clustering genes.
+    Feature: Add maximum log2FoldChange to the significance output
+             when multiple comparisons are used as inputs.
+    Feature: Remove non-mapped genes in degPlot.
+    Feature: Add specific function to plot degPatterns clusters.
+    Fix: Support DESeqResults for list of DEGSets.
+    Feature: Add variable selection for covariates that correlate with PCs
+             in degCovariate function.
+    Feature: Add lasso as an option to variable selection in covariate
+             analysis.
+    Feature: Fill with colors only significant variables by lm or lasso, and 
+             draw borber for correlated variables by cor.test.
+
 CHANGES IN DEGreport 1.17.2
     Lorena Pantano <lorena.pantano@gmail.com>
         

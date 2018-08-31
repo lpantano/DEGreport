@@ -4,8 +4,8 @@
 \alias{geom_cor}
 \title{Add correlation and p-value to a \link{ggplot2} plot}
 \usage{
-geom_cor(mapping = NULL, data = NULL, method = "spearman", xpos = NULL,
-  ypos = NULL, inherit.aes = TRUE, ...)
+geom_cor(mapping = NULL, data = NULL, method = "spearman",
+  xpos = NULL, ypos = NULL, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or

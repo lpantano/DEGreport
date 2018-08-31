@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.17.3
-Date: 2017-06-22
+Version: 1.17.4
+Date: 2017-08-31
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -10,6 +10,7 @@ Description: Creation of a HTML report of differential expression
     variability for each selected gene.
 biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
     GeneExpression
+URL: http://lpantano.github.io/DEGreport/
 BugReports: https://github.com/lpantano/DEGreport/issues
 Suggests:
     BiocStyle,
@@ -18,6 +19,7 @@ Suggests:
     pheatmap,
     knitr,
     rmarkdown,
+    statmod,
     testthat
 Depends:
     R (>= 3.4.0)
@@ -26,6 +28,7 @@ Imports:
     methods,
     Biobase,
     BiocGenerics,
+    broom,
     circlize,
     ComplexHeatmap,
     cowplot,
@@ -41,6 +44,7 @@ Imports:
     grDevices,
     knitr,
     logging,
+    lasso2,
     magrittr,
     Nozzle.R1,
     psych,
@@ -67,7 +71,6 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-

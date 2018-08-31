@@ -25,7 +25,7 @@
 #'             "cmdscale" "dist" "hclust" "p.adjust" "xtabs"
 #'             "as.dendrogram"
 #' @importFrom scales trans_breaks trans_format math_format
-#' @importFrom ConsensusClusterPlus ConsensusClusterPlus
+#' @importFrom ConsensusClusterPlus ConsensusClusterPlus calcICL
 #' @import ggrepel
 #' @import ggplot2
 #' @importFrom ggplot2 layer ggproto
@@ -41,9 +41,11 @@
 #'             colData assay assays rowData
 #' @importFrom psych corr.test
 #' @importFrom grid textGrob
+#' @importFrom broom tidy
 #' @importFrom cowplot draw_plot
 #' @importFrom cowplot ggdraw
 #' @importFrom cowplot plot_grid
+#' @importFrom dplyr arrange
 #' @importFrom dplyr select select_if
 #' @importFrom dplyr summarise
 #' @importFrom dplyr mutate mutate_all mutate_if
@@ -51,10 +53,10 @@
 #' @importFrom dplyr group_by ungroup
 #' @importFrom dplyr "%>%"
 #' @importFrom dplyr distinct
-#' @importFrom dplyr left_join inner_join
+#' @importFrom dplyr left_join inner_join right_join
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr bind_cols
-#' @importFrom tidyr spread gather
+#' @importFrom tidyr spread gather unite
 #' @importFrom tibble column_to_rownames remove_rownames rownames_to_column
 #' @importFrom tibble as_tibble
 #' @importFrom ComplexHeatmap HeatmapAnnotation Heatmap
@@ -66,4 +68,5 @@
 #' @importFrom rlang sym
 #' @importFrom magrittr set_colnames set_rownames
 #' @importFrom stringr str_split
+#' @import lasso2
 "_PACKAGE"

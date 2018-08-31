@@ -6,7 +6,7 @@
 \usage{
 degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, minPC = 5,
   correlation = "kendall", addCovDen = TRUE, legacy = FALSE,
-  smart = TRUE, plot = TRUE)
+  smart = TRUE, method = "lm", plot = TRUE)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -34,21 +34,30 @@ the heatmap.}
 \item{legacy}{boolean. Whether to plot the legacy version.}
 
 \item{smart}{boolean. Whether to avoid normalization of the
-numeric covariates when calculating effect size. This is not
+numeric covariates when calculating importance. This is not
 used if \code{legacy = TRUE}. See @details for more information.}
+
+\item{method}{character. Whether to use \code{lm} or \code{lasso} to
+calculate the significance of the variable during reduction
+step. See @details for more information.}
 
 \item{plot}{Whether to plot or not the correlation matrix.}
 }
 \value{
 : list:
-a) significantCovars, covariates with FDR below the cutoff.
-b) plot, heatmap of the correlation found. * means pvalue < 0.05.
-Only variables with FDR value lower than the cutoff are colored.
-c) corMatrix, correlation, p-value, FDR values
+\itemize{
+\item plot, heatmap showing the signifcance of the variables.
+\item corMatrix, correlation, p-value, FDR values
 for each covariate and PCA pais
-d) effectsSignificantcovars: that is PCs % * absolute
-correlation between covariate and PCs,
-e) pcsMatrix: PCs loading for each sample
+\item pcsMatrix: PCs loading for each sample
+\item scatterPlot: plot for each significant covariate and
+the PC values.
+\item significants: contains the significant covariates
+using a linear model to predict the coefficient
+of covariates that have some color in the plot.
+All the significant covariates from the liner model analysis
+are returned.
+}
 }
 \description{
 This function will calculate the pcs using prcomp function,
@@ -56,31 +65,41 @@ and correlate categorical and numerical variables from
 metadata. The size of the dots indicates the importance of the
 metadata, for instance, when the range of the values is pretty
 small (from 0.001 to 0.002 in ribosimal content),
-the correlation results is not important. See details to know
+the correlation results is not important. If black stroke lines
+are shown, the correlation analysis has a FDR < 0.05 for that
+variable and PC.
+Only significant variables according the linear model are colored.
+See details to know
 how this is calculated.
 }
 \details{
 This method is adapeted from Daily et al 2017 article.
 Principal components from PCA analysis are correlated with
 covariates metadata. Factors are transformed to numeric variables.
-Correlation is measured by cor.test function with Kendall method
+Correlation is measured by \code{cor.test} function with Kendall method
 by default.
 
-The size of the dot, or effect size, indicates the importance of
+The size of the dot, or importance, indicates the importance of
 the covariate based on the range of the values. Covariates
 where the range is very small (like a % of mapped reads that
-varies between 0.001 to 0.002) will have a very small dot size (0.1 size).
-The highest value to have is 5 size.
-To get to this value, each covariate is normalized using this
+varies between 0.001 to 0.002) will have a very small size (0.1*max_size).
+The maximum value is set to 5 units.
+To get to importance, each covariate is normalized using this
 equation: \code{1 - min(v/max(v))},
 and the minimum and maximum values are set to
-0.01 and 1 respectively. 0.5 would mean there is at least
+0.01 and 1 respectively. For instance, 0.5 would mean there is at least
 50% of difference between the minimum value and the maximum value.
 Categorical variables are plot using the maximum size always, since
 it is not possible to estimate the variability. By default, it
 won't do \code{v/max(v)} if the values are already between 0-1 or
-0-100, trying to avoid rates and percentage values.
-If you want to ignore the effect size, use \code{legacy = TRUE}.
+0-100 (already normalized values as rates and percentages).
+If you want to ignore the importance, use \code{legacy = TRUE}.
+
+Finally, a linear model is used to calculate the significance
+of the covariates effect on the PCs. For that, this function
+uses \code{lm} to regress the data and uses the p-value calculated by
+each variable in the model to define significance (pvalue < 0.05).
+\code{lm} or \code{lasso} can be used here.
 }
 \examples{
 data(humanGender)
@@ -98,5 +117,6 @@ res$scatterPlot[[1]]
 Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 }
 \author{
-: Lorena Pantano, Kenneth Daily and Thanneer Malai Perumal
+: Lorena Pantano, Victor Barrera,
+Kenneth Daily and Thanneer Malai Perumal
 }

@@ -7,35 +7,99 @@
         print(toout)
 }
 
+#' Plot clusters from degPattern function output
+#' 
+#' This function helps to format the cluster plots from [degPatterns()].
+#' It allows to control the layers and it returns a ggplot object that
+#' can accept more ggplot functions to allow customization.
+#' 
+#' @param table `normalized` element from [degPatterns()] output.
+#' @param time column name to use in the x-axis.
+#' @param color column name to use to color and divide the samples.
+#' @param points Add points to the plot.
+#' @param boxes Add boxplot to the plot.
+#' @param smooth Add regression line to the plot.
+#' @param lines Add gene lines to the plot.
+#' @param facet Split figures based on cluster ID.
+#' @return [ggplot2] object.
+#' @examples
+#' data(humanGender)
+#' library(SummarizedExperiment)
+#' library(ggplot2)
+#' ma <- assays(humanGender)[[1]][1:100,]
+#' des <- colData(humanGender)
+#' des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
+#' res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
+#' degPlotCluster(res$normalized, "group", "other")
+#' degPlotCluster(res$normalized, "group", "other", lines = FALSE)
+#' @export
+degPlotCluster <- function(table, time, color = NULL,
+                           points = TRUE,
+                           boxes = TRUE,
+                           smooth = TRUE,
+                           lines = TRUE,
+                           facet = TRUE){
+    stopifnot(class(table) == "data.frame")
+    if ("cluster"  %in% colnames(table)){
+        counts <- table(distinct(table, genes, cluster)[["cluster"]])
+        table <- inner_join(table,
+                            data.frame(cluster = as.integer(names(counts)),
+                                       tittle = paste(names(counts),
+                                                      "- genes:" ,
+                                                      counts),
+                                       stringsAsFactors = FALSE),
+                            by = "cluster")
+    }
+    
+    table[["line_group"]] = paste(table[["genes"]], table[[color]])
+    splan <- length(unique(table[[time]])) - 1L
+    if (is.null(color))
+        table[[color]] = NULL
+    p <- ggplot(table, aes_string(x = time, y = "value",
+                                   fill = color, color = color))
+    if (boxes)
+        p <- p + geom_boxplot(alpha = 0.3,
+                              outlier.size = 0,
+                              outlier.shape = NA)
+    if (points)
+        p <- p + 
+        geom_point(alpha = 0.4, size = 1,
+                   position = position_jitterdodge(dodge.width = 0.9))
+    if (smooth)
+        p <- p + 
+        stat_smooth(aes_string(x = time, y = "value",
+                               group = color, color = color),
+                    method = "lm", formula = y~poly(x, splan))
+    if (lines)
+        p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
+    if (facet)
+        p <- p + facet_wrap(~tittle)
+    p <- p + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+        ylab("Z-score of gene abundance") +
+        xlab("")
+    p
+    
+}
 
 # plot group of genes according time and group
-.plot_cluster  = function(norm_sign, g_in_c, xs , groups, title, fixy=NULL) {
+.plot_cluster  <- function(norm_sign, g_in_c, xs , groups, title, fixy=NULL) {
     ma <- as.data.frame(norm_sign)[g_in_c,]
-    ma_long <- suppressMessages(melt(cbind(gene = row.names(ma), ma),
+    ma_long <- suppressMessages(melt(cbind(genes = row.names(ma), ma),
                                      variable_name = "sample"))
     ma_long$x <- xs[ma_long$sample]
     ma_long$group <- groups[ma_long$sample]
-    splan <- max(c(round(length(unique(ma_long$x))/3*2,0), 1))
-    p <- suppressWarnings(
-        ggplot(ma_long, aes_string(x = "x", y = "value",
-                                   fill = "group", color = "group")) +
-        geom_boxplot(alpha = 0.3, outlier.size = 0, outlier.shape = NA) +
-        geom_point(alpha = 0.4, width = 0.2, size = 1,
-                    position = position_jitterdodge(dodge.width = 0.9)) +
-        stat_smooth(aes_string(x = "x", y = "value",
-                               group = "group", color = "group"),
-                    method = "lm", formula = y~poly(x, splan)) +
-        ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )")) +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-        ylab("Z-score of gene abundance") + xlab("") )
+    p <- suppressWarnings(degPlotCluster(ma_long, "x", "group", facet = FALSE))
+    p <- p +
+        ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )"))
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups)) == 1) {
-        p <- p + scale_color_brewer(guide = FALSE, palette = "Set1") +
-                scale_fill_brewer(guide = FALSE, palette = "Set1")
+        p <- p + scale_color_brewer(guide = FALSE, palette = "Set2") +
+            scale_fill_brewer(guide = FALSE, palette = "Set2")
     }else{
-        p <- p + scale_color_brewer(palette = "Set1") +
-            scale_fill_brewer(palette = "Set1")
+        p <- p + scale_color_brewer(palette = "Set2") +
+            scale_fill_brewer(palette = "Set2")
     }
     p
 }
@@ -45,23 +109,18 @@
     scale(e)
 }
 
-.reduce <- function(group, counts_group, cutoff=0.70){
-    ngroup <- unique(group)
-    cor <- lapply(ngroup, function(nc1){
-        sapply(ngroup, function(nc2){
-            g1 = colMeans(counts_group[names(group[group == nc1]),])
-            g2 = colMeans(counts_group[names(group[group == nc2]),])
-            (1 - cor.test(g1, g2)$estimate)^2
-        })
-    })
-    cor <- do.call(rbind, cor)
-    colnames(cor) <- ngroup
-    rownames(cor) <- ngroup
-    h <- hclust(as.dist(cor), method = "ward.D2")
-    c <- cutree(h, h = (1 - cutoff)^2)
-    new <- c[as.character(group)]
-    names(new) <- names(group)
-    new
+.reduce <- function(groups, counts_group){
+    lapply(unique(groups), function(g){
+        ma <- counts_group[names(groups)[groups==g],]
+        nokeep <- apply(ma, 2L, function(x){
+            out <- boxplot(x, plot = FALSE)$out
+            rownames(ma)[which(x %in% out)]
+        }) %>% as.vector() %>% unlist() %>% unique()
+        keep <- setdiff(rownames(ma), nokeep)
+        group <- rep(g, length(keep))
+        names(group) <- keep
+        group
+    }) %>%  unlist()
 }
 
 .select_pattern <- function(df){
@@ -98,22 +157,41 @@
     c
 }
 
-.make_concensus_cluster <- function(counts_group){
+.make_concensus_cluster <- function(counts_group, ...){
     ConsensusClusterPlus(t(counts_group),
-                         reps = 500, maxK = 10, plot = "png")
+                         reps = 500, maxK = 10,
+                         distance = "pearson", finalLinkage = "ward.D2",
+                         ...)
 }
 
 .select_concensus_genes <- function(c){
-    c[[2]][["consensusClass"]]
+    icl <- calcICL(c)
+    consensus <- icl[["itemConsensus"]] %>%
+        group_by(!!!sym("k")) %>% 
+        summarise(score = quantile(!!!sym("itemConsensus"),
+                                   0.75,
+                                   na.rm = TRUE)) %>% 
+        arrange(desc(score), k) %>% .[["k"]] %>% .[1]
+    
+    df <- icl[["itemConsensus"]] %>%
+        filter(k == consensus, itemConsensus > 0.9) %>% 
+        .[,c("item", "cluster")]
+    
+    genes <- df[["cluster"]]
+    names(genes) <- df[["item"]]
+    
+    genes
 }
 
 .select_genes <- function(c, counts_group, minc=15,
                           reduce=FALSE, cutoff=0.30){
     select <- cutree(as.hclust(c), h = c$dc)
     select <- select[select %in% names(table(select))[table(select) > minc]]
+
+    if (reduce)
+        select <- .reduce(select, counts_group)
+    select <- select[select %in% names(table(select))[table(select) > minc]]
     message("Working with ", length(select), " genes after filtering: minc > ",minc)
-    if (reduce & length(unique(select) > 1) & ncol(counts_group) > 2)
-        select <- .reduce(select, counts_group, cutoff)
     return(select)
 }
 
@@ -540,6 +618,7 @@ degPCA <- function(counts, metadata = NULL, condition=NULL,
                    pc1 = "PC1", pc2 = "PC2",
                    name = NULL, shape = NULL,
                    data = FALSE){
+    # browser()
     pc <- .pca_loadings(counts)
     # error if pc1/2 are not in columns of pc
     idx1 <- which(names(pc[["percentVar"]]) == pc1)
@@ -679,11 +758,12 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @param col character column name in metadata to separate
 #'   samples. Normally control/mutant
 #' @param consensusCluster Indicates whether using [ConsensusClusterPlus]
-#'  or [cluster::diana()]
-#' @param reduce boolean reduce number of clusters using
-#'   correlation values between them.
-#' @param cutoff integer threshold for correlation
-#'   expression to merge clusters (0 - 1)
+#'   or [cluster::diana()]
+#' @param reduce boolean remove genes that are outliers of the cluster
+#'   distribution. `boxplot` function is used to flag a gene in any
+#'   group defined by `time` and `col` as outlier and it is removed
+#'   from the cluster. Not used if `consensusCluster` is TRUE.
+#' @param cutoff This is deprecated.
 #' @param scale boolean scale the \code{ma} values by row
 #' @param pattern numeric vector to be used to find patterns like this
 #'   from the count matrix. As well, it can be a character indicating the
@@ -743,6 +823,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' des <- colData(humanGender)
 #' des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
 #' res <- degPatterns(ma, des, time="group", col = "other")
+
 #' # Use the data yourself for custom figures
 #'  ggplot(res[["normalized"]],
 #'         aes(group, value, color = other, fill = other)) +
@@ -813,7 +894,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
 
     }else if (!consensusCluster & is.null(pattern)){
         cluster_genes = .make_clusters(counts_group)
-        groups <- .select_genes(cluster_genes, counts_group, minc,
+        groups <- .select_genes(cluster_genes, norm_sign, minc,
                                reduce = reduce,
                                cutoff = cutoff)
     }else if (consensusCluster & is.null(pattern)){
@@ -830,23 +911,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         stopifnot(length(pattern) == ncol(counts_group))
         cluster_genes <- .find_pattern(counts_group, pattern)
         groups <- .select_pattern(cluster_genes)
-    }
-
-    to_plot <- unique(groups)
-    plots <- lapply(to_plot, function(x){
-        .plot_cluster(norm_sign,
-                      as.character(names(groups[groups == x])),
-                      metadata_groups[,time],
-                      metadata_groups[,col], x, fixy)
-    })
-    nc <- 3
-    all <- NULL
-    if (length(plots) < 3)
-        nc = length(plots)
-    if (length(plots) > 0){
-        all <- plot_grid(plotlist = plots, ncol = nc)
-        if (plot)
-            print(all)
     }
     
     df <- data.frame(genes = names(groups), 
@@ -872,10 +936,20 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         inner_join(metadata_groups %>%
                        mutate_if(is.factor, as.character)) %>%
         inner_join(df, by = "genes")
+    normalized[[time]] = factor(normalized[[time]],
+                                levels = levels(metadata[[time]]))
+    
+    if (length(unique(groups)) > 0){
+        p <- degPlotCluster(normalized, time, col)
+        if (!is.null(fixy))
+            p <- p + ylim(fixy[1], fixy[2])
+        if (plot)
+            print(p)
+    }
     
     invisible(list(df = df,
-         pass = to_plot,
-         plot = all,
+         pass = unique(groups),
+         plot = p,
          hr = cluster_genes,
          normalized = normalized,
          summarise = summarise,

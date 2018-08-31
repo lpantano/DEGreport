@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>smart PCA from count matrix data — degPCA • DEGreport</title>
+<title>MA-plot from base means and log fold changes — degMA • DEGreport</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="smart PCA from count matrix data — degPCA" />
+<meta property="og:title" content="MA-plot from base means and log fold changes — degMA" />
 
-<meta property="og:description" content="nice plot using ggplot2 from prcomp function" />
+<meta property="og:description" content="MA-plot addaptation to show the shrinking effect." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -95,71 +95,67 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>smart PCA from count matrix data</h1>
+    <h1>MA-plot from base means and log fold changes</h1>
     
-    <div class="hidden name"><code>degPCA.Rd</code></div>
+    <div class="hidden name"><code>degMA.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>nice plot using ggplot2 from prcomp function</p>
+    <p>MA-plot addaptation to show the shrinking effect.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>degPCA</span>(<span class='no'>counts</span>, <span class='kw'>metadata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>condition</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pc1</span> <span class='kw'>=</span> <span class='st'>"PC1"</span>,
-  <span class='kw'>pc2</span> <span class='kw'>=</span> <span class='st'>"PC2"</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>degMA</span>(<span class='no'>results</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label_points</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label_column</span> <span class='kw'>=</span> <span class='st'>"symbol"</span>,
+  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>diff</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>raw</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>correlation</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>counts</th>
-      <td><p>matrix with count data</p></td>
+      <th>results</th>
+      <td><p><a href='DEGSet.html'>DEGSet</a> class.</p></td>
     </tr>
     <tr>
-      <th>metadata</th>
-      <td><p>dara.frame with sample information</p></td>
+      <th>title</th>
+      <td><p><em>Optional</em>. Plot title.</p></td>
     </tr>
     <tr>
-      <th>condition</th>
-      <td><p>character column in metadata to use to color samples</p></td>
+      <th>label_points</th>
+      <td><p>Optionally label these particular points.</p></td>
     </tr>
     <tr>
-      <th>pc1</th>
-      <td><p>character PC to plot on x-axis</p></td>
+      <th>label_column</th>
+      <td><p>Match label_points to this column in the results.</p></td>
     </tr>
     <tr>
-      <th>pc2</th>
-      <td><p>character PC to plot on y-axis</p></td>
+      <th>limit</th>
+      <td><p>Absolute maximum to plot on the log2FoldChange.</p></td>
     </tr>
     <tr>
-      <th>name</th>
-      <td><p>character if given, column in metadata to print label</p></td>
+      <th>diff</th>
+      <td><p>Minimum difference between logFoldChange before and
+after shrinking.</p></td>
     </tr>
     <tr>
-      <th>shape</th>
-      <td><p>character if given, column in metadata to shape points</p></td>
+      <th>raw</th>
+      <td><p>Whether to plot just the unshrunken log2FC.</p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>Whether return PCA data or just plot the PCA.</p></td>
+      <th>correlation</th>
+      <td><p>Whether to plot the correlation of the two logFCs.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>if <code>results &amp;lt;-</code> used, the function return the output
-of <code>prcomp()</code>.</p>
+    <p>MA-plot ggplot.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>humanGender</span>)
-<span class='fu'>library</span>(<span class='no'>DESeq2</span>)
-<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
-<span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>1000</span>, <span class='no'>idx</span>],
-<span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
-<span class='fu'>degPCA</span>(<span class='fu'>log2</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dse</span>)+<span class='fl'>0.5</span>), <span class='fu'>colData</span>(<span class='no'>dse</span>),
-  <span class='kw'>condition</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"group"</span>, <span class='kw'>shape</span><span class='kw'>=</span><span class='st'>"group"</span>)</div><div class='img'><img src='degPCA-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DESeq2</span>)
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span><span class='kw'>=</span><span class='fl'>1</span>)
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"condition_B_vs_A"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>degMA</span>(<span class='no'>res</span><span class='kw'>[[</span><span class='st'>"condition_B_vs_A"</span>]])</div><div class='output co'>#&gt; <span class='warning'>Warning: Transformation introduced infinite values in continuous x-axis</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 5 rows containing missing values (geom_point).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 84 rows containing missing values (geom_point).</span></div><div class='img'><img src='degMA-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -173,7 +169,11 @@ of <code>prcomp()</code>.</p>
 
     <h2>Author</h2>
     
-Lorena Pantano, Rory Kirchner, Michael Steinbaugh
+Victor Barrera
+
+Rory Kirchner
+
+Lorena Pantano
 
   </div>
 </div>

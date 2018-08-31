@@ -22,9 +22,11 @@ set of genes. — degMV • DEGreport</title>
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -35,6 +37,7 @@ set of genes. — degMV" />
 <meta property="og:description" content="Correlation of the standard desviation and the mean of the abundance of a
 set of genes." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -61,7 +64,7 @@ set of genes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
       </span>
     </div>
 
@@ -149,7 +152,10 @@ row number should be the same length than pvalues vector.</p></td>
 #&gt; <span class='message'>-- original counts are preserved in counts(dds)</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a></span>(<span class='no'>dds</span>)
 <span class='fu'>degMV</span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"group"</span>]],
       <span class='no'>res</span>[, <span class='fl'>4</span>],
-      <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing non-finite values (stat_quantile).</span></div><div class='img'><img src='degMV-1.png' alt='' width='700' height='433' /></div></pre>
+      <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing non-finite values (stat_quantile).</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: SparseM</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘SparseM’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    backsolve</span></div><div class='img'><img src='degMV-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

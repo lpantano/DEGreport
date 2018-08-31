@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -31,8 +33,9 @@
 <meta property="og:title" content="Make nice colors for metadata — degColors" />
 
 <meta property="og:description" content="The function will take a metadata table and use Set2 palette when
-number of levels is &gt; 3 or a set or orange/blue colors other wise." />
+number of levels is &amp;gt; 3 or a set or orange/blue colors other wise." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -59,7 +62,7 @@ number of levels is &gt; 3 or a set or orange/blue colors other wise." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
       </span>
     </div>
 
@@ -142,8 +145,16 @@ multi-levels categorical variables.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>humanGender</span>)
 <span class='fu'>library</span>(<span class='no'>DESeq2</span>)
-<span class='fu'>library</span>(<span class='no'>ComplexHeatmap</span>)
-<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
+<span class='fu'>library</span>(<span class='no'>ComplexHeatmap</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: grid</span></div><div class='output co'>#&gt; <span class='message'>========================================</span>
+#&gt; <span class='message'>ComplexHeatmap version 1.17.1</span>
+#&gt; <span class='message'>Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/</span>
+#&gt; <span class='message'>Github page: https://github.com/jokergoo/ComplexHeatmap</span>
+#&gt; <span class='message'>Documentation: http://bioconductor.org/packages/ComplexHeatmap/</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>If you use it in published research, please cite:</span>
+#&gt; <span class='message'>Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional </span>
+#&gt; <span class='message'>  genomic data. Bioinformatics 2016.</span>
+#&gt; <span class='message'>========================================</span></div><div class='input'><span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>75</span>:<span class='fl'>85</span>)
 <span class='no'>dse</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet'>DESeqDataSetFromMatrix</a></span>(<span class='fu'>assays</span>(<span class='no'>humanGender</span>)<span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>idx</span>],
   <span class='fu'>colData</span>(<span class='no'>humanGender</span>)[<span class='no'>idx</span>,], <span class='kw'>design</span><span class='kw'>=</span>~<span class='no'>group</span>)
 <span class='no'>th</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/ComplexHeatmap/topics/HeatmapAnnotation'>HeatmapAnnotation</a></span>(<span class='kw'>df</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>dse</span>),
