@@ -10,7 +10,7 @@
 #'   the colors themself (comparible with [pheatmap::pheatmap())]).
 #' @param con_values Color to be used for continuous variables.
 #' @param cat_values Color to be used for 2-levels categorical variables.
-#' @param palette Palette to use from [RColorBrewer::RColorBrewer()] for
+#' @param palette Palette to use from `brewer.pal()` for
 #'   multi-levels categorical variables.
 #' @examples 
 #' data(humanGender)

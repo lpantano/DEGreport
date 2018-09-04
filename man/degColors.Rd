@@ -21,7 +21,7 @@ the colors themself (comparible with [pheatmap::pheatmap())]).
 
 \item{cat_values}{Color to be used for 2-levels categorical variables.}
 
-\item{palette}{Palette to use from \code{\link[RColorBrewer:brewer.pal]{RColorBrewer::brewer.pal()}} for
+\item{palette}{Palette to use from \code{brewer.pal()} for
 multi-levels categorical variables.}
 }
 \description{
