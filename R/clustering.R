@@ -58,9 +58,9 @@ degPlotCluster <- function(table, time, color = NULL,
     p <- ggplot(table, aes_string(x = time, y = "value",
                                    fill = color, color = color))
     if (boxes)
-        p <- p + geom_boxplot(alpha = 0.3,
+        p <- p + geom_boxplot(alpha = 0,
                               outlier.size = 0,
-                              outlier.shape = NA)
+                              outlier.shape = NA, )
     if (points)
         p <- p + 
         geom_point(alpha = 0.4, size = 1,
@@ -69,6 +69,7 @@ degPlotCluster <- function(table, time, color = NULL,
         p <- p + 
         stat_smooth(aes_string(x = time, y = "value",
                                group = color, color = color),
+                    se = FALSE,
                     method = "lm", formula = y~poly(x, splan))
     if (lines)
         p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
