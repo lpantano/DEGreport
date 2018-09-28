@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.17.5
 
     Fix: Fix documentation warning.
+    Fix: Error in degCovariate when no correlation exists.
 
 CHANGES IN DEGreport 1.17.4
     

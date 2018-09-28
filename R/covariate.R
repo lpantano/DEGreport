@@ -162,7 +162,7 @@
 # reduce covariates to significant ones that predict PCs
 .reduce_covariates <- function(corMatrix, pcsMatrix, method = "lm"){
     pcs <- colnames(pcsMatrix)[grepl("PC[0-9]+", colnames(pcsMatrix))]
-    lapply(pcs, function(pc){
+    significants <- lapply(pcs, function(pc){
         pc_var <- corMatrix %>% 
             filter(fdr < 0.01, grepl(pc, compare)) %>% 
             arrange(abs(r)) %>% 
@@ -179,6 +179,9 @@
     }) %>% bind_rows() %>% 
         filter(!grepl("Intercept", !!!sym("term")))
     
+    if (nrow(significants) == 0)
+        return(data.frame(estimate=0, p.value=0, PC="", term=""))
+    significants[,c("estimate", "p.value", "PC", "term")]
 }
 
 #' Find correlation between pcs and covariates
@@ -378,7 +381,7 @@ degCovariates <- function(counts, metadata,
     scatterPlot <- .generate_scatter_plot(samplepcvals, corrRes[["mat"]])
     
     ma_plot <- left_join(ma,
-                         significants[,c("estimate", "p.value", "PC", "term")],
+                         significants,
               by = c("compare" = "PC", 
                      "covar" = "term")) %>% 
         left_join(pc_pct, by = c("compare" = "pc")) %>% 
