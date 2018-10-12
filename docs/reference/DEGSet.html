@@ -63,7 +63,7 @@ in a way the methods will work with all of them." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.6</span>
       </span>
     </div>
 
@@ -181,12 +181,13 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    IQR, mad, sd, var, xtabs</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,</span>
-#&gt; <span class='message'>    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,</span>
-#&gt; <span class='message'>    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,</span>
-#&gt; <span class='message'>    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span>
-#&gt; <span class='message'>    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,</span>
-#&gt; <span class='message'>    table, tapply, union, unique, unsplit, which, which.max, which.min</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>    anyDuplicated, append, as.data.frame, basename, cbind, colMeans,</span>
+#&gt; <span class='message'>    colnames, colSums, dirname, do.call, duplicated, eval, evalq,</span>
+#&gt; <span class='message'>    Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply,</span>
+#&gt; <span class='message'>    lengths, Map, mapply, match, mget, order, paste, pmax, pmax.int,</span>
+#&gt; <span class='message'>    pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,</span>
+#&gt; <span class='message'>    rowSums, sapply, setdiff, sort, table, tapply, union, unique,</span>
+#&gt; <span class='message'>    unsplit, which, which.max, which.min</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘S4Vectors’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    expand.grid</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: IRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomeInfoDb</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biobase</span></div><div class='output co'>#&gt; <span class='message'>Welcome to Bioconductor</span>
@@ -196,12 +197,12 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 #&gt; <span class='message'>    'citation("Biobase")', and for packages 'citation("pkgname")'.</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: DelayedArray</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: matrixStats</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘matrixStats’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Biobase’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    anyMissing, rowMedians</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>    anyMissing, rowMedians</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocParallel</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘DelayedArray’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:matrixStats’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
+#&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    apply</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>edgeR</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: limma</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>    aperm, apply</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>edgeR</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: limma</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘limma’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:DESeq2’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    plotMA</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:BiocGenerics’:</span>
@@ -213,32 +214,32 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
 #&gt; Wald test p-value: condition B vs A 
 #&gt; DataFrame with 1000 rows and 6 columns
-#&gt;           baseMean log2FoldChange     lfcSE       stat       pvalue
-#&gt;          &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt;    &lt;numeric&gt;
-#&gt; gene202  595.73808       2.692906 0.3127722   7.828812 4.925017e-15
-#&gt; gene710  117.42306       2.392023 0.3093875   6.933707 4.099523e-12
-#&gt; gene365   62.44349       2.688191 0.3470148   6.794943 1.083555e-11
-#&gt; gene364  504.52212       2.137270 0.3041599   6.564016 5.237766e-11
-#&gt; gene92   220.78020       2.057630 0.3268742   5.429779 5.642398e-08
-#&gt; ...            ...            ...       ...        ...          ...
-#&gt; gene984   3.560632     1.18341606 0.5582132  1.5660621    0.1173341
-#&gt; gene986   1.039125    -0.13169484 0.5499998 -0.7437829    0.4570078
-#&gt; gene989   1.841387     0.79707943 0.5677130  1.3149909    0.1885130
-#&gt; gene995   2.886361     0.08407965 0.5556643  1.0913791    0.2751061
-#&gt; gene1000  2.581666    -0.53534058 0.5649617 -0.8062393    0.4201049
-#&gt;                  padj
-#&gt;             &lt;numeric&gt;
-#&gt; gene202  4.058214e-12
-#&gt; gene710  1.689004e-09
-#&gt; gene365  2.976164e-09
-#&gt; gene364  1.078980e-08
-#&gt; gene92   9.298671e-06
-#&gt; ...               ...
-#&gt; gene984            NA
-#&gt; gene986            NA
-#&gt; gene989            NA
-#&gt; gene995            NA
-#&gt; gene1000           NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
+#&gt;                  baseMean     log2FoldChange             lfcSE
+#&gt;                 &lt;numeric&gt;          &lt;numeric&gt;         &lt;numeric&gt;
+#&gt; gene202  595.738080502665   2.69290441661694 0.312772825764591
+#&gt; gene710  117.423055944441   2.39202225442696 0.309387809822349
+#&gt; gene365  62.4434899710059   2.68819163853763 0.347014786363427
+#&gt; gene364  504.522116500683   2.13726876442053 0.304160581713146
+#&gt; gene92   220.780204589055   2.05762907387256 0.326874656707121
+#&gt; ...                   ...                ...               ...
+#&gt; gene984  3.56063169601722   1.18342031931477 0.558212799249338
+#&gt; gene986  1.03912504596143 -0.131696247712928 0.550000503156253
+#&gt; gene989  1.84138670225673  0.797083476699305 0.567712937423255
+#&gt; gene995  2.88636057994642 0.0840813792066131 0.555663728011982
+#&gt; gene1000  2.5816660463203 -0.535343293319606 0.564961445050577
+#&gt;                        stat               pvalue                 padj
+#&gt;                   &lt;numeric&gt;            &lt;numeric&gt;            &lt;numeric&gt;
+#&gt; gene202    7.82879005947595 4.92587384985754e-15 4.05892005228261e-12
+#&gt; gene710    6.93369964061162  4.0997464674756e-12 1.68909554459995e-09
+#&gt; gene365    6.79494555755484 1.08353438828276e-11  2.9761077864833e-09
+#&gt; gene364    6.56399761634188 5.23840391930272e-11 1.07911120737636e-08
+#&gt; gene92      5.4297680851086 5.64273306072517e-08 9.29922408407507e-06
+#&gt; ...                     ...                  ...                  ...
+#&gt; gene984    1.56606943948116    0.117332361646146                   NA
+#&gt; gene986  -0.743786405055134    0.457005706109876                   NA
+#&gt; gene989    1.31499465077388    0.188511700254376                   NA
+#&gt; gene995    1.09138089416803    0.275105315817471                   NA
+#&gt; gene1000 -0.806243807885651    0.420102283688199                   NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; # A tibble: 1,000 x 7
 #&gt;    gene    baseMean log2FoldChange lfcSE  stat   pvalue     padj
 #&gt;  * &lt;chr&gt;      &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 #&gt;  1 gene202    596.            2.69 0.313  7.83 4.93e-15 4.06e-12

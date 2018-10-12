@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.6</span>
       </span>
     </div>
 
@@ -107,9 +107,9 @@
     </div>
 
     <pre class="usage"><span class='fu'>degVolcano</span>(<span class='no'>stats</span>, <span class='kw'>side</span> <span class='kw'>=</span> <span class='st'>"both"</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Volcano Plot with Marginal Distributions"</span>, <span class='kw'>pval.cutoff</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>lfc.cutoff</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>shade.colour</span> <span class='kw'>=</span> <span class='st'>"orange"</span>, <span class='kw'>shade.alpha</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
-  <span class='kw'>point.colour</span> <span class='kw'>=</span> <span class='st'>"gray"</span>, <span class='kw'>point.alpha</span> <span class='kw'>=</span> <span class='fl'>0.75</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Volcano Plot with Marginal Distributions"</span>,
+  <span class='kw'>pval.cutoff</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>lfc.cutoff</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>shade.colour</span> <span class='kw'>=</span> <span class='st'>"orange"</span>,
+  <span class='kw'>shade.alpha</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>point.colour</span> <span class='kw'>=</span> <span class='st'>"gray"</span>, <span class='kw'>point.alpha</span> <span class='kw'>=</span> <span class='fl'>0.75</span>,
   <span class='kw'>point.outline.colour</span> <span class='kw'>=</span> <span class='st'>"darkgray"</span>, <span class='kw'>line.colour</span> <span class='kw'>=</span> <span class='st'>"gray"</span>,
   <span class='kw'>plot_text</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
@@ -182,7 +182,7 @@ right side of the volcano plot.</p>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>stats</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/results'>results</a></span>(<span class='no'>dds</span>)[,<span class='fu'>c</span>(<span class='st'>"log2FoldChange"</span>, <span class='st'>"padj"</span>)]
 <span class='no'>stats</span><span class='kw'>[[</span><span class='st'>"name"</span>]] <span class='kw'>&lt;-</span> <span class='fu'>row.names</span>(<span class='no'>stats</span>)
-<span class='fu'>degVolcano</span>(<span class='no'>stats</span>, <span class='kw'>plot_text</span> <span class='kw'>=</span> <span class='no'>stats</span>[<span class='fl'>1</span>:<span class='fl'>10</span>,])</div><div class='img'><img src='degVolcano-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>degVolcano</span>(<span class='no'>stats</span>, <span class='kw'>plot_text</span> <span class='kw'>=</span> <span class='no'>stats</span>[<span class='fl'>1</span>:<span class='fl'>10</span>,])</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_text_repel).</span></div><div class='img'><img src='degVolcano-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -63,7 +63,7 @@ DESeq2::DESeqResults and edgeR::topTags." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.6</span>
       </span>
     </div>
 
@@ -165,6 +165,15 @@ Only used when a list is giving to the method.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a <a href='http://dplyr.tidyverse.org/reference/tbl_df.html'>dplyr::tbl_df</a> data frame. <code>gene</code> column has the feature name.
+In the case of using this method with the results from <a href='degComps.html'>degComps</a>,
+<code>log2FoldChange</code> has the higher foldChange from the comparisons, and
+<code>padj</code> has the padj associated to the previous column. Then, there is
+two columns for each comparison, one for the log2FoldChange and another
+for the padj.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DESeq2</span>)
@@ -191,29 +200,32 @@ Only used when a list is giving to the method.</p></td>
 <span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/sample.html'>sample</a></span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"condition"</span>]], <span class='fl'>12</span>)
   <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
 <span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>contrast</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"treatment_B_vs_A"</span>,
-                                     <span class='fu'>c</span>(<span class='st'>"condition"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)))</div><div class='output co'>#&gt; <span class='message'>Doing 2 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span></div><div class='output co'>#&gt; # A tibble: 6 x 3
-#&gt;   gene     log2FoldChange_condition_A_vs_B padj_condition_A_vs_B
-#&gt;   &lt;chr&gt;                              &lt;dbl&gt;                 &lt;dbl&gt;
-#&gt; 1 gene1000                          -1.06              0.0191   
-#&gt; 2 gene101                           -1.60              0.00571  
-#&gt; 3 gene104                            1.41              0.0000718
-#&gt; 4 gene106                            0.875             0.0347   
-#&gt; 5 gene11                             1.07              0.0146   
-#&gt; 6 gene111                           -2.27              0.0000426</div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
-#&gt;   gene     log2FoldChange_c… log2FoldChange_… padj_condition_… padj_treatment_…
-#&gt;   &lt;chr&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-#&gt; 1 gene1               0.304          -0.00685          0.837              0.997
-#&gt; 2 gene10              0.421           0.113            0.413              0.986
-#&gt; 3 gene100            -0.0257         -0.0753           0.989              0.990
-#&gt; 4 gene1000           -1.06            0.313            0.0191             0.932
-#&gt; 5 gene101            -1.60            0.0770           0.00571            0.986
-#&gt; 6 gene102             0.767           0.0268           0.218              0.977</div></pre>
+                                     <span class='fu'>c</span>(<span class='st'>"condition"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)))</div><div class='output co'>#&gt; <span class='message'>Doing 2 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span></div><div class='output co'>#&gt; # A tibble: 6 x 5
+#&gt;   gene    log2FoldChange    padj log2FoldChange_condition_… padj_condition_A_v…
+#&gt;   &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;                      &lt;dbl&gt;               &lt;dbl&gt;
+#&gt; 1 gene100          -1.35 0.00103                      -1.35             0.00103
+#&gt; 2 gene10…          -1.40 0.00384                      -1.40             0.00384
+#&gt; 3 gene104          -1.49 0.00431                      -1.49             0.00431
+#&gt; 4 gene11           -2.54 0.00170                      -2.54             0.00170
+#&gt; 5 gene112           1.39 0.0122                        1.39             0.0122 
+#&gt; 6 gene114          -1.22 0.0100                       -1.22             0.0100 </div><div class='input'><span class='fu'>significants</span>(<span class='no'>res</span>, <span class='kw'>full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>padj</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span> <span class='no'>head</span> <span class='co'># all genes</span></div><div class='output co'>#&gt; # A tibble: 6 x 7
+#&gt;   gene  log2FoldChange  padj log2FoldChange_… log2FoldChange_… padj_condition_…
+#&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+#&gt; 1 gene1         1.14   0.153            1.14           -0.171           0.153  
+#&gt; 2 gene…         0.0473 0.996           NA               0.0473         NA      
+#&gt; 3 gene…         0.325  0.976           -1.35            0.325           0.00103
+#&gt; 4 gene…         0.419  0.931           -1.40            0.419           0.00384
+#&gt; 5 gene…        -0.185  0.996           -0.343          -0.185           0.706  
+#&gt; 6 gene…         0.641  0.479            0.641          -0.192           0.479  
+#&gt; # ... with 1 more variable: padj_treatment_B_vs_A &lt;dbl&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.6</span>
       </span>
     </div>
 
@@ -63,7 +63,7 @@
       <h1>QC and downstream analysis for differential expression RNA-seq</h1>
                         <h4 class="author">Lorena Pantano</h4>
             
-            <h4 class="date">15 August 2018</h4>
+            <h4 class="date">12 October 2018</h4>
       
       
       <div class="hidden name"><code>DEGreport.Rmd</code></div>
@@ -73,7 +73,7 @@
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <p>DEGreport package version: 1.17.3</p>
+      <p>DEGreport package version: 1.17.5</p>
     </div>
     
 <p><a href="lorena.pantano@gmail.com">Lorena Pantano</a> Harvard TH Chan School of Public Health, Boston, US</p>
@@ -152,32 +152,45 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <pre><code>## log2 fold change (MAP): group Male vs Female 
 ## Wald test p-value: group Male vs Female 
 ## DataFrame with 1000 rows and 6 columns
-##                   baseMean log2FoldChange      lfcSE         stat
-##                  &lt;numeric&gt;      &lt;numeric&gt;  &lt;numeric&gt;    &lt;numeric&gt;
-## ENSG00000067048 1025.03783      1.9394875 0.10069402    23.994380
-## ENSG00000012817  411.54387      3.7005640 0.09898885    21.804517
-## ENSG00000067646  169.81477      3.3228457 0.09951933    15.483847
-## ENSG00000005889  670.86191     -0.4894347 0.09293631    -5.263708
-## ENSG00000006757   92.66111     -0.4729262 0.09927492    -4.757006
-## ...                    ...            ...        ...          ...
-## ENSG00000068120  1214.0967  -0.0001143219 0.07972266 -0.001433998
-## ENSG00000072062   935.3172   0.0005592191 0.09153522  0.006108720
-## ENSG00000076770  1019.7964   0.0008500818 0.10166633  0.008361930
-## ENSG00000078967   166.4221   0.0004157454 0.09597580  0.004329710
-## ENSG00000079246  5226.3390   0.0001495843 0.09262051  0.001614995
-##                        pvalue          padj
-##                     &lt;numeric&gt;     &lt;numeric&gt;
-## ENSG00000067048 3.183020e-127 3.183020e-124
-## ENSG00000012817 2.102139e-105 1.051070e-102
-## ENSG00000067646  4.459844e-54  1.486615e-51
-## ENSG00000005889  1.411785e-07  3.529463e-05
-## ENSG00000006757  1.964856e-06  3.929713e-04
-## ...                       ...           ...
-## ENSG00000068120     0.9988558     0.9988558
-## ENSG00000072062     0.9951260     0.9988558
-## ENSG00000076770     0.9933282     0.9988558
-## ENSG00000078967     0.9965454     0.9988558
-## ENSG00000079246     0.9987114     0.9988558</code></pre>
+##                         baseMean        log2FoldChange              lfcSE
+##                        &lt;numeric&gt;             &lt;numeric&gt;          &lt;numeric&gt;
+## ENSG00000067048 1025.03783081851      1.93948751981495  0.100694015277881
+## ENSG00000012817 411.543865988588      3.70056395376919 0.0989888483685393
+## ENSG00000067646 169.814765626402      3.32284568660191 0.0995193327364417
+## ENSG00000005889 670.861906530697    -0.489434740758985  0.092936309939388
+## ENSG00000006757 92.6611112908156    -0.472926180708218 0.0992749166821469
+## ...                          ...                   ...                ...
+## ENSG00000068120 1214.09670077803 -0.000114321924517496 0.0797226606999421
+## ENSG00000072062 935.317212058596  0.000559219142042069 0.0915352171745646
+## ENSG00000076770 1019.79638067687  0.000850081845600191  0.101666325101382
+## ENSG00000078967 166.422097051996  0.000415745391578262 0.0959757955312269
+## ENSG00000079246 5226.33895971623  0.000149584255113252 0.0926205100248813
+##                                 stat                pvalue
+##                            &lt;numeric&gt;             &lt;numeric&gt;
+## ENSG00000067048     23.9943800011737  3.1830203922112e-127
+## ENSG00000012817     21.8045168852374 2.10213939599488e-105
+## ENSG00000067646     15.4838473278579  4.45984434298121e-54
+## ENSG00000005889    -5.26370810368133  1.41178536870763e-07
+## ENSG00000006757    -4.75700569609359  1.96485627341598e-06
+## ...                              ...                   ...
+## ENSG00000068120 -0.00143399782360411     0.998855835668455
+## ENSG00000072062  0.00610871981311749     0.995125977088407
+## ENSG00000076770  0.00836192966137436     0.993328223175276
+## ENSG00000078967  0.00432971042062787      0.99654540169618
+## ENSG00000079246  0.00161499511902357     0.998711420888906
+##                                  padj
+##                             &lt;numeric&gt;
+## ENSG00000067048  3.1830203922112e-124
+## ENSG00000012817 1.05106969799744e-102
+## ENSG00000067646  1.48661478099374e-51
+## ENSG00000005889  3.52946342176908e-05
+## ENSG00000006757  0.000392971254683197
+## ...                               ...
+## ENSG00000068120     0.998855835668455
+## ENSG00000072062     0.998855835668455
+## ENSG00000076770     0.998855835668455
+## ENSG00000078967     0.998855835668455
+## ENSG00000079246     0.998855835668455</code></pre>
 <p>By default it would output the <code>shrunken</code> table always, as defined by <code>degDefault</code>, that contains the default table to get.</p>
 <p>To get the original results table, use the parameter as this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/deg.html">deg</a></span>(degs[[<span class="dv">1</span>]], <span class="st">"raw"</span>, <span class="st">"tibble"</span>)</code></pre></div>
@@ -211,20 +224,21 @@ design &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 ## [10] "ENSG00000069702"</code></pre>
 <p>And it can returns the full table for a list:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs, <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>, <span class="dt">full =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 10 x 5
-##    gene     log2FoldChange_group… log2FoldChange_group… padj_group_Female…
-##    &lt;chr&gt;                    &lt;dbl&gt;                 &lt;dbl&gt;              &lt;dbl&gt;
-##  1 ENSG000…                -0.494                 0.388          1.31e-  2
-##  2 ENSG000…                -0.351                 0.319          5.56e-  3
-##  3 ENSG000…                 0.541                -0.425          3.69e-  3
-##  4 ENSG000…                 0.573                -0.489          3.53e-  5
-##  5 ENSG000…                 0.585                -0.473          3.93e-  4
-##  6 ENSG000…                -5.01                  3.70           1.05e-102
-##  7 ENSG000…                -3.63                  1.94           3.18e-124
-##  8 ENSG000…                -4.43                  3.32           1.49e- 51
-##  9 ENSG000…                 0.453                -0.260          3.71e-  2
-## 10 ENSG000…                 0.582                -0.339          1.48e-  3
-## # ... with 1 more variable: padj_group_Male_vs_Female &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 10 x 7
+##    gene  log2FoldChange      padj log2FoldChange_… log2FoldChange_…
+##    &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+##  1 ENSG…          0.388 1.31e-  2           -0.494            0.388
+##  2 ENSG…          0.319 5.56e-  3           -0.351            0.319
+##  3 ENSG…          0.541 3.69e-  3            0.541           -0.425
+##  4 ENSG…          0.573 3.53e-  5            0.573           -0.489
+##  5 ENSG…          0.585 3.93e-  4            0.585           -0.473
+##  6 ENSG…          3.70  1.05e-102           -5.01             3.70 
+##  7 ENSG…          1.94  3.18e-124           -3.63             1.94 
+##  8 ENSG…          3.32  1.49e- 51           -4.43             3.32 
+##  9 ENSG…          0.453 3.71e-  2            0.453           -0.260
+## 10 ENSG…          0.582 1.48e-  3            0.582           -0.339
+## # ... with 2 more variables: padj_group_Female_vs_Male &lt;dbl&gt;,
+## #   padj_group_Male_vs_Female &lt;dbl&gt;</code></pre>
 <p>Since log2FoldChange are shrunken, the method for DEGSet class now can plot these changes as follow:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>)</code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-1.png" width="700"></p>
@@ -274,7 +288,7 @@ show &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(res[<sp
 <pre><code>## ## Comparison:  test {.tabset} 
 ## 
 ## 
-##  &lt;br&gt;out of 1000 with nonzero total read count&lt;br&gt;adjusted p-value &lt; 0.1&lt;br&gt;LFC &gt; 0 (up)     : 6, 0.6% &lt;br&gt;LFC &lt; 0 (down)   : 7, 0.7% &lt;br&gt;outliers [1]     : 0, 0% &lt;br&gt;low counts [2]   : 0, 0% &lt;br&gt;(mean count &lt; 47)&lt;br&gt;[1] see 'cooksCutoff' argument of ?results&lt;br&gt;[2] see 'independentFiltering' argument of ?results&lt;br&gt;&lt;br&gt;NULL 
+##  &lt;br&gt;out of 1000 with nonzero total read count&lt;br&gt;adjusted p-value &lt; 0.1&lt;br&gt;LFC &gt; 0 (up)       : 6, 0.6%&lt;br&gt;LFC &lt; 0 (down)     : 7, 0.7%&lt;br&gt;outliers [1]       : 0, 0%&lt;br&gt;low counts [2]     : 0, 0%&lt;br&gt;(mean count &lt; 47)&lt;br&gt;[1] see 'cooksCutoff' argument of ?results&lt;br&gt;[2] see 'independentFiltering' argument of ?results&lt;br&gt;&lt;br&gt;NULL 
 ## 
 ## 
 ## Differential expression file at:  test_de.csv
@@ -387,13 +401,13 @@ th &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumenta
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.4 (2018-03-15)
+<pre><code>## R version 3.5.1 (2018-07-02)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS High Sierra 10.13.3
 ## 
 ## Matrix products: default
-## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -403,69 +417,69 @@ th &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumenta
 ##  [8] datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] pheatmap_1.0.10            ComplexHeatmap_1.17.1     
-##  [3] bindrcpp_0.2.2.9000        quantreg_5.36             
-##  [5] SparseM_1.77               DESeq2_1.18.1             
-##  [7] SummarizedExperiment_1.8.1 DelayedArray_0.4.1        
-##  [9] matrixStats_0.53.1         Biobase_2.38.0            
-## [11] GenomicRanges_1.30.3       GenomeInfoDb_1.14.0       
-## [13] IRanges_2.12.0             S4Vectors_0.16.0          
-## [15] BiocGenerics_0.24.0        DEGreport_1.17.3          
-## [17] BiocStyle_2.6.1           
+##  [1] pheatmap_1.0.10             ComplexHeatmap_1.18.1      
+##  [3] bindrcpp_0.2.2              quantreg_5.36              
+##  [5] SparseM_1.77                DESeq2_1.20.0              
+##  [7] SummarizedExperiment_1.10.1 DelayedArray_0.6.5         
+##  [9] BiocParallel_1.14.2         matrixStats_0.54.0         
+## [11] Biobase_2.40.0              GenomicRanges_1.32.6       
+## [13] GenomeInfoDb_1.16.0         IRanges_2.14.11            
+## [15] S4Vectors_0.18.3            BiocGenerics_0.26.0        
+## [17] DEGreport_1.17.5            BiocStyle_2.8.2            
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_1.3-2            rjson_0.2.20               
 ##   [3] rprojroot_1.3-2             circlize_0.4.4             
-##   [5] htmlTable_1.12              XVector_0.18.0             
+##   [5] htmlTable_1.12              XVector_0.20.0             
 ##   [7] GlobalOptions_0.1.0         base64enc_0.1-3            
-##   [9] ggdendro_0.1-20             fs_1.2.2                   
-##  [11] rstudioapi_0.7              roxygen2_6.0.1.9000        
+##   [9] ggdendro_0.1-20             fs_1.2.6                   
+##  [11] rstudioapi_0.7              roxygen2_6.1.0             
 ##  [13] MatrixModels_0.4-1          ggrepel_0.8.0              
-##  [15] bit64_0.9-7                 AnnotationDbi_1.40.0       
-##  [17] xml2_1.2.0                  splines_3.4.4              
-##  [19] logging_0.7-103             mnormt_1.5-5               
-##  [21] geneplotter_1.56.0          knitr_1.20                 
-##  [23] Formula_1.2-3               Nozzle.R1_1.1-1            
-##  [25] broom_0.4.4                 annotate_1.56.2            
-##  [27] cluster_2.0.7-1             compiler_3.4.4             
-##  [29] backports_1.1.2             assertthat_0.2.0           
-##  [31] Matrix_1.2-14               lazyeval_0.2.1             
-##  [33] cli_1.0.0                   limma_3.34.9               
-##  [35] acepack_1.4.1               htmltools_0.3.6            
-##  [37] tools_3.4.4                 gtable_0.2.0               
-##  [39] glue_1.2.0                  GenomeInfoDbData_1.0.0     
-##  [41] reshape2_1.4.3              dplyr_0.7.6                
-##  [43] Rcpp_0.12.18                pkgdown_1.1.0              
-##  [45] nlme_3.1-137                psych_1.8.4                
-##  [47] stringr_1.3.1               XML_3.98-1.11              
-##  [49] edgeR_3.20.9                zlibbioc_1.24.0            
-##  [51] MASS_7.3-50                 scales_1.0.0               
-##  [53] RColorBrewer_1.1-2          yaml_2.1.19                
-##  [55] memoise_1.1.0               gridExtra_2.3              
-##  [57] ggplot2_3.0.0               rpart_4.1-13               
-##  [59] reshape_0.8.7               latticeExtra_0.6-28        
-##  [61] stringi_1.2.3               RSQLite_2.1.1              
-##  [63] highr_0.7                   genefilter_1.60.0          
-##  [65] desc_1.2.0                  checkmate_1.8.5            
-##  [67] BiocParallel_1.12.0         shape_1.4.4                
-##  [69] rlang_0.2.1                 pkgconfig_2.0.1            
+##  [15] bit64_0.9-7                 fansi_0.3.0                
+##  [17] AnnotationDbi_1.42.1        xml2_1.2.0                 
+##  [19] splines_3.5.1               logging_0.7-103            
+##  [21] mnormt_1.5-5                geneplotter_1.58.0         
+##  [23] knitr_1.20                  Formula_1.2-3              
+##  [25] Nozzle.R1_1.1-1             broom_0.5.0                
+##  [27] annotate_1.58.0             cluster_2.0.7-1            
+##  [29] compiler_3.5.1              backports_1.1.2            
+##  [31] assertthat_0.2.0            Matrix_1.2-14              
+##  [33] lazyeval_0.2.1              cli_1.0.0                  
+##  [35] limma_3.36.3                lasso2_1.2-19              
+##  [37] acepack_1.4.1               htmltools_0.3.6            
+##  [39] tools_3.5.1                 gtable_0.2.0               
+##  [41] glue_1.3.0                  GenomeInfoDbData_1.1.0     
+##  [43] dplyr_0.7.6                 Rcpp_0.12.18               
+##  [45] pkgdown_1.1.0               nlme_3.1-137               
+##  [47] psych_1.8.4                 stringr_1.3.1              
+##  [49] XML_3.98-1.16               edgeR_3.22.3               
+##  [51] zlibbioc_1.26.0             MASS_7.3-50                
+##  [53] scales_1.0.0                RColorBrewer_1.1-2         
+##  [55] yaml_2.2.0                  memoise_1.1.0              
+##  [57] gridExtra_2.3               ggplot2_3.0.0              
+##  [59] rpart_4.1-13                reshape_0.8.7              
+##  [61] latticeExtra_0.6-28         stringi_1.2.4              
+##  [63] RSQLite_2.1.1               highr_0.7                  
+##  [65] genefilter_1.62.0           desc_1.2.0                 
+##  [67] checkmate_1.8.5             shape_1.4.4                
+##  [69] rlang_0.2.2                 pkgconfig_2.0.2            
 ##  [71] commonmark_1.5              bitops_1.0-6               
-##  [73] evaluate_0.10.1             lattice_0.20-35            
-##  [75] purrr_0.2.5                 bindr_0.1.1.9000           
+##  [73] evaluate_0.11               lattice_0.20-35            
+##  [75] purrr_0.2.5                 bindr_0.1.1                
 ##  [77] labeling_0.3                htmlwidgets_1.2            
 ##  [79] cowplot_0.9.3               bit_1.1-14                 
 ##  [81] tidyselect_0.2.4            plyr_1.8.4                 
 ##  [83] magrittr_1.5                R6_2.2.2                   
 ##  [85] Hmisc_4.1-1                 DBI_1.0.0                  
-##  [87] withr_2.1.2                 pillar_1.2.3               
-##  [89] foreign_0.8-70              survival_2.42-3            
-##  [91] RCurl_1.95-4.10             nnet_7.3-12                
+##  [87] withr_2.1.2                 pillar_1.3.0               
+##  [89] foreign_0.8-71              survival_2.42-6            
+##  [91] RCurl_1.95-4.11             nnet_7.3-12                
 ##  [93] tibble_1.4.2                crayon_1.3.4               
-##  [95] utf8_1.1.3                  rmarkdown_1.10             
+##  [95] utf8_1.1.4                  rmarkdown_1.10             
 ##  [97] GetoptLong_0.1.7            locfit_1.5-9.1             
 ##  [99] data.table_1.11.4           blob_1.1.1                 
-## [101] ConsensusClusterPlus_1.42.0 digest_0.6.15              
-## [103] xtable_1.8-2                tidyr_0.8.1                
+## [101] ConsensusClusterPlus_1.44.0 digest_0.6.16              
+## [103] xtable_1.8-3                tidyr_0.8.1                
 ## [105] munsell_0.5.0</code></pre>
 </div>
   </div>

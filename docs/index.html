@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">DEGreport</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.3</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.17.6</span>
       </span>
     </div>
 
@@ -78,7 +78,8 @@
 <div id="bioconductor-stable-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bioconductor-stable-version" class="anchor"></a><a href="https://bioconductor.org">Bioconductor</a> stable version</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">"BiocManager"</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>))
+    <span class="kw">install.packages</span>(<span class="st">"BiocManager"</span>)
 BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"DEGreport"</span>)</code></pre></div>
 </div>
 <div id="bioconductor-latest-version" class="section level3">
