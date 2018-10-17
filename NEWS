@@ -1,292 +1,249 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.17.7
+
+    * Fix: re-format NEWS file
+    
 CHANGES IN DEGreport 1.17.6
 
-    Fix: Error in degCovariate when no correlation exists.
+    * Fix: Error in degCovariate when no correlation exists.
 
 CHANGES IN DEGreport 1.17.5
 
-    Fix: Fix documentation warning.
+    * Fix: Fix documentation warning.
 
 CHANGES IN DEGreport 1.17.4
     
-    Feature: Reduce parameter is used to remove outlier points
+    * Feature: Reduce parameter is used to remove outlier points
              after clustering genes.
-    Feature: Add maximum log2FoldChange to the significance output
+    * Feature: Add maximum log2FoldChange to the significance output
              when multiple comparisons are used as inputs.
-    Feature: Remove non-mapped genes in degPlot.
-    Feature: Add specific function to plot degPatterns clusters.
-    Fix: Support DESeqResults for list of DEGSets.
-    Feature: Add variable selection for covariates that correlate with PCs
+    * Feature: Remove non-mapped genes in degPlot.
+    * Feature: Add specific function to plot degPatterns clusters.
+    * Fix: Support DESeqResults for list of DEGSets.
+    * Feature: Add variable selection for covariates that correlate with PCs
              in degCovariate function.
-    Feature: Add lasso as an option to variable selection in covariate
+    * Feature: Add lasso as an option to variable selection in covariate
              analysis.
-    Feature: Fill with colors only significant variables by lm or lasso, and 
+    * Feature: Fill with colors only significant variables by lm or lasso, and 
              draw borber for correlated variables by cor.test.
 
 CHANGES IN DEGreport 1.17.3
-    Lorena Pantano <lorena.pantano@gmail.com>
-        
-        Fix: degCovariates works with metadata only with numerical variables
-        Feature: Improve support for DEGSet conversion.
-        Fix: Remove theme set up for degPCA plot.
-        Feature: Make function to generate colors for metadata variables for
+
+        * Fix: degCovariates works with metadata only with numerical variables
+        * * Feature: Improve support for DEGSet conversion.
+        * Fix: Remove theme set up for degPCA plot.
+        * Feature: Make function to generate colors for metadata variables for
                  annotation column in heatmap figure.
-        Feature: Improve degCovariates to add effect size of the covariates.
+        * Feature: Improve degCovariates to add effect size of the covariates.
                  Thanks to @vbarrera
-        Fix: Improve degCovariates man pages.
+        * Fix: Improve degCovariates man pages.
 
 CHANGES IN DEGreport 1.17.1
-    2017-04-02  Lorena Pantano <lorena.pantano@gmail.com>
-        
-        Fix: remove discrete scale color in degPCA.
-        Feature: Return same output for degPatterns with single genes. Thanks Amir Jassim.
-        Feature: Allow custom y-axis lab in degPlot. Thanks @vbarrera.
+
+        * Fix: remove discrete scale color in degPCA.
+        * Feature: Return same output for degPatterns with single genes. Thanks Amir Jassim.
+        * Feature: Allow custom y-axis lab in degPlot. Thanks @vbarrera.
 
 
 CHANGES IN DEGreport 1.15.4
-    2017-03-27  Lorena Pantano <lorena.pantano@gmail.com>
-        
-        Fix: Fix typo in variable inside degClean
-        Fix: Remove all columsn with NA values in degClean
-        Feature: Plot only when degPatterns has only one gene. Thanks Amir Jassim.
-        Feature: Add geom_cor to plot correlation values to a ggplot2 plot.
-        Feature: Add eachStep option to degPattern to apply groupDifference
+
+        * Fix: * Fix typo in variable inside degClean
+        * Fix: Remove all columsn with NA values in degClean
+        * Feature: Plot only when degPatterns has only one gene. Thanks Amir Jassim.
+        * Feature: Add geom_cor to plot correlation values to a ggplot2 plot.
+        * Feature: Add eachStep option to degPattern to apply groupDifference
           to each time point and not only to the maximum and minimum values.
-        Feature: Add covariates dendograme to degCovariates.
-        Fix: Wrong matrix in degPattern. Thanks Amir Jassim.
-        Feature: Add option to filter genes in degPattern. Thanks Amir Jassim.
-        Feature: Return raw and summarise table in degPattern
-        Feature: Migrate to rmarkdown for vignette
-        Feature: Return prcomp output when using degPCA
-        Fix: Typo in degPattern function, and set up to FALSE the
+        * Feature: Add covariates dendograme to degCovariates.
+        * Fix: Wrong matrix in degPattern. Thanks Amir Jassim.
+        * Feature: Add option to filter genes in degPattern. Thanks Amir Jassim.
+        * Feature: Return raw and summarise table in degPattern
+        * Feature: Migrate to rmarkdown for vignette
+        * Feature: Return prcomp output when using degPCA
+        * Fix: Typo in degPattern function, and set up to FALSE the
           use of consensusCluster.
-        Fix: degPlot to be able to work with one gene.
-        Feature: Add the option to look for specific patterns, or genes as
+        * Fix: degPlot to be able to work with one gene.
+        * Feature: Add the option to look for specific patterns, or genes as
             reference.
-        Feature: Return scaled values if scale==TRUE in degPattern.
-        Feature: Add values used in plots for degPattern function. Thanks to Amir Jassim.
-        Feature: Get significants for a list of DEGSet objects binding
+        * Feature: Return scaled values if scale==TRUE in degPattern.
+        * Feature: Add values used in plots for degPattern function. Thanks to Amir Jassim.
+        * Feature: Get significants for a list of DEGSet objects binding
              the tables first, calculating a new FDR,
              and aplying the filter as last step.
              https://support.bioconductor.org/p/104059/#104072
              
 CHANGES IN DEGreport 1.15.2
-    2017-01-08  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: Add support to list for significant and recover full table.
-    Feature: Add support to different shrinkage estimator.
-    Fix: Volcano plot was plotting wrong the shadows in the y-axis.
-    Fix: Use correct option in DESeq2::results to count UP/DOWN genes.
-    Feature: Allow to ask for up/down genes. Thanks to Radhika Khetani.
+
+    * Feature: Add support to list for significant and recover full table.
+    * Feature: Add support to different shrinkage estimator.
+    * Fix: Volcano plot was plotting wrong the shadows in the y-axis.
+    * Fix: Use correct option in DESeq2::results to count UP/DOWN genes.
+    * Feature: Allow to ask for up/down genes. Thanks to Radhika Khetani.
 
 CHANGES IN DEGreport 1.15.1
-    2017-11-13  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fix: Add checking point in degPCA
-    Feature: Add function to plot basic expression signatures.
+
+    * Fix: Add checking point in degPCA
+    * Feature: Add function to plot basic expression signatures.
 
 CHANGES IN DEGreport 1.13.12
-    2017-10-11  Lorena Pantano <lorena.pantano@gmail.com>
-   
-   Fix: Fix NA values in covariates analysis and add pvalue-ploting
-   Fix: Avoid error when none covariate is significant
-   Feature: Return scatter plots between PCs and metadata in degCovariates.
-   Feature: Use ConsensusClusterPlus to cluster genes with degPatterns.
+
+   * Fix: * Fix NA values in covariates analysis and add pvalue-ploting
+   * Fix: Avoid error when none covariate is significant
+   * Feature: Return scatter plots between PCs and metadata in degCovariates.
+   * Feature: Use ConsensusClusterPlus to cluster genes with degPatterns.
 
 CHANGES IN DEGreport 1.13.11
-    2017-09-22  Lorena Pantano <lorena.pantano@gmail.com>
-   
-   Feature: significant works with DESeqResults class.
-   Fix: log2 in degPlot wasn't active.
-   Feature: Allow plot samples together or not in degCheckFactor.
-   Feature: Migrate vignette to new BiocStyle.
-   Fix: Automatic QC report. Reduce final report with most important figures.
+
+   * Feature: significant works with DESeqResults class.
+   * Fix: log2 in degPlot wasn't active.
+   * Feature: Allow plot samples together or not in degCheckFactor.
+   * Feature: Migrate vignette to new BiocStyle.
+   * Fix: Automatic QC report. Reduce final report with most important figures.
    
 CHANGES IN DEGreport 1.13.10
-    2017-09-07  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fix: Complete vignette with new functions.
-    Feature: Add DEGSet construct to accept other sources.
-    Feature: Adapt degQC to accept DEGSet object.
-    Feature: Allow multiple group for degMB and degVB.
-    Feature: Add optional log2 for gene plotting.
-    Feature: Plot correlation of shrunken vs unshruken log2fc.
-    Feature: Allow to plot original MA plot.
-    Feature: Adapt summary of DESeq2Results to data.frame and compatible with
+
+    * Fix: Complete vignette with new functions.
+    * Feature: Add DEGSet construct to accept other sources.
+    * Feature: Adapt degQC to accept DEGSet object.
+    * Feature: Allow multiple group for degMB and degVB.
+    * Feature: Add optional log2 for gene plotting.
+    * Feature: Plot correlation of shrunken vs unshruken log2fc.
+    * Feature: Allow to plot original MA plot.
+    * Feature: Adapt summary of DESeq2Results to data.frame and compatible with
              markdown output, and multiple alpha values.
-    Fix: links in man pages.
-    Feature: Pass options to Heatmap in degCorCov.@vbarrera.
-    Feature: Add parameter to select top rows from DEGset.
-    Fix: Change method names to short words.
-    Feature: degVolcano accepts DESeq2Results class.
-    Fix: degPCA print the correct PC number on x/ylabels.
-    Fix: Move NEWS to parent folder.
-    Feature: Add method to get significant genes from DEGSet class.
-    Feature: Add plotMA method to show shrunken effect. @vbarrera
-    Fix: Move to testthat for examples.
-    Feature: Adding main class and methods to handle DEG output.
-    Fix: axis in degPCA now show the values.
-    Feature: Handle multiple contrasts/coefficient for DESeq2 results.
+    * Fix: links in man pages.
+    * Feature: Pass options to Heatmap in degCorCov.@vbarrera.
+    * Feature: Add parameter to select top rows from DEGset.
+    * Fix: Change method names to short words.
+    * Feature: degVolcano accepts DESeq2Results class.
+    * Fix: degPCA print the correct PC number on x/ylabels.
+    * Fix: Move NEWS to parent folder.
+    * Feature: Add method to get significant genes from DEGSet class.
+    * Feature: Add plotMA method to show shrunken effect. @vbarrera
+    * Fix: Move to testthat for examples.
+    * Feature: Adding main class and methods to handle DEG output.
+    * Fix: axis in degPCA now show the values.
+    * Feature: Handle multiple contrasts/coefficient for DESeq2 results.
     
 CHANGES IN DEGreport  1.13.7
-    2017-08-08  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: new function to analyze the correlation
+
+    * Feature: new function to analyze the correlation
              among covaritaes in metatdata
     Deprecation: all functions related to foldchange accuraty are removed. 
                  Using lfcShrink much better now
     Style: Add more unit tests
-    Feature: Accept SE like objects to degPlot and
+    * Feature: Accept SE like objects to degPlot and
              use better gene names if rowData has it
-    Feature: Use plot_grid for degPattern and save plot
-    Feature: Use text or point in degPCA
-    Feature: Fix labels of degPlot
-    Feature: Accept matrix in degPlot
-    Fix: correctly handling rowData in SE objects for degPlot
-    Fix: plot only legend if group > 1
-    Feature: More output for degPattern
-    Style: change to lower-cases inside degCovariates function
+    * Feature: Use plot_grid for degPattern and save plot
+    * Feature: Use text or point in degPCA
+    * Feature: * Fix labels of degPlot
+    * Feature: Accept matrix in degPlot
+    * Fix: correctly handling rowData in SE objects for degPlot
+    * Fix: plot only legend if group > 1
+    * Feature: More output for degPattern
+    * Style: change to lower-cases inside degCovariates function
 
 CHANGES IN DEGreport  1.13.6
-    2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
 
-    Feature: Add degPCA plot from Rory Kirchner
+    * Feature: Add degPCA plot from Rory Kirchner
    
 CHANGES IN DEGreport  1.13.5
-    2017-05-30  Lorena Pantano <lorena.pantano@gmail.com>
 
-    Feature: Accept matrix for degWidePlot
+    * Feature: Accept matrix for degWidePlot
     
 CHANGES IN DEGreport  1.13.4
-    2017-05-22  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: Add degCovariates to calculate correlations
+
+    * Feature: Add degCovariates to calculate correlations
              between PCs from count data and covariates
              from metadata
 
 CHANGES IN DEGreport  1.13.3
-    2017-05-19  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: Add degMDS for PCA like clustering figures
-    Feature: Add labels parameters to degPlot
+
+    * Feature: Add degMDS for PCA like clustering figures
+    * Feature: Add labels parameters to degPlot
     
 CHANGES IN DEGreport  1.13.2
-    2017-05-05  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: add degFilter to filter genes by group
+
+    * Feature: add degFilter to filter genes by group
 
 CHANGES IN DEGreport  1.13.1
-    2017-04-27  Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: change arrange for plotQC plots with cowplot
-    Feature: Use theme_minimal inside degResults
-    Feature: Change title for some sections in degResults
+
+    * Feature: change arrange for plotQC plots with cowplot
+    * Feature: Use theme_minimal inside degResults
+    * Feature: Change title for some sections in degResults
     
 CHANGES IN DEGreport 1.11.7
 
-    2017-04-08 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fix: Add new contributor
+    * Fix: Add new contributor
 
 CHANGES IN DEGreport 1.11.6
 
-    2017-04-07 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: Add function to plot genes in a wide format
+    * Feature: Add function to plot genes in a wide format
 
 CHANGES IN DEGreport 1.11.4
 
-    02-17-2017 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Feature: Re-organize vignette.
-    Feature: Ignore warnings when plotting
-    Feature: Improve volcano plot
+    * Feature: Re-organize vignette.
+    * Feature: Ignore warnings when plotting
+    * Feature: Improve volcano plot
 
 CHANGES IN DEGreport 1.11.3
 
-    01-03-2017 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fix: fix order of clusters figures that are not in the correct
+    * Fix: * Fix order of clusters figures that are not in the correct
          place in some cases with many groups.
 
 
 CHANGES IN DEGreport 1.11.2
 
-    12-09-2016 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Features: Add degCheckFactors functions to plot sizefactors used to
+    * Features: Add degCheckFactors functions to plot sizefactors used to
               normalize count data.
 
 CHANGES IN DEGreport 1.11.1
 
-    10-18-2016 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fixes: print clusterProfiler output.
+    * Fixes: print clusterProfiler output.
 
 CHANGES IN DEGreport 1.9.9
 
-    10-14-2016 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fixes: Fix the reduccion of clusters to use correlation
+    * Fixes: * Fix the reduccion of clusters to use correlation
            values directly.
 
 CHANGES IN DEGreport 1.9.9
 
-    10-06-2016 Lorena Pantano <lorena.pantano@gmail.com>
-    
-    Fixes: GO enrichment function. Input genes was wrong.
+    * Fixes: GO enrichment function. Input genes was wrong.
     
 CHANGES IN DEGreport 1.9.7
     
-    07-29-2015 Lorena Pantano <lorena.pantano@gmail.com>
-
-    Features: Add functions to return markdown report from DESeq2 object,
+    * Features: Add functions to return markdown report from DESeq2 object,
               and clustering function for time course data.
-    Fixes: small bugs related to Nan values or small diversity values
+    * Fixes: small bugs related to Nan values or small diversity values
            in QC plots.
 
 CHANGES IN DEGreport 1.4.0
     
-    07-03-2015 Lorena Pantano <lorena.pantano@gmail.com>
-
-    FIX SOME TEXT IN VIGNETTE, AND CLEAN DEPENDS FLAG
+    * Fix SOME TEXT IN VIGNETTE, AND CLEAN DEPENDS FLAG
 
 CHANGES IN DEGreport 1.01.01
     
-    10-17-2014 Lorena Pantano <lorena.pantano@gmail.com>
-
-    FIX BUG WHEN ONLY ONE GENE IS DEG
+    * Fix BUG WHEN ONLY ONE GENE IS DEG
 
 CHANGES IN DEGreport 0.99.12
     
-    09-04-2014 Lorena Pantano <lorena.pantano@gmail.com>
-
-    CORRECT DOC OF createReport
+    * CORRECT DOC OF createReport
 
 CHANGES IN DEGreport 0.99.11
     
-    09-02-2014 Lorena Pantano <lorena.pantano@gmail.com>
-
-    ADD ncores TO REPORT CREATION
+    * ADD ncores TO REPORT CREATION
 
 CHANGES IN DEGreport 0.99.10
     
-    08-16-2014 Lorena Pantano <lorena.pantano@gmail.com>
-
-    REMOVE BIOMART FROM VIGNETTES DUE TO WINDOWS UNKNOWN BUILD ISSUES
+    * REMOVE BIOMART FROM VIGNETTES DUE TO WINDOWS UNKNOWN BUILD ISSUES
 
 CHANGES IN DEGreport 0.99.9
     
-    08-02-2014 Lorena Pantano <lorena.pantano@gmail.com>
-
-    ADDING PARALLELIZATION TO BAYESIAN INFERENCE
+    * ADDING PARALLELIZATION TO BAYESIAN INFERENCE
 
 CHANGES IN DEGreport 0.99.4
     
-    05-19-2014 Lorena Pantano <lorena.pantano@gmail.com>
 
-    CODING STYLE
     * replacing tab by 4 spaces
     * cleaning up function
     * adding unit tests
