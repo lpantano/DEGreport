@@ -1,5 +1,9 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.17.8
+
+    * Fix: typo in as.DEGSet from DESeq2 object.
+
 CHANGES IN DEGreport 1.17.7
 
     * Fix: re-format NEWS file

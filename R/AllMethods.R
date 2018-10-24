@@ -343,7 +343,7 @@ setMethod("as.DEGSet", signature("DESeqResults"),
     if (!(default  %in% names(l))){
         message(default, " not found in names of list:", paste(names(l)))
         message("Set it up to raw")
-        default == "raw"
+        default = "raw"
     }
     dge <- new("DEGSet", l,
                default = default)
