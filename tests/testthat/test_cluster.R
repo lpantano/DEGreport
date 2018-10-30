@@ -39,3 +39,16 @@ test_that("groupDifference", {
     ma[1:20, 2] <- 1000 + ma[1:20, 2]
     expect_equal(.remove_low_difference(ma, 500, FALSE) %>% nrow(), 20)
 })
+
+test_that("process", {
+    library(dplyr)
+    library(tidyr)
+    library(tibble)
+    table <- rownames_to_column(as.data.frame(ma), "genes") %>%
+        gather("sample", "expression", -genes) %>%
+        right_join(distinct(res$df[,c("genes", "cluster")]),
+                   by = "genes") %>%
+        left_join(rownames_to_column(as.data.frame(des), "sample"),
+                  by = "sample")
+    expect_true("value"  %in%  names(.process(table, "group", NULL)))
+})

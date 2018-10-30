@@ -7,6 +7,24 @@
         print(toout)
 }
 
+# It takes a table with gene and metadata information and convert
+# it to be compatible with degPlotCluster
+.process <- function(table, time, color){
+    stopifnot(c("genes", "sample", time, "cluster", "expression")  %in% names(table))
+
+        if (!is.null(color))
+        stopifnot(color  %in% names(table))
+    if (is.null(color))
+        color <- time
+    
+    group_by(table, !!sym("genes"),
+             !!sym(time), !!sym("cluster"), !!sym(color)) %>% 
+        summarise(expression=mean(expression)) %>% 
+        group_by(!!sym("genes")) %>% 
+        mutate(value = scale(expression)) %>% 
+        ungroup()
+}
+
 #' Plot clusters from degPattern function output
 #' 
 #' This function helps to format the cluster plots from [degPatterns()].
@@ -14,6 +32,8 @@
 #' can accept more ggplot functions to allow customization.
 #' 
 #' @param table `normalized` element from [degPatterns()] output.
+#'   It can be a data.frame with the following columns in there:
+#'   `genes, sample, expression, cluster, xaxis_column, color_column`.
 #' @param time column name to use in the x-axis.
 #' @param color column name to use to color and divide the samples.
 #' @param points Add points to the plot.
@@ -32,14 +52,30 @@
 #' res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
 #' degPlotCluster(res$normalized, "group", "other")
 #' degPlotCluster(res$normalized, "group", "other", lines = FALSE)
+#' degPlotCluster(table, "group", "other", process=TRUE)
+#' 
+#' library(dplyr)
+#' library(tidyr)
+#' library(tibble)
+#' table <- rownames_to_column(as.data.frame(ma), "genes") %>%
+#'     gather("sample", "expression", -genes) %>%
+#'     right_join(distinct(res$df[,c("genes", "cluster")]),
+#'                by = "genes") %>%
+#'     left_join(rownames_to_column(as.data.frame(des), "sample"),
+#'               by = "sample")
+#' degPlotCluster(table, "group", "other", process = TRUE)
 #' @export
 degPlotCluster <- function(table, time, color = NULL,
+                           process = FALSE,
                            points = TRUE,
                            boxes = TRUE,
                            smooth = TRUE,
                            lines = TRUE,
                            facet = TRUE){
     stopifnot(class(table) == "data.frame")
+    if (process){
+        table <- .process(table, time, color)
+    }
     if ("cluster"  %in% colnames(table)){
         counts <- table(distinct(table, genes, cluster)[["cluster"]])
         table <- inner_join(table,
@@ -50,11 +86,18 @@ degPlotCluster <- function(table, time, color = NULL,
                                        stringsAsFactors = FALSE),
                             by = "cluster")
     }
+
+    if (is.null(color)){
+        color = "dummy"
+        table[[color]] = ""
+        lines = FALSE
+    }
+    table[["line_group"]] = paste(table[["genes"]],
+                                  table[[color]])
     
-    table[["line_group"]] = paste(table[["genes"]], table[[color]])
+    
     splan <- length(unique(table[[time]])) - 1L
-    if (is.null(color))
-        table[[color]] = NULL
+    
     p <- ggplot(table, aes_string(x = time, y = "value",
                                    fill = color, color = color))
     if (boxes)

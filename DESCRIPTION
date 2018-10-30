@@ -1,5 +1,5 @@
 Package: DEGreport
-Version: 1.17.8
+Version: 1.17.9
 Date: 2018-10-17
 Type: Package
 Title: Report of DEG analysis
@@ -22,7 +22,7 @@ Suggests:
     statmod,
     testthat
 Depends:
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 Imports:
     utils,
     methods,

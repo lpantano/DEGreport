@@ -1,5 +1,9 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.17.9
+
+    * Feature: Accept data.frame to plot custom clusters.
+
 CHANGES IN DEGreport 1.17.8
 
     * Fix: typo in as.DEGSet from DESeq2 object.

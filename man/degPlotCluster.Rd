@@ -4,11 +4,14 @@
 \alias{degPlotCluster}
 \title{Plot clusters from degPattern function output}
 \usage{
-degPlotCluster(table, time, color = NULL, points = TRUE,
-  boxes = TRUE, smooth = TRUE, lines = TRUE, facet = TRUE)
+degPlotCluster(table, time, color = NULL, process = FALSE,
+  points = TRUE, boxes = TRUE, smooth = TRUE, lines = TRUE,
+  facet = TRUE)
 }
 \arguments{
-\item{table}{\code{normalized} element from \code{\link[=degPatterns]{degPatterns()}} output.}
+\item{table}{\code{normalized} element from \code{\link[=degPatterns]{degPatterns()}} output.
+It can be a data.frame with the following columns in there:
+\code{genes, sample, expression, cluster, xaxis_column, color_column}.}
 
 \item{time}{column name to use in the x-axis.}
 
@@ -42,4 +45,16 @@ des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
 res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
 degPlotCluster(res$normalized, "group", "other")
 degPlotCluster(res$normalized, "group", "other", lines = FALSE)
+degPlotCluster(table, "group", "other", process=TRUE)
+
+library(dplyr)
+library(tidyr)
+library(tibble)
+table <- rownames_to_column(as.data.frame(ma), "genes") \%>\%
+    gather("sample", "expression", -genes) \%>\%
+    right_join(distinct(res$df[,c("genes", "cluster")]),
+               by = "genes") \%>\%
+    left_join(rownames_to_column(as.data.frame(des), "sample"),
+              by = "sample")
+degPlotCluster(table, "group", "other", process = TRUE)
 }
