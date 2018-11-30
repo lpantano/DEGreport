@@ -954,6 +954,10 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'   with metadata information attached.
 #' * `summarise` data.frame with clusters values summarized by group and
 #'   with the metadata information attached.
+#' * `benchmarking` plot showing the different patterns at different
+#'   values for clustering cuttree function.
+#' * `benchmarking_curve` plot showing how the numbers of clusters and genes
+#'   changed at different values for clustering cuttree function.
 #' @examples
 #' data(humanGender)
 #' library(SummarizedExperiment)

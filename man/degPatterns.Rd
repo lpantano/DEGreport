@@ -75,6 +75,10 @@ with the clusters they belong.
 with metadata information attached.
 \item \code{summarise} data.frame with clusters values summarized by group and
 with the metadata information attached.
+\item \code{benchmarking} plot showing the different patterns at different
+values for clustering cuttree function.
+\item \code{benchmarking_curve} plot showing how the numbers of clusters and genes
+changed at different values for clustering cuttree function.
 }
 }
 \description{
