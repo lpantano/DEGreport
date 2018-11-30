@@ -3,6 +3,7 @@ DEGreport News
 CHANGES IN DEGreport 1.17.9
 
     * Feature: Accept data.frame to plot custom clusters.
+    * Feature: Add cluster consistency plot to degPattern.
 
 CHANGES IN DEGreport 1.17.8
 

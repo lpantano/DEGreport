@@ -1,6 +1,6 @@
 Package: DEGreport
 Version: 1.17.9
-Date: 2018-10-17
+Date: 2018-11-30
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -9,7 +9,7 @@ Description: Creation of a HTML report of differential expression
     list of genes according to the fold changes mean and
     variability for each selected gene.
 biocViews: DifferentialExpression, Visualization, RNASeq, ReportWriting,
-    GeneExpression
+    GeneExpression, ImmunoOncology
 URL: http://lpantano.github.io/DEGreport/
 BugReports: https://github.com/lpantano/DEGreport/issues
 Suggests:

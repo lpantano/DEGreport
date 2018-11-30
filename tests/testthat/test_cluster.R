@@ -40,6 +40,13 @@ test_that("groupDifference", {
     expect_equal(.remove_low_difference(ma, 500, FALSE) %>% nrow(), 20)
 })
 
+test_that("pct_variance", {
+    clusters <- c(rep(1, 500), rep(2, 500))
+    names(clusters) <- row.names(counts[1:1000, idx])
+    pct <- .pct_var(counts[1:1000, idx], clusters)
+    expect_true(pct < 100)
+})
+
 test_that("process", {
     library(dplyr)
     library(tidyr)
