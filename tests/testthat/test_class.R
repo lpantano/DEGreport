@@ -1,5 +1,6 @@
 context("Classes and Methods")
 library(tibble)
+library(DESeq2)
 
 y <- matrix(rnbinom(80L, size = 1L, mu = 10L), nrow = 20L)
 d <- DGEList(counts = y, group = rep(1L:2L, each = 2L),

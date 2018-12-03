@@ -35,12 +35,17 @@
 #'   It can be a data.frame with the following columns in there:
 #'   `genes, sample, expression, cluster, xaxis_column, color_column`.
 #' @param time column name to use in the x-axis.
+#' @param process whether to process the table if it is not
+#'   ready for plotting.
 #' @param color column name to use to color and divide the samples.
 #' @param points Add points to the plot.
 #' @param boxes Add boxplot to the plot.
 #' @param smooth Add regression line to the plot.
 #' @param lines Add gene lines to the plot.
 #' @param facet Split figures based on cluster ID.
+#' @param cluster_column column name if cluster is in a column
+#'   with a different name. Usefull, to plot cluster with different
+#'   cutoffs used when grouping genes from the clustering step.
 #' @return [ggplot2] object.
 #' @examples
 #' data(humanGender)
@@ -62,7 +67,8 @@
 #'     right_join(distinct(res$df[,c("genes", "cluster")]),
 #'                by = "genes") %>%
 #'     left_join(rownames_to_column(as.data.frame(des), "sample"),
-#'               by = "sample")
+#'               by = "sample") %>% 
+#'               as.data.frame()
 #' degPlotCluster(table, "group", "other", process = TRUE)
 #' @export
 degPlotCluster <- function(table, time, color = NULL,
@@ -71,12 +77,17 @@ degPlotCluster <- function(table, time, color = NULL,
                            boxes = TRUE,
                            smooth = TRUE,
                            lines = TRUE,
-                           facet = TRUE){
+                           facet = TRUE,
+                           cluster_column = "cluster"){
+
     stopifnot(class(table) == "data.frame")
+    if (cluster_column  %in% colnames(table)){
+        table[["cluster"]] = table[[cluster_column]]
+    }
     if (process){
         table <- .process(table, time, color)
     }
-    
+
     if ("cluster"  %in% colnames(table)){
         counts <- table(distinct(table, genes, cluster)[["cluster"]])
         table <- inner_join(table,
@@ -987,6 +998,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     benchmarking <- NULL
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
+    rownames(ma) = make.names(rownames(ma))
     if (is.null(col)){
         col = "colored"
         metadata[,col] = rep("one_group", nrow(metadata))
@@ -1075,14 +1087,12 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                   n_genes = n()) %>% 
         ungroup()
     
-    df.rows.fixed <- df
-    df.rows.fixed[["genes"]] <- make.names(df[["genes"]])
-    normalized <- norm_sign %>% as.data.frame(check.names=F) %>% 
+    normalized <- norm_sign %>% as.data.frame() %>% 
         rownames_to_column("genes") %>%
         gather(!!sym(summarize), "value", -genes) %>%
         inner_join(metadata_groups %>%
                        mutate_if(is.factor, as.character)) %>%
-        inner_join(df.rows.fixed, by = "genes") 
+        inner_join(df, by = "genes") 
     
     if (!is.null(benchmarking))
         normalized <- normalized %>% left_join(benchmarking[["genes"]], by = "genes")
