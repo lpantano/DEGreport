@@ -52,7 +52,6 @@ des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
 res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
 degPlotCluster(res$normalized, "group", "other")
 degPlotCluster(res$normalized, "group", "other", lines = FALSE)
-degPlotCluster(table, "group", "other", process=TRUE)
 
 library(dplyr)
 library(tidyr)

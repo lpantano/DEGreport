@@ -1,5 +1,5 @@
 Package: DEGreport
-Version: 1.17.9
+Version: 1.19.1
 Date: 2018-12-03
 Type: Package
 Title: Report of DEG analysis
@@ -17,7 +17,6 @@ Suggests:
     AnnotationDbi,
     limma,
     pheatmap,
-    knitr,
     rmarkdown,
     statmod,
     testthat
