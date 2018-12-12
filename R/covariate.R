@@ -39,6 +39,14 @@
 }
 
 # function to calculate correlation and plot
+# cat vs continous
+# ICCest(Chick, weight, data = ChickWeight, CI.type = "S")
+# broom::tidy(aov(weight~Chick, data = ChickWeight))
+# data("Arthritis") # cat vs cat
+# tab <- xtabs(~Improved + Treatment, data = Arthritis)
+# summary(assocstats(tab))
+# 
+# assocstats(UCBAdmissions)
 .calccompletecorandplot <- function(compare_data, covar_data,
                                     correlationtype, title,
                                     weights = NULL,

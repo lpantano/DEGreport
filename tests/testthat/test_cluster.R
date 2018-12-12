@@ -1,4 +1,5 @@
 context("Clustering")
+library(DESeq2)
 
 data(humanGender)
 idx <- c(1:5, 75:80)
@@ -38,4 +39,24 @@ test_that("groupDifference", {
     ma <- matrix(rnorm(50), ncol = 2)
     ma[1:20, 2] <- 1000 + ma[1:20, 2]
     expect_equal(.remove_low_difference(ma, 500, FALSE) %>% nrow(), 20)
+})
+
+test_that("pct_variance", {
+    clusters <- c(rep(1, 500), rep(2, 500))
+    names(clusters) <- row.names(counts[1:1000, idx])
+    pct <- .pct_var(counts[1:1000, idx], clusters)
+    expect_true(pct < 100)
+})
+
+test_that("process", {
+    library(dplyr)
+    library(tidyr)
+    library(tibble)
+    table <- rownames_to_column(as.data.frame(ma), "genes") %>%
+        gather("sample", "expression", -genes) %>%
+        right_join(distinct(res$df[,c("genes", "cluster")]),
+                   by = "genes") %>%
+        left_join(rownames_to_column(as.data.frame(des), "sample"),
+                  by = "sample")
+    expect_true("value"  %in%  names(.process(table, "group", NULL)))
 })

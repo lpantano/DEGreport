@@ -7,6 +7,24 @@
         print(toout)
 }
 
+# It takes a table with gene and metadata information and convert
+# it to be compatible with degPlotCluster
+.process <- function(table, time, color){
+    stopifnot(c("genes", "sample", time, "cluster", "expression")  %in% names(table))
+
+        if (!is.null(color))
+        stopifnot(color  %in% names(table))
+    if (is.null(color))
+        color <- time
+    
+    group_by(table, !!sym("genes"),
+             !!sym(time), !!sym("cluster"), !!sym(color)) %>% 
+        summarise(expression=mean(expression)) %>% 
+        group_by(!!sym("genes")) %>% 
+        mutate(value = scale(expression)) %>% 
+        ungroup()
+}
+
 #' Plot clusters from degPattern function output
 #' 
 #' This function helps to format the cluster plots from [degPatterns()].
@@ -14,13 +32,20 @@
 #' can accept more ggplot functions to allow customization.
 #' 
 #' @param table `normalized` element from [degPatterns()] output.
+#'   It can be a data.frame with the following columns in there:
+#'   `genes, sample, expression, cluster, xaxis_column, color_column`.
 #' @param time column name to use in the x-axis.
+#' @param process whether to process the table if it is not
+#'   ready for plotting.
 #' @param color column name to use to color and divide the samples.
 #' @param points Add points to the plot.
 #' @param boxes Add boxplot to the plot.
 #' @param smooth Add regression line to the plot.
 #' @param lines Add gene lines to the plot.
 #' @param facet Split figures based on cluster ID.
+#' @param cluster_column column name if cluster is in a column
+#'   with a different name. Usefull, to plot cluster with different
+#'   cutoffs used when grouping genes from the clustering step.
 #' @return [ggplot2] object.
 #' @examples
 #' data(humanGender)
@@ -32,29 +57,58 @@
 #' res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
 #' degPlotCluster(res$normalized, "group", "other")
 #' degPlotCluster(res$normalized, "group", "other", lines = FALSE)
+#' 
+#' library(dplyr)
+#' library(tidyr)
+#' library(tibble)
+#' table <- rownames_to_column(as.data.frame(ma), "genes") %>%
+#'     gather("sample", "expression", -genes) %>%
+#'     right_join(distinct(res$df[,c("genes", "cluster")]),
+#'                by = "genes") %>%
+#'     left_join(rownames_to_column(as.data.frame(des), "sample"),
+#'               by = "sample") %>% 
+#'               as.data.frame()
+#' degPlotCluster(table, "group", "other", process = TRUE)
 #' @export
 degPlotCluster <- function(table, time, color = NULL,
+                           process = FALSE,
                            points = TRUE,
                            boxes = TRUE,
                            smooth = TRUE,
                            lines = TRUE,
-                           facet = TRUE){
+                           facet = TRUE,
+                           cluster_column = "cluster"){
+
     stopifnot(class(table) == "data.frame")
+    if (cluster_column  %in% colnames(table)){
+        table[["cluster"]] = table[[cluster_column]]
+    }
+    if (process){
+        table <- .process(table, time, color)
+    }
+
     if ("cluster"  %in% colnames(table)){
         counts <- table(distinct(table, genes, cluster)[["cluster"]])
         table <- inner_join(table,
                             data.frame(cluster = as.integer(names(counts)),
-                                       tittle = paste(names(counts),
+                                       title = paste(names(counts),
                                                       "- genes:" ,
                                                       counts),
                                        stringsAsFactors = FALSE),
                             by = "cluster")
     }
+
+    if (is.null(color)){
+        color = "dummy"
+        table[[color]] = ""
+        lines = FALSE
+    }
+    table[["line_group"]] = paste(table[["genes"]],
+                                  table[[color]])
     
-    table[["line_group"]] = paste(table[["genes"]], table[[color]])
+    
     splan <- length(unique(table[[time]])) - 1L
-    if (is.null(color))
-        table[[color]] = NULL
+    
     p <- ggplot(table, aes_string(x = time, y = "value",
                                    fill = color, color = color))
     if (boxes)
@@ -74,13 +128,71 @@ degPlotCluster <- function(table, time, color = NULL,
     if (lines)
         p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
     if (facet)
-        p <- p + facet_wrap(~tittle)
+        p <- p + facet_wrap(~title)
     p <- p + 
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
         ylab("Z-score of gene abundance") +
         xlab("")
     p
     
+}
+
+.plot_benchmarking_curve <- function(benchmarking){
+    if (is.null(benchmarking))
+        return(NULL)
+    df <- benchmarking[["genes"]]
+    nc <- apply(df[2:ncol(df)], 2, function(c){
+        length(unique(c))
+    })
+    ng <- apply(df[2:ncol(df)], 2, function(c){
+        sum(!is.na(c))
+    })
+    data.frame(cutoff = names(nc),
+               cluster = rev(nc),
+               genes = rev(ng),
+               pct_variance = unlist(benchmarking[["pcts"]])) %>% 
+        ggplot(aes_string("cutoff", "pct_variance", group = 1)) +
+        geom_line() +
+        geom_text(aes_string(label="nc"), nudge_y = 1) +
+        geom_text(aes_string(label="ng"), nudge_y = -1) +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 90, hjust=1))
+}
+
+.plot_benchmarking <- function(normalized, benchmarking,
+                               time, color){
+
+    if (is.null(benchmarking))
+        return(NULL)
+    p <- lapply(names(benchmarking[["pcts"]]), function(serie){
+        table <- normalized %>% group_by(!!sym(color),
+                                         !!sym(time),
+                                         !!sym(serie)) %>% 
+            summarise(value = median(value))
+        n = length(unique(table[[serie]]))
+        p <- ggplot(table, aes_string(x = time, y = "value",
+                                 color = color, group = serie)) +
+            geom_line() +
+            guides(color=FALSE) +
+            ggtitle(paste0(serie, ": ",
+                          round(benchmarking[["pcts"]][[serie]]),
+                          "% clusters:",
+                          n)) +
+            theme_minimal() +
+            theme(title = element_text(size=6),
+                  axis.title.x=element_blank(),
+                  axis.text.x=element_blank(),
+                  axis.ticks.x=element_blank(),
+                  axis.title.y=element_blank(),
+                  axis.text.y=element_blank(),
+                  axis.ticks.y=element_blank())
+        
+        if (color == "colored"){
+            p <- p + scale_color_manual(values = "black")
+        }
+        p
+    }) %>% plot_grid(plotlist = .)
+    p
 }
 
 # plot group of genes according time and group
@@ -108,6 +220,15 @@ degPlotCluster <- function(table, time, color = NULL,
 # Scale from 1 to 0 the expression genes
 .scale <- function(e){
     scale(e)
+}
+
+.pct_var <- function(counts, clusters){
+    clusters_sd <- lapply(unique(clusters), function(c){
+        counts[names(clusters[clusters == c]),, drop = FALSE] %>% 
+            apply(., 2, sd) %>% 
+            median(.)
+    }) %>% unlist() %>%  median
+    (1 - clusters_sd / median(apply(counts, 2, sd))) * 100
 }
 
 .reduce <- function(groups, counts_group){
@@ -185,8 +306,10 @@ degPlotCluster <- function(table, time, color = NULL,
 }
 
 .select_genes <- function(c, counts_group, minc=15,
-                          reduce=FALSE, cutoff=0.30){
-    select <- cutree(as.hclust(c), h = c$dc)
+                          reduce=FALSE, cutoff=0.30, h = NULL){
+    if (is.null(h))
+        h <- c$dc
+    select <- cutree(as.hclust(c), h = h)
     select <- select[select %in% names(table(select))[table(select) > minc]]
 
     if (reduce)
@@ -194,6 +317,31 @@ degPlotCluster <- function(table, time, color = NULL,
     select <- select[select %in% names(table(select))[table(select) > minc]]
     message("Working with ", length(select), " genes after filtering: minc > ",minc)
     return(select)
+}
+
+.benckmark_cutoff <- function(tree, counts, minc = 15){
+    # browser()
+    series <- unique(round(tree$height, digits = 3))
+    series <- sort(series[2:length(series)])
+    list_clusters <- lapply(series, function(s) {
+        select <- cutree(as.hclust(tree), h = s)
+        select <- select[select %in% names(table(select))[table(select) > minc]]
+    })
+    list_pct <- lapply(list_clusters, function(c) {
+        .pct_var(counts, c)
+    })
+    names(list_clusters) <- paste0("cutoff", series)
+    names(list_pct) <- paste0("cutoff", series)
+    df_clusters <- lapply(names(list_clusters), function(s){
+        c = list_clusters[[s]]
+        data.frame(genes = make.names(names(c)),
+                   cluster = c,
+                   cutoff = s,
+                   stringsAsFactors = F)
+    }) %>% bind_rows() %>% 
+        distinct() %>% 
+        spread(cutoff, cluster)
+    list(genes=df_clusters, pcts=list_pct)
 }
 
 # summarize matrix into groups and scale if needed
@@ -816,6 +964,10 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'   with metadata information attached.
 #' * `summarise` data.frame with clusters values summarized by group and
 #'   with the metadata information attached.
+#' * `benchmarking` plot showing the different patterns at different
+#'   values for clustering cuttree function.
+#' * `benchmarking_curve` plot showing how the numbers of clusters and genes
+#'   changed at different values for clustering cuttree function.
 #' @examples
 #' data(humanGender)
 #' library(SummarizedExperiment)
@@ -842,8 +994,10 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        groupDifference = NULL,
                        eachStep = FALSE,
                        plot=TRUE, fixy=NULL){
+    benchmarking <- NULL
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
+    rownames(ma) = make.names(rownames(ma))
     if (is.null(col)){
         col = "colored"
         metadata[,col] = rep("one_group", nrow(metadata))
@@ -898,6 +1052,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         groups <- .select_genes(cluster_genes, norm_sign, minc,
                                reduce = reduce,
                                cutoff = cutoff)
+        benchmarking <- .benckmark_cutoff(cluster_genes, norm_sign, minc)
     }else if (consensusCluster & is.null(pattern)){
         cluster_genes <- .make_concensus_cluster(counts_group)
         groups <- .select_concensus_genes(cluster_genes)
@@ -931,14 +1086,20 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                   n_genes = n()) %>% 
         ungroup()
     
-    normalized <- norm_sign %>% as.data.frame %>% 
+    normalized <- norm_sign %>% as.data.frame() %>% 
         rownames_to_column("genes") %>%
         gather(!!sym(summarize), "value", -genes) %>%
         inner_join(metadata_groups %>%
                        mutate_if(is.factor, as.character)) %>%
-        inner_join(df, by = "genes")
+        inner_join(df, by = "genes") 
+    
+    if (!is.null(benchmarking))
+        normalized <- normalized %>% left_join(benchmarking[["genes"]], by = "genes")
     normalized[[time]] = factor(normalized[[time]],
                                 levels = levels(metadata[[time]]))
+    
+    plot_benchmarking <- .plot_benchmarking(normalized, benchmarking, time, col)
+    plot_benchmarking_curve <- .plot_benchmarking_curve(benchmarking)
     
     if (length(unique(groups)) > 0){
         p <- degPlotCluster(normalized, time, col)
@@ -955,5 +1116,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
          normalized = normalized,
          summarise = summarise,
          raw = raw,
-         counts = ma[raw[["genes"]],]))
+         counts = ma[raw[["genes"]],],
+         benchmarking = plot_benchmarking,
+         benchmarking_curve = plot_benchmarking_curve))
 }

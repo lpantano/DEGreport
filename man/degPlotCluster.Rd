@@ -4,15 +4,21 @@
 \alias{degPlotCluster}
 \title{Plot clusters from degPattern function output}
 \usage{
-degPlotCluster(table, time, color = NULL, points = TRUE,
-  boxes = TRUE, smooth = TRUE, lines = TRUE, facet = TRUE)
+degPlotCluster(table, time, color = NULL, process = FALSE,
+  points = TRUE, boxes = TRUE, smooth = TRUE, lines = TRUE,
+  facet = TRUE, cluster_column = "cluster")
 }
 \arguments{
-\item{table}{\code{normalized} element from \code{\link[=degPatterns]{degPatterns()}} output.}
+\item{table}{\code{normalized} element from \code{\link[=degPatterns]{degPatterns()}} output.
+It can be a data.frame with the following columns in there:
+\code{genes, sample, expression, cluster, xaxis_column, color_column}.}
 
 \item{time}{column name to use in the x-axis.}
 
 \item{color}{column name to use to color and divide the samples.}
+
+\item{process}{whether to process the table if it is not
+ready for plotting.}
 
 \item{points}{Add points to the plot.}
 
@@ -23,6 +29,10 @@ degPlotCluster(table, time, color = NULL, points = TRUE,
 \item{lines}{Add gene lines to the plot.}
 
 \item{facet}{Split figures based on cluster ID.}
+
+\item{cluster_column}{column name if cluster is in a column
+with a different name. Usefull, to plot cluster with different
+cutoffs used when grouping genes from the clustering step.}
 }
 \value{
 \link{ggplot2} object.
@@ -42,4 +52,16 @@ des[["other"]] <- sample(c("a", "b"), 85, replace = TRUE)
 res <- degPatterns(ma, des, time="group", col = "other", plot = FALSE)
 degPlotCluster(res$normalized, "group", "other")
 degPlotCluster(res$normalized, "group", "other", lines = FALSE)
+
+library(dplyr)
+library(tidyr)
+library(tibble)
+table <- rownames_to_column(as.data.frame(ma), "genes") \%>\%
+    gather("sample", "expression", -genes) \%>\%
+    right_join(distinct(res$df[,c("genes", "cluster")]),
+               by = "genes") \%>\%
+    left_join(rownames_to_column(as.data.frame(des), "sample"),
+              by = "sample") \%>\% 
+              as.data.frame()
+degPlotCluster(table, "group", "other", process = TRUE)
 }

@@ -1,4 +1,5 @@
 context("results")
+library(DESeq2)
 
 dds <- makeExampleDESeqDataSet(betaSD=1)
 colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
