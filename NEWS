@@ -1,5 +1,9 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.19.2
+
+    * Fix: Fix cutoff summary in degPattern.
+
 CHANGES IN DEGreport 1.19.1
 
     * Feature: Accept data.frame to plot custom clusters.

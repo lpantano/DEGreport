@@ -164,6 +164,7 @@ degPlotCluster <- function(table, time, color = NULL,
 
     if (is.null(benchmarking))
         return(NULL)
+    benchmarking[["pcts"]] <- benchmarking[["pcts"]][lapply(benchmarking[["pcts"]],length)>0] 
     p <- lapply(names(benchmarking[["pcts"]]), function(serie){
         table <- normalized %>% group_by(!!sym(color),
                                          !!sym(time),
@@ -334,6 +335,7 @@ degPlotCluster <- function(table, time, color = NULL,
     names(list_pct) <- paste0("cutoff", series)
     df_clusters <- lapply(names(list_clusters), function(s){
         c = list_clusters[[s]]
+        if (length(c) == 0) {return(data.frame())}
         data.frame(genes = make.names(names(c)),
                    cluster = c,
                    cutoff = s,
