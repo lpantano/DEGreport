@@ -341,7 +341,7 @@ degCovariates <- function(counts, metadata,
                                      colnames(samplesbyfullcovariates))
     
     covar_factors <- samplesbyfullcovariates[,names(covar_class)[covar_class != "numeric"], drop = FALSE]
-    covar_numeric <- samplesbyfullcovariates[,names(covar_class)[covar_class == "numeric"]]
+    covar_numeric <- samplesbyfullcovariates[,names(covar_class)[covar_class == "numeric"], drop = FALSE]
     
     samplesbyfullcovariates = cbind(covar_factors, covar_numeric)
     
