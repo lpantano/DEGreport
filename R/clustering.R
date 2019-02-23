@@ -1004,9 +1004,13 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         col = "colored"
         metadata[,col] = rep("one_group", nrow(metadata))
     }
+
     if (!summarize %in% names(metadata))
         metadata[,summarize] = as.factor(paste0(metadata[,col],
                                                 metadata[,time]))
+
+    # ensure there are no missing levels in summarize
+    metadata[,summarize] = droplevels(metadata[,summarize])
 
     stopifnot(class(metadata) == "data.frame")
     stopifnot(class(ma) == "matrix" | class(ma) == "data.frame")
