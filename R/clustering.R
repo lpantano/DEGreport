@@ -1018,9 +1018,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         stopifnot(length(fixy) == 2)
 
     if (nrow(ma)>3000 & is.null(pattern))
-        message("Large number of genes given. Please,",
-                "make sure is not an error. Normally",
-                "Only DE genes are useful for this function.")
+        message("A large number of genes was given-- please, ",
+                "make sure this is not an error. Normally, ",
+                "only DE genes will be useful for this function.")
     message("Working with ", nrow(ma), " genes.")
     
 
