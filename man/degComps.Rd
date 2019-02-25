@@ -20,7 +20,7 @@ fom \code{colData(dds)} to create group comparisons.}
 \item{skip}{Boolean to indicate whether skip shrinkage. For instance
 when it comes from LRT method.}
 
-\item{type}{Type of shrinkage estimator. See \code{\link[DESeq2:results]{DESeq2::results()}}.}
+\item{type}{Type of shrinkage estimator. See \code{\link[DESeq2:lfcShrink]{DESeq2::lfcShrink()}}.}
 
 \item{pairs}{Boolean to indicate whether create all comparisons or only
 use the coefficient already created from \code{DESeq2::resultsNames()}.}

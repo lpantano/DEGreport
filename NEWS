@@ -2,6 +2,8 @@ DEGreport News
 
 CHANGES IN DEGreport 1.19.2
 
+    * Fix: Update documentation link in degComb.
+    * Fix: Fix error when factor has extra-levels by @roryk.
     * Fix: Fix cutoff summary in degPattern.
 
 CHANGES IN DEGreport 1.19.1
