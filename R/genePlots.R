@@ -236,6 +236,7 @@ degPlotWide <- function(counts, genes, group, metadata=NULL, batch=NULL){
                        intgroup = group, returnData = TRUE) %>%
                 mutate(count = log2(count + 1)) %>%
                 mutate(gene = gene, sample = row.names(metadata))}))
+        dd$group = dd[[group]]
     }else if (class(counts) == "matrix") {
         dd = melt(counts[genes, ])
         colnames(dd) = c("gene", "sample", "count")
