@@ -933,22 +933,22 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' more several time points. 
 #' Before calculating the genes similarity among samples,
 #' all samples inside the same time point (`time` parameter) and
-#' group (`col` paramater) are collapsed together, and the `mean`
+#' group (`col` parameter) are collapsed together, and the `mean`
 #' value is the representation of the group for the gene abundance.
-#' Then, all pair-wise gene expression are calculated using
+#' Then, all pair-wise gene expression is calculated using
 #' `cor.test`  R function using kendall as the statistical
-#' method. A distance matrix is created from those vsalues.
+#' method. A distance matrix is created from those values.
 #' After that, [cluster::diana()] is used for the 
-#' clustering of gene-gene distance matrix and cut of the tree using
+#' clustering of gene-gene distance matrix and cut the tree using
 #' the divisive coefficient of the clustering, giving as well by diana.
-#' Alernatively, if `consensusCluster` is on, it would used 
+#' Alternatively, if `consensusCluster` is on, it would use
 #' [ConsensusClusterPlus] to cut the tree in stable clusters.
 #' Finally, for each group of genes, only the ones that have genes
 #' higher than `minc` parameter will be added to the figure.
 #' The y-axis in the figure is the results of applying `scale()` 
-#' R function, what is similar to the meaning of creating a 
+#' R function, what is similar to creating a 
 #' `Z-score` where values are centered to the `mean`  and
-#' scaled to the `standard desviation`.
+#' scaled to the `standard desviation` by each gene.
 #' 
 #' The different patterns can be merged
 #' to get similar ones into only one pattern. The expression
