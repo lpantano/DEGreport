@@ -164,6 +164,7 @@ degPlotCluster <- function(table, time, color = NULL,
 
     if (is.null(benchmarking))
         return(NULL)
+    benchmarking[["pcts"]] <- benchmarking[["pcts"]][lapply(benchmarking[["pcts"]],length)>0] 
     p <- lapply(names(benchmarking[["pcts"]]), function(serie){
         table <- normalized %>% group_by(!!sym(color),
                                          !!sym(time),
@@ -334,6 +335,7 @@ degPlotCluster <- function(table, time, color = NULL,
     names(list_pct) <- paste0("cutoff", series)
     df_clusters <- lapply(names(list_clusters), function(s){
         c = list_clusters[[s]]
+        if (length(c) == 0) {return(data.frame())}
         data.frame(genes = make.names(names(c)),
                    cluster = c,
                    cutoff = s,
@@ -931,22 +933,22 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' more several time points. 
 #' Before calculating the genes similarity among samples,
 #' all samples inside the same time point (`time` parameter) and
-#' group (`col` paramater) are collapsed together, and the `mean`
+#' group (`col` parameter) are collapsed together, and the `mean`
 #' value is the representation of the group for the gene abundance.
-#' Then, all pair-wise gene expression are calculated using
+#' Then, all pair-wise gene expression is calculated using
 #' `cor.test`  R function using kendall as the statistical
-#' method. A distance matrix is created from those vsalues.
+#' method. A distance matrix is created from those values.
 #' After that, [cluster::diana()] is used for the 
-#' clustering of gene-gene distance matrix and cut of the tree using
+#' clustering of gene-gene distance matrix and cut the tree using
 #' the divisive coefficient of the clustering, giving as well by diana.
-#' Alernatively, if `consensusCluster` is on, it would used 
+#' Alternatively, if `consensusCluster` is on, it would use
 #' [ConsensusClusterPlus] to cut the tree in stable clusters.
 #' Finally, for each group of genes, only the ones that have genes
 #' higher than `minc` parameter will be added to the figure.
 #' The y-axis in the figure is the results of applying `scale()` 
-#' R function, what is similar to the meaning of creating a 
+#' R function, what is similar to creating a 
 #' `Z-score` where values are centered to the `mean`  and
-#' scaled to the `standard desviation`.
+#' scaled to the `standard desviation` by each gene.
 #' 
 #' The different patterns can be merged
 #' to get similar ones into only one pattern. The expression
@@ -1002,9 +1004,13 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         col = "colored"
         metadata[,col] = rep("one_group", nrow(metadata))
     }
+
     if (!summarize %in% names(metadata))
         metadata[,summarize] = as.factor(paste0(metadata[,col],
                                                 metadata[,time]))
+
+    # ensure there are no missing levels in summarize
+    metadata[,summarize] = droplevels(metadata[,summarize])
 
     stopifnot(class(metadata) == "data.frame")
     stopifnot(class(ma) == "matrix" | class(ma) == "data.frame")
@@ -1016,9 +1022,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         stopifnot(length(fixy) == 2)
 
     if (nrow(ma)>3000 & is.null(pattern))
-        message("Large number of genes given. Please,",
-                "make sure is not an error. Normally",
-                "Only DE genes are useful for this function.")
+        message("A large number of genes was given-- please, ",
+                "make sure this is not an error. Normally, ",
+                "only DE genes will be useful for this function.")
     message("Working with ", nrow(ma), " genes.")
     
 

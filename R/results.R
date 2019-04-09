@@ -93,7 +93,7 @@
 #' @param alpha Numeric value used in independent filtering in [DESeq2::results()].
 #' @param skip Boolean to indicate whether skip shrinkage. For instance
 #'   when it comes from LRT method.
-#' @param type Type of shrinkage estimator. See [DESeq2::results()].
+#' @param type Type of shrinkage estimator. See [DESeq2::lfcShrink()].
 #' @param pairs Boolean to indicate whether create all comparisons or only
 #'   use the coefficient already created from `DESeq2::resultsNames()`.
 #'   

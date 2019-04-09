@@ -1,5 +1,12 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.19.2
+
+    * Fix: Error when metadata doesn't contain group column. Thanks to @hexaflexa.
+    * Fix: Update documentation link in degComb.
+    * Fix: Fix error when factor has extra-levels by @roryk.
+    * Fix: Fix cutoff summary in degPattern.
+
 CHANGES IN DEGreport 1.19.1
 
     * Feature: Accept data.frame to plot custom clusters.
