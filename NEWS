@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.21.1
+    * Fix: degMA used always raw table, now fixed to use the right one.
+
 CHANGES IN DEGreport 1.19.2
 
     * Fix: Error when metadata doesn't contain group column. Thanks to @hexaflexa.

@@ -272,14 +272,13 @@ degMA <- function(results,
     stopifnot(class(results) == "DEGSet")
     if (raw & correlation)
         stop("Use one or another. Incompatible parameters.")
-    if (length(names(results) == 1))
+    if (length(names(results)) == 1)
         raw = TRUE
     if (raw){
         p <- .plot_raw(deg(results))
     }else{
         res_all <- .merge_results(results, raw)    
         toplot <- (abs(res_all[["log2FoldChange_shrunken"]] - res_all[["log2FoldChange_unshrunken"]])) >= diff
-        
         if (!is.null(limit)){
             res_all[["log2FoldChange_shrunken"]][res_all[["log2FoldChange_shrunken"]] < -1 * limit] <-  -1 * limit
             res_all[["log2FoldChange_shrunken"]][res_all[["log2FoldChange_shrunken"]] > 1 * limit] <-  1 * limit
