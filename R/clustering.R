@@ -78,8 +78,8 @@ degPlotCluster <- function(table, time, color = NULL,
                            lines = TRUE,
                            facet = TRUE,
                            cluster_column = "cluster"){
-
     stopifnot(class(table) == "data.frame")
+
     if (cluster_column  %in% colnames(table)){
         table[["cluster"]] = table[[cluster_column]]
     }
@@ -1098,7 +1098,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         inner_join(metadata_groups %>%
                        mutate_if(is.factor, as.character)) %>%
         inner_join(df, by = "genes") 
-    
+
     if (!is.null(benchmarking))
         normalized <- normalized %>% left_join(benchmarking[["genes"]], by = "genes")
     normalized[[time]] = factor(normalized[[time]],
@@ -1106,7 +1106,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     
     plot_benchmarking <- .plot_benchmarking(normalized, benchmarking, time, col)
     plot_benchmarking_curve <- .plot_benchmarking_curve(benchmarking)
-    
+
     if (length(unique(groups)) > 0){
         p <- degPlotCluster(normalized, time, col)
         if (!is.null(fixy))

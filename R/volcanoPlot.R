@@ -41,6 +41,7 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
         stats <- deg(stats, tidy = "data.frame")
         stats <- stats[, c("log2FoldChange", "padj")]
     }
+
     stats <- as.data.frame(stats)
     if (!any(side %in% c("both","down","up")) | length(side)>1)
         stop("side parameter should be: both, up or down.")
@@ -70,7 +71,7 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
         theme_bw()+
         theme(legend.position="none") +
         theme(plot.margin=unit(c(3,-5.5,4,3), "mm") )+
-        scale_x_continuous(limits = range.lfc, breaks = range.lfc[1]:range.lfc[2], expand = c(.05,.05))+
+#         scale_x_continuous(limits = range.lfc, breaks = range.lfc[1]:range.lfc[2])+
         scale_y_continuous(labels=fmt(), limits = range.pval)+ labs(list(title="Volcano plot"))
     if (side=="both" | side=="up")
         scatter = scatter + geom_polygon(data=scat.poly.up, aes_string(x="x",y="y"), fill=shade.colour, alpha=shade.alpha)

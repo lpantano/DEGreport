@@ -1,6 +1,7 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.21.1
+    * Fix: degVolcano doesn't uses ranges of 0.5 in the x axis anymore
     * Fix: degMA used always raw table, now fixed to use the right one.
 
 CHANGES IN DEGreport 1.19.2
