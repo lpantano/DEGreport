@@ -3,7 +3,7 @@
         return(counts(c, "rlog"))
     if (class(c) == "DESeqDataSet")
         return(counts(c, normalized = TRUE))
-    if (class(c) == "SummarizedExperiment")
+    if (class(c) %in% c("SummarizedExperiment", "RangedSummarizedExperiment"))
         return(assays(c)[[slot]])
     if (class(c) == "data.frame")
         return(c)
@@ -13,7 +13,8 @@
 }
 
 .get_meta <- function(c){
-    if (class(c) %in% c("bcbioRNASeq", "DESeqDataSet", "SummarizedExperiment"))
+    if (class(c) %in% c("bcbioRNASeq", "DESeqDataSet",
+                        "SummarizedExperiment", "RangedSummarizedExperiment"))
         return(data.frame(colData(c), stringsAsFactors = FALSE))
     return(NULL)
 }
@@ -50,7 +51,8 @@ degSignature <- function(counts, signature, group = NULL, metadata = NULL, slot 
 
     names(signature) <- c("gene", "signature")
     common <- intersect(row.names(c), signature[["gene"]])
-    c[common, ] %>%  melt() %>%  data.frame(., stringsAsFactors = FALSE) %>% 
+    c[common, ] %>%  as.data.frame() %>% rownames_to_column("id") %>% 
+        melt() %>%  data.frame(., stringsAsFactors = FALSE) %>% 
         set_colnames(c("gene", "sample", "expression")) %>% 
         mutate_if(is.factor, as.character) %>% 
         left_join(meta %>% rownames_to_column("degsample") %>% 
