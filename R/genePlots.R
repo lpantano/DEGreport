@@ -148,7 +148,7 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
         if (length(name) != 2L)
             message("No genes were mapped to rowData. check ann parameter values.")
         if (length(name) == 2L)
-            newgenes <- anno[match(genes, anno[, name[1L]]), name[2L]]
+            newgenes <- anno[match(genes, anno[, ann[1L]]), ann[2L]]
         if (sum(is.na(newgenes)) > 0)
             warning(sum(is.na(newgenes)), " cannot be mapped to ", name[2L], 
                     ". Those will be skipped.")
