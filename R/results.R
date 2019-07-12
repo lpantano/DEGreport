@@ -313,13 +313,13 @@ degMA <- function(results,
         if (is.null(contrast)) {
             contrast <- resultsNames(object)[[2L]]
         }
-        return(capture.output(summary(.guessResults(object, contrast),
-                                      alpha = alpha)))
+        return(capture.output(DESeq2::summary(.guessResults(object, contrast),
+                                      alpha)))
     }
     if (class(object) == "DESeqResults")
-        return(capture.output(summary(object, alpha = alpha)))
+        return(capture.output(DESeq2::summary(object, alpha)))
     if (class(object) == "DEGSet")
-        return(capture.output(summary(deg(object), alpha = alpha)))
+        return(capture.output(DESeq2::summary(deg(object), alpha)))
     stop("No class supported.")
 }
 
