@@ -1,14 +1,40 @@
-.guessResults <- function(object, what, alpha){
+.correct_fdr <- function(tb, fdr){
+    if (fdr == "lfdr-stat"){
+        values <- tb[["stat"]]
+        names(values) <- rownames(tb)
+        values <- values[!is.na(values)]
+        lfdr <- fdrtool(values, plot = F)[["lfdr"]]
+        names(lfdr) = names(values)
+        tb[names(lfdr), "padj"] <- lfdr
+    }else if (fdr == "lfdr-pvalue"){
+        values <- tb[["pvalue"]]
+        names(values) <- rownames(tb)
+        values <- values[!is.na(values)]
+        lfdr <- fdrtool(values, plot = F)[["lfdr"]]
+        names(lfdr) = names(values)
+        tb[names(lfdr), "padj"] <- lfdr
+    }else if (is.numeric(fdr)){
+        stopifnot(length(fdr) == nrow(tb))
+        tb[["padj"]] <- lfdr
+    }else if (fdr !="default"){
+        stop(fdr, "not supported.")
+    }
+    tb
+}
+
+.guessResults <- function(object, what, alpha, fdr){
     coef <- match(what[[1]], resultsNames(object))
     if (is.na(coef) & length(what) == 1L)
         stop("coef ", what, " not found in resultsNames(dds).")
     if (length(what) == 1)
         res <- results(object, name = what)
     else res <- results(object, contrast = what)
+    if (fdr != "default")
+        .correct_fdr(res, fdr)
     res[order(res[["padj"]]),]
 }
 
-.guessShrunken <- function(object, what, unShrunken, method){
+.guessShrunken <- function(object, what, unShrunken, method, fdr){
     coef <- match(what[[1]], resultsNames(object))
     object <- object[rownames(unShrunken),]
     if (is.na(coef) & length(what) == 1L)
@@ -25,6 +51,7 @@
             type = method)
     else res <- lfcShrink(object, contrast = what,
                           res = unShrunken, type = method)
+    res <- .correct_fdr(res, fdr)
     res[order(res[["padj"]]),]
 }
 
@@ -107,21 +134,24 @@
 #'   design(dds) <-  ~ condition + treatment
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, combs = c("condition", 2),
-#'               contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
+#'                 contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
+#' res <- degComps(dds,contrast = list("treatment_B_vs_A"),
+#'                 fdr="lfdr-stat")
 #' @export
 degComps <- function(dds, combs = NULL, contrast = NULL,
                      alpha = 0.05, skip = FALSE,
                      type = "normal",
-                     pairs = FALSE) {
+                     pairs = FALSE,
+                     fdr = "default") {
     stopifnot(class(dds) == "DESeqDataSet")
-
+    stopifnot(fdr %in% c("default", "lfdr-stat", "lfdr-pvalue"))
     all_combs <- .guessComb(dds,
                             combs = combs, contrast = contrast,
                             pairs = pairs)
     message("Doing ", length(all_combs), " element(s).")
 
     message("Doing results() for each element.")
-    resUnshrunken <- lapply(all_combs, function(x) .guessResults(dds, x, alpha))
+    resUnshrunken <- lapply(all_combs, function(x) .guessResults(dds, x, alpha, fdr))
     resShrunken <- list()
     default <- "raw"
     if (!skip){
@@ -132,7 +162,8 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
             .guessShrunken(dds,
                            all_combs[[x]],
                            resUnshrunken[[x]],
-                           type))
+                           type,
+                           fdr))
         
         names(resShrunken) <- names(all_combs)
     }
@@ -143,6 +174,9 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
             default = default)
         )
     names(rdsList) <- names(all_combs)
+    if (length(rdsList) == 1){
+        rdsList <- rdsList[[1]]
+    }
     rdsList
 }
 

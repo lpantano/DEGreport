@@ -5,7 +5,7 @@
 \title{Automatize the use of \code{results()} for multiple comparisons}
 \usage{
 degComps(dds, combs = NULL, contrast = NULL, alpha = 0.05,
-  skip = FALSE, type = "normal", pairs = FALSE)
+  skip = FALSE, type = "normal", pairs = FALSE, fdr = "default")
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} obcject.}
@@ -48,7 +48,9 @@ colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
   design(dds) <-  ~ condition + treatment
 dds <- DESeq(dds)
 res <- degComps(dds, combs = c("condition", 2),
-              contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
+                contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
+res <- degComps(dds,contrast = list("treatment_B_vs_A"),
+                fdr="lfdr-stat")
 }
 \author{
 Lorena Pantano

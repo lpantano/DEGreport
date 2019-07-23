@@ -1,11 +1,53 @@
+setMethod("show", "DEGSet",
+          function(object){
+              cat("Comparisons:" , .get_contrast_name(object))
+              cat("\nResults in comparison:",
+                  paste(names(object),
+                        collapse =","))
+              cat("\nDefault is:", degDefault(object))
+          }
+)
+
 #' Method to get the default table to use.
 #' 
 #' @param object [DEGSet]
 #' @author Lorena Pantano
 #' @rdname degDefault
 #' @export
-setMethod("degDefault", signature("DEGSet"), function(object) {
+setMethod("degDefault", signature("DEGSet"), 
+          function(object) {
     slot(object, name = "default")
+})
+
+
+#' Method to re-calculate the padj column.
+#' 
+#' It can accept a list of new padj values matching the 
+#' same dimmensions than the current vector.
+#' It can calculate the `lfdr` based on [fdrtool::fdrtool] function.
+#' 
+#' @param object [DEGSet]
+#' @param fdr It can be `fdr-stat`, `fdr-pvalue`, vector of new padj
+#' @author Lorena Pantano
+#' @rdname degDefault
+#' @examples
+#' library(DESeq2)
+#' library(dplyr)
+#' dds <- makeExampleDESeqDataSet(betaSD=1)
+#' colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
+#' design(dds) <-  ~ condition + treatment
+#' dds <- DESeq(dds)
+#' res <- degComps(dds, contrast = list("treatment_B_vs_A"))
+#' degCorrect(res, fdr = "lfdr-stat")
+#' @export
+setMethod("degCorrect", signature("DEGSet"),
+          function(object, fdr) {
+              res <- lapply(names(object), function(n){
+                  .correct_fdr(object[[n]], fdr)
+              })
+              names(res) <- names(object)
+              new("DEGSet", res,
+                  default = degDefault(object))
 })
 
  
@@ -19,7 +61,7 @@ setMethod("degDefault", signature("DEGSet"), function(object) {
 #' @author Lorena Pantano
 #' @rdname deg
 #' @references  
-#' * Testing it `top` is whole number or not comes from:
+#' * Testing if `top` is whole number or not comes from:
 #'   https://stackoverflow.com/a/3477158
 #' @export
 setMethod("deg", signature("DEGSet"),
@@ -34,12 +76,13 @@ setMethod("deg", signature("DEGSet"),
               if (is.null(top))
                   top <- nrow(df)
               stopifnot(top%%1 == 0)
-              
+
               if (is.null(tidy))
                   return(df %>% .[order(.[["padj"]]),] %>%
                              .[1:top,])
               if (tidy == "data.frame")
-                  return(as.data.frame(df) %>% .[order(.[["padj"]]),] %>%
+                  return(as.data.frame(df) %>%
+                             .[order(.[["padj"]]),] %>%
                              .[1:top,])
               if (tidy == "tibble")
                   return(as.data.frame(df) %>%
@@ -292,12 +335,13 @@ setMethod("as.DEGSet", signature("TopTags"),
 setMethod("as.DEGSet", signature("data.frame"),
           function(object, contrast, default = "raw", extras = NULL){
               stopifnot(!is.null(contrast))
-              cols <- c("logFC", "AveExpr", "P.Value", "adj.P.Val")
+              cols <- c("logFC", "AveExpr", "t", "P.Value", "adj.P.Val")
               stopifnot(cols  %in% names(object))
               name <- contrast
               df <- as.data.frame(object)[,cols] %>%
                   set_colnames(c("log2FoldChange",
                                  "baseMean",
+                                 "stat",
                                  "pvalue",
                                  "padj")) %>%
                   DataFrame
@@ -307,6 +351,7 @@ setMethod("as.DEGSet", signature("data.frame"),
                       return(as.data.frame(e)[,cols] %>% 
                                  set_colnames(c("log2FoldChange",
                                                 "baseMean",
+                                                "stat",
                                                 "pvalue",
                                                 "padj")) %>%
                                  DataFrame)

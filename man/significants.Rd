@@ -9,7 +9,8 @@
 \alias{significants,list-method}
 \title{Method to get the significant genes}
 \usage{
-significants(object, ...)
+significants(object, padj = 0.05, fc = 0, direction = NULL,
+  full = FALSE, ...)
 
 \S4method{significants}{DEGSet}(object, padj = 0.05, fc = 0,
   direction = NULL, full = FALSE, ...)
@@ -26,9 +27,6 @@ significants(object, ...)
 \arguments{
 \item{object}{\link{DEGSet}}
 
-\item{...}{Passed to \link{deg}. Default: value = NULL.
-Value can be 'raw', 'shrunken'.}
-
 \item{padj}{Cutoff for the FDR column.}
 
 \item{fc}{Cutoff for the log2FC column.}
@@ -37,6 +35,9 @@ Value can be 'raw', 'shrunken'.}
 down, up and NULL.}
 
 \item{full}{Whether to return full table or not.}
+
+\item{...}{Passed to \link{deg}. Default: value = NULL.
+Value can be 'raw', 'shrunken'.}
 
 \item{newFDR}{Whether to recalculate the FDR or not.
 See https://support.bioconductor.org/p/104059/#104072.

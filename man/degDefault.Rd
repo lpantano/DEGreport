@@ -3,19 +3,43 @@
 \docType{methods}
 \name{degDefault}
 \alias{degDefault}
+\alias{degCorrect}
 \alias{degDefault,DEGSet-method}
+\alias{degCorrect,DEGSet-method}
 \title{Method to get the default table to use.}
 \usage{
 degDefault(object)
 
+degCorrect(object, fdr)
+
 \S4method{degDefault}{DEGSet}(object)
+
+\S4method{degCorrect}{DEGSet}(object, fdr)
 }
 \arguments{
 \item{object}{\link{DEGSet}}
+
+\item{fdr}{It can be \code{fdr-stat}, \code{fdr-pvalue}, vector of new padj}
+
+\item{object}{\link{DEGSet}}
 }
 \description{
-Method to get the default table to use.
+It can accept a list of new padj values matching the
+same dimmensions than the current vector.
+It can calculate the \code{lfdr} based on \link[fdrtool:fdrtool]{fdrtool::fdrtool} function.
+}
+\examples{
+library(DESeq2)
+library(dplyr)
+dds <- makeExampleDESeqDataSet(betaSD=1)
+colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
+design(dds) <-  ~ condition + treatment
+dds <- DESeq(dds)
+res <- degComps(dds, contrast = list("treatment_B_vs_A"))
+degCorrect(res, fdr = "lfdr-stat")
 }
 \author{
+Lorena Pantano
+
 Lorena Pantano
 }

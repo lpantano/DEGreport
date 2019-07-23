@@ -37,3 +37,11 @@ test_that("Results",{
     expect_error(degSummary(colData(dds)))
     expect_output(degSummary(res, kable = TRUE), "|")
 })
+
+test_that("Correct", {
+    res <- .guessResults(dds, c("condition", "A", "B"), 0.05, "default")
+    expect_s4_class(.correct_fdr(res, "lfdr-stat"), "DESeqResults")
+    expect_s4_class(.correct_fdr(res, "lfdr-pvalue"), "DESeqResults")
+    expect_error(.correct_fdr(res, "other"))
+    expect_equal(res, .correct_fdr(res, "default"))
+})

@@ -6,7 +6,7 @@
 \alias{deg,DEGSet-method}
 \title{Method to get all table stored for an specific comparison}
 \usage{
-deg(object, ...)
+deg(object, value = NULL, tidy = NULL, top = NULL, ...)
 
 \S4method{deg}{DEGSet}(object, value = NULL, tidy = NULL, top = NULL,
   ...)
@@ -14,20 +14,20 @@ deg(object, ...)
 \arguments{
 \item{object}{\link{DEGSet}}
 
-\item{...}{Other parameters to pass for other methods.}
-
 \item{value}{Character to specify which table to use.}
 
 \item{tidy}{Return data.frame, tibble or original class.}
 
 \item{top}{Limit number of rows to return. Default: All.}
+
+\item{...}{Other parameters to pass for other methods.}
 }
 \description{
 Method to get all table stored for an specific comparison
 }
 \references{
 \itemize{
-\item Testing it \code{top} is whole number or not comes from:
+\item Testing if \code{top} is whole number or not comes from:
 https://stackoverflow.com/a/3477158
 }
 }

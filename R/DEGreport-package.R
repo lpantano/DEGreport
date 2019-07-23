@@ -35,6 +35,7 @@
 #' @import edgeR
 #' @import cluster
 #' @import logging
+#' @import fdrtool
 #' @importFrom Biobase rowMax rowMin
 #' @importFrom DESeq2 plotCounts rlog results resultsNames lfcShrink
 #' @importFrom SummarizedExperiment SummarizedExperiment

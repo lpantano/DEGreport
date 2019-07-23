@@ -1,6 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.21.2
+    
+    * Feature: add lfdr support from fdrtools to degCombs and DEGSet object.
+
 CHANGES IN DEGreport 1.21.1
+
     * Fix: call summary from DESeq2
     * Fix: degPlot to avoid reordering `ann` vector when checking if they exists.
     * Fix: degSignature to work with new version of melt.
