@@ -38,8 +38,8 @@
 #' design(dds) <-  ~ condition + treatment
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, combs = c("condition"))
-#' deg(res[[1]])
-#' deg(res[[1]], tidy = "tibble")
+#' deg(res)
+#' deg(res, tidy = "tibble")
 #' # From edgeR
 #' dge <- DGEList(counts=counts(dds), group=colData(dds)[["treatment"]])
 #' dge <- estimateCommonDisp(dge)
