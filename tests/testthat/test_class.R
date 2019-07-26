@@ -27,26 +27,26 @@ test_that("DEGSet",{
     expect_type(as.DEGSet(rawR,  extras = list(shrunken = rawR)), "list")
     expect_error(as.DEGSet(rawR,  extras = list(shrunken = raw)), "TopTags")
     
-    expect_true(abs(deg(res[[1]], "raw")[["log2FoldChange"]][[1]]) >
-                    abs(deg(res[[1]], "shrunken")[["log2FoldChange"]][[1]]))
-    expect_match(degDefault(res[[1]]), "shrunken")
-    expect_error(deg(res[[1]], "fake"))
-    expect_identical(res[[1]][["shrunken"]], deg(res[[1]]))
-    expect_true(deg(res[[1]], tidy = "tibble") %>% is_tibble)
-    expect_equal(deg(res[[1]], top = 5) %>% nrow, 5)
+    expect_true(abs(deg(res, "raw")[["log2FoldChange"]][[1]]) >
+                    abs(deg(res, "shrunken")[["log2FoldChange"]][[1]]))
+    expect_match(degDefault(res), "shrunken")
+    expect_error(deg(res, "fake"))
+    expect_identical(res[["shrunken"]], deg(res[[1]]))
+    expect_true(deg(res, tidy = "tibble") %>% is_tibble)
+    expect_equal(deg(res, top = 5) %>% nrow, 5)
     
+    expect_type(significants(res), "character")
     expect_type(significants(res[[1]]), "character")
-    expect_type(significants(res[[1]][[1]]), "character")
     expect_type(significants(res), "character")
     expect_true(significants(res, full = TRUE) %>% is_tibble)
     
     expect_s4_class(degCorrect(res, "lfdr-stat"), "DEGSet")
     
-    expect_true(degMA(res[[1]], diff = 4) %>%
+    expect_true(degMA(res, diff = 4) %>%
                     class %>% .[[2]] == "ggplot")
-    expect_true(degMA(res[[1]], diff = 4, raw = TRUE) %>%
+    expect_true(degMA(res, diff = 4, raw = TRUE) %>%
                     class %>% .[[2]] == "ggplot")
-    expect_true(degMA(res[[1]], diff = 4, correlation = TRUE) %>%
+    expect_true(degMA(res, diff = 4, correlation = TRUE) %>%
                     class %>% .[[2]] == "ggplot")
-    expect_error(degMA(res[[1]], diff = 4, raw = TRUE, correlation = TRUE))
+    expect_error(degMA(res, diff = 4, raw = TRUE, correlation = TRUE))
 })
