@@ -293,7 +293,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
 #' dds <- makeExampleDESeqDataSet(betaSD=1)
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("condition_B_vs_A"))
-#' degMA(res[["condition_B_vs_A"]])
+#' degMA(res)
 #' @export
 degMA <- function(results, 
                     title = NULL,

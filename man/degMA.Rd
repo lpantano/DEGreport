@@ -38,7 +38,7 @@ library(DESeq2)
 dds <- makeExampleDESeqDataSet(betaSD=1)
 dds <- DESeq(dds)
 res <- degComps(dds, contrast = list("condition_B_vs_A"))
-degMA(res[["condition_B_vs_A"]])
+degMA(res)
 }
 \author{
 Victor Barrera
