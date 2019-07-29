@@ -31,7 +31,7 @@ test_that("DEGSet",{
                     abs(deg(res, "shrunken")[["log2FoldChange"]][[1]]))
     expect_match(degDefault(res), "shrunken")
     expect_error(deg(res, "fake"))
-    expect_identical(res[["shrunken"]], deg(res[[1]]))
+    expect_identical(res[["shrunken"]], deg(res))
     expect_true(deg(res, tidy = "tibble") %>% is_tibble)
     expect_equal(deg(res, top = 5) %>% nrow, 5)
     
