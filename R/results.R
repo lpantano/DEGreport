@@ -22,7 +22,7 @@
     tb
 }
 
-.guessResults <- function(object, what, alpha, fdr){
+.guessResults <- function(object, what, alpha, fdr="default"){
     coef <- match(what[[1]], resultsNames(object))
     if (is.na(coef) & length(what) == 1L)
         stop("coef ", what, " not found in resultsNames(dds).")
