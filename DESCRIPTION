@@ -33,7 +33,7 @@ Imports:
     cowplot,
     ConsensusClusterPlus,
     cluster,
-    DESeq2,
+    DESeq2 (>= 1.25.8),
     dplyr,
     edgeR,
     ggplot2,
