@@ -33,7 +33,7 @@ test_that("Results",{
     expect_error(.guessResults(dds, "condition_C_vs_A", res))
     expect_type(degSummary(dds, contrast = "condition_B_vs_A"), "list")
     expect_type(degSummary(res), "list")
-    expect_type(degSummary(resComps[[1]]), "list")
+    expect_type(degSummary(resComps), "list")
     expect_error(degSummary(colData(dds)))
     expect_output(degSummary(res, kable = TRUE), "|")
 })
