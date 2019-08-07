@@ -24,6 +24,11 @@ when it comes from LRT method.}
 
 \item{pairs}{Boolean to indicate whether create all comparisons or only
 use the coefficient already created from \code{DESeq2::resultsNames()}.}
+
+\item{fdr}{type of fdr correction. \code{default} is FDR value,
+\code{lfdr-stat} is
+for local FDR using the statistics of the test,
+\code{lfdr-pvalue} is for local FDR using the p-value of the test}
 }
 \value{
 \link{DEGSet} with unSrunken and Srunken results.

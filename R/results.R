@@ -30,11 +30,11 @@
         res <- results(object, name = what)
     else res <- results(object, contrast = what)
     if (fdr != "default")
-        .correct_fdr(res, fdr)
+        res <- .correct_fdr(res, fdr)
     res[order(res[["padj"]]),]
 }
 
-.guessShrunken <- function(object, what, unShrunken, method, fdr){
+.guessShrunken <- function(object, what, unShrunken, method){
     coef <- match(what[[1]], resultsNames(object))
     object <- object[rownames(unShrunken),]
     if (is.na(coef) & length(what) == 1L)
@@ -51,7 +51,7 @@
             type = method)
     else res <- lfcShrink(object, contrast = what,
                           res = unShrunken, type = method)
-    res <- .correct_fdr(res, fdr)
+    # res <- .correct_fdr(res, fdr)
     res[order(res[["padj"]]),]
 }
 
@@ -123,6 +123,10 @@
 #' @param type Type of shrinkage estimator. See [DESeq2::lfcShrink()].
 #' @param pairs Boolean to indicate whether create all comparisons or only
 #'   use the coefficient already created from `DESeq2::resultsNames()`.
+#' @param fdr type of fdr correction. `default` is FDR value,
+#'  `lfdr-stat` is
+#'  for local FDR using the statistics of the test, 
+#'  `lfdr-pvalue` is for local FDR using the p-value of the test
 #'   
 #' @author Lorena Pantano
 #'
@@ -158,12 +162,15 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
         default <- "shrunken"
         
         message("Doing lcfSrink() for each element.")
-        resShrunken <- lapply(names(all_combs), function(x)
-            .guessShrunken(dds,
+        resShrunken <- lapply(names(all_combs), function(x){
+            r <- .guessShrunken(dds,
                            all_combs[[x]],
                            resUnshrunken[[x]],
-                           type,
-                           fdr))
+                           type)
+            r$padj <- resUnshrunken[[x]]$padj
+            r
+            })
+            
         
         names(resShrunken) <- names(all_combs)
     }
@@ -343,17 +350,20 @@ degMA <- function(results,
 
 # DESeq2 summary helper ====
 .summary <- function(object, contrast, alpha){
+    fn <- summary
+    if (compareVersion("7.0", R.Version()$minor) < 0)
+        fn <- DESeq2::summary
     if (class(object) == "DESeqDataSet"){
         if (is.null(contrast)) {
             contrast <- resultsNames(object)[[2L]]
         }
-        return(capture.output(DESeq2::summary(.guessResults(object, contrast),
+        return(capture.output(fn(.guessResults(object, contrast),
                                       alpha)))
     }
     if (class(object) == "DESeqResults")
-        return(capture.output(DESeq2::summary(object, alpha)))
+        return(capture.output(fn(object, alpha)))
     if (class(object) == "DEGSet")
-        return(capture.output(DESeq2::summary(deg(object), alpha)))
+        return(capture.output(fn(deg(object), alpha)))
     stop("No class supported.")
 }
 
