@@ -353,7 +353,7 @@ degMA <- function(results,
     fn <- summary
     if (compareVersion("7.0", R.Version()$minor) < 0)
         fn <- DESeq2::summary
-    if (compareVersion("1.25", packageVersion("DESeq2")) < 0)
+    if (compareVersion("1.25", as.character(packageVersion("DESeq2"))) < 0)
         fn <- DESeq2::summary
     if (class(object) == "DESeqDataSet"){
         if (is.null(contrast)) {
