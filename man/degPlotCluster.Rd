@@ -4,9 +4,9 @@
 \alias{degPlotCluster}
 \title{Plot clusters from degPattern function output}
 \usage{
-degPlotCluster(table, time, color = NULL, process = FALSE,
-  points = TRUE, boxes = TRUE, smooth = TRUE, lines = TRUE,
-  facet = TRUE, cluster_column = "cluster")
+degPlotCluster(table, time, color = NULL, min_genes = 10,
+  process = FALSE, points = TRUE, boxes = TRUE, smooth = TRUE,
+  lines = TRUE, facet = TRUE, cluster_column = "cluster")
 }
 \arguments{
 \item{table}{\code{normalized} element from \code{\link[=degPatterns]{degPatterns()}} output.

@@ -8,21 +8,25 @@
 
 <title>DEGSet — DEGSet • DEGreport</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,12 +34,13 @@
 
 
 
-<meta property="og:title" content="DEGSet — DEGSet" />
 
+<meta property="og:title" content="DEGSet — DEGSet" />
 <meta property="og:description" content="S4 class to store data from differentially expression analysis.
 It should be compatible with different package and stores the information
 in a way the methods will work with all of them." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -47,6 +52,7 @@ in a way the methods will work with all of them." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -65,7 +71,7 @@ in a way the methods will work with all of them." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.21.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.21.2</span>
       </span>
     </div>
 
@@ -84,7 +90,6 @@ in a way the methods will work with all of them." />
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -94,6 +99,7 @@ in a way the methods will work with all of them." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -105,11 +111,9 @@ in a way the methods will work with all of them." />
     </div>
 
     <div class="ref-description">
-    
     <p>S4 class to store data from differentially expression analysis.
 It should be compatible with different package and stores the information
 in a way the methods will work with all of them.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>DEGSet</span>(<span class='no'>resList</span>, <span class='no'>default</span>)
@@ -128,7 +132,7 @@ in a way the methods will work with all of them.</p>
 <span class='co'># S4 method for DESeqResults</span>
 <span class='fu'>as.DEGSet</span>(<span class='no'>object</span>, <span class='kw'>default</span> <span class='kw'>=</span> <span class='st'>"shrunken"</span>,
   <span class='kw'>extras</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -159,22 +163,22 @@ should have names.</p></td>
       <td><p>To name the comparison when using <code>as.DEGSet</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For now supporting only <code><a href='https://www.rdocumentation.org/packages/DESeq2/topics/results'>DESeq2::results()</a></code> output.
+    <p>For now supporting only <code><a href='https://rdrr.io/pkg/DESeq2/man/results.html'>DESeq2::results()</a></code> output.
 Use constructor <code><a href='degComps.html'>degComps()</a></code> to create the object.</p>
 <p>The list will contain one element for each comparison done.
 Each element has the following structure:</p><ul>
 <li><p>DEG table</p></li>
 <li><p>Optional table with shrunk Fold Change when it has been done.</p></li>
 </ul>
-    <p>To access the raw table use <code><a href='deg.html'>deg(dgs, "raw")</a></code>, to access the
+
+<p>To access the raw table use <code><a href='deg.html'>deg(dgs, "raw")</a></code>, to access the
 shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or just <code><a href='deg.html'>deg(dgs)</a></code>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>DESeq2</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: parallel</span></div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>DESeq2</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: parallel</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘BiocGenerics’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:parallel’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
@@ -203,48 +207,48 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>edgeR</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: limma</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>edgeR</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: limma</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘limma’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:DESeq2’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    plotMA</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:BiocGenerics’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    plotMA</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>limma</span>)
-<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/makeExampleDESeqDataSet'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"condition"</span>]], <span class='fl'>12</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/design'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
-<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/DESeq'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='output co'>#&gt; <span class='message'>using 'normal' for LFC shrinkage, the Normal prior from Love et al (2014).</span>
+#&gt; <span class='message'>    plotMA</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>limma</span>)
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/makeExampleDESeqDataSet.html'>makeExampleDESeqDataSet</a></span>(<span class='kw'>betaSD</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"condition"</span>]], <span class='fl'>12</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/design.html'>design</a></span>(<span class='no'>dds</span>) <span class='kw'>&lt;-</span>  ~ <span class='no'>condition</span> + <span class='no'>treatment</span>
+<span class='no'>dds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/DESeq.html'>DESeq</a></span>(<span class='no'>dds</span>)</div><div class='output co'>#&gt; <span class='message'>estimating size factors</span></div><div class='output co'>#&gt; <span class='message'>estimating dispersions</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>fitting model and testing</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='degComps.html'>degComps</a></span>(<span class='no'>dds</span>, <span class='kw'>combs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>))</div><div class='output co'>#&gt; <span class='message'>Doing 1 element(s).</span></div><div class='output co'>#&gt; <span class='message'>Doing results() for each element.</span></div><div class='output co'>#&gt; <span class='message'>Doing lcfSrink() for each element.</span></div><div class='output co'>#&gt; <span class='message'>using 'normal' for LFC shrinkage, the Normal prior from Love et al (2014).</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>Note that type='apeglm' and type='ashr' have shown to have less bias than type='normal'.</span>
 #&gt; <span class='message'>See ?lfcShrink for more details on shrinkage type, and the DESeq2 vignette.</span>
-#&gt; <span class='message'>Reference: https://doi.org/10.1093/bioinformatics/bty895</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
+#&gt; <span class='message'>Reference: https://doi.org/10.1093/bioinformatics/bty895</span></div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; log2 fold change (MAP): condition B vs A 
 #&gt; Wald test p-value: condition B vs A 
 #&gt; DataFrame with 1000 rows and 6 columns
-#&gt;                  baseMean      log2FoldChange             lfcSE
-#&gt;                 &lt;numeric&gt;           &lt;numeric&gt;         &lt;numeric&gt;
-#&gt; gene202  595.738080502665    2.84842810352626  0.26634771333669
-#&gt; gene710  117.423055944441    2.27457157814062 0.269412722270367
-#&gt; gene365  62.4434899710059    2.58422310739862 0.312590047837112
-#&gt; gene92   220.780204589055    2.34371133129609 0.293935357285172
-#&gt; gene364  504.522116500683    2.02714357936619 0.261124625693044
-#&gt; ...                   ...                 ...               ...
-#&gt; gene817  1.01863690444656   0.449433023322897 0.445454565205662
-#&gt; gene843 0.337116176782868  -0.213542721980009  0.33541917558252
-#&gt; gene896 0.641791262357825  -0.193113193147619 0.453528848117175
-#&gt; gene929 0.400097105619871   0.148754379342596 0.336592062169539
-#&gt; gene986  1.03912504596143 -0.0807878953313301 0.501091699324092
+#&gt;                  baseMean     log2FoldChange             lfcSE
+#&gt;                 &lt;numeric&gt;          &lt;numeric&gt;         &lt;numeric&gt;
+#&gt; gene202  595.738080502665   2.84842810352625 0.266347713336691
+#&gt; gene710  117.423055944441   2.27457157814062 0.269412722270367
+#&gt; gene365  62.4434899710059   2.58422310739862 0.312590047837112
+#&gt; gene92   220.780204589055   2.34371133129609 0.293935357285173
+#&gt; gene364  504.522116500683   2.02714357936619 0.261124625693044
+#&gt; ...                   ...                ...               ...
+#&gt; gene817  1.01863690444656  0.449433023322897 0.445454565205662
+#&gt; gene843 0.337116176782868 -0.213542721980008 0.335419175582519
+#&gt; gene896 0.641791262357825 -0.193113193147619 0.453528848117175
+#&gt; gene929 0.400097105619871  0.148754379342596 0.336592062169539
+#&gt; gene986  1.03912504596143  -0.08078789533133 0.501091699324092
 #&gt;                       stat               pvalue                 padj
 #&gt;                  &lt;numeric&gt;            &lt;numeric&gt;            &lt;numeric&gt;
-#&gt; gene202   10.4242414625226  1.9218668186503e-25 1.84307027908564e-22
-#&gt; gene710    8.1957816603608 2.48969903778304e-16 1.19381068861697e-13
-#&gt; gene365    8.0286548251752 9.85471916802645e-16 3.15022522737912e-13
-#&gt; gene92    7.76267201527671 8.31584691463769e-15 1.99372429778439e-12
+#&gt; gene202   10.4242414625226 1.92186681865069e-25 1.84307027908601e-22
+#&gt; gene710   8.19578166036082 2.48969903778264e-16 1.19381068861678e-13
+#&gt; gene365   8.02865482517521 9.85471916802617e-16 3.15022522737903e-13
+#&gt; gene92     7.7626720152767 8.31584691463868e-15 1.99372429778462e-12
 #&gt; gene364   7.51756890822073 5.58041485417993e-14 1.07032356903171e-11
 #&gt; ...                    ...                  ...                  ...
-#&gt; gene817   1.05361747680227    0.292058084434073                   NA
+#&gt; gene817   1.05361747680227    0.292058084434074                   NA
 #&gt; gene843 -0.406932816121088    0.684057332932902                   NA
 #&gt; gene896 -0.612499137852159      0.5402075682426                   NA
-#&gt; gene929  0.414219583248068     0.67871330116447                   NA
-#&gt; gene986 0.0436335995171098    0.965196468651691                   NA</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1,000 x 7</span><span>
+#&gt; gene929  0.414219583248068    0.678713301164469                   NA
+#&gt; gene986 0.0436335995171099    0.965196468651691                   NA</div><div class='output co'>#&gt; &lt;numeric&gt;</div><div class='input'><span class='fu'><a href='deg.html'>deg</a></span>(<span class='no'>res</span>, <span class='kw'>tidy</span> <span class='kw'>=</span> <span class='st'>"tibble"</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1,000 x 7</span><span>
 #&gt;    gene    baseMean log2FoldChange lfcSE  stat   pvalue     padj
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span> gene202    596.            2.85 0.266 10.4  1.92</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-25</span><span> 1.84</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-22</span><span>
@@ -258,21 +262,20 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
 #&gt; </span><span style='color: #555555;'> 9</span><span> gene342    484.            1.45 0.225  6.50 7.90</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-11</span><span> 8.42</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 9</span><span>
 #&gt; </span><span style='color: #555555;'>10</span><span> gene880     27.5           2.80 0.402  6.48 9.01</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-11</span><span> 8.64</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 9</span><span>
 #&gt; </span><span style='color: #555555;'># … with 990 more rows</span><span></div><div class='input'><span class='co'># From edgeR</span>
-<span class='no'>dge</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/edgeR/topics/DGEList'>DGEList</a></span>(<span class='kw'>counts</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>), <span class='kw'>group</span><span class='kw'>=</span><span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]])
-<span class='no'>dge</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/edgeR/topics/estimateCommonDisp'>estimateCommonDisp</a></span>(<span class='no'>dge</span>)
-<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>as.DEGSet</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/edgeR/topics/topTags'>topTags</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/edgeR/topics/exactTest'>exactTest</a></span>(<span class='no'>dge</span>)))
+<span class='no'>dge</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/edgeR/man/DGEList.html'>DGEList</a></span>(<span class='kw'>counts</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span>(<span class='no'>dds</span>), <span class='kw'>group</span><span class='kw'>=</span><span class='fu'>colData</span>(<span class='no'>dds</span>)<span class='kw'>[[</span><span class='st'>"treatment"</span>]])
+<span class='no'>dge</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/edgeR/man/estimateCommonDisp.html'>estimateCommonDisp</a></span>(<span class='no'>dge</span>)
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>as.DEGSet</span>(<span class='fu'><a href='https://rdrr.io/pkg/edgeR/man/topTags.html'>topTags</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/edgeR/man/exactTest.html'>exactTest</a></span>(<span class='no'>dge</span>)))
 <span class='co'># From limma</span>
-<span class='no'>v</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/limma/topics/voom'>voom</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/DESeq2/topics/counts'>counts</a></span>(<span class='no'>dds</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/model.matrix'>model.matrix</a></span>(~<span class='no'>treatment</span>, <span class='fu'>colData</span>(<span class='no'>dds</span>)), <span class='kw'>plot</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/limma/topics/lmFit'>lmFit</a></span>(<span class='no'>v</span>)
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/limma/topics/ebayes'>eBayes</a></span>(<span class='no'>fit</span>, <span class='kw'>robust</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in fitFDistRobustly(var, df1 = df, covariate = covariate, winsor.tail.p = winsor.tail.p): statmod package required but is not installed</span></div><div class='input'><span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>as.DEGSet</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/limma/topics/toptable'>topTable</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='st'>"Inf"</span>), <span class='st'>"A_vs_B"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in topTable(fit, n = "Inf"): Need to run eBayes or treat first</span></div></span></pre>
+<span class='no'>v</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/limma/man/voom.html'>voom</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/DESeq2/man/counts.html'>counts</a></span>(<span class='no'>dds</span>), <span class='fu'><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix</a></span>(~<span class='no'>treatment</span>, <span class='fu'>colData</span>(<span class='no'>dds</span>)), <span class='kw'>plot</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/limma/man/lmFit.html'>lmFit</a></span>(<span class='no'>v</span>)
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/limma/man/ebayes.html'>eBayes</a></span>(<span class='no'>fit</span>, <span class='kw'>robust</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>as.DEGSet</span>(<span class='fu'><a href='https://rdrr.io/pkg/limma/man/toptable.html'>topTable</a></span>(<span class='no'>fit</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='st'>"Inf"</span>), <span class='st'>"A_vs_B"</span>)</div><div class='output co'>#&gt; <span class='message'>Removing intercept from test coefficients</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -281,19 +284,23 @@ shrunken table use <code><a href='deg.html'>deg(dgs, "shrunken")</a></code> or j
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://lpantano.github.io'>Lorena Pantano</a>.</p>
+  <p>Developed by Lorena Pantano.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

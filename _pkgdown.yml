@@ -1,23 +1,63 @@
-url: http://lpantano.github.io/DEGreport
+reference:
+- title: All functions
+  desc: null
+  contents:
+  - '`DEGSet`'
+  - '`DEGreport-package`'
+  - '`createReport`'
+  - '`deg`'
+  - '`degCheckFactors`'
+  - '`degColors`'
+  - '`degComps`'
+  - '`degCorCov`'
+  - '`degCovariates`'
+  - '`degDefault`'
+  - '`degFilter`'
+  - '`degMA`'
+  - '`degMB`'
+  - '`degMDS`'
+  - '`degMV`'
+  - '`degMean`'
+  - '`degMerge`'
+  - '`degObj`'
+  - '`degPCA`'
+  - '`degPatterns`'
+  - '`degPlot`'
+  - '`degPlotCluster`'
+  - '`degPlotWide`'
+  - '`degQC`'
+  - '`degResults`'
+  - '`degSignature`'
+  - '`degSummary`'
+  - '`degVB`'
+  - '`degVar`'
+  - '`degVolcano`'
+  - '`geneInfo`'
+  - '`geom_cor`'
+  - '`humanGender`'
+  - '`significants`'
+articles:
+- title: All vignettes
+  desc: null
+  contents: '`DEGreport`'
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    intro:
+      text: Get started
+      href: articles/DEGreport.html
 
-template:
-  params:
-    bootswatch: readable
-
-authors:
-    Lorena Pantano:
-        href: https://lpantano.github.io
-    Michael Steinbaugh:
-        href: http://steinbaugh.com
-    Rory Kirchner:
-        href: https://github.com/roryk
-    Victor Barrera:
-        href: https://github.com/vbarrera
-    Kenneth Daily:
-    Thanneer Malai Perumal:
-    Mary Piper:
-        href: https://github.com/marypiper
-    John Hutchinson:
-        href: https://github.com/jnhutchinson
-    Harvard Chan Bioinformatics Core:
-        href: http://bioinformatics.sph.harvard.edu

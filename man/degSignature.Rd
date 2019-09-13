@@ -5,7 +5,7 @@
 \title{Plot gene signature for each group and signature}
 \usage{
 degSignature(counts, signature, group = NULL, metadata = NULL,
-  slot = 1)
+  slot = 1, scale = FALSE)
 }
 \arguments{
 \item{counts}{expression data. It accepts bcbioRNASeq, DESeqDataSet and
@@ -24,6 +24,8 @@ should match \code{ma} column names
 row number should be the same length than p-values vector.}
 
 \item{slot}{slotName in the case of SummarizedExperiment objects.}
+
+\item{scale}{Whether to scale or not the expression.}
 }
 \value{
 ggplot plot.

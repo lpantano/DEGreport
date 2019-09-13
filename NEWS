@@ -1,7 +1,8 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.21.2
-    
+
+    * Feature: add `scale` option to degSignature
     * Feature: add lfdr support from fdrtools to degCombs and DEGSet object.
 
 CHANGES IN DEGreport 1.21.1

@@ -36,14 +36,19 @@
 #'   should match \code{ma} column names
 #'   row number should be the same length than p-values vector.
 #' @param slot slotName in the case of SummarizedExperiment objects.
+#' @param scale Whether to scale or not the expression.
 #' @return ggplot plot.
 #' @examples
 #' data(humanGender)
 #' data(geneInfo)
 #' degSignature(humanGender, geneInfo, group = "group")
 #' @export
-degSignature <- function(counts, signature, group = NULL, metadata = NULL, slot = 1){
+degSignature <- function(counts, signature,
+                         group = NULL, metadata = NULL,
+                         slot = 1, scale = FALSE){
     c <- .get_counts(counts, slot)
+    if (scale)
+        c <- t(scale(t(c)))
     meta <- .get_meta(counts)
     if (is.null(meta))
         meta <- metadata

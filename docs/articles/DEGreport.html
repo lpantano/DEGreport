@@ -6,9 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QC and downstream analysis for differential expression RNA-seq • DEGreport</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/readable/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="QC and downstream analysis for differential expression RNA-seq">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -30,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">DEGreport</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.21.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.21.2</span>
       </span>
     </div>
 
@@ -58,13 +59,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>QC and downstream analysis for differential expression RNA-seq</h1>
                         <h4 class="author">Lorena Pantano</h4>
             
-            <h4 class="date">3 July 2019</h4>
+            <h4 class="date">13 September 2019</h4>
       
       
       <div class="hidden name"><code>DEGreport.Rmd</code></div>
@@ -74,25 +76,25 @@
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      DEGreport package version: 1.20.0
+      DEGreport package version: 1.21.2
     </div>
     
 <p><a href="lorena.pantano@gmail.com">Lorena Pantano</a> Harvard TH Chan School of Public Health, Boston, US</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DEGreport)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(humanGender)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DEGreport)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(humanGender)</a></code></pre></div>
 <div id="general-qc-figures-from-de-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general-qc-figures-from-de-analysis" class="anchor"></a>General QC figures from DE analysis</h2>
-<p>We are going to do a differential expression analysis with edgeR/DESeq2. We have an object that is coming from the edgeR package. It contains a gene count matrix for 85 TSI HapMap individuals, and the gender information. With that, we are going to apply the <code>glmFit</code> function or <em><a href="https://bioconductor.org/packages/3.9/DESeq2">DESeq2</a></em> to get genes differentially expressed between males and females.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DESeq2)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">idx &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">75</span><span class="op">:</span><span class="dv">85</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeqDataSet">DESeqDataSetFromMatrix</a></span>(<span class="kw">assays</span>(humanGender)[[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, idx],</a>
+<p>We are going to do a differential expression analysis with edgeR/DESeq2. We have an object that is coming from the edgeR package. It contains a gene count matrix for 85 TSI HapMap individuals, and the gender information. With that, we are going to apply the <code>glmFit</code> function or <em><a href="https://bioconductor.org/packages/3.10/DESeq2">DESeq2</a></em> to get genes differentially expressed between males and females.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DESeq2)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">idx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">75</span><span class="op">:</span><span class="dv">85</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html">DESeqDataSetFromMatrix</a></span>(<span class="kw">assays</span>(humanGender)[[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, idx],</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4">                              <span class="kw">colData</span>(humanGender)[idx,], <span class="dt">design=</span><span class="op">~</span>group)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeq">DESeq</a></span>(dds)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">res &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/results">results</a></span>(dds)</a></code></pre></div>
+<a class="sourceLine" id="cb2-5" data-line-number="5">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/DESeq.html">DESeq</a></span>(dds)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">res &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/results.html">results</a></span>(dds)</a></code></pre></div>
 <p>We need to extract the experiment design data.frame where the condition is Male or Female.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">counts &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds, <span class="dt">normalized =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">design &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(<span class="kw">colData</span>(dds))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">counts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/counts.html">counts</a></span>(dds, <span class="dt">normalized =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">design &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">colData</span>(dds))</a></code></pre></div>
 <div id="size-factor-qc" class="section level3">
 <h3 class="hasAnchor">
 <a href="#size-factor-qc" class="anchor"></a>Size factor QC</h3>
@@ -114,26 +116,37 @@
 <h3 class="hasAnchor">
 <a href="#covariates-effect-on-count-data" class="anchor"></a>Covariates effect on count data</h3>
 <p>Another important analysis to do if you have covariates is to calculate the correlation between PCs from PCA analysis to different variables you may think are affecting the gene expression. This is a toy example of how the function works with raw data, where clearly library size correlates with some of the PCs.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">resCov &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degCovariates.html">degCovariates</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds)<span class="op">+</span><span class="fl">0.5</span>),</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">resCov &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degCovariates.html">degCovariates</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/counts.html">counts</a></span>(dds)<span class="op">+</span><span class="fl">0.5</span>),</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">                        <span class="kw">colData</span>(dds))</a></code></pre></div>
+<pre><code>## Warning: Unquoting language objects with `!!!` is deprecated as of rlang 0.4.0.
+## Please use `!!` instead.
+## 
+##   # Bad:
+##   dplyr::select(data, !!!enquo(x))
+## 
+##   # Good:
+##   dplyr::select(data, !!enquo(x))    # Unquote single quosure
+##   dplyr::select(data, !!!enquos(x))  # Splice list of quosures
+## 
+## This warning is displayed once per session.</code></pre>
 <p><img src="DEGreport_files/figure-html/cov-1.png" width="700"></p>
 </div>
 <div id="covariates-correlation-with-metrics" class="section level3">
 <h3 class="hasAnchor">
 <a href="#covariates-correlation-with-metrics" class="anchor"></a>Covariates correlation with metrics</h3>
 <p>Also, the correlation among covariates and metrics from the analysis can be tested. This is useful when the study has multiple variables, like in clinical trials. The following code will return a correlation table, and plot the correlation heatmap for all the covariates and metrics in a table.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">cor &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degCorCov.html">degCorCov</a></span>(<span class="kw">colData</span>(dds))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">cor &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degCorCov.html">degCorCov</a></span>(<span class="kw">colData</span>(dds))</a></code></pre></div>
 <pre><code>## Warning: The input is a data frame, convert it to the matrix.</code></pre>
 <p><img src="DEGreport_files/figure-html/corcov-1.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(cor)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(cor)</a></code></pre></div>
 <pre><code>## [1] "cor"    "corMat" "fdrMat" "plot"</code></pre>
 </div>
 <div id="qc-report" class="section level3">
 <h3 class="hasAnchor">
 <a href="#qc-report" class="anchor"></a>QC report</h3>
 <p>A quick HTML report can be created with <code>createReport</code> to show whether a DE analysis is biased to a particular set of genes. It contains the output of <code>degQC,</code>degVB and <code>degMB</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/createReport.html">createReport</a></span>(<span class="kw">colData</span>(dds)[[<span class="st">"group"</span>]], <span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds, <span class="dt">normalized =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">             <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res)[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>], res[[<span class="st">"pvalue"</span>]], <span class="dt">path =</span> <span class="st">"~/Downloads"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/createReport.html">createReport</a></span>(<span class="kw">colData</span>(dds)[[<span class="st">"group"</span>]], <span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/counts.html">counts</a></span>(dds, <span class="dt">normalized =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">             <span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(res)[<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>], res[[<span class="st">"pvalue"</span>]], <span class="dt">path =</span> <span class="st">"~/Downloads"</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="report-from-deseq2-analysis" class="section level2">
@@ -143,59 +156,202 @@
 <div id="contrasts" class="section level3">
 <h3 class="hasAnchor">
 <a href="#contrasts" class="anchor"></a>Contrasts</h3>
-<p><code>DEGSet</code> is a class to store the DE results like the one from <code>results</code> function. <em><a href="https://bioconductor.org/packages/3.9/DESeq2">DESeq2</a></em> offers multiple way to ask for contrasts/coefficients. With <code>degComps</code> is easy to get multiple results in a single object:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">degs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degComps.html">degComps</a></span>(dds, <span class="dt">combs =</span> <span class="st">"group"</span>,</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">                 <span class="dt">contrast =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"group_Male_vs_Female"</span>,</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">                                 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"group"</span>, <span class="st">"Female"</span>, <span class="st">"Male"</span>)))</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(degs)</a></code></pre></div>
+<p><code>DEGSet</code> is a class to store the DE results like the one from <code>results</code> function. <em><a href="https://bioconductor.org/packages/3.10/DESeq2">DESeq2</a></em> offers multiple way to ask for contrasts/coefficients. With <code>degComps</code> is easy to get multiple results in a single object:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">degs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degComps.html">degComps</a></span>(dds, <span class="dt">combs =</span> <span class="st">"group"</span>,</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">                 <span class="dt">contrast =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"group_Male_vs_Female"</span>,</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">                                 <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"group"</span>, <span class="st">"Female"</span>, <span class="st">"Male"</span>)))</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(degs)</a></code></pre></div>
 <pre><code>## [1] "group_Male_vs_Female" "group_Female_vs_Male"</code></pre>
 <p><code>degs</code> contains 3 elements, one for each contrast/coefficient asked for. It contains the results output in the element <code>raw</code> and the output of <code>lfcShrink</code> in the element <code>shrunken</code>. To obtain the results from one of them, use the method <code>dge</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/deg.html">deg</a></span>(degs[[<span class="dv">1</span>]])</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="../reference/deg.html">deg</a></span>(degs[[<span class="dv">1</span>]])</a></code></pre></div>
 <pre><code>## log2 fold change (MAP): group Male vs Female 
 ## Wald test p-value: group Male vs Female 
 ## DataFrame with 1000 rows and 6 columns
-##                         baseMean       log2FoldChange              lfcSE
-##                        &lt;numeric&gt;            &lt;numeric&gt;          &lt;numeric&gt;
-## ENSG00000067048 1025.03783081851       1.939487519815  0.100694015277882
-## ENSG00000012817 411.543865988588     3.70056395376915 0.0989888483685402
-## ENSG00000067646 169.814765626402     3.32284568660183 0.0995193327364427
-## ENSG00000005889 670.861906530697   -0.489434740758986 0.0929363099393883
-## ENSG00000006757 92.6611112908156   -0.472926180708217 0.0992749166821477
-## ...                          ...                  ...                ...
-## ENSG00000068120 1214.09670077803 -0.00011432192452446  0.079722660699942
-## ENSG00000072062 935.317212058596 0.000559219142040265 0.0915352171745647
-## ENSG00000076770 1019.79638067687 0.000850081845597548  0.101666325101382
-## ENSG00000078967 166.422097051996 0.000415745391578267 0.0959757955312276
-## ENSG00000079246 5226.33895971623 0.000149584255112328 0.0926205100248817
+##                         baseMean        log2FoldChange              lfcSE
+##                        &lt;numeric&gt;             &lt;numeric&gt;          &lt;numeric&gt;
+## ENSG00000067048 1025.03783081851      1.93948751981499  0.100694015277881
+## ENSG00000012817 411.543865988588      3.70056395376914 0.0989888483685399
+## ENSG00000067646 169.814765626402      3.32284568660182 0.0995193327364425
+## ENSG00000005889 670.861906530697    -0.489434740758987 0.0929363099393882
+## ENSG00000006757 92.6611112908156    -0.472926180708215 0.0992749166821474
+## ...                          ...                   ...                ...
+## ENSG00000068120 1214.09670077803 -0.000114321924521797 0.0797226606999419
+## ENSG00000072062 935.317212058596  0.000559219142042473 0.0915352171745645
+## ENSG00000076770 1019.79638067687  0.000850081845596963  0.101666325101382
+## ENSG00000078967 166.422097051996  0.000415745391577556 0.0959757955312274
+## ENSG00000079246 5226.33895971623  0.000149584255112998 0.0926205100248815
 ##                                 stat                pvalue
 ##                            &lt;numeric&gt;             &lt;numeric&gt;
-## ENSG00000067048     23.9943800011737 3.18302039221093e-127
-## ENSG00000012817     21.8045168852374 2.10213939599373e-105
-## ENSG00000067646     15.4838473278579  4.45984434297604e-54
-## ENSG00000005889     -5.2637081036813  1.41178536870784e-07
-## ENSG00000006757    -4.75700569609353  1.96485627341658e-06
+## ENSG00000067048     23.9943800011738 3.18302039220984e-127
+## ENSG00000012817     21.8045168852374  2.1021393959939e-105
+## ENSG00000067646      15.483847327858  4.45984434297296e-54
+## ENSG00000005889    -5.26370810368132  1.41178536870766e-07
+## ENSG00000006757     -4.7570056960935  1.96485627341685e-06
 ## ...                              ...                   ...
-## ENSG00000068120 -0.00143399782363959     0.998855835668427
-## ENSG00000072062  0.00610871981311039     0.995125977088413
-## ENSG00000076770  0.00836192966136371     0.993328223175285
-## ENSG00000078967  0.00432971042060657     0.996545401696197
-## ENSG00000079246  0.00161499511898808     0.998711420888935
+## ENSG00000068120 -0.00143399782359433     0.998855835668463
+## ENSG00000072062  0.00610871981311817     0.995125977088406
+## ENSG00000076770  0.00836192966138066     0.993328223175271
+## ENSG00000078967  0.00432971042060565     0.996545401696197
+## ENSG00000079246  0.00161499511898696     0.998711420888936
 ##                                  padj
 ##                             &lt;numeric&gt;
-## ENSG00000067048 3.18302039221093e-124
-## ENSG00000012817 1.05106969799687e-102
-## ENSG00000067646  1.48661478099201e-51
-## ENSG00000005889  3.52946342176959e-05
-## ENSG00000006757  0.000392971254683316
+## ENSG00000067048 3.18302039220984e-124
+## ENSG00000012817 1.05106969799695e-102
+## ENSG00000067646  1.48661478099099e-51
+## ENSG00000005889  3.52946342176915e-05
+## ENSG00000006757   0.00039297125468337
 ## ...                               ...
-## ENSG00000068120     0.998855835668427
-## ENSG00000072062     0.998855835668427
-## ENSG00000076770     0.998855835668427
-## ENSG00000078967     0.998855835668427
-## ENSG00000079246     0.998855835668427</code></pre>
+## ENSG00000068120     0.998855835668463
+## ENSG00000072062     0.998855835668463
+## ENSG00000076770     0.998855835668463
+## ENSG00000078967     0.998855835668463
+## ENSG00000079246     0.998855835668463</code></pre>
+<pre><code>## &lt;numeric&gt;
+
+## 1025.03783081851
+
+## 411.543865988588
+
+## 169.814765626402
+
+## 670.861906530697
+
+## 92.6611112908156
+
+## ...
+
+## 1214.09670077803
+
+## 935.317212058596
+
+## 1019.79638067687
+
+## 166.422097051996
+
+## 5226.33895971623
+
+## &lt;numeric&gt;
+
+## 1.93948751981499
+
+## 3.70056395376914
+
+## 3.32284568660182
+
+## -0.489434740758987
+
+## -0.472926180708215
+
+## ...
+
+## -0.000114321924521797
+
+## 0.000559219142042473
+
+## 0.000850081845596963
+
+## 0.000415745391577556
+
+## 0.000149584255112998
+
+## &lt;numeric&gt;
+
+## 0.100694015277881
+
+## 0.0989888483685399
+
+## 0.0995193327364425
+
+## 0.0929363099393882
+
+## 0.0992749166821474
+
+## ...
+
+## 0.0797226606999419
+
+## 0.0915352171745645
+
+## 0.101666325101382
+
+## 0.0959757955312274
+
+## 0.0926205100248815
+
+## &lt;numeric&gt;
+
+## 23.9943800011738
+
+## 21.8045168852374
+
+## 15.483847327858
+
+## -5.26370810368132
+
+## -4.7570056960935
+
+## ...
+
+## -0.00143399782359433
+
+## 0.00610871981311817
+
+## 0.00836192966138066
+
+## 0.00432971042060565
+
+## 0.00161499511898696
+
+## &lt;numeric&gt;
+
+## 3.18302039220984e-127
+
+## 2.1021393959939e-105
+
+## 4.45984434297296e-54
+
+## 1.41178536870766e-07
+
+## 1.96485627341685e-06
+
+## ...
+
+## 0.998855835668463
+
+## 0.995125977088406
+
+## 0.993328223175271
+
+## 0.996545401696197
+
+## 0.998711420888936
+
+## &lt;numeric&gt;
+
+## 3.18302039220984e-124
+
+## 1.05106969799695e-102
+
+## 1.48661478099099e-51
+
+## 3.52946342176915e-05
+
+## 0.00039297125468337
+
+## ...
+
+## 0.998855835668463
+
+## 0.998855835668463
+
+## 0.998855835668463
+
+## 0.998855835668463
+
+## 0.998855835668463</code></pre>
 <p>By default it would output the <code>shrunken</code> table always, as defined by <code>degDefault</code>, that contains the default table to get.</p>
 <p>To get the original results table, use the parameter as this:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="../reference/deg.html">deg</a></span>(degs[[<span class="dv">1</span>]], <span class="st">"raw"</span>, <span class="st">"tibble"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="../reference/deg.html">deg</a></span>(degs[[<span class="dv">1</span>]], <span class="st">"raw"</span>, <span class="st">"tibble"</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 1,000 x 7
 ##    gene            baseMean log2FoldChange  lfcSE  stat    pvalue      padj
 ##    &lt;chr&gt;              &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
@@ -213,19 +369,19 @@
 <p>Note that the format of the output can be changed to tibble, or data.frame with a third parameter <code>tidy</code>.</p>
 <p>The table will be always sorted by padj.</p>
 <p>And easy way to get significant genes is:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>##  [1] "ENSG00000012817" "ENSG00000067646" "ENSG00000067048"
 ##  [4] "ENSG00000005889" "ENSG00000006757" "ENSG00000005302"
 ##  [7] "ENSG00000003400" "ENSG00000073282" "ENSG00000005020"
 ## [10] "ENSG00000069702"</code></pre>
 <p>This function can be used as well for a list of comparisons:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs, <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs, <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>##  [1] "ENSG00000012817" "ENSG00000067646" "ENSG00000067048"
 ##  [4] "ENSG00000005889" "ENSG00000006757" "ENSG00000005302"
 ##  [7] "ENSG00000003400" "ENSG00000073282" "ENSG00000005020"
 ## [10] "ENSG00000069702"</code></pre>
 <p>And it can returns the full table for a list:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs, <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>, <span class="dt">full =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="../reference/significants.html">significants</a></span>(degs, <span class="dt">fc =</span> <span class="dv">0</span>, <span class="dt">fdr =</span> <span class="fl">0.05</span>, <span class="dt">full =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 7
 ##    gene  log2FoldChange      padj log2FoldChange_… log2FoldChange_…
 ##    &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
@@ -242,23 +398,23 @@
 ## # … with 2 more variables: padj_group_Female_vs_Male &lt;dbl&gt;,
 ## #   padj_group_Male_vs_Female &lt;dbl&gt;</code></pre>
 <p>Since log2FoldChange are shrunken, the method for DEGSet class now can plot these changes as follow:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-1.png" width="700"></p>
 <p>The blue arrows indicate how foldchange is affected by this new feature.</p>
 <p>As well, it can plot the original MA plot:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">raw =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">diff =</span> <span class="dv">2</span>, <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">raw =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-raw-1.png" width="700"></p>
 <p>or the correlation between the original log2FoldChange and the new ones:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">correlation =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="../reference/degMA.html">degMA</a></span>(degs[[<span class="dv">1</span>]], <span class="dt">limit =</span> <span class="dv">3</span>, <span class="dt">correlation =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/plotMA-cor-1.png" width="700"></p>
 </div>
 <div id="volcano-plots" class="section level3">
 <h3 class="hasAnchor">
 <a href="#volcano-plots" class="anchor"></a>Volcano plots</h3>
-<p>Volcano plot using the output of <em><a href="https://bioconductor.org/packages/3.9/DESeq2">DESeq2</a></em>. It mainly needs data.frame with two columns (logFC and pVal). Specific genes can be plot using the option <code>plot\_text</code> (subset of the previous data.frame with a 3rd column to be used to plot the gene name).</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">res[[<span class="st">"id"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res)</a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">show &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(res[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"log2FoldChange"</span>, <span class="st">"padj"</span>, <span class="st">"id"</span>)])</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw"><a href="../reference/degVolcano.html">degVolcano</a></span>(res[,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"log2FoldChange"</span>, <span class="st">"padj"</span>)], <span class="dt">plot_text =</span> show)</a></code></pre></div>
+<p>Volcano plot using the output of <em><a href="https://bioconductor.org/packages/3.10/DESeq2">DESeq2</a></em>. It mainly needs data.frame with two columns (logFC and pVal). Specific genes can be plot using the option <code>plot\_text</code> (subset of the previous data.frame with a 3rd column to be used to plot the gene name).</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">res[[<span class="st">"id"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(res)</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">show &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(res[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"log2FoldChange"</span>, <span class="st">"padj"</span>, <span class="st">"id"</span>)])</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw"><a href="../reference/degVolcano.html">degVolcano</a></span>(res[,<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"log2FoldChange"</span>, <span class="st">"padj"</span>)], <span class="dt">plot_text =</span> show)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/deseq2-volcano-1.png" width="700"></p>
 <p>Note that the function is compatible with DEGset. Using <code><a href="../reference/degVolcano.html">degVolcano(degs[[1]])</a></code> is valid.</p>
 </div>
@@ -266,31 +422,31 @@
 <h3 class="hasAnchor">
 <a href="#gene-plots" class="anchor"></a>Gene plots</h3>
 <p>Plot top genes coloring by group. Very useful for experiments with nested groups. <code>xs</code> can be <code>time</code> or <code>WT</code>/<code>KO</code>, and <code>group</code> can be <code>treated</code>/<code>untreated</code>. Another classification can be added, like <code>batch</code> that will plot points with different shapes.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="../reference/degPlot.html">degPlot</a></span>(<span class="dt">dds =</span> dds, <span class="dt">res =</span> res, <span class="dt">n =</span> <span class="dv">6</span>, <span class="dt">xs =</span> <span class="st">"group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw"><a href="../reference/degPlot.html">degPlot</a></span>(<span class="dt">dds =</span> dds, <span class="dt">res =</span> res, <span class="dt">n =</span> <span class="dv">6</span>, <span class="dt">xs =</span> <span class="st">"group"</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/deseq2-gene-plots-1.png" width="700"></p>
 <p>Another option for plotting genes in a wide format:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw"><a href="../reference/degPlotWide.html">degPlotWide</a></span>(dds, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">rownames</a></span>(dds)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="dt">group=</span><span class="st">"group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw"><a href="../reference/degPlotWide.html">degPlotWide</a></span>(dds, <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(dds)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="dt">group=</span><span class="st">"group"</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/deseq2-gene-plot-wide-1.png" width="700"></p>
 </div>
 <div id="markers-plots" class="section level3">
 <h3 class="hasAnchor">
 <a href="#markers-plots" class="anchor"></a>Markers plots</h3>
 <p>Markers can be used to show whether different conditions are enriched in different markers. For instance, in this example, Females and Males show different total expression for chromosome X/Y markers</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(geneInfo)</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw"><a href="../reference/degSignature.html">degSignature</a></span>(humanGender, geneInfo, <span class="dt">group =</span> <span class="st">"group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(geneInfo)</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw"><a href="../reference/degSignature.html">degSignature</a></span>(humanGender, geneInfo, <span class="dt">group =</span> <span class="st">"group"</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/markers-1.png" width="700"></p>
 </div>
 <div id="full-report" class="section level3">
 <h3 class="hasAnchor">
 <a href="#full-report" class="anchor"></a>Full report</h3>
 <p>If you have a DESeq2 object, you can use degResults to create a full report with markdown code inserted, including figures and table with top de-regulated genes, GO enrichment analysis and heatmaps and PCA plots. If you set , different files will be saved there.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">resreport &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degResults.html">degResults</a></span>(<span class="dt">dds =</span> dds, <span class="dt">name =</span> <span class="st">"test"</span>, <span class="dt">org =</span> <span class="ot">NULL</span>,</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">                        <span class="dt">do_go =</span> <span class="ot">FALSE</span>, <span class="dt">group =</span> <span class="st">"group"</span>, <span class="dt">xs =</span> <span class="st">"group"</span>,</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">                        <span class="dt">path_results =</span> <span class="ot">NULL</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">resreport &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degResults.html">degResults</a></span>(<span class="dt">dds =</span> dds, <span class="dt">name =</span> <span class="st">"test"</span>, <span class="dt">org =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">                        <span class="dt">do_go =</span> <span class="ot">FALSE</span>, <span class="dt">group =</span> <span class="st">"group"</span>, <span class="dt">xs =</span> <span class="st">"group"</span>,</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">                        <span class="dt">path_results =</span> <span class="ot">NULL</span>)</a></code></pre></div>
 <pre><code>## ## Comparison:  test {.tabset} 
 ## 
 ## 
-##  &lt;br&gt;out of 1000 with nonzero total read count&lt;br&gt;adjusted p-value &lt; 0.1&lt;br&gt;LFC &gt; 0 (up)       : 6, 0.6%&lt;br&gt;LFC &lt; 0 (down)     : 7, 0.7%&lt;br&gt;outliers [1]       : 0, 0%&lt;br&gt;low counts [2]     : 0, 0%&lt;br&gt;(mean count &lt; 47)&lt;br&gt;[1] see 'cooksCutoff' argument of ?results&lt;br&gt;[2] see 'independentFiltering' argument of ?results&lt;br&gt;&lt;br&gt;NULL 
+##  [1] "DESeqResults object of length 6 with 2 metadata columns"&lt;br&gt;[2] NA                                                       &lt;br&gt;[3] NA                                                       &lt;br&gt;[4] NA                                                       &lt;br&gt;[5] NA                                                       &lt;br&gt;[6] NA                                                       &lt;br&gt;[7] NA                                                       &lt;br&gt;[8] NA                                                        
 ## 
 ## 
 ## Differential expression file at:  test_de.csv
@@ -349,17 +505,17 @@
 <h3 class="hasAnchor">
 <a href="#interactive-shiny-app" class="anchor"></a>Interactive shiny-app</h3>
 <p>Browsing gene expression can help to validate results or select some gene for downstream analysis. Run the following lines if you want to visualize your expression values by condition:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw"><a href="../reference/degObj.html">degObj</a></span>(counts, design, <span class="st">"degObj.rda"</span>)</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(shiny)</a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">shiny<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/shiny/topics/runUrl">runGitHub</a></span>(<span class="st">"lpantano/shiny"</span>, <span class="dt">subdir=</span><span class="st">"expression"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw"><a href="../reference/degObj.html">degObj</a></span>(counts, design, <span class="st">"degObj.rda"</span>)</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(shiny)</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">shiny<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/shiny/man/runUrl.html">runGitHub</a></span>(<span class="st">"lpantano/shiny"</span>, <span class="dt">subdir=</span><span class="st">"expression"</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="detect-patterns-of-expression" class="section level2">
 <h2 class="hasAnchor">
 <a href="#detect-patterns-of-expression" class="anchor"></a>Detect patterns of expression</h2>
 <p>In this section, we show how to detect pattern of expression. Mainly useful when data is a time course experiment. <code>degPatterns</code> needs a expression matrix, the design experiment and the column used to group samples.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">ma =<span class="st"> </span><span class="kw">assay</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/rlog">rlog</a></span>(dds))[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/row.names">row.names</a></span>(res)[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>],]</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degPatterns.html">degPatterns</a></span>(ma, design, <span class="dt">time =</span> <span class="st">"group"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">ma =<span class="st"> </span><span class="kw">assay</span>(<span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/rlog.html">rlog</a></span>(dds))[<span class="kw"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(res)[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>],]</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degPatterns.html">degPatterns</a></span>(ma, design, <span class="dt">time =</span> <span class="st">"group"</span>)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/pattern-1.png" width="700"></p>
 </div>
 <div id="useful-functions" class="section level2">
@@ -370,40 +526,40 @@
 <h3 class="hasAnchor">
 <a href="#filter-genes-by-group" class="anchor"></a>Filter genes by group</h3>
 <p><code>degFilter</code> helps to filter genes with a minimum read count by group.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"gene in original count matrix: 1000"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"gene in original count matrix: 1000"</span>)</a></code></pre></div>
 <p>gene in original count matrix: 1000</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">filter_count &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degFilter.html">degFilter</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds),</a>
-<a class="sourceLine" id="cb39-2" data-line-number="2">                          design, <span class="st">"group"</span>,</a>
-<a class="sourceLine" id="cb39-3" data-line-number="3">                          <span class="dt">min=</span><span class="dv">1</span>, <span class="dt">minreads =</span> <span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"gene in final count matrix"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(filter_count))</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">filter_count &lt;-<span class="st"> </span><span class="kw"><a href="../reference/degFilter.html">degFilter</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/counts.html">counts</a></span>(dds),</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">                          design, <span class="st">"group"</span>,</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">                          <span class="dt">min=</span><span class="dv">1</span>, <span class="dt">minreads =</span> <span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"gene in final count matrix"</span>, <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(filter_count))</a></code></pre></div>
 <p>gene in final count matrix 940</p>
 </div>
 <div id="generate-colors-for-metadata-variables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-colors-for-metadata-variables" class="anchor"></a>Generate colors for metadata variables</h3>
 <p>This functions allows you to create colors for metadata columns to be used as annotation for columns in a heatmap figure.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ComplexHeatmap)</a>
-<a class="sourceLine" id="cb40-2" data-line-number="2">th &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ComplexHeatmap/topics/HeatmapAnnotation">HeatmapAnnotation</a></span>(<span class="dt">df =</span> <span class="kw">colData</span>(dds),</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3">                        <span class="dt">col =</span> <span class="kw"><a href="../reference/degColors.html">degColors</a></span>(<span class="kw">colData</span>(dds), <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/ComplexHeatmap/topics/Heatmap">Heatmap</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,],</a>
-<a class="sourceLine" id="cb40-5" data-line-number="5">        <span class="dt">top_annotation =</span> th)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ComplexHeatmap)</a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">th &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/HeatmapAnnotation.html">HeatmapAnnotation</a></span>(<span class="dt">df =</span> <span class="kw">colData</span>(dds),</a>
+<a class="sourceLine" id="cb42-3" data-line-number="3">                        <span class="dt">col =</span> <span class="kw"><a href="../reference/degColors.html">degColors</a></span>(<span class="kw">colData</span>(dds), <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb42-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/counts.html">counts</a></span>(dds) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,],</a>
+<a class="sourceLine" id="cb42-5" data-line-number="5">        <span class="dt">top_annotation =</span> th)</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/degColors-1.png" width="700"></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pheatmap)</a>
-<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/pheatmap/topics/pheatmap">pheatmap</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/counts">counts</a></span>(dds) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,], </a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">         <span class="dt">annotation_col =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(<span class="kw">colData</span>(dds))[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>],</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">         <span class="dt">annotation_colors =</span> <span class="kw"><a href="../reference/degColors.html">degColors</a></span>(<span class="kw">colData</span>(dds)[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>],</a>
-<a class="sourceLine" id="cb41-5" data-line-number="5">                                       <span class="dt">con_values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"white"</span>,</a>
-<a class="sourceLine" id="cb41-6" data-line-number="6">                                                      <span class="st">"red"</span>)</a>
-<a class="sourceLine" id="cb41-7" data-line-number="7">                                       )</a>
-<a class="sourceLine" id="cb41-8" data-line-number="8">         )</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(pheatmap)</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/counts.html">counts</a></span>(dds) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,], </a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">         <span class="dt">annotation_col =</span> <span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw">colData</span>(dds))[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>],</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">         <span class="dt">annotation_colors =</span> <span class="kw"><a href="../reference/degColors.html">degColors</a></span>(<span class="kw">colData</span>(dds)[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>],</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5">                                       <span class="dt">con_values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>,</a>
+<a class="sourceLine" id="cb43-6" data-line-number="6">                                                      <span class="st">"red"</span>)</a>
+<a class="sourceLine" id="cb43-7" data-line-number="7">                                       )</a>
+<a class="sourceLine" id="cb43-8" data-line-number="8">         )</a></code></pre></div>
 <p><img src="DEGreport_files/figure-html/degColors-2.png" width="700"></p>
 </div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h1>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
-<pre><code>## R version 3.6.0 (2019-04-26)
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<pre><code>## R version 3.6.1 (2019-07-05)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS Mojave 10.14.3
 ## 
@@ -419,75 +575,75 @@
 ##  [8] datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] pheatmap_1.0.12             ComplexHeatmap_2.0.0       
-##  [3] DESeq2_1.24.0               SummarizedExperiment_1.14.0
-##  [5] DelayedArray_0.10.0         BiocParallel_1.18.0        
-##  [7] matrixStats_0.54.0          Biobase_2.44.0             
-##  [9] GenomicRanges_1.36.0        GenomeInfoDb_1.20.0        
-## [11] IRanges_2.18.1              S4Vectors_0.22.0           
-## [13] BiocGenerics_0.30.0         DEGreport_1.20.0           
-## [15] BiocStyle_2.12.0           
+##  [1] pheatmap_1.0.12             ComplexHeatmap_2.1.0       
+##  [3] DESeq2_1.25.10              SummarizedExperiment_1.15.8
+##  [5] DelayedArray_0.11.4         BiocParallel_1.19.2        
+##  [7] matrixStats_0.54.0          Biobase_2.45.0             
+##  [9] GenomicRanges_1.37.15       GenomeInfoDb_1.21.1        
+## [11] IRanges_2.19.14             S4Vectors_0.23.20          
+## [13] BiocGenerics_0.31.5         DEGreport_1.21.2           
+## [15] BiocStyle_2.13.2           
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] colorspace_1.4-1            rjson_0.2.20               
-##   [3] rprojroot_1.3-2             circlize_0.4.6             
-##   [5] htmlTable_1.13.1            XVector_0.24.0             
+##   [3] rprojroot_1.3-2             circlize_0.4.7             
+##   [5] htmlTable_1.13.1            XVector_0.25.0             
 ##   [7] ggdendro_0.1-20             GlobalOptions_0.1.0        
 ##   [9] base64enc_0.1-3             fs_1.3.1                   
 ##  [11] clue_0.3-57                 rstudioapi_0.10            
-##  [13] roxygen2_6.1.1              ggrepel_0.8.1              
-##  [15] bit64_0.9-7                 fansi_0.4.0                
-##  [17] AnnotationDbi_1.46.0        xml2_1.2.0                 
-##  [19] splines_3.6.0               logging_0.9-107            
-##  [21] mnormt_1.5-5                geneplotter_1.62.0         
-##  [23] knitr_1.23                  zeallot_0.1.0              
-##  [25] Formula_1.2-3               Nozzle.R1_1.1-1            
-##  [27] broom_0.5.2                 annotate_1.62.0            
-##  [29] cluster_2.0.9               png_0.1-7                  
-##  [31] BiocManager_1.30.4          compiler_3.6.0             
-##  [33] backports_1.1.4             assertthat_0.2.1           
-##  [35] Matrix_1.2-17               lazyeval_0.2.2             
-##  [37] cli_1.1.0                   limma_3.40.2               
-##  [39] lasso2_1.2-20               acepack_1.4.1              
-##  [41] htmltools_0.3.6             tools_3.6.0                
-##  [43] gtable_0.3.0                glue_1.3.1                 
-##  [45] GenomeInfoDbData_1.2.1      dplyr_0.8.1                
-##  [47] Rcpp_1.0.1                  pkgdown_1.3.0              
-##  [49] vctrs_0.1.0                 nlme_3.1-140               
-##  [51] psych_1.8.12                xfun_0.7                   
-##  [53] stringr_1.4.0               XML_3.98-1.19              
-##  [55] edgeR_3.26.4                zlibbioc_1.30.0            
-##  [57] MASS_7.3-51.4               scales_1.0.0               
-##  [59] RColorBrewer_1.1-2          yaml_2.2.0                 
-##  [61] memoise_1.1.0               gridExtra_2.3              
-##  [63] ggplot2_3.1.1               rpart_4.1-15               
-##  [65] reshape_0.8.8               latticeExtra_0.6-28        
-##  [67] stringi_1.4.3               RSQLite_2.1.1              
-##  [69] highr_0.8                   genefilter_1.66.0          
-##  [71] desc_1.2.0                  checkmate_1.9.3            
-##  [73] shape_1.4.4                 rlang_0.3.4                
-##  [75] pkgconfig_2.0.2             commonmark_1.7             
-##  [77] bitops_1.0-6                evaluate_0.14              
-##  [79] lattice_0.20-38             purrr_0.3.2                
-##  [81] labeling_0.3                htmlwidgets_1.3            
-##  [83] cowplot_0.9.4               bit_1.1-14                 
-##  [85] tidyselect_0.2.5            plyr_1.8.4                 
-##  [87] magrittr_1.5                R6_2.4.0                   
-##  [89] generics_0.0.2              Hmisc_4.2-0                
-##  [91] DBI_1.0.0                   withr_2.1.2                
-##  [93] pillar_1.4.1                foreign_0.8-71             
-##  [95] survival_2.44-1.1           RCurl_1.95-4.12            
-##  [97] nnet_7.3-12                 tibble_2.1.2               
-##  [99] crayon_1.3.4                utf8_1.1.4                 
-## [101] rmarkdown_1.13              GetoptLong_0.1.7           
-## [103] locfit_1.5-9.1              data.table_1.12.2          
-## [105] blob_1.1.1                  ConsensusClusterPlus_1.48.0
-## [107] digest_0.6.19               xtable_1.8-4               
-## [109] tidyr_0.8.3                 munsell_0.5.0</code></pre>
+##  [13] ggrepel_0.8.1               bit64_0.9-7                
+##  [15] fansi_0.4.0                 AnnotationDbi_1.47.1       
+##  [17] splines_3.6.1               logging_0.10-108           
+##  [19] mnormt_1.5-5                geneplotter_1.63.0         
+##  [21] knitr_1.24                  zeallot_0.1.0              
+##  [23] Formula_1.2-3               Nozzle.R1_1.1-1            
+##  [25] broom_0.5.2                 annotate_1.63.0            
+##  [27] cluster_2.1.0               png_0.1-7                  
+##  [29] BiocManager_1.30.4          compiler_3.6.1             
+##  [31] backports_1.1.4             assertthat_0.2.1           
+##  [33] Matrix_1.2-17               lazyeval_0.2.2             
+##  [35] cli_1.1.0                   limma_3.41.15              
+##  [37] lasso2_1.2-20               acepack_1.4.1              
+##  [39] htmltools_0.3.6             tools_3.6.1                
+##  [41] gtable_0.3.0                glue_1.3.1                 
+##  [43] GenomeInfoDbData_1.2.1      dplyr_0.8.3                
+##  [45] Rcpp_1.0.2                  pkgdown_1.4.0              
+##  [47] vctrs_0.2.0                 nlme_3.1-140               
+##  [49] psych_1.8.12                xfun_0.9                   
+##  [51] stringr_1.4.0               XML_3.98-1.20              
+##  [53] edgeR_3.27.13               zlibbioc_1.31.0            
+##  [55] MASS_7.3-51.4               scales_1.0.0               
+##  [57] RColorBrewer_1.1-2          yaml_2.2.0                 
+##  [59] memoise_1.1.0               gridExtra_2.3              
+##  [61] ggplot2_3.2.1               rpart_4.1-15               
+##  [63] reshape_0.8.8               latticeExtra_0.6-28        
+##  [65] stringi_1.4.3               RSQLite_2.1.2              
+##  [67] highr_0.8                   genefilter_1.67.1          
+##  [69] desc_1.2.0                  checkmate_1.9.4            
+##  [71] shape_1.4.4                 rlang_0.4.0                
+##  [73] pkgconfig_2.0.2             bitops_1.0-6               
+##  [75] evaluate_0.14               lattice_0.20-38            
+##  [77] purrr_0.3.2                 labeling_0.3               
+##  [79] htmlwidgets_1.3             cowplot_1.0.0              
+##  [81] bit_1.1-14                  tidyselect_0.2.5           
+##  [83] plyr_1.8.4                  magrittr_1.5               
+##  [85] R6_2.4.0                    generics_0.0.2             
+##  [87] Hmisc_4.2-0                 DBI_1.0.0                  
+##  [89] withr_2.1.2                 pillar_1.4.2               
+##  [91] foreign_0.8-71              survival_2.44-1.1          
+##  [93] RCurl_1.95-4.12             nnet_7.3-12                
+##  [95] tibble_2.1.3                crayon_1.3.4               
+##  [97] utf8_1.1.4                  fdrtool_1.2.15             
+##  [99] rmarkdown_1.15              GetoptLong_0.1.7           
+## [101] locfit_1.5-9.1              data.table_1.12.2          
+## [103] blob_1.2.0                  ConsensusClusterPlus_1.49.0
+## [105] digest_0.6.20               xtable_1.8-4               
+## [107] tidyr_0.8.3                 munsell_0.5.0</code></pre>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -504,17 +660,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
-  <p>Developed by <a href="https://lpantano.github.io">Lorena Pantano</a>.</p>
+  <p>Developed by Lorena Pantano.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -71,6 +71,7 @@
 #' degPlotCluster(table, "group", "other", process = TRUE)
 #' @export
 degPlotCluster <- function(table, time, color = NULL,
+                           min_genes = 10,
                            process = FALSE,
                            points = TRUE,
                            boxes = TRUE,
@@ -89,6 +90,7 @@ degPlotCluster <- function(table, time, color = NULL,
 
     if ("cluster"  %in% colnames(table)){
         counts <- table(distinct(table, genes, cluster)[["cluster"]])
+        counts <- counts[counts>=min_genes]
         table <- inner_join(table,
                             data.frame(cluster = as.integer(names(counts)),
                                        title = paste(names(counts),
