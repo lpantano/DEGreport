@@ -4,8 +4,13 @@
 \alias{degColors}
 \title{Make nice colors for metadata}
 \usage{
-degColors(ann, col_fun = FALSE, con_values = c("grey80", "black"),
-  cat_values = c("orange", "steelblue"), palette = "Set2")
+degColors(
+  ann,
+  col_fun = FALSE,
+  con_values = c("grey80", "black"),
+  cat_values = c("orange", "steelblue"),
+  palette = "Set2"
+)
 }
 \arguments{
 \item{ann}{Data.frame with metadata information. Each column will be used to

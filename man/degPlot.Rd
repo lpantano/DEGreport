@@ -4,10 +4,24 @@
 \alias{degPlot}
 \title{Plot top genes allowing more variables to color and shape points}
 \usage{
-degPlot(dds, xs, res = NULL, n = 9, genes = NULL, group = NULL,
-  batch = NULL, metadata = NULL, ann = c("geneID", "symbol"),
-  slot = 1L, log2 = TRUE, xsLab = xs, ysLab = "abundance",
-  color = "black", groupLab = group, batchLab = batch)
+degPlot(
+  dds,
+  xs,
+  res = NULL,
+  n = 9,
+  genes = NULL,
+  group = NULL,
+  batch = NULL,
+  metadata = NULL,
+  ann = c("geneID", "symbol"),
+  slot = 1L,
+  log2 = TRUE,
+  xsLab = xs,
+  ysLab = "abundance",
+  color = "black",
+  groupLab = group,
+  batchLab = batch
+)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} object or SummarizedExperiment

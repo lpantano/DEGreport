@@ -4,8 +4,7 @@
 \alias{degMDS}
 \title{Plot MDS from normalized count data}
 \usage{
-degMDS(counts, condition = NULL, k = 2, d = "euclidian", xi = 1,
-  yi = 2)
+degMDS(counts, condition = NULL, k = 2, d = "euclidian", xi = 1, yi = 2)
 }
 \arguments{
 \item{counts}{matrix samples in columns, features in rows}

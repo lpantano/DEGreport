@@ -4,9 +4,19 @@
 \alias{degCovariates}
 \title{Find correlation between pcs and covariates}
 \usage{
-degCovariates(counts, metadata, fdr = 0.1, scale = FALSE, minPC = 5,
-  correlation = "kendall", addCovDen = TRUE, legacy = FALSE,
-  smart = TRUE, method = "lm", plot = TRUE)
+degCovariates(
+  counts,
+  metadata,
+  fdr = 0.1,
+  scale = FALSE,
+  minPC = 5,
+  correlation = "kendall",
+  addCovDen = TRUE,
+  legacy = FALSE,
+  smart = TRUE,
+  method = "lm",
+  plot = TRUE
+)
 }
 \arguments{
 \item{counts}{normalized counts matrix}
@@ -81,14 +91,14 @@ by default.
 
 The size of the dot, or importance, indicates the importance of
 the covariate based on the range of the values. Covariates
-where the range is very small (like a % of mapped reads that
+where the range is very small (like a \% of mapped reads that
 varies between 0.001 to 0.002) will have a very small size (0.1*max_size).
 The maximum value is set to 5 units.
 To get to importance, each covariate is normalized using this
 equation: \code{1 - min(v/max(v))},
 and the minimum and maximum values are set to
 0.01 and 1 respectively. For instance, 0.5 would mean there is at least
-50% of difference between the minimum value and the maximum value.
+50\% of difference between the minimum value and the maximum value.
 Categorical variables are plot using the maximum size always, since
 it is not possible to estimate the variability. By default, it
 won't do \code{v/max(v)} if the values are already between 0-1 or

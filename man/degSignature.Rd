@@ -4,8 +4,14 @@
 \alias{degSignature}
 \title{Plot gene signature for each group and signature}
 \usage{
-degSignature(counts, signature, group = NULL, metadata = NULL,
-  slot = 1, scale = FALSE)
+degSignature(
+  counts,
+  signature,
+  group = NULL,
+  metadata = NULL,
+  slot = 1,
+  scale = FALSE
+)
 }
 \arguments{
 \item{counts}{expression data. It accepts bcbioRNASeq, DESeqDataSet and

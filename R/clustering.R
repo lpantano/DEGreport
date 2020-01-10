@@ -46,6 +46,7 @@
 #' @param cluster_column column name if cluster is in a column
 #'   with a different name. Usefull, to plot cluster with different
 #'   cutoffs used when grouping genes from the clustering step.
+#' @param prefix_title text to add before the cluster ID in the figure title.
 #' @return [ggplot2] object.
 #' @examples
 #' data(humanGender)
@@ -78,7 +79,8 @@ degPlotCluster <- function(table, time, color = NULL,
                            smooth = TRUE,
                            lines = TRUE,
                            facet = TRUE,
-                           cluster_column = "cluster"){
+                           cluster_column = "cluster",
+                           prefix_title = "Group: "){
     stopifnot(class(table) == "data.frame")
 
     if (cluster_column  %in% colnames(table)){
@@ -93,7 +95,8 @@ degPlotCluster <- function(table, time, color = NULL,
         counts <- counts[counts>=min_genes]
         table <- inner_join(table,
                             data.frame(cluster = as.integer(names(counts)),
-                                       title = paste(names(counts),
+                                       title = paste(prefix_title,
+                                                      names(counts),
                                                       "- genes:" ,
                                                       counts),
                                        stringsAsFactors = FALSE),

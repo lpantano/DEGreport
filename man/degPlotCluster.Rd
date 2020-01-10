@@ -4,14 +4,25 @@
 \alias{degPlotCluster}
 \title{Plot clusters from degPattern function output}
 \usage{
-degPlotCluster(table, time, color = NULL, min_genes = 10,
-  process = FALSE, points = TRUE, boxes = TRUE, smooth = TRUE,
-  lines = TRUE, facet = TRUE, cluster_column = "cluster")
+degPlotCluster(
+  table,
+  time,
+  color = NULL,
+  min_genes = 10,
+  process = FALSE,
+  points = TRUE,
+  boxes = TRUE,
+  smooth = TRUE,
+  lines = TRUE,
+  facet = TRUE,
+  cluster_column = "cluster",
+  prefix_title = "Group: "
+)
 }
 \arguments{
 \item{table}{\code{normalized} element from \code{\link[=degPatterns]{degPatterns()}} output.
 It can be a data.frame with the following columns in there:
-\code{genes, sample, expression, cluster, xaxis_column, color_column}.}
+\verb{genes, sample, expression, cluster, xaxis_column, color_column}.}
 
 \item{time}{column name to use in the x-axis.}
 
@@ -33,6 +44,8 @@ ready for plotting.}
 \item{cluster_column}{column name if cluster is in a column
 with a different name. Usefull, to plot cluster with different
 cutoffs used when grouping genes from the clustering step.}
+
+\item{prefix_title}{text to add before the cluster ID in the figure title.}
 }
 \value{
 \link{ggplot2} object.

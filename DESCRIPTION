@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.21.2
-Date: 2019-07-23
+Version: 1.23.1
+Date: 2019-07-12
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -44,7 +44,6 @@ Imports:
     knitr,
     logging,
     lasso2,
-    fdrtool,
     magrittr,
     Nozzle.R1,
     psych,
@@ -71,6 +70,6 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

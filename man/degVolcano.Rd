@@ -4,12 +4,20 @@
 \alias{degVolcano}
 \title{Create volcano plot from log2FC and adjusted pvalues data frame}
 \usage{
-degVolcano(stats, side = "both",
+degVolcano(
+  stats,
+  side = "both",
   title = "Volcano Plot with Marginal Distributions",
-  pval.cutoff = 0.05, lfc.cutoff = 1, shade.colour = "orange",
-  shade.alpha = 0.25, point.colour = "gray", point.alpha = 0.75,
-  point.outline.colour = "darkgray", line.colour = "gray",
-  plot_text = NULL)
+  pval.cutoff = 0.05,
+  lfc.cutoff = 1,
+  shade.colour = "orange",
+  shade.alpha = 0.25,
+  point.colour = "gray",
+  point.alpha = 0.75,
+  point.outline.colour = "darkgray",
+  line.colour = "gray",
+  plot_text = NULL
+)
 }
 \arguments{
 \item{stats}{data.frame with two columns: logFC and Adjusted.Pvalue}

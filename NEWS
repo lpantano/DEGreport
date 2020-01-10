@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.23.1
+    * Feature: add prefix to clusters plot in `degPlotCluster`
+
 CHANGES IN DEGreport 1.21.2
 
     * Feature: add `scale` option to degSignature

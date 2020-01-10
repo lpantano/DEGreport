@@ -4,8 +4,16 @@
 \alias{degComps}
 \title{Automatize the use of \code{results()} for multiple comparisons}
 \usage{
-degComps(dds, combs = NULL, contrast = NULL, alpha = 0.05,
-  skip = FALSE, type = "normal", pairs = FALSE, fdr = "default")
+degComps(
+  dds,
+  combs = NULL,
+  contrast = NULL,
+  alpha = 0.05,
+  skip = FALSE,
+  type = "normal",
+  pairs = FALSE,
+  fdr = "default"
+)
 }
 \arguments{
 \item{dds}{\link[DESeq2:DESeqDataSet]{DESeq2::DESeqDataSet} obcject.}

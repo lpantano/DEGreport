@@ -4,8 +4,13 @@
 \alias{degSummary}
 \title{Print Summary Statistics of Alpha Level Cutoffs}
 \usage{
-degSummary(object, alpha = c(0.1, 0.05, 0.01), contrast = NULL,
-  caption = "", kable = FALSE)
+degSummary(
+  object,
+  alpha = c(0.1, 0.05, 0.01),
+  contrast = NULL,
+  caption = "",
+  kable = FALSE
+)
 }
 \arguments{
 \item{object}{Can be \link{DEGSet} or \link{DESeqDataSet} or \link{DESeqResults}.}

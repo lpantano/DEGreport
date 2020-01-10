@@ -30,7 +30,7 @@ with not enough expression in any group.
 }
 \description{
 This function will keep only rows that have a minimum counts of
-1 at least in a \code{min} number of samples (default 80%).
+1 at least in a \code{min} number of samples (default 80\%).
 }
 \examples{
 data(humanGender)

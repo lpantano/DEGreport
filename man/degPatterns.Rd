@@ -4,11 +4,23 @@
 \alias{degPatterns}
 \title{Make groups of genes using expression profile.}
 \usage{
-degPatterns(ma, metadata, minc = 15, summarize = "merge",
-  time = "time", col = NULL, consensusCluster = FALSE,
-  reduce = FALSE, cutoff = 0.7, scale = TRUE, pattern = NULL,
-  groupDifference = NULL, eachStep = FALSE, plot = TRUE,
-  fixy = NULL)
+degPatterns(
+  ma,
+  metadata,
+  minc = 15,
+  summarize = "merge",
+  time = "time",
+  col = NULL,
+  consensusCluster = FALSE,
+  reduce = FALSE,
+  cutoff = 0.7,
+  scale = TRUE,
+  pattern = NULL,
+  groupDifference = NULL,
+  eachStep = FALSE,
+  plot = TRUE,
+  fixy = NULL
+)
 }
 \arguments{
 \item{ma}{log2 normalized count matrix}
@@ -110,7 +122,7 @@ higher than \code{minc} parameter will be added to the figure.
 The y-axis in the figure is the results of applying \code{scale()}
 R function, what is similar to creating a
 \code{Z-score} where values are centered to the \code{mean}  and
-scaled to the \code{standard desviation} by each gene.
+scaled to the \verb{standard desviation} by each gene.
 
 The different patterns can be merged
 to get similar ones into only one pattern. The expression

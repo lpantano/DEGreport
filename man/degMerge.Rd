@@ -4,8 +4,16 @@
 \alias{degMerge}
 \title{Integrate data comming from degPattern into one data object}
 \usage{
-degMerge(matrix_list, cluster_list, metadata_list, summarize = "group",
-  time = "time", col = "condition", scale = TRUE, mapping = NULL)
+degMerge(
+  matrix_list,
+  cluster_list,
+  metadata_list,
+  summarize = "group",
+  time = "time",
+  col = "condition",
+  scale = TRUE,
+  mapping = NULL
+)
 }
 \arguments{
 \item{matrix_list}{list expression data for each element}

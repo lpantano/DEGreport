@@ -4,9 +4,20 @@
 \alias{degResults}
 \title{Complete report from DESeq2 analysis}
 \usage{
-degResults(res = NULL, dds, rlogMat = NULL, name, org = NULL,
-  FDR = 0.05, do_go = FALSE, FC = 0.1, group = "condition",
-  xs = "time", path_results = ".", contrast = NULL)
+degResults(
+  res = NULL,
+  dds,
+  rlogMat = NULL,
+  name,
+  org = NULL,
+  FDR = 0.05,
+  do_go = FALSE,
+  FC = 0.1,
+  group = "condition",
+  xs = "time",
+  path_results = ".",
+  contrast = NULL
+)
 }
 \arguments{
 \item{res}{output from \code{\link[DESeq2:results]{DESeq2::results()}} function.}

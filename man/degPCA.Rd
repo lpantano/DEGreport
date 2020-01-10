@@ -4,8 +4,16 @@
 \alias{degPCA}
 \title{smart PCA from count matrix data}
 \usage{
-degPCA(counts, metadata = NULL, condition = NULL, pc1 = "PC1",
-  pc2 = "PC2", name = NULL, shape = NULL, data = FALSE)
+degPCA(
+  counts,
+  metadata = NULL,
+  condition = NULL,
+  pc1 = "PC1",
+  pc2 = "PC2",
+  name = NULL,
+  shape = NULL,
+  data = FALSE
+)
 }
 \arguments{
 \item{counts}{matrix with count data}
@@ -25,7 +33,7 @@ degPCA(counts, metadata = NULL, condition = NULL, pc1 = "PC1",
 \item{data}{Whether return PCA data or just plot the PCA.}
 }
 \value{
-if \code{results <-} used, the function return the output
+if \verb{results <-} used, the function return the output
 of \code{\link[=prcomp]{prcomp()}}.
 }
 \description{
