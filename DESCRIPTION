@@ -36,6 +36,7 @@ Imports:
     DESeq2,
     dplyr,
     edgeR,
+    fdrtools,
     ggplot2,
     ggdendro,
     grid,
