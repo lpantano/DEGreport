@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.23.2
+    * Fix: adopt class(counts)[1] to check classes
+
 CHANGES IN DEGreport 1.23.1
     * Feature: add prefix to clusters plot in `degPlotCluster`
 

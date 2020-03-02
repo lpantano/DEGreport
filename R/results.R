@@ -126,7 +126,8 @@
 #' @param fdr type of fdr correction. `default` is FDR value,
 #'  `lfdr-stat` is
 #'  for local FDR using the statistics of the test, 
-#'  `lfdr-pvalue` is for local FDR using the p-value of the test
+#'  `lfdr-pvalue` is for local FDR using the p-value of the test. fdrtools
+#'  needs to be installed and loaded by the user
 #'   
 #' @author Lorena Pantano
 #'

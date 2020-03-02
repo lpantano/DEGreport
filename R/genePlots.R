@@ -133,7 +133,7 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
         counts <- counts(dds, normalized = TRUE)
     else counts <- assays(dds)[[slot]]
     
-    stopifnot(class(counts) == "data.frame" | class(counts) == "matrix")
+    stopifnot(class(counts)[1] == "data.frame" | class(counts)[1] == "matrix")
     
     if (log2 & max(counts) < 500L)
         warning("Data seems to be already in log2. Please use log2 = FALSE.")
@@ -230,19 +230,19 @@ degPlotWide <- function(counts, genes, group, metadata=NULL, batch=NULL){
     if (is.null(metadata))
         metadata = data.frame(colData(counts))
     metadata = data.frame(metadata)
-    if (class(counts) == "DESeqDataSet") {
+    if (class(counts)[1] == "DESeqDataSet") {
         dd = bind_rows(lapply(genes,function(gene){
             plotCounts(counts, gene,
                        intgroup = group, returnData = TRUE) %>%
                 mutate(count = log2(count + 1)) %>%
                 mutate(gene = gene, sample = row.names(metadata))}))
         dd$group = dd[[group]]
-    }else if (class(counts) == "matrix") {
+    }else if (class(counts)[1] == "matrix") {
         dd = melt(counts[genes, ])
         colnames(dd) = c("gene", "sample", "count")
         dd$group = as.factor(metadata[as.character(dd$sample), group])
     }else{
-        stop("No supported for class", class(counts))
+        stop("No supported for class", class(counts)[1])
     }
     if (is.null(group)) {
         dd$treatment = "one_group"
