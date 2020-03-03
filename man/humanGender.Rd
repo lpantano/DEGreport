@@ -9,7 +9,7 @@
 gEUvadis
 }
 \usage{
-humanGender
+data(humanGender)
 }
 \description{
 DGEList object for DE genes betwen Male and Females

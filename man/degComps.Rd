@@ -36,7 +36,8 @@ use the coefficient already created from \code{DESeq2::resultsNames()}.}
 \item{fdr}{type of fdr correction. \code{default} is FDR value,
 \code{lfdr-stat} is
 for local FDR using the statistics of the test,
-\code{lfdr-pvalue} is for local FDR using the p-value of the test}
+\code{lfdr-pvalue} is for local FDR using the p-value of the test. fdrtools
+needs to be installed and loaded by the user}
 }
 \value{
 \link{DEGSet} with unSrunken and Srunken results.
@@ -62,8 +63,9 @@ colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 dds <- DESeq(dds)
 res <- degComps(dds, combs = c("condition", 2),
                 contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
-res <- degComps(dds,contrast = list("treatment_B_vs_A"),
-                fdr="lfdr-stat")
+# library(fdrtools)
+#res <- degComps(dds,contrast = list("treatment_B_vs_A"),
+#                fdr="lfdr-stat")
 }
 \author{
 Lorena Pantano

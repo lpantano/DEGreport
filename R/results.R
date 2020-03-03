@@ -140,15 +140,16 @@
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, combs = c("condition", 2),
 #'                 contrast = list("treatment_B_vs_A", c("condition", "A", "B")))
-#' res <- degComps(dds,contrast = list("treatment_B_vs_A"),
-#'                 fdr="lfdr-stat")
+#' # library(fdrtools)
+#' #res <- degComps(dds,contrast = list("treatment_B_vs_A"),
+#' #                fdr="lfdr-stat")
 #' @export
 degComps <- function(dds, combs = NULL, contrast = NULL,
                      alpha = 0.05, skip = FALSE,
                      type = "normal",
                      pairs = FALSE,
                      fdr = "default") {
-    stopifnot(class(dds) == "DESeqDataSet")
+    stopifnot(class(dds)[1] == "DESeqDataSet")
     stopifnot(fdr %in% c("default", "lfdr-stat", "lfdr-pvalue"))
     all_combs <- .guessComb(dds,
                             combs = combs, contrast = contrast,
@@ -311,7 +312,7 @@ degMA <- function(results,
                     diff = 5,
                     raw = FALSE,
                     correlation = FALSE) {
-    stopifnot(class(results) == "DEGSet")
+    stopifnot(class(results)[1] == "DEGSet")
     if (raw & correlation)
         stop("Use one or another. Incompatible parameters.")
     if (length(names(results)) == 1)
@@ -356,16 +357,16 @@ degMA <- function(results,
         fn <- DESeq2::summary
     if (compareVersion("1.25", as.character(packageVersion("DESeq2"))) < 0)
         fn <- DESeq2::summary
-    if (class(object) == "DESeqDataSet"){
+    if (class(object)[1] == "DESeqDataSet"){
         if (is.null(contrast)) {
             contrast <- resultsNames(object)[[2L]]
         }
         return(capture.output(fn(.guessResults(object, contrast),
                                       alpha)))
     }
-    if (class(object) == "DESeqResults")
+    if (class(object)[1] == "DESeqResults")
         return(capture.output(fn(object, alpha)))
-    if (class(object) == "DEGSet")
+    if (class(object)[1] == "DEGSet")
         return(capture.output(fn(deg(object), alpha)))
     stop("No class supported.")
 }

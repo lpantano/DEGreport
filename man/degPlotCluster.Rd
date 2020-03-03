@@ -28,6 +28,8 @@ It can be a data.frame with the following columns in there:
 
 \item{color}{column name to use to color and divide the samples.}
 
+\item{min_genes}{minimum number of genes to be added to the plot.}
+
 \item{process}{whether to process the table if it is not
 ready for plotting.}
 

@@ -493,7 +493,7 @@ degClean <- function(ma){
     lapply(ma, function(x) {
         if (length(unique(x)) < length(x) * 0.20 & is.numeric(x))
             x <- as.factor(x)
-        if ((class(x) %in% c("factor", "character"))) {
+        if ((class(x)[1] %in% c("factor", "character"))) {
             .f = as.factor(x)
             if (length(levels(.f)) < 2L)
                 return(NULL)

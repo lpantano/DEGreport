@@ -9,7 +9,7 @@
 biomart
 }
 \usage{
-geneInfo
+data(geneInfo)
 }
 \description{
 data.frame with chromose information for each gene

@@ -1,19 +1,19 @@
 .get_counts <- function(c, slot){
-    if (class(c) == "bcbioRNASeq")
+    if (class(c)[1] == "bcbioRNASeq")
         return(counts(c, "rlog"))
-    if (class(c) == "DESeqDataSet")
+    if (class(c)[1] == "DESeqDataSet")
         return(counts(c, normalized = TRUE))
-    if (class(c) %in% c("SummarizedExperiment", "RangedSummarizedExperiment"))
+    if (class(c)[1] %in% c("SummarizedExperiment", "RangedSummarizedExperiment"))
         return(assays(c)[[slot]])
-    if (class(c) == "data.frame")
+    if (class(c)[1] == "data.frame")
         return(c)
-    if (class(c) == "matrix")
+    if (class(c)[1] == "matrix")
         return(as.data.frame(c))
-    stop("class ", class(c), " no supported.")
+    stop("class ", class(c)[1], " no supported.")
 }
 
 .get_meta <- function(c){
-    if (class(c) %in% c("bcbioRNASeq", "DESeqDataSet",
+    if (class(c)[1] %in% c("bcbioRNASeq", "DESeqDataSet",
                         "SummarizedExperiment", "RangedSummarizedExperiment"))
         return(data.frame(colData(c), stringsAsFactors = FALSE))
     return(NULL)

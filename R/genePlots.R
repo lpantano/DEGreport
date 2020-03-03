@@ -36,7 +36,7 @@ degColors <- function(ann, col_fun = FALSE,
                       cat_values = c("orange", "steelblue"),
                       palette = "Set2"){
     col <- lapply(names(ann), function(a){
-        if (class(ann[[a]][1]) == "numeric"){
+        if (class(ann[[a]][1])[1] == "numeric"){
             fn = colorRamp2(c(min(ann[[a]]),
                               max(ann[[a]])),
                             con_values)
@@ -113,7 +113,7 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
                    ysLab = "abundance",
                    color = "black",
                    groupLab = group, batchLab = batch){
-    if (class(dds) %in% c("data.frame", "matrix"))
+    if (class(dds)[1] %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
                                    colData = metadata)
     
@@ -129,7 +129,7 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
     anno <- as.data.frame(rowData(dds))
     
     metadata = data.frame(colData(dds))
-    if (class(dds) == "DESeqDataSet")
+    if (class(dds)[1] == "DESeqDataSet")
         counts <- counts(dds, normalized = TRUE)
     else counts <- assays(dds)[[slot]]
     

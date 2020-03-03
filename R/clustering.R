@@ -38,6 +38,7 @@
 #' @param process whether to process the table if it is not
 #'   ready for plotting.
 #' @param color column name to use to color and divide the samples.
+#' @param min_genes minimum number of genes to be added to the plot.
 #' @param points Add points to the plot.
 #' @param boxes Add boxplot to the plot.
 #' @param smooth Add regression line to the plot.
@@ -81,7 +82,7 @@ degPlotCluster <- function(table, time, color = NULL,
                            facet = TRUE,
                            cluster_column = "cluster",
                            prefix_title = "Group: "){
-    stopifnot(class(table) == "data.frame")
+    stopifnot(class(table)[1] == "data.frame")
 
     if (cluster_column  %in% colnames(table)){
         table[["cluster"]] = table[[cluster_column]]
@@ -1019,8 +1020,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     # ensure there are no missing levels in summarize
     metadata[,summarize] = droplevels(metadata[,summarize])
 
-    stopifnot(class(metadata) == "data.frame")
-    stopifnot(class(ma) == "matrix" | class(ma) == "data.frame")
+    stopifnot(class(metadata)[1] == "data.frame")
+    stopifnot(class(ma)[1] == "matrix" | class(ma)[1] == "data.frame")
     stopifnot(summarize %in% names(metadata))
     stopifnot(time %in% names(metadata))
 

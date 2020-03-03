@@ -35,9 +35,9 @@ degVolcano <- function(stats, side="both", title="Volcano Plot with Marginal Dis
                                  shade.alpha=0.25, point.colour="gray", point.alpha=0.75,
                                  point.outline.colour="darkgray", line.colour="gray",
                                  plot_text=NULL) {
-    if (class(stats) == "DESeqResults")
+    if (class(stats)[1] == "DESeqResults")
         stats <- stats[, c("log2FoldChange", "padj")]
-    if (class(stats) == "DEGSet"){
+    if (class(stats)[1] == "DEGSet"){
         stats <- deg(stats, tidy = "data.frame")
         stats <- stats[, c("log2FoldChange", "padj")]
     }

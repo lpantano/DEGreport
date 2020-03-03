@@ -40,7 +40,7 @@ test_that("DEGSet",{
     expect_type(significants(res), "character")
     expect_true(significants(res, full = TRUE) %>% is_tibble)
     
-    expect_s4_class(degCorrect(res, "lfdr-stat"), "DEGSet")
+    # expect_s4_class(degCorrect(res, "lfdr-stat"), "DEGSet")
     
     expect_true(degMA(res, diff = 4) %>%
                     class %>% .[[2]] == "ggplot")

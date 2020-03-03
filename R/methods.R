@@ -63,11 +63,11 @@ degFilter <- function(counts, metadata, group, min=0.8, minreads=0){
 degQC <- function(counts, groups, object=NULL, pvalue=NULL){
     if (is.null(pvalue) & is.null(object))
         stop("You need to provide DEGset object or pvalue.")
-    if (!is.null(object) & class(object) != "DEGSet")
+    if (!is.null(object)[1] & class(object)[1] != "DEGSet")
         stop("Object should be a DEGSet class.")
-    stopifnot(class(counts) %in% c("matrix", "data.frame"))
+    stopifnot(class(counts)[1] %in% c("matrix", "data.frame"))
     
-    if (class(object) == "DEGSet"){
+    if (class(object)[1] == "DEGSet"){
         df <- deg(object, tidy = "tibble")
         if (length(intersect(rownames(counts), df[["gene"]])) < nrow(df))
             stop("Not all features in DEGSet are in counts table.")

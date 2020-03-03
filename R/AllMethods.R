@@ -38,7 +38,7 @@ setMethod("degDefault", signature("DEGSet"),
 #' design(dds) <-  ~ condition + treatment
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("treatment_B_vs_A"))
-#' degCorrect(res, fdr = "lfdr-stat")
+#' # library(fdrtools); degCorrect(res, fdr = "lfdr-stat")
 #' @export
 setMethod("degCorrect", signature("DEGSet"),
           function(object, fdr) {
@@ -205,16 +205,16 @@ setMethod("significants", signature("TopTags"),
           })
 
 .supported <- function(x){
-    return(class(x) %in% c("DEGSet", "DESeqResults"))
+    return(class(x)[1] %in% c("DEGSet", "DESeqResults"))
 }
 
 .get_contrast_name <- function(x){
-    if (class(x) == "DEGSet"){
+    if (class(x)[1] == "DEGSet"){
         table = deg(x)
-    }else if (class(x) == "DESeqResults"){
+    }else if (class(x)[1] == "DESeqResults"){
         table = x
     }else{
-        stop("Format not supported: ", class(x))
+        stop("Format not supported: ", class(x)[1])
     }
     contrast <- slot(table, "elementMetadata") %>% 
         .[["description"]] %>% 
@@ -309,13 +309,13 @@ setMethod("as.DEGSet", signature("TopTags"),
                                                 "padj")) %>%
         DataFrame
     news <- lapply(extras, function(e){
-        if (class(e) == "TopTags")
+        if (class(e)[1] == "TopTags")
             return(as.data.frame(e) %>% set_colnames(c("log2FoldChange",
                                                        "baseMean",
                                                        "pvalue",
                                                        "padj")) %>%
                        DataFrame)
-        stop(class(e), " is not a TopTags object.")
+        stop(class(e)[1], " is not a TopTags object.")
     })
     names(news) <- names(extras)
     l <- c(list(raw = df), news)
@@ -346,7 +346,7 @@ setMethod("as.DEGSet", signature("data.frame"),
                                  "padj")) %>%
                   DataFrame
               news <- lapply(extras, function(e){
-                  if (class(e) == "data.frame"){
+                  if (class(e)[1] == "data.frame"){
                       stopifnot(cols  %in% names(object))
                       return(as.data.frame(e)[,cols] %>% 
                                  set_colnames(c("log2FoldChange",
@@ -379,9 +379,9 @@ setMethod("as.DEGSet", signature("DESeqResults"),
         gsub(" ", "", .)
     df <- DataFrame(object)
     news <- lapply(extras, function(e){
-        if (class(e) == "DESeqResults")
+        if (class(e)[1] == "DESeqResults")
             return(DataFrame(e))
-        stop(class(e), " is not a DESeqResults object.")
+        stop(class(e)[1], " is not a DESeqResults object.")
     })
     names(news) <- names(extras)
     l <- c(list(raw = df), news)
