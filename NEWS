@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.23.3
+    * Fix: pass min_counts parameter to degPlotCluster
+
 CHANGES IN DEGreport 1.23.2
     * Fix: adopt class(counts)[1] to check classes
 

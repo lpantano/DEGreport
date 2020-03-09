@@ -94,6 +94,8 @@ degPlotCluster <- function(table, time, color = NULL,
     if ("cluster"  %in% colnames(table)){
         counts <- table(distinct(table, genes, cluster)[["cluster"]])
         counts <- counts[counts>=min_genes]
+        if (length(counts)==0)
+            stop("No clusters with min_genes > ", min_genes)
         table <- inner_join(table,
                             data.frame(cluster = as.integer(names(counts)),
                                        title = paste(prefix_title,
@@ -1035,7 +1037,6 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                 "only DE genes will be useful for this function.")
     message("Working with ", nrow(ma), " genes.")
     
-
     counts_group <- .summarize_scale(ma,
                                      metadata[[summarize]],
                                      FALSE)
@@ -1116,7 +1117,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     plot_benchmarking_curve <- .plot_benchmarking_curve(benchmarking)
 
     if (length(unique(groups)) > 0){
-        p <- degPlotCluster(normalized, time, col)
+        p <- degPlotCluster(normalized, time, col, min_genes = minc)
         if (!is.null(fixy))
             p <- p + ylim(fixy[1], fixy[2])
         if (plot)
