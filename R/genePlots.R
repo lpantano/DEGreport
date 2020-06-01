@@ -155,7 +155,7 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
     }
     
     dd <- melt(as.data.frame(counts[genes, , drop = FALSE]) %>%
-                  mutate(gene = newgenes))
+                  mutate(gene = factor(newgenes, levels=newgenes)))
     colnames(dd) = c("gene", "sample", "count")
     
     dd <-dd[!is.na(dd[["gene"]]),]

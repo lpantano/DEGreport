@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.25.1
+    * Feature: degPlot will keep the gene order given by the user.
+
 CHANGES IN DEGreport 1.23.3
     * Fix: pass min_counts parameter to degPlotCluster
 
