@@ -11,15 +11,18 @@
 # it to be compatible with degPlotCluster
 .process <- function(table, time, color){
     stopifnot(c("genes", "sample", time, "cluster", "expression")  %in% names(table))
-
-        if (!is.null(color))
-        stopifnot(color  %in% names(table))
-    if (is.null(color))
-        color <- time
     
-    group_by(table, !!sym("genes"),
-             !!sym(time), !!sym("cluster"), !!sym(color)) %>% 
-        summarise(expression=mean(expression)) %>% 
+    if (!is.null(color))
+        stopifnot(color  %in% names(table))
+    if (is.null(color)){
+        tb <- group_by(table, !!sym("genes"),
+                       !!sym(time), !!sym("cluster")) 
+    }else{
+        tb <- group_by(table, !!sym("genes"),
+                       !!sym(time), !!sym("cluster"), !!sym(color)) 
+    }
+    
+    summarise(tb, expression=mean(expression)) %>% 
         group_by(!!sym("genes")) %>% 
         mutate(value = scale(expression)) %>% 
         ungroup()

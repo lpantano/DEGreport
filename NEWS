@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.24.1
+    * Fix: load dplyr::n() to avoid error
+
 CHANGES IN DEGreport 1.23.3
     * Fix: pass min_counts parameter to degPlotCluster
 
