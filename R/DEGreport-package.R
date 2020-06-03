@@ -47,7 +47,7 @@
 #' @importFrom cowplot plot_grid
 #' @importFrom dplyr arrange
 #' @importFrom dplyr select select_if
-#' @importFrom dplyr summarise
+#' @importFrom dplyr summarise n
 #' @importFrom dplyr mutate mutate_all mutate_if
 #' @importFrom dplyr filter rename
 #' @importFrom dplyr group_by ungroup

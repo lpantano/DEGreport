@@ -21,7 +21,7 @@ test_that("missingfactor", {
    des_missing <- des
    levels(des_missing$group) <- c(levels(des_missing$group), "missing")
    expect_is(degPatterns(ma, des_missing, time="group", col = NULL, plot = FALSE,
-                         summarize="group"), "list")
+                         ), "list")
 })
 
 test_that("transform", {
