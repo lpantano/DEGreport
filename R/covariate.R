@@ -184,8 +184,7 @@
         pc_sig <- .model(data, method)
         pc_sig[["PC"]] = pc
         pc_sig %>% filter(p.value < 0.05)
-    }) %>% bind_rows() %>% 
-        filter(!grepl("Intercept", term))
+    }) %>% bind_rows()
     
     if (nrow(significants) == 0)
         return(data.frame(estimate=0, p.value=0, PC="", term=""))
