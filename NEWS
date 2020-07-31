@@ -1,5 +1,11 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.25.2
+    * Fix: In the case of non-correlation avoid error in significants code.
+            @vbarrera and @mjsteinbaugh
+    * Feature: degCovariates shows grey stroke for variables with
+        p-value < 0.05 from the first correlation step. @vbarrera
+
 CHANGES IN DEGreport 1.25.1
     * Feature: degPlot will keep the gene order given by the user.
 

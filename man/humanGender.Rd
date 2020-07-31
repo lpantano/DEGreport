@@ -4,7 +4,9 @@
 \name{humanGender}
 \alias{humanGender}
 \title{DGEList object for DE genes betwen Male and Females}
-\format{DGEList}
+\format{
+DGEList
+}
 \source{
 gEUvadis
 }

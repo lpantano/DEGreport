@@ -4,7 +4,9 @@
 \name{geneInfo}
 \alias{geneInfo}
 \title{data.frame with chromose information for each gene}
-\format{data.frame}
+\format{
+data.frame
+}
 \source{
 biomart
 }

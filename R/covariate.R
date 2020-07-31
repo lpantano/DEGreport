@@ -185,9 +185,9 @@
         pc_sig[["PC"]] = pc
         pc_sig %>% filter(p.value < 0.05)
     }) %>% bind_rows()
-    
+
     if (nrow(significants) == 0)
-        return(data.frame(estimate=0, p.value=0, PC="", term=""))
+        return(data.frame(estimate=0, p.value=0, PC="1", term="noterm"))
     significants[,c("estimate", "p.value", "PC", "term")]
 }
 
@@ -257,7 +257,10 @@
 #'   of the covariates effect on the PCs. For that, this function
 #'   uses `lm` to regress the data and uses the p-value calculated by
 #'   each variable in the model to define significance (pvalue < 0.05).
-#'   `lm` or `lasso` can be used here.
+#'   `lm` or `lasso` can be used here. Variables with a black stroke
+#'   are significant after this step. Variables with grey stroke 
+#'   are significant at the first pass considering p.value < 0.05
+#'   for the correlation analysis.
 #' @references 
 #' Daily, K. et al.  Molecular, phenotypic, and sample-associated data to describe pluripotent stem cell lines and derivatives. Sci Data 4, 170030 (2017).
 #'  
@@ -392,7 +395,8 @@ degCovariates <- function(counts, metadata,
               by = c("compare" = "PC", 
                      "covar" = "term")) %>% 
         left_join(pc_pct, by = c("compare" = "pc")) %>% 
-        unite(col = "compare", !!sym("compare"), !!sym("pct"), sep = " ")
+        unite(col = "compare", !!sym("compare"), !!sym("pct"),
+              sep = " ")
     ma_plot[["r"]][is.na(ma_plot[["p.value"]])] = NA
     if (legacy){
         if (addCovDen){
@@ -438,7 +442,7 @@ degCovariates <- function(counts, metadata,
         
         ma_plot[["covar"]] <- factor(ma_plot[["covar"]],
                                 levels = hc$labels[hc$order])
-        # browser()
+
         tile <- ggplot(ma_plot, aes_(x = ~covar,y = ~compare,
                              size = ~effect_size,
                              color = ~r,
@@ -447,6 +451,8 @@ degCovariates <- function(counts, metadata,
             geom_point() +
             geom_point(data = filter(ma_plot, !is.na(fdr)),
                        stroke = 1, color="black") +
+            geom_point(data = filter(ma_plot, pvalue<0.05),
+                       stroke = 1, color="grey60") +
             theme_minimal() +
             scale_shape_manual(values = c(22, 21)) + 
             scale_size_continuous(name = "importance",

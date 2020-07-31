@@ -109,7 +109,10 @@ Finally, a linear model is used to calculate the significance
 of the covariates effect on the PCs. For that, this function
 uses \code{lm} to regress the data and uses the p-value calculated by
 each variable in the model to define significance (pvalue < 0.05).
-\code{lm} or \code{lasso} can be used here.
+\code{lm} or \code{lasso} can be used here. Variables with a black stroke
+are significant after this step. Variables with grey stroke
+are significant at the first pass considering p.value < 0.05
+for the correlation analysis.
 }
 \examples{
 data(humanGender)
