@@ -185,7 +185,7 @@
         pc_sig[["PC"]] = pc
         pc_sig %>% filter(p.value < 0.05)
     }) %>% bind_rows() %>% 
-        filter(!grepl("Intercept", !!!sym("term")))
+        filter(!grepl("Intercept", term))
     
     if (nrow(significants) == 0)
         return(data.frame(estimate=0, p.value=0, PC="", term=""))
@@ -393,7 +393,7 @@ degCovariates <- function(counts, metadata,
               by = c("compare" = "PC", 
                      "covar" = "term")) %>% 
         left_join(pc_pct, by = c("compare" = "pc")) %>% 
-        unite(col = "compare", !!!sym("compare"), !!!sym("pct"), sep = " ")
+        unite(col = "compare", !!sym("compare"), !!sym("pct"), sep = " ")
     ma_plot[["r"]][is.na(ma_plot[["p.value"]])] = NA
     if (legacy){
         if (addCovDen){
