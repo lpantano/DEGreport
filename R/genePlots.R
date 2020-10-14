@@ -90,6 +90,7 @@ degColors <- function(ann, col_fun = FALSE,
 #'   compatible with `ggplot2::scale_color_brewer()`.
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
+#' @param sizePoint Integer, indicates the size of the plotted points (default 1).
 #' @return ggplot showing the expresison of the genes
 #' @examples 
 #' data(humanGender)
