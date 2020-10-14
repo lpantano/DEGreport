@@ -20,7 +20,8 @@ degPlot(
   ysLab = "abundance",
   color = "black",
   groupLab = group,
-  batchLab = batch
+  batchLab = batch,
+  size_point = 1
 )
 }
 \arguments{
