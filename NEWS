@@ -1,7 +1,7 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.25.3
-     * Feature: degPlot accepts size_point as parameter to indicate the size of
+     * Feature: degPlot accepts sizePoint as parameter to indicate the size of
      the plotted points.
 
 CHANGES IN DEGreport 1.25.2

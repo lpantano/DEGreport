@@ -21,7 +21,7 @@ degPlot(
   color = "black",
   groupLab = group,
   batchLab = batch,
-  size_point = 1
+  sizePoint = 1
 )
 }
 \arguments{
