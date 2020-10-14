@@ -112,7 +112,8 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
                    xsLab = xs,
                    ysLab = "abundance",
                    color = "black",
-                   groupLab = group, batchLab = batch){
+                   groupLab = group, batchLab = batch,
+                   size_point = 1){
     if (class(dds)[1] %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
                                    colData = metadata)
@@ -181,7 +182,7 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
     p = p +
         # geom_violin(alpha=0.3) +
         stat_smooth(fill = "grey80", method = 'loess') +
-        geom_point(size = 1, alpha = 0.7,
+        geom_point(size = size_point, alpha = 0.7,
                    position = position_jitterdodge(dodge.width = 0.9)) +
         facet_wrap(~gene, scales = "free_y") +
         xlab(xsLab) +
