@@ -1,5 +1,5 @@
 Package: DEGreport
-Version: 1.25.2
+Version: 1.25.3
 Date: 2020-07-31
 Type: Package
 Title: Report of DEG analysis
@@ -70,6 +70,6 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1.9000
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -20,7 +20,8 @@ degPlot(
   ysLab = "abundance",
   color = "black",
   groupLab = group,
-  batchLab = batch
+  batchLab = batch,
+  sizePoint = 1
 )
 }
 \arguments{
@@ -66,6 +67,8 @@ compatible with \code{ggplot2::scale_color_brewer()}.}
 \item{groupLab}{Character, alternative label for group (default: same as group).}
 
 \item{batchLab}{Character, alternative label for batch (default: same as batch).}
+
+\item{sizePoint}{Integer, indicates the size of the plotted points (default 1).}
 }
 \value{
 ggplot showing the expresison of the genes
