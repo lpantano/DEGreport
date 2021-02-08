@@ -80,7 +80,7 @@
     colnames(all_cor_p) <- colnames(all_covariates)
     
     effects.significantcovars <- all_cor_vals
-    effects.significantcovars[all_cor_p > max_fdr] <- 0
+    #effects.significantcovars[all_cor_p > max_fdr] <- 0
     effects.significantcovars <- colSums(abs(effects.significantcovars) * replicate(dim(effects.significantcovars)[2L], weights / sum(weights)))
     effects.significantcovars <- effects.significantcovars[order(abs(effects.significantcovars), decreasing = TRUE)]
 
@@ -526,6 +526,8 @@ degClean <- function(ma){
 #' @param fdr numeric value to use as cutoff to determine
 #'   the minimum fdr to consider significant correlations
 #'   between pcs and covariates.
+#' @param use_pval boolean to indicate to use p-value instead of FDR to
+#'   hide non-significant correlation.
 #' @param ... Parameters to pass to [ComplexHeatmap::Heatmap()].
 #'
 #' @return: list:
@@ -541,21 +543,26 @@ degClean <- function(ma){
 #'   colData(humanGender)[idx,], design=~group)
 #' cor <- degCorCov(colData(dse))
 #' @export
-degCorCov <- function(metadata, fdr=0.05, ...){
+degCorCov <- function(metadata, fdr=0.05, use_pval = FALSE, ...){
     clean <- degClean(metadata) %>%
         mutate_all(as.numeric)
     cor <- .calccompletecorandplot(clean,
-                                      clean,
-                                      "kendall",
-                                      "",
-                                      weights = 1L)
-    
+                                   clean,
+                                   "kendall",
+                                   "",
+                                   max_fdr = fdr,
+                                   weights = 1L)
+    #browser()
+    if (use_pval){
+        cor[["mat"]]['fdr'] <- cor[["mat"]]['pvalue']
+    }
     corMat <- cor[["mat"]][, c("r", "compare", "covar")] %>%
         spread(!!sym("compare"), !!sym("r")) %>% remove_rownames() %>%
         column_to_rownames("covar")
     fdrMat <- cor[["mat"]][, c("fdr", "compare", "covar")] %>%
         spread(compare, fdr) %>% remove_rownames() %>%
         column_to_rownames("covar")
+
     corMat[fdrMat > fdr] <- 0
     # corMat[fdrMat > 0.05] <- NA
     if (sum(!is.na(corMat)) > 2) {

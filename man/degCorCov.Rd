@@ -5,7 +5,7 @@
 \title{Calculate the correlation relationshipt among all covariates
 in the metadata table}
 \usage{
-degCorCov(metadata, fdr = 0.05, ...)
+degCorCov(metadata, fdr = 0.05, use_pval = FALSE, ...)
 }
 \arguments{
 \item{metadata}{data.frame with samples metadata.}
@@ -13,6 +13,9 @@ degCorCov(metadata, fdr = 0.05, ...)
 \item{fdr}{numeric value to use as cutoff to determine
 the minimum fdr to consider significant correlations
 between pcs and covariates.}
+
+\item{use_pval}{boolean to indicate to use p-value instead of FDR to
+hide non-significant correlation.}
 
 \item{...}{Parameters to pass to \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap()}}.}
 }
