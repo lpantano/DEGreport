@@ -1,5 +1,8 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.25.4
+    * Fix: Export n() from dplyrs.[#27](https://github.com/lpantano/DEGreport/issues/27#issuecomment-819201968)
+
 CHANGES IN DEGreport 1.25.3
      * Feature: degPlot accepts sizePoint as parameter to indicate the size of
      the plotted points.

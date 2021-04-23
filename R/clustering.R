@@ -14,11 +14,15 @@
 
         if (!is.null(color))
         stopifnot(color  %in% names(table))
-    if (is.null(color))
-        color <- time
+    if (is.null(color)){
+        grouped <- group_by(table, genes,
+                            !!sym(time), cluster)
+    }else{
+        grouped <- group_by(table, genes,
+                            !!sym(time), cluster, !!sym(color))
+    }
     
-    group_by(table, !!sym("genes"),
-             !!sym(time), !!sym("cluster"), !!sym(color)) %>% 
+    grouped %>% 
         summarise(expression=mean(expression)) %>% 
         group_by(!!sym("genes")) %>% 
         mutate(value = scale(expression)) %>% 
@@ -458,7 +462,7 @@ degPlotCluster <- function(table, time, color = NULL,
     if (!summarize %in% names(metadata))
         metadata[,summarize] = paste0(metadata[,col_transformed], metadata[,time])
 
-    metadata_groups = metadata %>% dplyr::distinct_(summarize, .keep_all = TRUE)
+    metadata_groups = metadata %>% dplyr::distinct(!!sym(summarize), .keep_all = TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     return(metadata_groups)
 }
@@ -1048,7 +1052,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     
     colnames(norm_sign) <- colnames(counts_group)
     metadata_groups <- metadata %>%
-        dplyr::distinct_(summarize, .keep_all = TRUE)
+        dplyr::distinct(!!sym(summarize), .keep_all = TRUE)
     rownames(metadata_groups) = metadata_groups[,summarize]
     norm_sign <- norm_sign[, row.names(metadata_groups), drop = FALSE]
     if (nrow(ma) == 1){
