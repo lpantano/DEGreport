@@ -83,7 +83,7 @@ degQC <- function(counts, groups, object=NULL, pvalue=NULL){
     padj <- padj[!is.na(padj)]
     pmean <- degMean(pvalue, counts) +
         xlab("pvalues along expression quantiles") +
-        guides(fill = FALSE)
+        guides(fill = "none")
     pvar <- degVar(pvalue, counts) +
         xlab("pvalues along variance quantiles") +
         guides("") +
