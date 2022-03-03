@@ -204,7 +204,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
         xlab("mean expression across all samples") +
         ylab(expression(log[2]*" fold change")) + # nolint
         scale_color_manual(values = c("black","red", "green")) +
-        guides(color = FALSE) + 
+        guides(color = "none") + 
         geom_point(data = res_all_subset,
                    aes_string("baseMean_unshrunken",
                               "log2FoldChange_unshrunken"),
@@ -237,7 +237,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
         xlab("mean expression across all samples") +
         ylab(expression(log[2]*" fold change")) + # nolint
         scale_color_manual(values = c("black","red", "green")) +
-        guides(color = FALSE)
+        guides(color = "none")
 }
 
 .plot_correlation <- function(res_all){
@@ -251,7 +251,7 @@ degComps <- function(dds, combs = NULL, contrast = NULL,
         xlab("fold change - unshrunken") +
         ylab(expression(log[2]*" fold change - shrunken")) + # nolint
         scale_color_manual(values = c("black","red", "green")) +
-        guides(color = FALSE)
+        guides(color = "none")
 }
 
 .merge_results <- function(results, raw){

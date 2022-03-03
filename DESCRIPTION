@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.31.1
-Date: 2021-11-20
+Version: 1.31.2
+Date: 2022-03-03
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -70,6 +70,6 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

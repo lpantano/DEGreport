@@ -140,8 +140,8 @@ setMethod("deg", signature("DEGSet"),
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("treatment_B_vs_A",
 #'                                      c("condition", "A", "B")))
-#' significants(res, full = TRUE) %>% head
-#' significants(res, full = TRUE, padj = 1) %>% head # all genes
+#' significants(res, full = TRUE)
+#' significants(res, full = TRUE, padj = 1) # all genes
 #' @export
 setMethod("significants", signature("DEGSet"),
           function(object, padj = 0.05, fc = 0,
