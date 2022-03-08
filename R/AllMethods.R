@@ -224,7 +224,7 @@ setMethod("significants", signature("TopTags"),
 }
 
 .summarise_res <- function(df, cutoff){
-    inner_join(
+    dplyr::inner_join(
         df[,c("gene", names(df)[grepl("log2", names(df))])] %>% 
             gather("comparison", "value", -gene) %>% 
             mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison"))),
@@ -232,11 +232,11 @@ setMethod("significants", signature("TopTags"),
             gather("comparison", "value", -gene) %>% 
             mutate(comparison = gsub("padj_", "", !!!sym("comparison"))),
         by = c("gene", "comparison"), suffix = c("_fc", "_fdr")
-    ) %>% group_by(!!!sym("gene")) %>%
-        filter(value_fdr < cutoff) %>%
-        summarise(log2FoldChange = value_fc[which.max(value_fc)[1L]],
-                  padj = value_fdr[which.max(value_fc)[1L]]) %>% 
-        right_join(df, by = "gene")
+    ) %>% dplyr::group_by(!!!sym("gene")) %>%
+        dplyr::filter(value_fdr < cutoff) %>%
+        dplyr::summarise(log2FoldChange = value_fc[which.max(value_fc)[1L]],
+                         padj = value_fdr[which.max(value_fc)[1L]]) %>% 
+        dplyr::right_join(df, by = "gene")
 }
 
 #' @rdname significants

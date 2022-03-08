@@ -191,8 +191,8 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
     if (length(unique(dd[, groupLab])) == 1L) {
         stopifnot(length(color) == 1)
         p = p +
-            scale_color_manual(guide = FALSE, values = color) +
-            scale_fill_manual(guide = FALSE, values = color)
+            scale_color_manual(guide = "none", values = color) +
+            scale_fill_manual(guide = "none", values = color)
     }else{
         if (color == "black")
             color = "Set1"
