@@ -1,6 +1,6 @@
 DEGreport News
 
-CHANGES IN DEGreport 1.30.1
+CHANGES IN DEGreport 1.30.2
 
     * Fix error in example when using `head` after pipe
 

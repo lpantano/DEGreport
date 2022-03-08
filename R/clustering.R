@@ -186,7 +186,7 @@ degPlotCluster <- function(table, time, color = NULL,
         p <- ggplot(table, aes_string(x = time, y = "value",
                                  color = color, group = serie)) +
             geom_line() +
-            guides(color=FALSE) +
+            guides(color="none") +
             ggtitle(paste0(serie, ": ",
                           round(benchmarking[["pcts"]][[serie]]),
                           "% clusters:",
@@ -221,8 +221,8 @@ degPlotCluster <- function(table, time, color = NULL,
     if (!is.null(fixy))
         p <- p + ylim(fixy[1], fixy[2])
     if (length(unique(groups)) == 1) {
-        p <- p + scale_color_brewer(guide = FALSE, palette = "Set2") +
-            scale_fill_brewer(guide = FALSE, palette = "Set2")
+        p <- p + scale_color_brewer(guide = "none", palette = "Set2") +
+            scale_fill_brewer(guide = "none", palette = "Set2")
     }else{
         p <- p + scale_color_brewer(palette = "Set2") +
             scale_fill_brewer(palette = "Set2")
