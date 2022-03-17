@@ -196,7 +196,7 @@ setMethod("significants", signature("TopTags"),
               df <- df %>%
                   rownames_to_column("gene") %>%
                   subset(., filterOut) %>%
-                  rename(padj = FDR, log2FoldChange = logFC) %>% 
+                  dplyr::rename(padj = FDR, log2FoldChange = logFC) %>% 
                   .[order(abs(.[["logFC"]]), decreasing = TRUE),]
               if (full)
                   return(as_tibble(df))
@@ -226,11 +226,13 @@ setMethod("significants", signature("TopTags"),
 .summarise_res <- function(df, cutoff){
     dplyr::inner_join(
         df[,c("gene", names(df)[grepl("log2", names(df))])] %>% 
-            gather("comparison", "value", -gene) %>% 
-            mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison"))),
+            tidyr::pivot_longer(cols = matches("_vs_"),
+                                names_to = "comparison", values_to = "value") %>% 
+            dplyr::mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison"))),
         df[,c("gene", names(df)[grepl("padj", names(df))])] %>% 
-            gather("comparison", "value", -gene) %>% 
-            mutate(comparison = gsub("padj_", "", !!!sym("comparison"))),
+            tidyr::pivot_longer(cols = matches("_vs_"),
+                                            names_to = "comparison", values_to = "value") %>% 
+            dplyr::mutate(comparison = gsub("padj_", "", !!!sym("comparison"))),
         by = c("gene", "comparison"), suffix = c("_fc", "_fdr")
     ) %>% dplyr::group_by(!!!sym("gene")) %>%
         dplyr::filter(value_fdr < cutoff) %>%
@@ -251,7 +253,7 @@ setMethod("significants", signature("list"),
                                          padj = 1, fc = 0,
                                          full = TRUE) %>%
                           bind_rows() %>% 
-                          mutate(fdr = p.adjust(padj, "fdr")) %>% 
+                          dplyr::mutate(fdr = p.adjust(padj, "fdr")) %>% 
                           subset(., .filterTable(., direction,
                                                  "log2FoldChange", fc,
                                                  "fdr", padj)) %>%
@@ -288,10 +290,11 @@ setMethod("significants", signature("list"),
                                              x,
                                              sep = "_"))
                       top_renamed[["gene"]] <- top[["gene"]]
-                      gather(top_renamed, "variable", "value", -gene)
+                      tidyr::pivot_longer(top_renamed, cols = matches("_vs_"),
+                                          names_to = "variable", values_to =  "value")
                       }) %>% bind_rows() %>% 
-                      distinct() %>% 
-                      spread(., "variable", "value") %>% 
+                      dplyr::distinct() %>% 
+                      tidyr::spread(., "variable", "value") %>% 
                       as_tibble()
                   df <- .summarise_res(df, padj)
                   return(df)

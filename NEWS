@@ -1,5 +1,11 @@
 DEGreport News
 
+
+CHANGES IN DEGreport 1.31.4
+
+    * Migrate gather to pitvot_longer
+
+
 CHANGES IN DEGreport 1.31.3
 
     * Fix error in example when using `head` after pipe
