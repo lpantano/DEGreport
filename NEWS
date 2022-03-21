@@ -4,6 +4,7 @@ DEGreport News
 CHANGES IN DEGreport 1.31.5
 
     * Migrate gather to pitvot_longer
+    * Fix warning in melt in degcovariates
 
 
 CHANGES IN DEGreport 1.31.3

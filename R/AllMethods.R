@@ -133,15 +133,14 @@ setMethod("deg", signature("DEGSet"),
 #'  for the padj.
 #' @examples
 #' library(DESeq2)
-#' library(dplyr)
 #' dds <- makeExampleDESeqDataSet(betaSD=1)
 #' colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 #'   design(dds) <-  ~ condition + treatment
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("treatment_B_vs_A",
 #'                                      c("condition", "A", "B")))
-#' significants(res, full = TRUE)
-#' significants(res, full = TRUE, padj = 1) # all genes
+#' # significants(res, full = TRUE)
+#' # significants(res, full = TRUE, padj = 1) # all genes
 #' @export
 setMethod("significants", signature("DEGSet"),
           function(object, padj = 0.05, fc = 0,
@@ -224,15 +223,17 @@ setMethod("significants", signature("TopTags"),
 }
 
 .summarise_res <- function(df, cutoff){
+    first = df[,c("gene", names(df)[grepl("log2", names(df))])] %>% 
+        tidyr::pivot_longer(cols = matches("_vs_"),
+                            names_to = "comparison", values_to = "value") %>% 
+        dplyr::mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison")))
+    second = df[,c("gene", names(df)[grepl("padj", names(df))])] %>% 
+        tidyr::pivot_longer(cols = matches("_vs_"),
+                            names_to = "comparison", values_to = "value") %>% 
+        dplyr::mutate(comparison = gsub("padj_", "", !!!sym("comparison")))
     dplyr::inner_join(
-        df[,c("gene", names(df)[grepl("log2", names(df))])] %>% 
-            tidyr::pivot_longer(cols = matches("_vs_"),
-                                names_to = "comparison", values_to = "value") %>% 
-            dplyr::mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison"))),
-        df[,c("gene", names(df)[grepl("padj", names(df))])] %>% 
-            tidyr::pivot_longer(cols = matches("_vs_"),
-                                            names_to = "comparison", values_to = "value") %>% 
-            dplyr::mutate(comparison = gsub("padj_", "", !!!sym("comparison"))),
+        first,
+        second,
         by = c("gene", "comparison"), suffix = c("_fc", "_fdr")
     ) %>% dplyr::group_by(!!!sym("gene")) %>%
         dplyr::filter(value_fdr < cutoff) %>%

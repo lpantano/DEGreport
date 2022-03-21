@@ -92,7 +92,8 @@
     cor_mat[["covar"]] <- factor(cor_mat[["covar"]],
                                  levels = colnames(all_cor_p))
 
-    cor_mat[["r"]] <- melt(all_cor_vals)[["value"]]
+    # cor_mat[["r"]] <- melt(all_cor_vals)[["value"]]
+    cor_mat[["r"]] <- as.vector(all_cor_vals)
     cor_mat[["fdr"]] <- p.adjust(cor_mat[["pvalue"]], method = "fdr")
     return(list(mat = cor_mat,
                 effects.significantcovars = effects.significantcovars))
