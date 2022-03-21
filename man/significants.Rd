@@ -66,7 +66,7 @@ colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 dds <- DESeq(dds)
 res <- degComps(dds, contrast = list("treatment_B_vs_A",
                                      c("condition", "A", "B")))
-# significants(res, full = TRUE)
+significants(res, full = TRUE)
 # significants(res, full = TRUE, padj = 1) # all genes
 }
 \author{

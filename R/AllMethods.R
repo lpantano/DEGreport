@@ -139,7 +139,7 @@ setMethod("deg", signature("DEGSet"),
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("treatment_B_vs_A",
 #'                                      c("condition", "A", "B")))
-#' # significants(res, full = TRUE)
+#' significants(res, full = TRUE)
 #' # significants(res, full = TRUE, padj = 1) # all genes
 #' @export
 setMethod("significants", signature("DEGSet"),
@@ -226,19 +226,19 @@ setMethod("significants", signature("TopTags"),
     first = df[,c("gene", names(df)[grepl("log2", names(df))])] %>% 
         tidyr::pivot_longer(cols = matches("_vs_"),
                             names_to = "comparison", values_to = "value") %>% 
-        dplyr::mutate(comparison = gsub("log2FoldChange_", "", !!!sym("comparison")))
+        dplyr::mutate(comparison = gsub("log2FoldChange_", "", comparison))
     second = df[,c("gene", names(df)[grepl("padj", names(df))])] %>% 
         tidyr::pivot_longer(cols = matches("_vs_"),
                             names_to = "comparison", values_to = "value") %>% 
-        dplyr::mutate(comparison = gsub("padj_", "", !!!sym("comparison")))
+        dplyr::mutate(comparison = gsub("padj_", "", comparison))
     dplyr::inner_join(
         first,
         second,
         by = c("gene", "comparison"), suffix = c("_fc", "_fdr")
-    ) %>% dplyr::group_by(!!!sym("gene")) %>%
+    ) %>% dplyr::group_by(gene) %>% 
         dplyr::filter(value_fdr < cutoff) %>%
         dplyr::summarise(log2FoldChange = value_fc[which.max(value_fc)[1L]],
-                         padj = value_fdr[which.max(value_fc)[1L]]) %>% 
+                         padj = value_fdr[which.max(value_fc)[1L]]) %>%
         dplyr::right_join(df, by = "gene")
 }
 
