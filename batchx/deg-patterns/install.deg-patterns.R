@@ -1,0 +1,8 @@
+options(repos = list(CRAN="http://cran.rstudio.com/"))
+install.packages(c("getopt","ggpubr","plotly"))
+if (!requireNamespace("BiocManager", dependecies=TRUE, quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ComplexHeatmap", ask = FALSE)
+if (!requireNamespace("devtools", dependecies=TRUE, quietly=TRUE))
+  install.packages('devtools')
+BiocManager::install("DEGreport", ask = FALSE)

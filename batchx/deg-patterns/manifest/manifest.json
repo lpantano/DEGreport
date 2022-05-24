@@ -1,0 +1,136 @@
+{
+    "name": "degreport/deg-patterns",
+    "title": "Identifies clusters in a DESeq2 object using the degPatterns function from DEGreport.",
+    "version": "0.0.4",
+    "schema": {
+        "input": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "deseq2Object": {
+                    "type": "string",
+                    "format": "file",
+                    "required": true,
+                    "description": "DESeq2 object in RDS format. This object is generated after running the `DESeq´ function."
+                },
+                "qValue": {
+                    "type": "number",
+                    "required": false,
+                    "default": 0.05,
+                    "description": "Q-value threshold to filter elements from the DESeq2 object."
+                },
+                "log2FoldChange": {
+                    "type": "number",
+                    "required": false,
+                    "default": 0,
+                    "description": "Min absolute log2 fold-change threshold to filter elements from the DESeq2 object."
+                },
+                "minElements": {
+                    "type": "integer",
+                    "required": false,
+                    "default": 15,
+                    "description": "Min number of elements to form a cluster."
+                },
+                "explanatoryVar": {
+                    "type": "string",
+                    "required": true,
+                    "description": "Explanatory variable in the DESeq2 object (e.g. time). It will be used on the x-axis of the plots. This variable must exist in the DESeq2 object."
+                },
+                "groupVar": {
+                    "type": "string",
+                    "required": false,
+                    "description": "Group variable in the DESeq2 object (e.g. genotype). It will determine how samples are grouped. This variable must exist in the DESeq2 object."
+                },
+                "clusterMethod": {
+                    "type": "string",
+                    "required": false,
+                    "enum": [
+                        "diana",
+                        "consensus"
+                    ],
+                    "default": "diana",
+                    "description": "Cluster method."
+                },
+                "removeOutliers": {
+                    "type": "boolean",
+                    "required": false,
+                    "default": true,
+                    "description": "Remove outliers from the cluster distribution."
+                },
+                "scale": {
+                    "type": "boolean",
+                    "required": false,
+                    "default": true,
+                    "description": "Scale DESeq2 normalized count matrix."
+                },
+                "plotsPerColumn": {
+                    "type": "integer",
+                    "required": false,
+                    "default": 2,
+                    "minimum": 1,
+                    "maximum": 5,
+                    "description": "Number of plots per column in the `summaryPlot´ output file."
+                },
+                "plotsPerRow": {
+                    "type": "integer",
+                    "required": false,
+                    "default": 2,
+                    "minimum": 1,
+                    "maximum": 5,
+                    "description": "Number of plots per row in the `summaryPlot´ output file."
+                },
+                "outputPrefix": {
+                    "type": "string",
+                    "required": false,
+                    "default": "deg-patterns",
+                    "description": "Prefix name for output files."
+                }
+            }
+        },
+        "output": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "degReport": {
+                    "type": "string",
+                    "format": "file",
+                    "required": true,
+                    "description": "Table describing the association between each element and the assigned cluster."
+                },
+                "elementClusterMap": {
+                    "type": "string",
+                    "format": "file",
+                    "required": true,
+                    "description": "Table describing what cluster has been assigned to each element."
+                },
+                "clusterCount": {
+                    "type": "string",
+                    "format": "file",
+                    "required": true,
+                    "description": "Table summarizing the number of elements per cluster."
+                },
+                "summaryPlot": {
+                    "type": "string",
+                    "format": "file",
+                    "required": true,
+                    "description": "PDF file displaying plots of all the identified clusters."
+                },
+                "clusterPlots": {
+                    "type": "string",
+                    "format": "file",
+                    "required": true,
+                    "description": "Compressed tar.gz file with individual Plotly cluster plots."
+                }
+            }
+        }
+    },
+
+    "author": "batchx@lpantano",
+    "runtime": {
+        "minMem": 4000
+    },
+    "scm" : "https://github.com/lpantano/DEGreport",
+    "changeLog": "Corrected documentation."
+}
