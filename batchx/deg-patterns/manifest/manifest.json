@@ -1,7 +1,7 @@
 {
     "name": "degreport/deg-patterns",
     "title": "Identifies clusters in a DESeq2 object using the degPatterns function from DEGreport.",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "schema": {
         "input": {
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -132,5 +132,5 @@
         "minMem": 4000
     },
     "scm" : "https://github.com/lpantano/DEGreport",
-    "changeLog": "Corrected documentation."
+    "changeLog": "Corrected picture."
 }
