@@ -7,6 +7,7 @@
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![BioC Downloads](http://bioconductor.org//shields/downloads/DEGreport.svg)](http://bioconductor.org/packages/3.6/bioc/html/DEGreport.html)
 [![coverage](https://img.shields.io/codecov/c/github/lpantano/DEGreport/master.svg)](https://codecov.io/github/lpantano/DEGreport?branch=master)
+[![Support this project by running your production jobs at BatchX](https://images.batchx.io/gh-badge-logo.svg)](https://platform.batchx.io/lpantano-team/tools/degreport%2Fdeg-patterns "Support this project by running your production jobs at BatchX")
 
 QCs, figures and analyses after differential expression with DESeq2 or other similar tool.
 
