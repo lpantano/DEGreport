@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.33.0
-Date: 2022-03-21
+Version: 1.33.1
+Date: 2022-06-17
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -21,7 +21,7 @@ Suggests:
     statmod,
     testthat
 Depends:
-    R (>= 3.6.0)
+    R (>= 4.0.0)
 Imports:
     utils,
     methods,
@@ -45,7 +45,6 @@ Imports:
     logging,
     lasso2,
     magrittr,
-    Nozzle.R1,
     psych,
     RColorBrewer,
     reshape,
