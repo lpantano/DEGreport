@@ -60,7 +60,6 @@ according to some thresholds from a \link{DEGSet},
 }
 \examples{
 library(DESeq2)
-library(dplyr)
 dds <- makeExampleDESeqDataSet(betaSD=1)
 colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
   design(dds) <-  ~ condition + treatment
@@ -68,7 +67,7 @@ dds <- DESeq(dds)
 res <- degComps(dds, contrast = list("treatment_B_vs_A",
                                      c("condition", "A", "B")))
 significants(res, full = TRUE)
-significants(res, full = TRUE, padj = 1) # all genes
+# significants(res, full = TRUE, padj = 1) # all genes
 }
 \author{
 Lorena Pantano

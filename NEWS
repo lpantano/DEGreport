@@ -1,9 +1,15 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.33.1
 
-CHANGES IN DEGreport 1.31.4
+    * Remove Nozzle.R1 from dependencies
+
+
+CHANGES IN DEGreport 1.31.6
 
     * Migrate gather to pitvot_longer
+    * Fix warning in melt in degcovariates
+    * Fix significants function, issue with !!!sym
 
 
 CHANGES IN DEGreport 1.31.3
