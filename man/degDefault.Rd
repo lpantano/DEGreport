@@ -23,7 +23,6 @@ degCorrect(object, fdr)
 \description{
 It can accept a list of new padj values matching the
 same dimmensions than the current vector.
-It can calculate the \code{lfdr} based on \link[fdrtool:fdrtool]{fdrtool::fdrtool} function.
 }
 \examples{
 library(DESeq2)
@@ -36,7 +35,5 @@ res <- degComps(dds, contrast = list("treatment_B_vs_A"))
 # library(fdrtools); degCorrect(res, fdr = "lfdr-stat")
 }
 \author{
-Lorena Pantano
-
 Lorena Pantano
 }

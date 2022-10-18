@@ -68,5 +68,4 @@
 #' @importFrom rlang sym
 #' @importFrom magrittr set_colnames set_rownames
 #' @importFrom stringr str_split
-#' @import lasso2
 "_PACKAGE"

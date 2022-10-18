@@ -24,7 +24,6 @@ setMethod("degDefault", signature("DEGSet"),
 #' 
 #' It can accept a list of new padj values matching the 
 #' same dimmensions than the current vector.
-#' It can calculate the `lfdr` based on [fdrtool::fdrtool] function.
 #' 
 #' @param object [DEGSet]
 #' @param fdr It can be `fdr-stat`, `fdr-pvalue`, vector of new padj
