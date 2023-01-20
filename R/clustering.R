@@ -120,9 +120,13 @@ degPlotCluster <- function(table, time, color = NULL,
     
     
     splan <- length(unique(table[[time]])) - 1L
-    
+    table$title <- table$title %>% as.factor()
+    old <- table$title %>% levels() %>% stringi::stri_extract_first(., regex="\\d+") %>% as.integer()
+    index <- sort(old, index.return = TRUE)[[2]]
+    table$title <- factor(table$title, levels = levels(table$title)[index])
     p <- ggplot(table, aes_string(x = time, y = "value",
                                    fill = color, color = color))
+    
     if (boxes)
         p <- p + geom_boxplot(alpha = 0,
                               outlier.size = 0,
@@ -319,16 +323,19 @@ degPlotCluster <- function(table, time, color = NULL,
 }
 
 .select_genes <- function(c, counts_group, minc=15,
-                          reduce=FALSE, cutoff=0.30, h = NULL){
-    if (is.null(h))
+                          reduce=FALSE, cutoff=0.30, nClusters = NULL){
+    if (is.null(nClusters)){
         h <- c$dc
-    select <- cutree(as.hclust(c), h = h)
-    select <- select[select %in% names(table(select))[table(select) > minc]]
-
+        select <- cutree(as.hclust(c), h = h)
+        select <- select[select %in% names(table(select))[table(select) > minc]]}
+    else {
+        select <- cutree(as.hclust(c), k = nClusters)
+        select <- select[select %in% names(table(select))[table(select) > minc]]}
+    
     if (reduce)
         select <- .reduce(select, counts_group)
-    select <- select[select %in% names(table(select))[table(select) > minc]]
-    message("Working with ", length(select), " genes after filtering: minc > ",minc)
+        select <- select[select %in% names(table(select))[table(select) > minc]]
+        message("Working with ", length(select), " genes after filtering: minc > ",minc)
     return(select)
 }
 
@@ -938,6 +945,7 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #'    with multiple time points**.
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
+#' @param nClusters an integer scalar or vector with the desired number of groups
 #' @details 
 #' It can work with one or more groups with 2 or
 #' more several time points. 
@@ -1007,7 +1015,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        pattern = NULL,
                        groupDifference = NULL,
                        eachStep = FALSE,
-                       plot=TRUE, fixy=NULL){
+                       plot=TRUE, fixy=NULL, nClusters = NULL){
     benchmarking <- NULL
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
@@ -1068,7 +1076,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         cluster_genes = .make_clusters(counts_group)
         groups <- .select_genes(cluster_genes, norm_sign, minc,
                                reduce = reduce,
-                               cutoff = cutoff)
+                               cutoff = cutoff, nClusters = nClusters)
         benchmarking <- .benckmark_cutoff(cluster_genes, norm_sign, minc)
     }else if (consensusCluster & is.null(pattern)){
         cluster_genes <- .make_concensus_cluster(counts_group)
@@ -1126,9 +1134,45 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
             print(p)
     }
     
+    dend_plot <- NA
+    if (length(unique(groups)) > 0 & is.null(nClusters)){
+        dend <- cluster_genes 
+        h = dend$dc
+        clust <- cutree(as.hclust(dend), h = h)
+        clust.cutree <- dendextend:::cutree(dend, h = h, order_clusters_as_data = FALSE)
+        dend <- as.dendrogram(dend, h = h)
+        idx <- order(names(clust.cutree))
+        clust.cutree <- clust.cutree[idx]
+        df.merge <- merge(clust,clust.cutree,by='row.names')
+        df.merge.sorted <- df.merge[order(df.merge$y),]
+        lbls<-unique(df.merge.sorted$x)
+        dend_plot <- dendextend::color_branches(dend, h = h, groupLabels = lbls) %>% dendextend::set("labels", "")
+       
+        
+        if (plot)
+            plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
+    }
+    if (length(unique(groups)) > 0 & is.numeric(nClusters)){
+        dend <- cluster_genes 
+        clust <- cutree(as.hclust(dend), k = nClusters)
+        clust.cutree <- dendextend:::cutree(dend, k = nClusters, order_clusters_as_data = FALSE)
+        dend <- as.dendrogram(dend, k = nClusters)
+        idx <- order(names(clust.cutree))
+        clust.cutree <- clust.cutree[idx]
+        df.merge <- merge(clust,clust.cutree,by='row.names')
+        df.merge.sorted <- df.merge[order(df.merge$y),]
+        lbls<-unique(df.merge.sorted$x)
+        dend_plot <- color_branches(dend, k = nClusters, groupLabels = lbls) %>% set("labels", "")
+        
+        
+        if (plot)
+            plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
+    }
+    
     invisible(list(df = df,
          pass = unique(groups),
          plot = p,
+         dend = dend_plot,
          hr = cluster_genes,
          normalized = normalized,
          summarise = summarise,

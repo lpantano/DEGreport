@@ -33,10 +33,8 @@ colData(dds)[["treatment"]] <- sample(colData(dds)[["condition"]], 12)
 design(dds) <-  ~ condition + treatment
 dds <- DESeq(dds)
 res <- degComps(dds, contrast = list("treatment_B_vs_A"))
-# library(fdrtools); degCorrect(res, fdr = "lfdr-stat")
+# library(fdrtool); degCorrect(res, fdr = "lfdr-stat")
 }
 \author{
-Lorena Pantano
-
 Lorena Pantano
 }

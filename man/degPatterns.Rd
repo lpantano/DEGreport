@@ -19,7 +19,8 @@ degPatterns(
   groupDifference = NULL,
   eachStep = FALSE,
   plot = TRUE,
-  fixy = NULL
+  fixy = NULL,
+  nClusters = NULL
 )
 }
 \arguments{
