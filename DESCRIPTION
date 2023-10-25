@@ -33,6 +33,7 @@ Imports:
     cowplot,
     ConsensusClusterPlus,
     cluster,
+    dendextend,
     DESeq2,
     dplyr,
     edgeR,
@@ -52,6 +53,7 @@ Imports:
     scales,
     stats,
     stringr,
+    stringi,
     S4Vectors,
     SummarizedExperiment,
     tidyr,
@@ -69,6 +71,6 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
