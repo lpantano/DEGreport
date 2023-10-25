@@ -1,6 +1,10 @@
 DEGreport News
 
 CHANGES IN DEGreport 1.33.1
+    * remove lasso and fdrtools
+    * merge https://github.com/lpantano/DEGreport/pull/56
+
+CHANGES IN DEGreport 1.33.1
 
     * Remove Nozzle.R1 from dependencies
 

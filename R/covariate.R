@@ -158,12 +158,13 @@
     if (method == "lm"){
         pc_sig <- lm(PC~., data=data) %>% 
             broom::tidy()
-    }else if (method == "lasso"){
-        pc_sig <- lm.lasso <- l1ce(PC ~ 0 + ., data=data, sweep.out = NULL) %>% 
-            summary() %>% 
-            .[["coefficients"]] %>% 
-            broom::tidy()
     }
+    # else if (method == "lasso"){
+    #     pc_sig <- lm.lasso <- l1ce(PC ~ 0 + ., data=data, sweep.out = NULL) %>% 
+    #         summary() %>% 
+    #         .[["coefficients"]] %>% 
+    #         broom::tidy()
+    # }
     names(pc_sig) <- c("term", "estimate", "std.error", "statistic", "p.value")
     return(pc_sig)
 }
@@ -228,7 +229,7 @@
 #' @param smart boolean. Whether to avoid normalization of the
 #'   numeric covariates when calculating importance. This is not
 #'   used if `legacy = TRUE`. See @details for more information.
-#' @param method character. Whether to use `lm` or `lasso` to
+#' @param method character. Whether to use `lm` to
 #'   calculate the significance of the variable during reduction
 #'   step. See @details for more information.
 #' @param plot Whether to plot or not the correlation matrix.
@@ -258,7 +259,7 @@
 #'   of the covariates effect on the PCs. For that, this function
 #'   uses `lm` to regress the data and uses the p-value calculated by
 #'   each variable in the model to define significance (pvalue < 0.05).
-#'   `lm` or `lasso` can be used here. Variables with a black stroke
+#'   `lm` can be used here. Variables with a black stroke
 #'   are significant after this step. Variables with grey stroke 
 #'   are significant at the first pass considering p.value < 0.05
 #'   for the correlation analysis.

@@ -1,6 +1,6 @@
 Package: DEGreport
-Version: 1.33.1
-Date: 2022-06-17
+Version: 1.33.2
+Date: 2023-10-25
 Type: Package
 Title: Report of DEG analysis
 Description: Creation of a HTML report of differential expression
@@ -44,7 +44,6 @@ Imports:
     grDevices,
     knitr,
     logging,
-    lasso2,
     magrittr,
     psych,
     RColorBrewer,
@@ -60,14 +59,14 @@ Imports:
     tibble
 Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com", 
   role = c("aut", "cre")),
-  person("John", "Hutchinson", email = "@jnhutchinson", role = c("ctb")),
-  person("Victor", "Barrera", email = "@vbarrera", role = c("ctb")),
-  person("Mary", "Piper", email = "@marypiper", role = c("ctb")),
-  person("Radhika", "Khetani", email = "@rkhetani", role = c("ctb")),
+  person("John", "Hutchinson",  role = c("ctb")),
+  person("Victor", "Barrera",  role = c("ctb")),
+  person("Mary", "Piper",  role = c("ctb")),
+  person("Radhika", "Khetani",  role = c("ctb")),
   person("Kenneth", "Daily", role=c("ctb")),
   person("Thanneer", "Malai Perumal", role=c("ctb")),
-  person("Rory", "Kirchner", email="@roryk", role=c("ctb")),
-  person("Michael", "Steinbaugh", email="@mjsteinbaugh", role=c("ctb")))
+  person("Rory", "Kirchner",  role=c("ctb")),
+  person("Michael", "Steinbaugh",  role=c("ctb")))
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr
