@@ -37,7 +37,6 @@ setMethod("degDefault", signature("DEGSet"),
 #' design(dds) <-  ~ condition + treatment
 #' dds <- DESeq(dds)
 #' res <- degComps(dds, contrast = list("treatment_B_vs_A"))
-#' # library(fdrtools); degCorrect(res, fdr = "lfdr-stat")
 #' @export
 setMethod("degCorrect", signature("DEGSet"),
           function(object, fdr) {

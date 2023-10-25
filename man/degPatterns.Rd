@@ -19,7 +19,8 @@ degPatterns(
   groupDifference = NULL,
   eachStep = FALSE,
   plot = TRUE,
-  fixy = NULL
+  fixy = NULL,
+  nClusters = NULL
 )
 }
 \arguments{
@@ -72,6 +73,8 @@ with multiple time points}.}
 \item{plot}{boolean plot the clusters found}
 
 \item{fixy}{vector integers used as ylim in plot}
+
+\item{nClusters}{an integer scalar or vector with the desired number of groups}
 }
 \value{
 list wiht two items:

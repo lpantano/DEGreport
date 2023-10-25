@@ -158,9 +158,13 @@
     if (method == "lm"){
         pc_sig <- lm(PC~., data=data) %>% 
             broom::tidy()
-    }else if (method == "lasso"){
-        stop("method not supported since 3.14")
     }
+    # else if (method == "lasso"){
+    #     pc_sig <- lm.lasso <- l1ce(PC ~ 0 + ., data=data, sweep.out = NULL) %>% 
+    #         summary() %>% 
+    #         .[["coefficients"]] %>% 
+    #         broom::tidy()
+    # }
     names(pc_sig) <- c("term", "estimate", "std.error", "statistic", "p.value")
     return(pc_sig)
 }
