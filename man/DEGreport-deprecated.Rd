@@ -40,6 +40,7 @@ Other contributors:
   \item Thanneer Malai Perumal [contributor]
   \item Rory Kirchner [contributor]
   \item Michael Steinbaugh [contributor]
+  \item Ivo Zeller [contributor]
 }
 
 }
