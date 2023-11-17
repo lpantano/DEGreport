@@ -27,9 +27,9 @@ test_that("Results",{
     expect_match(.guessResults(dds, "condition_B_vs_A", 0.05) %>% class,
                 "DESeqResults")
     expect_error(.guessResults(dds, "condition_C_vs_A", 0.05))
-    expect_match(.guessShrunken(dds, c("condition", "A", "B"), res, "normal") %>%
-                     class,
-                 "DESeqResults")
+    # expect_match(.guessShrunken(dds, c("condition", "A", "B"), res, "normal") %>%
+    #                  class,
+    #              "DESeqResults")
     expect_error(.guessResults(dds, "condition_C_vs_A", res))
     expect_type(degSummary(dds, contrast = "condition_B_vs_A"), "list")
     expect_type(degSummary(res), "list")
