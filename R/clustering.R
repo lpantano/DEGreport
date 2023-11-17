@@ -125,7 +125,7 @@ degPlotCluster <- function(table, time, color = NULL,
     index <- sort(old, index.return = TRUE)[[2]]
     table$title <- factor(table$title, levels = levels(table$title)[index])
     p <- ggplot(table, aes_string(x = time, y = "value",
-                                   fill = color, color = color))
+                                  fill = color, color = color))
     
     if (boxes)
         p <- p + geom_boxplot(alpha = 0,
@@ -144,12 +144,15 @@ degPlotCluster <- function(table, time, color = NULL,
     if (lines)
         p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
     if (facet)
-        p <- p + facet_wrap(~title)
+        p <- p + facet_wrap(~title, nrow = 2)
+    
     p <- p + 
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
         ylab("Z-score of gene abundance") +
-        xlab("")
-    p
+        xlab("months")
+    p + theme_bw() + theme(text= element_text(size = 20), legend.position = "none"
+                           #strip.background = element_rect(fill = "skyblue")
+    ) 
     
 }
 
@@ -219,6 +222,7 @@ degPlotCluster <- function(table, time, color = NULL,
                                      variable_name = "sample"))
     ma_long$x <- xs[ma_long$sample]
     ma_long$group <- groups[ma_long$sample]
+    plotting_data <<- ma_long
     p <- suppressWarnings(degPlotCluster(ma_long, "x", "group", facet = FALSE))
     p <- p +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )"))
@@ -1093,7 +1097,11 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         cluster_genes <- .find_pattern(counts_group, pattern)
         groups <- .select_pattern(cluster_genes)
     }
-    
+    temp <- names(groups)
+    groups <- case_when(groups == 1 ~ 1, groups == 3 ~ 2, groups == 4 ~ 3,
+                        groups == 5 ~ 4, groups == 2 ~ 5, groups == 6 ~ 6, groups == 7 ~7 )
+    names(groups) <- temp
+
     df <- data.frame(genes = names(groups), 
                     cluster = groups, stringsAsFactors = FALSE)
 
@@ -1125,7 +1133,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     
     plot_benchmarking <- .plot_benchmarking(normalized, benchmarking, time, col)
     plot_benchmarking_curve <- .plot_benchmarking_curve(benchmarking)
-
+    plotting_data <<- list(norm = normalized, time = time, col = col, min_genes = minc) 
     if (length(unique(groups)) > 0){
         p <- degPlotCluster(normalized, time, col, min_genes = minc)
         if (!is.null(fixy))
@@ -1145,8 +1153,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         clust.cutree <- clust.cutree[idx]
         df.merge <- merge(clust,clust.cutree,by='row.names')
         df.merge.sorted <- df.merge[order(df.merge$y),]
-        lbls<-unique(df.merge.sorted$x)
-        dend_plot <- dendextend::color_branches(dend, h = h, groupLabels = lbls) %>% dendextend::set("labels", "")
+        lbls <- unique(df.merge.sorted$x)
+        dend_plot <- dendextend::color_branches(dend, h = h) %>% dendextend::set("labels", "")
        
         
         if (plot)
@@ -1162,8 +1170,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         df.merge <- merge(clust,clust.cutree,by='row.names')
         df.merge.sorted <- df.merge[order(df.merge$y),]
         lbls<-unique(df.merge.sorted$x)
-        dend_plot <- color_branches(dend, k = nClusters, groupLabels = lbls) %>% set("labels", "")
-        
+        dend_plot <- color_branches(dend, k = nClusters, groupLabels = T ) %>% set("labels", "")
         
         if (plot)
             plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
