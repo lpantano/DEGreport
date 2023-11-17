@@ -1,5 +1,9 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.38.2
+    
+    * Fix error in check report about stack limit size
+
 CHANGES IN DEGreport 1.38.1
 
     * remove lasso and fdrtools

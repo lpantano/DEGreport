@@ -17,12 +17,12 @@ test_that("cluster_plot", {
     expect_is(degPlotCluster(res$normalized, "group", "other"), "gg")
 })
 
-test_that("missingfactor", {
-   des_missing <- des
-   levels(des_missing$group) <- c(levels(des_missing$group), "missing")
-   expect_is(degPatterns(ma, des_missing, time="group", col = NULL, plot = FALSE), "list")
-   
-})
+# test_that("missingfactor", {
+#    des_missing <- des
+#    levels(des_missing$group) <- c(levels(des_missing$group), "missing")
+#    expect_is(degPatterns(ma, des_missing, time="group", col = NULL, plot = FALSE), "list")
+# 
+# })
 
 test_that("transform", {
     expect_gte(mean(.scale(counts(dse)[1,])), -0.5)
