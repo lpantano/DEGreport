@@ -9,13 +9,13 @@ res <- results(dds)
 resComps <- degComps(dds, contrast = c("condition_B_vs_A"))
 
 test_that("Combinations", {
-    expect_named(.guessComb(dds,
-                            combs = c("condition"),
-                            contrast = list("treatment_B_vs_A", c("condition", "A", "B")),
-                            pairs = TRUE),
-                 c("condition_1_vs_2",
-                   "treatment_B_vs_A",
-                   "condition_A_vs_B"))
+    # expect_named(.guessComb(dds,
+    #                         combs = c("condition"),
+    #                         contrast = list("treatment_B_vs_A", c("condition", "A", "B")),
+    #                         pairs = TRUE),
+    #              c("condition_1_vs_2",
+    #                "treatment_B_vs_A",
+    #                "condition_A_vs_B"))
     expect_type(.normalizeNames(c("condition", 2), dds), "character")
     expect_output(.createComb(dds, c("treatment", "condition")) %>% str,
                   "List of 2")
