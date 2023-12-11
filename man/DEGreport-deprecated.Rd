@@ -32,14 +32,14 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item John Hutchinson \email{@jnhutchinson} [contributor]
-  \item Victor Barrera \email{@vbarrera} [contributor]
-  \item Mary Piper \email{@marypiper} [contributor]
-  \item Radhika Khetani \email{@rkhetani} [contributor]
+  \item John Hutchinson [contributor]
+  \item Victor Barrera [contributor]
+  \item Mary Piper [contributor]
+  \item Radhika Khetani [contributor]
   \item Kenneth Daily [contributor]
   \item Thanneer Malai Perumal [contributor]
-  \item Rory Kirchner \email{@roryk} [contributor]
-  \item Michael Steinbaugh \email{@mjsteinbaugh} [contributor]
+  \item Rory Kirchner [contributor]
+  \item Michael Steinbaugh [contributor]
 }
 
 }

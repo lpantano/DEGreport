@@ -1,5 +1,22 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.39.2
+
+    * Add ctb
+  
+CHANGES IN DEGreport 1.39.1
+
+    * merging changes from 1.38.1
+
+CHANGES IN DEGreport 1.38.1
+
+    * remove lasso and fdrtools
+    * merge https://github.com/lpantano/DEGreport/pull/56
+
+CHANGES IN DEGreport 1.33.2
+
+    * Remove lasso2 from dependencies
+
 CHANGES IN DEGreport 1.33.1
 
     * Remove Nozzle.R1 from dependencies
