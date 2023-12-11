@@ -144,7 +144,7 @@ degPlotCluster <- function(table, time, color = NULL,
     if (lines)
         p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
     if (facet)
-        p <- p + facet_wrap(~title, nrow = 2)
+        p <- p + facet_wrap(~title, nrow = 3)
     
     p <- p + 
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
@@ -1098,10 +1098,45 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         groups <- .select_pattern(cluster_genes)
     }
     temp <- names(groups)
-    groups <- case_when(groups == 1 ~ 1, groups == 3 ~ 2, groups == 4 ~ 3,
-                        groups == 5 ~ 4, groups == 2 ~ 5, groups == 6 ~ 6, groups == 7 ~7 )
+    
+   
+    
+    dend_plot <- NA
+    if (length(unique(groups)) > 0 & is.null(nClusters)){
+        dend <- cluster_genes 
+        h = dend$dc
+        clust <- cutree(as.hclust(dend), h = h)
+        clust.cutree <- dendextend:::cutree(dend, h = h, order_clusters_as_data = FALSE)
+        dend <- as.dendrogram(dend, h = h)
+        idx <- order(names(clust.cutree))
+        clust.cutree <- clust.cutree[idx]
+        df.merge <- merge(clust,clust.cutree,by='row.names')
+        df.merge.sorted <- df.merge[order(df.merge$y),]
+        lbls <- unique(df.merge.sorted$x)
+        dend_plot <- dendextend::color_branches(dend, h = h) %>% dendextend::set("labels", "")
+        
+        
+        if (plot)
+            plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
+    }
+    if (length(unique(groups)) > 0 & is.numeric(nClusters)){
+        dend <- cluster_genes 
+        clust <- cutree(as.hclust(dend), k = nClusters)
+        clust.cutree <- dendextend:::cutree(dend, k = nClusters, order_clusters_as_data = FALSE)
+        dend <- as.dendrogram(dend, k = nClusters)
+        idx <- order(names(clust.cutree))
+        clust.cutree <- clust.cutree[idx]
+        df.merge <- merge(clust,clust.cutree,by='row.names')
+        df.merge.sorted <- df.merge[order(df.merge$y),]
+        lbls<-unique(df.merge.sorted$x)
+        dend_plot <- color_branches(dend, k = nClusters, groupLabels = TRUE, warn = FALSE ) %>% set("labels", "")
+        
+        if (plot)
+            plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
+    }
+    
+    groups <- match(groups, lbls)
     names(groups) <- temp
-
     df <- data.frame(genes = names(groups), 
                     cluster = groups, stringsAsFactors = FALSE)
 
@@ -1142,39 +1177,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
             print(p)
     }
     
-    dend_plot <- NA
-    if (length(unique(groups)) > 0 & is.null(nClusters)){
-        dend <- cluster_genes 
-        h = dend$dc
-        clust <- cutree(as.hclust(dend), h = h)
-        clust.cutree <- dendextend:::cutree(dend, h = h, order_clusters_as_data = FALSE)
-        dend <- as.dendrogram(dend, h = h)
-        idx <- order(names(clust.cutree))
-        clust.cutree <- clust.cutree[idx]
-        df.merge <- merge(clust,clust.cutree,by='row.names')
-        df.merge.sorted <- df.merge[order(df.merge$y),]
-        lbls <- unique(df.merge.sorted$x)
-        dend_plot <- dendextend::color_branches(dend, h = h) %>% dendextend::set("labels", "")
-       
-        
-        if (plot)
-            plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
-    }
-    if (length(unique(groups)) > 0 & is.numeric(nClusters)){
-        dend <- cluster_genes 
-        clust <- cutree(as.hclust(dend), k = nClusters)
-        clust.cutree <- dendextend:::cutree(dend, k = nClusters, order_clusters_as_data = FALSE)
-        dend <- as.dendrogram(dend, k = nClusters)
-        idx <- order(names(clust.cutree))
-        clust.cutree <- clust.cutree[idx]
-        df.merge <- merge(clust,clust.cutree,by='row.names')
-        df.merge.sorted <- df.merge[order(df.merge$y),]
-        lbls<-unique(df.merge.sorted$x)
-        dend_plot <- color_branches(dend, k = nClusters, groupLabels = T ) %>% set("labels", "")
-        
-        if (plot)
-            plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
-    }
+    
     
     invisible(list(df = df,
          pass = unique(groups),
