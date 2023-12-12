@@ -67,7 +67,7 @@ Authors@R: c(person("Lorena", "Pantano", email = "lorena.pantano@gmail.com",
   person("Thanneer", "Malai Perumal", role=c("ctb")),
   person("Rory", "Kirchner",  role=c("ctb")),
   person("Michael", "Steinbaugh",  role=c("ctb")),
-  person("Ivo", "Zeller",  role=c("ctb")),)
+  person("Ivo", "Zeller",  role=c("ctb")))
 Maintainer: Lorena Pantano <lorena.pantano@gmail.com>
 License: MIT + file LICENSE
 VignetteBuilder: knitr

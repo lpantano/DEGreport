@@ -150,9 +150,7 @@ degPlotCluster <- function(table, time, color = NULL,
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
         ylab("Z-score of gene abundance") +
         xlab("months")
-    p + theme_bw() + theme(text= element_text(size = 20), legend.position = "none"
-                           #strip.background = element_rect(fill = "skyblue")
-    ) 
+    p + theme_bw() 
     
 }
 
@@ -1113,7 +1111,9 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         df.merge <- merge(clust,clust.cutree,by='row.names')
         df.merge.sorted <- df.merge[order(df.merge$y),]
         lbls <- unique(df.merge.sorted$x)
-        dend_plot <- dendextend::color_branches(dend, h = h) %>% dendextend::set("labels", "")
+        dend_plot <- dendextend::color_branches(dend, h = h, groupLabels = TRUE,
+                                                warn = FALSE) %>% 
+            dendextend::set("labels", "") %>% suppressWarnings()
         
         
         if (plot)
@@ -1128,8 +1128,12 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         clust.cutree <- clust.cutree[idx]
         df.merge <- merge(clust,clust.cutree,by='row.names')
         df.merge.sorted <- df.merge[order(df.merge$y),]
-        lbls<-unique(df.merge.sorted$x)
-        dend_plot <- color_branches(dend, k = nClusters, groupLabels = TRUE, warn = FALSE ) %>% set("labels", "")
+        lbls <- unique(df.merge.sorted$x)
+        dend_plot <- dendextend::color_branches(dend, k = nClusters,
+                                                groupLabels = TRUE, 
+                                                warn = FALSE ) %>%
+                                                dendextend::set("labels", "") %>% 
+                                                suppressWarnings()
         
         if (plot)
             plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
