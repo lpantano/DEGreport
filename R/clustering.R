@@ -220,7 +220,7 @@ degPlotCluster <- function(table, time, color = NULL,
                                      variable_name = "sample"))
     ma_long$x <- xs[ma_long$sample]
     ma_long$group <- groups[ma_long$sample]
-    plotting_data <<- ma_long
+    plotting_data <- ma_long
     p <- suppressWarnings(degPlotCluster(ma_long, "x", "group", facet = FALSE))
     p <- p +
         ggtitle(paste("Group:", title, "(", length(g_in_c), " genes )"))
@@ -1172,7 +1172,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     
     plot_benchmarking <- .plot_benchmarking(normalized, benchmarking, time, col)
     plot_benchmarking_curve <- .plot_benchmarking_curve(benchmarking)
-    plotting_data <<- list(norm = normalized, time = time, col = col, min_genes = minc) 
+    plotting_data <- list(norm = normalized, time = time, col = col, min_genes = minc) 
     if (length(unique(groups)) > 0){
         p <- degPlotCluster(normalized, time, col, min_genes = minc)
         if (!is.null(fixy))
