@@ -144,7 +144,7 @@ degPlotCluster <- function(table, time, color = NULL,
     if (lines)
         p <- p + geom_line(aes_string(group = "line_group"), alpha = 0.1)
     if (facet)
-        p <- p + facet_wrap(~title, nrow = 3)
+        p <- p + facet_wrap(~title)
     
     p <- p + 
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
