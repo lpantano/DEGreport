@@ -149,7 +149,7 @@ degPlotCluster <- function(table, time, color = NULL,
     p <- p + 
         theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
         ylab("Z-score of gene abundance") +
-        xlab("months")
+        xlab("")
     p + theme_bw() 
     
 }
