@@ -20,7 +20,8 @@ degPatterns(
   eachStep = FALSE,
   plot = TRUE,
   fixy = NULL,
-  nClusters = NULL
+  nClusters = NULL,
+  skipDendo = TRUE
 )
 }
 \arguments{
@@ -75,6 +76,9 @@ with multiple time points}.}
 \item{fixy}{vector integers used as ylim in plot}
 
 \item{nClusters}{an integer scalar or vector with the desired number of groups}
+
+\item{skipDendrogram}{a boolean to run or not dendextend. Temporary fix to memory
+issue in linux.}
 }
 \value{
 list wiht two items:
