@@ -1,5 +1,9 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.39.4
+    
+    * Fix error in check report about stack limit size
+  
 CHANGES IN DEGreport 1.39.3
 
     * Add ctb

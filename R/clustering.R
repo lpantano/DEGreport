@@ -1139,7 +1139,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         dend <- cluster_genes 
         h = dend$dc
         clust <- cutree(as.hclust(dend), h = h)
-        clust.cutree <- dendextend:::cutree(dend, h = h, order_clusters_as_data = FALSE)
+        clust.cutree <- dendextend::cutree(dend, h = h, order_clusters_as_data = FALSE)
         dend <- as.dendrogram(dend, h = h)
         idx <- order(names(clust.cutree))
         clust.cutree <- clust.cutree[idx]
@@ -1155,7 +1155,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     if (length(unique(groups)) > 0 & is.numeric(nClusters)){
         dend <- cluster_genes 
         clust <- cutree(as.hclust(dend), k = nClusters)
-        clust.cutree <- dendextend:::cutree(dend, k = nClusters, order_clusters_as_data = FALSE)
+        clust.cutree <- dendextend::cutree(dend, k = nClusters, order_clusters_as_data = FALSE)
         dend <- as.dendrogram(dend, k = nClusters)
         idx <- order(names(clust.cutree))
         clust.cutree <- clust.cutree[idx]
