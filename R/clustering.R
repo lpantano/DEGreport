@@ -946,6 +946,8 @@ degMDS = function(counts, condition=NULL, k=2, d="euclidian", xi=1, yi=2) {
 #' @param plot boolean plot the clusters found
 #' @param fixy vector integers used as ylim in plot
 #' @param nClusters an integer scalar or vector with the desired number of groups
+#' @param skipDendo a boolean to run or not dendextend. Temporary fix to memory
+#'                  issue in linux.
 #' @details 
 #' It can work with one or more groups with 2 or
 #' more several time points. 
@@ -1015,7 +1017,8 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        pattern = NULL,
                        groupDifference = NULL,
                        eachStep = FALSE,
-                       plot=TRUE, fixy=NULL, nClusters = NULL){
+                       plot=TRUE, fixy=NULL, nClusters = NULL,
+                       skipDendo=TRUE){
     benchmarking <- NULL
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]
@@ -1135,7 +1138,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
     }
     
     dend_plot <- NA
-    if (length(unique(groups)) > 0 & is.null(nClusters)){
+    if (length(unique(groups)) > 0 & is.null(nClusters) & !skipDendo){
         dend <- cluster_genes 
         h = dend$dc
         clust <- cutree(as.hclust(dend), h = h)
@@ -1152,7 +1155,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
         if (plot)
             plot(dend_plot, xlab="", ylab="", main="", sub="", axes=FALSE, cex = 2)
     }
-    if (length(unique(groups)) > 0 & is.numeric(nClusters)){
+    if (length(unique(groups)) > 0 & is.numeric(nClusters) & !skipDendo){
         dend <- cluster_genes 
         clust <- cutree(as.hclust(dend), k = nClusters)
         clust.cutree <- dendextend::cutree(dend, k = nClusters, order_clusters_as_data = FALSE)
