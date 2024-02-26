@@ -1018,7 +1018,7 @@ degPatterns = function(ma, metadata, minc=15, summarize="merge",
                        groupDifference = NULL,
                        eachStep = FALSE,
                        plot=TRUE, fixy=NULL, nClusters = NULL,
-                       skipDendo=TRUE){
+                       skipDendrogram=TRUE){
     benchmarking <- NULL
     metadata <- as.data.frame(metadata)
     ma = ma[, row.names(metadata)]

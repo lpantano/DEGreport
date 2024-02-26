@@ -21,7 +21,7 @@ degPatterns(
   plot = TRUE,
   fixy = NULL,
   nClusters = NULL,
-  skipDendo = TRUE
+  skipDendrogram = TRUE
 )
 }
 \arguments{
