@@ -1,7 +1,8 @@
 DEGreport News
 
-CHANGES IN DEGreport 1.39.4
+CHANGES IN DEGreport 1.39.5
     
+    * made that the sequence of clusters in the dendogram matches the sequence of clusters in the trajectories @zellerivo 
     * Fix error in check report about stack limit size
     * Add option to avoid running dendextend https://github.com/lpantano/DEGreport/issues/62
   
