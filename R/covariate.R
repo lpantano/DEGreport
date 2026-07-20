@@ -451,10 +451,10 @@ degCovariates <- function(counts, metadata,
                              fill = ~r,
                              shape = ~type_variable)) +
             geom_point() +
-            geom_point(data = filter(ma_plot, !is.na(fdr)),
-                       stroke = 1, color="black") +
             geom_point(data = filter(ma_plot, pvalue<0.05),
                        stroke = 1, color="grey60") +
+            geom_point(data = filter(ma_plot, !is.na(p.value)),
+                       stroke = 1, color="black") +
             theme_minimal() +
             scale_shape_manual(values = c(22, 21)) + 
             scale_size_continuous(name = "importance",

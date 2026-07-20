@@ -2,6 +2,12 @@ DEGreport News
 
 CHANGES IN DEGreport 1.45.1
 
+    * Fixed degCovariates() stroke colours so they match the documentation:
+      the grey (correlation p-value < 0.05) layer was drawn on top of the
+      black layer, hiding it, and the black layer was keyed to the correlation
+      FDR rather than the linear-model p-value. Now grey marks the first-pass
+      correlation hits and black (drawn on top) marks covariates significant
+      in the linear model.
     * Fixed labs() function calls in multiple R files:
         - methods.R (2 occurrences in degMean and degVar functions)
         - clustering.R (2 occurrences)
