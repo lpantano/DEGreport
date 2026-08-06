@@ -585,7 +585,7 @@ degMerge <- function(matrix_list, cluster_list, metadata_list,
     .idx = .res$padj < FDR & .res$absMaxLog2FC > FC
     .idx[is.na(.idx)] = FALSE
     cat("\n\n### GO ontology of DE genes (log2FC >" , FC, " and FDR <", FDR, "): ", sum(.idx),"\n\n")
-    ego <- enrichGO(gene = row.names(out_df[.idx,]), keytype = "ENSEMBL",
+    ego <- clusterProfiler::enrichGO(gene = row.names(out_df[.idx,]), keyType = "ENSEMBL",
                     OrgDb = org, ont = "BP", pAdjustMethod = "BH",
                     pvalueCutoff = 0.01, qvalueCutoff = 0.05, readable = TRUE)
 
