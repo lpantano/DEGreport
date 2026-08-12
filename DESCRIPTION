@@ -29,6 +29,7 @@ Imports:
     BiocGenerics,
     broom,
     circlize,
+    clusterProfiler,
     ComplexHeatmap,
     cowplot,
     ConsensusClusterPlus,
